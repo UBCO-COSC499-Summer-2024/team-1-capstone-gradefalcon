@@ -11,7 +11,7 @@ Please use the provided folder structure for your docs (project plan, design doc
 │   ├── logs                # Team Logs
 │   └── ...
 ├── build                   # Compiled files (alternatively `dist`))    
-├── src                     # Source files (alternatively `lib` or `app`)
+├── app                     # Source files (alternatively `lib` or `src`)
 ├── test                    # Automated tests (alternatively `spec` or `tests`)
 ├── tools                   # Tools and utilities
 ├── LICENSE                 # The license for this project 
