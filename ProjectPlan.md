@@ -12,74 +12,82 @@
 
 ## Overview:
 
-### Project purpose or justification (UVP)
+## Project Purpose or Justification (UVP)
 
-What is the purpose of this software? What problem does it solve? What is the unique value proposition? Why is your solution better than others?
+**What is the purpose of this software? What problem does it solve? What is the unique value proposition? Why is your solution better than others?**
 
-The Optical Marking Management System aims to streamline the process of creating, marking, analyzing, and returning optically marked exams. The Department of Computer Science, Mathematics, Physics and Statistics at UBCO currently utilizes a single outdated physical optical marking machine with a very low allowance for user error and a high bottleneck during exam season. Other errors include:
+The Optical Marking Management System aims to streamline the process of creating, marking, analyzing, and returning optically marked exams. The Department of Computer Science, Mathematics, Physics, and Statistics at UBCO currently utilizes a single outdated physical optical marking machine with a very low allowance for user error and a high bottleneck during exam season. Other errors include:
 
-- the marked exams cannot be returned to the students to see their wrong answers
-- long processing times
-- incorrectly scanning one sheet requires the whole stack of papers to be rescanned
-
-and many more.
+- The marked exams cannot be returned to the students to see their wrong answers
+- Long processing times
+- Incorrectly scanning one sheet requires the whole stack of papers to be rescanned
+- And many more.
 
 Our solution, titled GradeFalcon, is a web application that will provide a user-friendly interface for instructors to manage exams efficiently, offer statistical analysis and visualization tools to improve performance insights, and ensure a secure platform for both instructors and students to view exam data. Our solution stands out by integrating features from the standard UBC optical marking paper and tools like ZipGrade, accommodating custom bubble sheets, and detecting errors in scanned sheets. The unique value proposition is its adaptability, efficiency, and compliance with privacy regulations. Additionally, the computer vision model will be decoupled from the main system, ensuring flexibility and maintainability.
 
-### High-level project description and boundaries
+## High-Level Project Description and Boundaries
 
-Describe your MVP in a few statements and identify the boundaries of the system.
-
-Our Minimum Viable Product (MVP) will include the following features:
-
+**Our Minimum Viable Product (MVP) will include the following features:**
 - Instructor login and authentication.
 - Creation and management of classes and exams.
 - Upload and parsing of scanned bubble sheets.
 - Detection of wrongly scanned sheets and duplicate or non-present student IDs.
 - Automated marking and review of exams.
 - Statistical analysis and visualization of exam performance.
-- Flexible options for generating answer keys (manual entry or uploading filled-out bubble sheets)
-- Support for a variable number of options per question
 - Secure student access to view their exam results.
 - Administrative functionalities for system maintenance.
-- Separate computer vision model using openCV for detecting custom bubble sheet formats.
+- Separate computer vision model using YOLO for detecting custom bubble sheet formats.
 - A reporting system for contesting marking errors.
-- Flexible options for generating answer keys, allowing either manual entry on the website or uploading a filled-out bubble sheet
-- Support for a variable number of options per question
+- Flexible options for generating answer keys, allowing either manual entry on the website or uploading a filled-out bubble sheet.
+- Support for a variable number of options per question.
 
-The system boundaries include developing the web application and its backend infrastructure, ensuring secure data handling, and providing necessary documentation. It does not include physical infrastructure, hardware procurement, or integration with external non-standard system.
+**The system boundaries include:**
+- Developing the web application and its backend infrastructure.
+- Ensuring secure data handling.
+- Providing necessary documentation.
 
-### Measurable project objectives and related success criteria (scope of project)
+**The system boundaries do not include:**
+- Physical infrastructure.
+- Hardware procurement.
+- Integration with external non-standard systems.
 
-Make sure to use simple but precise statement of goals for the project that will be included when it the project is completed. Rememeber that goals must be clear and measurable and **SMART**. It should be clearly understood what success means to the project and how the success will be measured (as a high level, what is success?).
+## Measurable Project Objectives and Success Criteria
 
 **Objective:** Develop a responsive web application for managing optically marked exams.
 
-**Success critera:**
+**Success Criteria:**
+1. **Instructors can create and manage exams efficiently:**
+   - Instructors will be able to create and manage exams through an intuitive interface with 90% positive feedback, measured by the number of complaints per exam.
+   - Flexible options for generating answer keys, allowing either manual entry on the website or uploading a filled-out bubble sheet.
 
-- Instructors can create and manage exams efficiently:
-  - Instructors will be able to create and manage exams through an intuitive interface with 90% positive feedback, measured by the number of complaints per exam.
-  - Flexible options for generating answer keys, allowing either manual entry on the website or uploading a filled-out bubble sheet.
-- The system supports the upload, parsing, and marking of bubble sheets within 30 minutes:
-  - The entire process from upload to marking completion should take no longer than 30 minutes for a batch of 100 sheets.
+2. **The system supports the upload, parsing, and marking of bubble sheets within 30 minutes:**
+   - The entire process from upload to marking completion should take no longer than 30 minutes for a batch of 100 sheets.
 
-* Statistical analysis and visualization tools are functional and accurate:
-  - Tools will generate statistical analyses and visualizations with 95% accuracy.
-  - Implement statistical tools to analyze exam results, including mean scores, standard deviations, distribution graphs, and other relevant metrics.
-  - Provide year-over-year performance tracking to help instructors evaluate trends.
-  - Enable comparisons between different classes or exam periods to identify performance benchmarks.
-* Students can efficiently view their exam results:
-  - Students will log in and view their results, see right and wrong answers, and report misgrading efficiently, measured by the number of complaints per exam.
-* Compliance with privacy regulations is maintained:
-  - The system will undergo regular audits to ensure zero compliance issues.
-* The system detects and flags wrongly scanned sheets and duplicate or non-present student IDs:
-  - Achieve 95% accuracy in detecting and flagging errors.
-* The computer vision model accurately detects and interprets custom bubble sheet formats:
-  - The model will achieve 90% accuracy in detection and interpretation of custom formats.
-* Automatically grade the exams and store the results in the database:
-  - Develop an algorithm to compare the detected answers with the answer key.
-  - Automatically grade the exams and store the results in the database.
-* The entire system will be fully functional by August 9, 2024.
+3. **Statistical analysis and visualization tools are functional and accurate:**
+   - Tools will generate statistical analyses and visualizations with 95% accuracy.
+   - Implement statistical tools to analyze exam results, including mean scores, standard deviations, distribution graphs, and other relevant metrics.
+   - Provide year-over-year performance tracking to help instructors evaluate trends.
+   - Enable comparisons between different classes or exam periods to identify performance benchmarks.
+
+4. **Students can efficiently view their exam results:**
+   - Students will log in and view their results, see right and wrong answers, and report misgrading efficiently, measured by the number of complaints per exam.
+
+5. **Compliance with privacy regulations is maintained:**
+   - The system will undergo regular audits to ensure zero compliance issues.
+
+6. **The system detects and flags wrongly scanned sheets and duplicate or non-present student IDs:**
+   - Achieve 95% accuracy in detecting and flagging errors.
+
+7. **The computer vision model accurately detects and interprets custom bubble sheet formats:**
+   - The model will achieve 90% accuracy in detection and interpretation of custom formats.
+
+8. **Automatically grade the exams and store the results in the database:**
+   - Develop an algorithm to compare the detected answers with the answer key.
+   - Automatically grade the exams and store the results in the database.
+
+**Overall System Goal:**
+- The entire system will be fully functional by August 9, 2024.
+
 
 ## Users, Usage Scenarios and High Level Requirements
 
