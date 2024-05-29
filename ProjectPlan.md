@@ -58,27 +58,28 @@ Make sure to use simple but precise statement of goals for the project that will
 **Success critera:**
 
 - Instructors can create and manage exams efficiently:
-- Instructors will be able to create and manage exams through an intuitive interface with 90% positive feedback, measured by the number of complaints per exam.
-- Flexible options for generating answer keys, allowing either manual entry on the website or uploading a filled-out bubble sheet.
+  - Instructors will be able to create and manage exams through an intuitive interface with 90% positive feedback, measured by the number of complaints per exam.
+  - Flexible options for generating answer keys, allowing either manual entry on the website or uploading a filled-out bubble sheet.
 - The system supports the upload, parsing, and marking of bubble sheets within 30 minutes:
-- The entire process from upload to marking completion should take no longer than 30 minutes for a batch of 100 sheets.
-- Statistical analysis and visualization tools are functional and accurate:
-- Tools will generate statistical analyses and visualizations with 95% accuracy.
-- Implement statistical tools to analyze exam results, including mean scores, standard deviations, distribution graphs, and other relevant metrics.
-- Provide year-over-year performance tracking to help instructors evaluate trends.
-- Enable comparisons between different classes or exam periods to identify performance benchmarks.
-- Students can efficiently view their exam results:
-- Students will log in and view their results, see right and wrong answers, and report misgrading efficiently, measured by the number of complaints per exam.
-- Compliance with privacy regulations is maintained:
-- The system will undergo regular audits to ensure zero compliance issues.
-- The system detects and flags wrongly scanned sheets and duplicate or non-present student IDs:
-  Achieve 95% accuracy in detecting and flagging errors.
-- The computer vision model accurately detects and interprets custom bubble sheet formats:
-- The model will achieve 90% accuracy in detection and interpretation of custom formats.
-- Automatically grade the exams and store the results in the database:
-- Develop an algorithm to compare the detected answers with the answer key.
-- Automatically grade the exams and store the results in the database.
-- The entire system will be fully functional by August 9, 2024.
+  - The entire process from upload to marking completion should take no longer than 30 minutes for a batch of 100 sheets.
+
+* Statistical analysis and visualization tools are functional and accurate:
+  - Tools will generate statistical analyses and visualizations with 95% accuracy.
+  - Implement statistical tools to analyze exam results, including mean scores, standard deviations, distribution graphs, and other relevant metrics.
+  - Provide year-over-year performance tracking to help instructors evaluate trends.
+  - Enable comparisons between different classes or exam periods to identify performance benchmarks.
+* Students can efficiently view their exam results:
+  - Students will log in and view their results, see right and wrong answers, and report misgrading efficiently, measured by the number of complaints per exam.
+* Compliance with privacy regulations is maintained:
+  - The system will undergo regular audits to ensure zero compliance issues.
+* The system detects and flags wrongly scanned sheets and duplicate or non-present student IDs:
+  - Achieve 95% accuracy in detecting and flagging errors.
+* The computer vision model accurately detects and interprets custom bubble sheet formats:
+  - The model will achieve 90% accuracy in detection and interpretation of custom formats.
+* Automatically grade the exams and store the results in the database:
+  - Develop an algorithm to compare the detected answers with the answer key.
+  - Automatically grade the exams and store the results in the database.
+* The entire system will be fully functional by August 9, 2024.
 
 ## Users, Usage Scenarios and High Level Requirements
 
@@ -235,6 +236,26 @@ For each choice you make, provide a short justification based on the current tre
 ## High-level risks
 
 Describe and analyze any risks identified or associated with the project.
+
+**Technical Risks:**
+
+- Integration issues with existing systems: Integrating the Optical Marking system with the existing frameworks may be challenging, but this can be mitigated through thorough research into common standards and protocols, along with a detailed analysis of requirements.
+- Database security vulnerabilities: Potential security vulnerabilities leading to data breaches or losses. We mitigate this by implementing multiple security measures such as database encryption etc..
+- Scalability concerns: The system may not experience the same performance under a high volume of stress from increasing data. We mitigate this in the design stage by taking scalability, performance and efficiency into consideration when designing the database.
+- Lack of future-proofing: The system may become obsolete in the future or may require large modifications to accommodate future advancements in technologies.
+
+**Operational Risks:**
+
+- Resistance to adoption by instructors: There is a risk that the system may be rejected or disliked by our primary users. This can be mitigated by building a user-friendly interface and providing comprehensive documentation to make the system easier to learn.
+- Data entry errors: Data is highly important in this task so, any data entry errors could lead to high level performance errors. We mitigate this by implementing validation checks and provide clear and concise guidelines, and streamline the process where data is only handled by authorized users.
+
+**Project Risks:**
+
+- Delays in development: It is crucial to deliver the project on time and with the smooth running of the features desired. There might be some unforeseen circumstances that could delay development and lead to project overruns.
+- Scope creep: The system may experience delays , increased costs and resource strain if the changes and the growth in the development of the project are not controlled and regulated.
+- Insufficient testing: There might be some undetected bugs , system failures and user dissatisfaction post deployment if the testing is inadequate and inaccurate.
+- Resource Allocation : Insufficient resource allocation such as budget and personnel could have an impact on the quality of the project.
+- Compliance with Privacy Regulations : It is important to keep in mind the privacy regulations as non compliance with the same could lead to a loss of trust.
 
 ## Assumptions and constraints
 
