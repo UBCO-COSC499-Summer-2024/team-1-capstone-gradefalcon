@@ -229,6 +229,32 @@ In the requirements section, make sure to clearly define/describe the **function
 - Ensure the system can handle multiple types of bubble sheets and formats.
 - The computer vision model should be a separate module, allowing for independent updates and maintenance.
 
+## Feature List
+1. **User Authentication:**
+   - Secure login for instructors, students, and administrators.
+   - Authentication module supporting token-based authentication (e.g., CWL or generalized solutions).
+2. **Exam Management:**
+   - Creation and modification of classes and exams.
+   - Ability to build customizable bubble sheets (similar to ZipGrade).
+3. **Scan and Parse:**
+   - Upload and parsing of scanned bubble sheets.
+   - Handling PDFs, including those with multiple pages.
+4. **Marking and Review:**
+   - Automated and manual marking of exams.
+   - Links the exam to the corresponding student using the student’s details (ID and name).
+   - Highlight correct and incorrect answers (red and green highlights).
+5. **Statistics and Visualization:**
+   - Graphical representation of exam performance.
+   - Question breakdown analysis
+   - Year-over-year analysis for courses.
+6. **Results Download:**
+   - Export exam results in various formats.
+7. **Student View:**
+   - Secure access to individual exam results.
+8. **Course Archiving:**
+   - Archive courses for historical data access.
+
+
 ## Tech Stack
 
 Identify the “tech stack” you are using. This includes the technology the user is using to interact with your software (e.g., a web browser, an iPhone, any smartphone, etc.), the technology required to build the interface of your software, the technology required to handle the logic of your software (which may be part of the same framework as the technology for the interface), the technology required to handle any data storage, and the programming language(s) involved. You may also need to use an established API, in which case, say what that is. (Please don’t attempt to build your API in this course as you will need years of development experience to do it right.) You can explain your choices in a paragraph, in a list of bullet points, or a table. Just make sure you identify the full tech stack.
