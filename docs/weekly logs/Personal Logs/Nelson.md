@@ -6,7 +6,6 @@
 ## Features in the Project Plan Cycle:
 - System Architecture design - Working of creating the database and DataFlow design models
 - Project Plan - Investigating technical requirements for the system and understanding and documenting its scope.
-- 
 
 ## Associated Tasks from Project Board:
 | Task ID | Description | Feature | Assigned To | Status |
