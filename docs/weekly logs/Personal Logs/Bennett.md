@@ -1,0 +1,43 @@
+# Personal Log
+
+## Applicable Date Range
+- Week of 27/05/2024
+
+## Tasks Worked On
+- **UI and UX Design:**
+  - Completed the dashboard page.
+  - Began working on remaining pages for the UI/UX design.
+- **Project Plan:**
+  - Drafted the Project Proposal.
+  - Defined the MVP (Minimum Viable Product).
+  - Created user stories.
+
+
+## Features and Associated Tasks
+- **Dashboard Page:**
+  - Completed design (UI/UX).
+  - Associated tasks: Dashboard layout design.
+- **UI/UX Design:**
+  - Remaining pages in progress.
+  - Associated tasks: Page layout designs, user interface adjustments.
+- **Project Planning:**
+  - Drafted Project Proposal, MVP, user stories.
+  - Associated tasks: Proposal drafting.
+
+
+## Progress Summary
+- **Completed:**
+  - Dashboard page design (Large).
+  - Project Proposal draft (Medium).
+  - User stories creation (Medium).
+- **In Progress:**
+  - Remaining UI/UX pages (Large).
+
+## Goals Recap
+- **This Week's Goals:**
+  - Complete the dashboard page design.
+  - Draft the Project Proposal, and user stories.
+- **Next Cycle Plan (3-4 Days):**
+  - Finish remaining pages for the UI/UX design.
+  - Start contributing to the system design document: specifially UI mockup/Low fidelity prototype via figma and contribute to system arcitecture  design.
+  - Set up the CI/CD pipeline.
