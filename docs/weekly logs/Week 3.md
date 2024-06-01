@@ -45,10 +45,10 @@
 ## Completed Tasks:
 | Task ID | Description | Completed By |
 |---------|-------------|--------------|
-| T101    | Draft Project Proposal | Ahmad Saleem Mirza, Benett, Omar |
-| T102    | Define MVP | Benett, Omar |
+| T101    | Draft Project Proposal | Ahmad Saleem Mirza, Benett, Omar, Nelson |
+| T102    | Define MVP | Benett, Omar, Nelson |
 | T103    | Create User Stories | Benett, Omar |
-| T104    | Organize and assign tasks via kanban dashboard | Ahmad Saleem Mirza |
+| T104    | Organize and assign tasks via kanban dashboard | Ahmad Saleem Mirza, Omar |
 | T106    | Complete dashboard page design | Benett, Omar |
 
 ## In Progress Tasks:
