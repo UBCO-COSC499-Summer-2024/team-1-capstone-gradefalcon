@@ -1,57 +1,67 @@
 # Weekly Team Log
 
 ## Date Range:
-- [Start Date] - [End Date]
+- May 27, 2024 - May 31, 2024
 
 ## Features in the Project Plan Cycle:
-- Feature 1
-- Feature 2
-- Feature 3
+- User Authentication
+- Bubble Sheet Upload
+- Automatic Grading
+- UI/UX Design
+- Project Planning
 
 ## Associated Tasks from Project Board:
 | Task ID | Description | Feature | Assigned To | Status |
 |---------|-------------|---------|-------------|--------|
-| Task 1  | Description of Task 1 | Feature 1 | @username1 | Completed |
-| Task 2  | Description of Task 2 | Feature 2 | @username2 | In Progress |
-| Task 3  | Description of Task 3 | Feature 3 | @username3 | Not Started |
+| T101    | Draft Project Proposal | Project Planning | Ahmad Saleem Mirza, Benett, Omar, Nelson | Completed |
+| T102    | Define MVP | Project Planning | Benett, Omar, Nelson, Ahmad Saleem Mirza| Completed |
+| T103    | Create User Stories | Project Planning | Benett, Omar | Completed |
+| T104    | Organize and assign tasks via kanban dashboard | Backlog Management | Ahmad Saleem Mirza, Omar | In Progress |
+| T105    | Start system design architecture | Design Document | Ahmad Saleem Mirza, Omar, Nelson | In Progress |
+| T106    | Complete dashboard page design | UI/UX Design | Benett, Omar | Completed |
+| T107    | Work on remaining UI/UX pages | UI/UX Design | Benett, Omar | In Progress |
 
 ## Tasks for Next Cycle:
 | Task ID | Description | Estimated Time (hrs) | Assigned To |
 |---------|-------------|----------------------|-------------|
-| Task 4  | Description of Task 4 | 5 | @username1 |
-| Task 5  | Description of Task 5 | 3 | @username2 |
-| Task 6  | Description of Task 6 | 4 | @username3 |
+| T108    | Set up the CI/CD pipeline | 4 | Ahmad Saleem Mirza, Benett, Omar |
+| T109    | Develop data flow diagrams (DFD) | 5 | Ahmad Saleem Mirza, Omar |
+| T110    | Develop database schema | 6 | Ahmad Saleem Mirza, Omar, Nelson |
+| T111    | Finalize design document | 5 | Ahmad Saleem Mirza, Benett, Omar, Nelson |
+| T112    | Finish remaining pages for UI/UX design | 8 | Benett, Omar |
+| T113    | Contribute to system design document (UI mockup/Low fidelity prototype via Figma, system architecture design) | 6 | Benett, Omar |
 
 ## Burn-up Chart (Velocity):
-- ![Burn-up Chart](path_to_burnup_chart.png)
+- ![Burn-up Chart](docs/weekly logs/Burn Up Charts/burn up chart 1.png)
 
 ## Times for Team/Individual:
-| Team Member | Logged Hours |
-|-------------|--------------|
-| @username1  | 10 |
-| @username2  | 12 |
-| @username3  | 8 |
+| Team Member       | Logged Hours |
+|-------------------|--------------|
+| Ahmad Saleem Mirza | 14           |
+| Benett             | 14           |
+| Omar               | 14           |
+| Nelson             | 14           |
 
 ## Completed Tasks:
 | Task ID | Description | Completed By |
 |---------|-------------|--------------|
-| Task 1  | Description of Task 1 | @username1 |
-| Task 2  | Description of Task 2 | @username2 |
+| T101    | Draft Project Proposal | Ahmad Saleem Mirza, Benett, Omar |
+| T102    | Define MVP | Benett, Omar |
+| T103    | Create User Stories | Benett, Omar |
+| T104    | Organize and assign tasks via kanban dashboard | Ahmad Saleem Mirza |
+| T106    | Complete dashboard page design | Benett, Omar |
 
 ## In Progress Tasks:
 | Task ID | Description | Assigned To |
 |---------|-------------|-------------|
-| Task 3  | Description of Task 3 | @username3 |
-| Task 7  | Description of Task 7 | @username1 |
+| T105    | Start system design architecture | Ahmad Saleem Mirza |
+| T107    | Work on remaining UI/UX pages | Benett, Omar |
 
 ## Test Report / Testing Status:
-- Summary of test results for the week.
-- Issues identified and resolved.
-- Pending tests.
+N/A
 
 ## Overview:
-- Summary of team efforts for the week.
-- Quick summary view including burnup or burndown.
-- Accumulative view of tasks done, tasks in progress, and tasks left to do.
-- Visual representation of team's velocity.
-- Comparison of planned work vs. completed work.
+- Team focused on completing the project plan, UI/UX design, and backlog management.
+- Quick summary view: 5 tasks completed, 2 tasks in progress, 6 tasks planned for the next cycle.
+- Velocity has been steady with slight improvements.
+- Planned work mostly aligns with completed work, with minor delays in the UI/UX design tasks.
