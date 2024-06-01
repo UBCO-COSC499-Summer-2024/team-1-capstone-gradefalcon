@@ -32,7 +32,7 @@
 | T113    | Contribute to system design document (UI mockup/Low fidelity prototype via Figma, system architecture design) | 6 | Benett, Omar |
 
 ## Burn-up Chart (Velocity):
-- ![Burn-up Chart](docs/weekly logs/Burn Up Charts/burn up chart 1.png)
+- ![Burn-up Chart]([docs/weekly logs/Burn Up Charts/burn up chart 1.png](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/master/docs/weekly%20logs/Burn%20Up%20Charts/burn%20up%20chart%201.png))
 
 ## Times for Team/Individual:
 | Team Member       | Logged Hours |
