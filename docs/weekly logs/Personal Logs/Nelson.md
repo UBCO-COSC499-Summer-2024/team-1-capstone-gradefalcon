@@ -1,49 +1,43 @@
-# Weekly Team Log
+# Personal Log
 
-## Date Range:
-- [Week of 27/05/2024]
+## Applicable Date Range
+- Week of 27/05/2024
 
-## Features in the Project Plan Cycle:
-- System Architecture design - Working of creating the database and DataFlow design models
-- Project Plan - Investigating technical requirements for the system and understanding and documenting its scope.
-
-## Associated Tasks from Project Board:
-| Task ID | Description | Feature | Assigned To | Status |
-|---------|-------------|---------|-------------|--------|
-| Project Plan  | Description of Task 1 | Feature 1 | Completed |
-| System Architecture Design | Description of Task 2 | Feature 2 | In Progress |
-| Database design  | Description of Task 3 | Feature 3 | In Progress |
-
-## Tasks for Next Cycle:
-| Task ID | Description | Estimated Time (hrs) | Status |
-|---------|-------------|----------------------|-------------|
-| Finalizing database | Finish database design and reviewing it with teammates | 5 | InProgress|
-| Backend API Planning  | Investigating and constructing our backend API | 5 | Investigating |
-| Code Frontend  | Create a first version of the frontend | 5 | Not started |
+## Tasks Worked On
+- **System Architecture Design:**
+  - Worked on creating the database and DataFlow design models.
+- **Project Plan:**
+  - Investigated technical requirements for the system.
+  - Understood and documented the project's scope.
+- **UI Elements:**
+  - Worked on various UI elements for the project.
 
 ## Features and Associated Tasks
-- **Dashboard Page:**
-  - Completed design (UI/UX).
-  - Associated tasks: Dashboard layout design.
-- **UI/UX Design:**
-  - Remaining pages in progress.
-  - Associated tasks: Page layout designs, user interface adjustments.
+- **System Architecture Design:**
+  - Created database and DataFlow design models.
+  - Associated tasks: Designing database structure, creating DataFlow diagrams.
 - **Project Planning:**
-  - Drafted Project Proposal.
-  - Associated tasks: Proposal drafting, user story creation.
-  - System Architecture design.
-  - Database design.
-- **Backlog Management:**
-  - Organizing and populating the backlog.
-  - Associated tasks: Backlog categorization, task prioritization.
+  - Investigated and documented technical requirements and project scope.
+  - Associated tasks: Technical requirement analysis, project scope documentation.
+- **Creating/Designing Logo:**
+  - Designed the project's logo.
+  - Associated tasks: Logo design, logo iterations.
 
 ## Progress Summary
 - **Completed:**
-  - Dashboard page design (Large).
-  - Project Proposal draft (Medium).
-  - Technical Risks (Medium).
-  - Scope of the project and success criteria (Medium).
+  - Project plan documentation (Medium).
+  - Technical requirement analysis (Medium).
+  - Logo design (Medium).
 - **In Progress:**
-  - Remaining UI/UX pages (Large).
-  - System Architecture design (Large).
   - Database design (Large).
+  - DataFlow design models (Large).
+
+## Goals Recap
+- **This Week's Goals:**
+  - Investigate/start database and DataFlow design models.
+  - Investigate and document technical requirements and project scope.
+  - Design the project's logo.
+- **Next Cycle Plan (3-4 Days):**
+  - Finalize database design and review with teammates.
+  - Investigate and construct the backend API.
+  - Create the first version of the frontend.
