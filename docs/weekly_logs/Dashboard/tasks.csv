@@ -1,0 +1,8 @@
+Task ID,Description,Feature,Assigned To,Status
+Description,Feature | Assigned To | Status,|---------|-------------|---------|-------------|--------|,"T101    | Draft Project Proposal | Project Planning | Ahmad Saleem Mirza, Benett, Omar, Nelson",Completed
+T102,Define MVP,Project Planning,"Benett, Omar, Nelson, Ahmad Saleem Mirza",Completed
+T103,Create User Stories,Project Planning,"Benett, Omar",Completed
+T104,Organize and assign tasks via kanban dashboard,Backlog Management,"Ahmad Saleem Mirza, Omar",In Progress
+T105,Start system design architecture,Design Document,"Ahmad Saleem Mirza, Omar, Nelson",In Progress
+T106,Complete dashboard page design,UI/UX Design,"Benett, Omar",Completed
+T107,Work on remaining UI/UX pages,UI/UX Design,"Benett, Omar",In Progress
