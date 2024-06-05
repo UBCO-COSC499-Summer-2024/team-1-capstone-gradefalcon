@@ -47,7 +47,7 @@
 # Personal Log
 
 ## Applicable Date Range
-- Week of 27/05/2024
+-  Week of 31/05/2024 to 05/06/2024
 
 ## Tasks Worked On
 - **UI and UX Design:**
