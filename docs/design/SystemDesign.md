@@ -302,6 +302,26 @@ Provide an ER diagram of the entities and relationships you anticipate having in
 
 !["ER Diagram](er_diagram.jpg "ER Diagram")
 
+### Summary
+
+This database is designed to efficiently manage and store all data associated with creating, marking, and reviewing bubble sheet exams. It not only handles exam-related data but also manages user records and essential information required for the key functionalities of our system.
+
+### How Users Interact with the Database
+
+**Teachers**
+- **Create Exams**: Teachers create exams (bubble sheets) and provide the solutions. This data is stored in the `Exam` and `Solution` tables.
+- **Upload Submissions**: Teachers upload scanned student submissions, which are saved in the `ScannedExam` table.
+- **Mark Exams**: The system automatically marks the exams by comparing student submissions to the provided solutions. The results are stored in the `StudentResults` table.
+- **Review and Analyze**: Teachers review the automatically marked exams and view results, generating visualizations of exam performance using data from the `StudentResults` table.
+
+**Students**
+- **View Results**: Students log in to view their marked exams, with the relevant data fetched from the `StudentResults` table.
+- **Provide Feedback**: Students can report any perceived errors in their results, which are recorded for further review.
+
+**Admins**
+- **Manage Users**: Admins handle user registrations and permissions, with information stored and managed in the `Teacher`, `Student`, and `Admin` tables.
+
+
 ## Data Flow Diagram (Level 0/Level 1)
 
 The team is required to create comprehensive Level 0 and Level 1 Data Flow Diagrams (DFDs) to visually represent the system’s data flow, including key processes, data stores, and data movements.  The deliverables will include a high-level context diagram, a detailed Level 1 DFD, and supporting documentation to facilitate the understanding of data movement within the system.   Remember that within a L1 DFD, the same general level of abstraction should apply to all processes (review 310 notes for guidance)
