@@ -312,7 +312,7 @@ This database is designed to efficiently manage and store all data associated wi
 - **Create Exams**: Teachers create exams (bubble sheets) and provide the solutions. This data is stored in the `Exam` and `Solution` tables.
 - **Upload Submissions**: Teachers upload scanned student submissions, which are saved in the `ScannedExam` table.
 - **Mark Exams**: The system automatically marks the exams by comparing student submissions to the provided solutions. The results are stored in the `StudentResults` table.
-- **Review and Analyze**: Teachers review the automatically marked exams and view results, generating visualizations of exam performance using data from the `StudentResults` table.
+- **Review and Analyze**: Teachers review the automatically marked exams and view results, generating visualizations of exam performance using data from the `Exam` table.
 
 **Students**
 - **View Results**: Students log in to view their marked exams, with the relevant data fetched from the `StudentResults` table.
