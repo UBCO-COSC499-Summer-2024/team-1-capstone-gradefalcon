@@ -13,9 +13,53 @@ GradeFalcon is an Optical Mark Recognition System for managing the automatic gra
 
 Recall the system architecture slides and tell us which architecture pattern you are using and why (it may also be something not in the slides or be a combination). Provide more details about the components you have written, and where these components fit in the overall architecture so we can visualize how you have decomposed your system. Basically, this should all be captured in ONE diagram with the components on them and a few sentences explaining (i) why you chose this architecture and (ii) why the components are where you put them. If you want to just focus on a certain aspect of your system and not show the entire architecture for your system in the diagram, that should be fine as well.
 
-GradeFalcon will implement the layered architecture approach for it's system design.
+## System Architecture for Optical Marking Management System
 
-![System Architecture Design](system_architecture.jpg "System Architecture Design")
+### Architecture Pattern: Model-View-Controller (MVC)
+
+#### Reason for Choosing MVC
+
+We chose the MVC architecture for the following reasons:
+
+- **Separation of Concerns:** MVC separates the application into three interconnected components, which allows for efficient division of labor and simplifies maintenance.
+- **Testability:** Each component can be tested independently, which improves the overall robustness of the application.
+- **Flexibility:** Changes in the user interface can be made without affecting the underlying business logic and data.
+
+### Components and Their Placement
+
+#### Model:
+
+- **Database:** PostgreSQL for relational data storage. Some of our entities: Users, Exams, and Results.
+
+#### View:
+
+- **User Interface:** Developed using HTML, CSS, and JavaScript (React). Provides a responsive and interactive UI for users.
+- **Visualization Tools:** Implements charts and graphs for displaying statistical analysis of exam results.
+
+#### Controller:
+
+- **Business Logic:** Developed using Node.js, handling user requests, processing data, and returning the appropriate responses.
+- **Authentication and Authorization:** Manages user authentication using JWT and uses authorization middleware for access.
+- **Error Detection:** Includes logic for detecting wrongly scanned sheets and duplicate/non-present student IDs.
+
+- **OMR Tools Integration:** Incorporates a YOLO-based computer vision model for bubble sheet parsing and grading.
+
+### System Architecture Diagram with RBAC
+
+![System Architecture Design with RBAC](SystemArchitectureRBAC.png "System Architecture Design with RBAC")
+
+### Why Components Are Placed as Shown
+
+- **Model (Database):** Centralized data handling and ensure that all business logic related to data management and error detection is confined to one place, making the system more modular.
+- **View (Frontend):** By separating the user interface from the backend, we ensure that any changes to the UI do not affect the underlying business logic. This separation also allows for better scalability and responsiveness.
+- **Controller (Backend):** Acts as a bridge between the Model and the View, handling all incoming requests, applying necessary business logic, and returning appropriate responses. The controller manages the flow of data and the communication between the frontend and backend.
+- **RBAC Integration:** Implementing RBAC directly in the backend enables authentication and authorization based on user roles, simplifying role management.
+
+
+### Here are alternative System Architectures that were considered:
+![Initial System Architecture Design](system_architecture.jpg "Initial System Architecture Design")
+![System Architecture Design with reverse proxy](SystemArchitectureReverseProxy.jpg "System Architecture Design with Reverse Proxy")
+
 
 ## Use Case Models
 
