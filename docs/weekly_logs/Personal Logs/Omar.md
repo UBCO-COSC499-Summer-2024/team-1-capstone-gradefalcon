@@ -121,6 +121,5 @@
   - Attend team meetings and meet with Professor Lawrence.
 - **Next Cycle Plan (3-4 Days):**
   - Work on the video for system architecture.
-  - Set up the CI/CD pipeline.
   - Set up Docker.
   - Start looking into the OCM.
