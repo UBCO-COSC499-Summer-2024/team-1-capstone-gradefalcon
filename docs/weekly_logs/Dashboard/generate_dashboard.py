@@ -51,6 +51,7 @@ tasks_df = extract_tasks_from_log(log_text)
 # Generate a summary
 completed_tasks_df = tasks_df[tasks_df['Status'] == 'Completed']
 in_progress_tasks_df = tasks_df[tasks_df['Status'] == 'In Progress']
+backlog_tasks_df = tasks_df[tasks_df['Status'] == 'Backlog']
 
 # Save DataFrame to a CSV file
 tasks_df.to_csv(os.path.join(dashboard_dir, 'tasks.csv'), index=False)

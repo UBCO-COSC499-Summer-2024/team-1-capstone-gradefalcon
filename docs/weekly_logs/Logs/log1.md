@@ -67,4 +67,4 @@ N/A
 - Planned work mostly aligns with completed work, with minor delays in the UI/UX design tasks.
 
 ### Task Status Distribution
-![Task Status Distribution](../Dashboard/task_status_distribution.png)
+![Task Status Distribution](../Dashboard/Week3/task_status_distribution.png)
