@@ -60,18 +60,11 @@ We chose the MVC architecture for the following reasons:
 ![Initial System Architecture Design](system_architecture.jpg "Initial System Architecture Design")
 ![System Architecture Design with reverse proxy](SystemArchitectureReverseProxy.jpg "System Architecture Design with Reverse Proxy")
 
-
-We deemed the Model-View Controller (MVC) architecture to be most suitable for implementation in this project. MVC is especially an ideal solution for projects at this scale and provides sufficient isolation between various components in the system (frontend, backend management and the exam grader), which allows us to develop them in parallel and improve ease of testing. Such compartmentalization ensures components will only have access to data that they absolutely need.
-
-Our frontend represents the view as it includes all user interface and presentation elements. The database is the model, defining the app's data storage mechanism and the backend is the controller, allowing changes in the database to be reflected in the frontend view. Components like the exam generator and OMR Grader are all part of of server-side processing as they would be too strenuous to execute on the client side.  
-
 ## Use Case Models
 
 Extending from your requirements, the team will need to develop a set of usage scenarios for each user group documented as properly dressed use cases  (including diagrams following the UML syntax and descriptions as presented in class). You may also want to include journey lines with some use cases.
 
 ![Use Cases](use_cases.png "Use Cases")
-
-![Standard Use Case](StandardUseCase.jpg "Standard Use Case")
 
 ### Use Case Scenarios
 
