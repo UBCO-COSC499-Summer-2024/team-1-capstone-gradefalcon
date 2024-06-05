@@ -39,7 +39,7 @@
 | #30 | Translate UI Mockup into clean and reusable HTML/CSS | 6 | Benett, Ahmad, Omar, Nelson |
 
 ## Burn-up Chart (Velocity):
-- ![docs/weekly logs/Burn Up Charts/burn up chart 2.png](/weekly_logs/BurnUpCharts/BurnUpChart2.png)
+- ![docs/weekly logs/Burn Up Charts/burn up chart 2.png](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/96b826b091ca75a8a5207057b0ea23d87e6a8c70/docs/weekly_logs/BurnUpCharts/BurnUpChart2.png)
 
 
 ## Times for Team/Individual:
@@ -51,7 +51,7 @@
 | Benett      | 17           |
 | Jusnoor     | 4            |
 
-- ![docs/weekly logs/Clockify/Time1.png](/weekly_logs/Clockify/Time1.png)
+- ![docs/weekly logs/Clockify/Time1.png](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/96b826b091ca75a8a5207057b0ea23d87e6a8c70/docs/weekly_logs/Clockify/Time1.png)
 
 ## Completed Tasks:
 | Task ID | Description | Completed By |
@@ -86,14 +86,3 @@ N/A
 
 ## Overview:
 The team focused on the system design which includes completing the Figma UI design, refining the UI, working on the system architecture, working on the use cases and use case diagrams and working on the database design. The Kanban Board has been populated with user stories and tasks, and milestones have been added and the dashboard visuals creation has been added. The next cycle will focus on creating a video for the system architecture, setting up Docker, starting to look into OCM, and continuing with the development environment setup, UI design implementation, and backend research.
-
-### Task Status Distribution
-![Task Status Distribution](../Dashboard/Week4/task_status_distribution.png)
-### Task Status Distribution
-![Task Status Distribution](../Dashboard/task_status_distribution.png)
-
-### Task Status Distribution
-![Task Status Distribution](../Dashboard/task_status_distribution.png)
-
-### Task Status Distribution
-![Task Status Distribution](../Dashboard/task_status_distribution.png)
