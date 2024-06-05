@@ -6,7 +6,7 @@ Start with a brief introduction of **what** you are building, reminding the read
 
 Start each section with a lead-in, detailing what it is.  Also, do not just have a collection of images.   Each diagram must be explained clearly. **Do not assume that the reader understands the intentions of your designs**.
 
-GradeFalcon is an Optical Mark Recognition System for managing the automatic grading of students' bubble sheets. Teachers will be able to create exams for classes, create the formats for exams, have submitted PDFs accurately marked from the exam's answer key and visualize various class performance matrics. Students will be able to have their submissions returned to them with the correct and incorrect answers highlighted and report if the system has made any error in marking and adminstrators will have full privelege over all system data.
+GradeFalcon is an Optical Mark Recognition System for managing the automatic grading of students' bubble sheets. Teachers will be able to create exams for classes, create the formats for exams, have submitted PDFs accurately marked from the exam's answer key and visualize various class performance metrics. Students will be able to have their submissions returned to them with the correct and incorrect answers highlighted and report if the system has made any error in marking. Administrators will have full privilege over all system data.
 
 
 ## System Architecture Design
@@ -17,11 +17,15 @@ GradeFalcon will implement the layered architecture approach for it's system des
 
 ![System Architecture Design](system_architecture.jpg "System Architecture Design")
 
+We deemed the Model-View Controller (MVC) architecture to be most suitable for implementation in this project. MVC is especially an ideal solution for projects at this scale and provides sufficient isolation between various components in the system (frontend, backend management and the exam grader), which allows us to develop them in parallel and improve ease of testing. Such compartmentalization ensures components will only have access to data that they absolutely need.
+
+Our frontend represents the view as it includes all user interface and presentation elements. The database is the model, defining the app's data storage mechanism and the backend is the controller, allowing changes in the database to be reflected in the frontend view. Components like the exam generator and OMR Grader are all part of of server-side processing as they would be too strenuous to execute on the client side.  
+
 ## Use Case Models
 
-Extending from your requirements, the team will need to develop a set of usage scenarios for each user group documented as properly dressed use cases  (including diagrams following the UML syntax and descriptions as presented in class).   You may also want to include journey lines with some use cases. 
+Extending from your requirements, the team will need to develop a set of usage scenarios for each user group documented as properly dressed use cases  (including diagrams following the UML syntax and descriptions as presented in class). You may also want to include journey lines with some use cases.
 
-![Use Cases](use_cases.jpg "Use Cases")
+![Use Cases](use_cases.png "Use Cases")
 
 ## Database Design 
 
