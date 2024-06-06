@@ -409,3 +409,5 @@ The team is required to put forward a series of UI mock-ups that will be used as
 
 https://www.figma.com/team_invite/redeem/B4KfW7NnvG8pZzrV4FU2gr
 https://www.figma.com/design/oPhFFyWLfBNY1Pznj5FayD/GradeFalcon_UI-MOCK_V1.0?node-id=0-1&t=NKX5rpCgiJPrEtaA-0
+
+![User Flow Diagram](UserFlowDiagram.png "User Flow Diagram")
