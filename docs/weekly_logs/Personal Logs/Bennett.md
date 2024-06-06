@@ -41,3 +41,35 @@
   - Finish remaining pages for the UI/UX design.
   - Start contributing to the system design document: specifially UI mockup/Low fidelity prototype via figma and contribute to system arcitecture  design.
   - Set up the CI/CD pipeline.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Personal Log
+
+## Applicable Date Range
+-  Week of 31/05/2024 to 05/06/2024
+
+## Tasks Worked On
+- **UI and UX Design:**
+  - finished UI/UX design/mockup for frontent in figma to contribute to design document.
+
+## Features and Associated Tasks
+- **UI/UX Design:**
+  - Frontent UI Mockup in figma
+
+## Progress Summary
+- **Completed:**
+  - Frontent UI Mockup in figma (Large)
+- **In Progress:**
+  - Translating UI Mockup into clean and reusable HTML/CSS (Large)
+
+## Goals Recap
+- **Next Cycle Plan (Wednessday -> Friday):**
+  - Translate UI Mockup into clean and reusable HTML/CSS.
+
+
+
+
+
+
+

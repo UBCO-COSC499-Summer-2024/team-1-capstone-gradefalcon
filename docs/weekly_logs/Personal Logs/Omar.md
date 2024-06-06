@@ -46,8 +46,6 @@
   - Finish remaining pages for the UI/UX design.
   - Start contributing to the system design document.
   - Set up the CI/CD pipeline.
- 
-  Here is your updated personal log based on the new information:
 
 # Personal Log
 
@@ -123,6 +121,5 @@
   - Attend team meetings and meet with Professor Lawrence.
 - **Next Cycle Plan (3-4 Days):**
   - Work on the video for system architecture.
-  - Set up the CI/CD pipeline.
   - Set up Docker.
   - Start looking into the OCM.
