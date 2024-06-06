@@ -348,8 +348,8 @@ The DFD Level 0 shows a high-level overview of the data flow within the GradeFal
 
 ### Data Flow Diagram (Level 1):
 
+![Level 1 DFD](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/5f19e915-81e9-455d-b806-2c3e6e4ce317)
 
-![Level 1 DFD](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/bdb2d1ce-7026-40b2-9f59-c2b88d7b34b9)
 
 The Level 1 Data Flow Diagram (DFD) for the GradeFalcon system provides a more detailed view of the processes and data flows within the system, expanding on the Level 0 DFD. 
 
