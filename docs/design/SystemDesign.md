@@ -326,6 +326,9 @@ This database is designed to efficiently manage and store all data associated wi
 
 The team is required to create comprehensive Level 0 and Level 1 Data Flow Diagrams (DFDs) to visually represent the system’s data flow, including key processes, data stores, and data movements.  The deliverables will include a high-level context diagram, a detailed Level 1 DFD, and supporting documentation to facilitate the understanding of data movement within the system.   Remember that within a L1 DFD, the same general level of abstraction should apply to all processes (review 310 notes for guidance)
 
+### Data Flow Diagram (Level 0):
+
+
 
 ![Level 0 DFD](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/e3c4d0d0-ed81-492e-a3ca-5f21f1d95aed)
 
@@ -343,6 +346,7 @@ The DFD Level 0 shows a high-level overview of the data flow within the GradeFal
 - Approves Instructor Registration (Administrators to GradeFalcon): Administrators handle the approval of new instructor registrations within the GradeFalcon system.
 - Approval Message for the Instructor (GradeFalcon to Administrators): Once an instructor is approved, the system sends a notification back to the administrator to confirm the approval.
 
+### Data Flow Diagram (Level 1):
 
 
 ![Level 1 DFD](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/bdb2d1ce-7026-40b2-9f59-c2b88d7b34b9)
