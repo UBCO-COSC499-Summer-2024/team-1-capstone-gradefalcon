@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeFalcon Classes</title>
+    <link rel="stylesheet" href="Classes.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <h1>GradeFalcon</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="Dashboard.html">Dashboard</a></li>
+                <li><a href="Schedule.html">Schedule</a></li>
+                <li><a href="ExamBoard.html">Exam Board</a></li>
+                <li><a href="GradeReport.html">Grade Report</a></li>
+                <li><a href="Classes.html">Classes</a></li>
+                <li><a href="AccountSettings.html">Account Settings</a></li>
+                <li><a href="NotificationPreferences.html">Notification Preferences</a></li>
+                <li><a href="Logout.html">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="main-content">
+        <header>
+            <h2>Classes</h2>
+        </header>
+        <section class="class-list">
+            <h3>Your Classes</h3>
+            <div class="class-card">
+                <h4><a href="ClassManagement.html">Class 1</a></h4>
+                <p>Details about Class 1</p>
+            </div>
+            <div class="class-card">
+                <h4><a href="ClassManagement.html">Class 2</a></h4>
+                <p>Details about Class 2</p>
+            </div>
+            <!-- Add more class cards as needed -->
+        </section>
+        <section class="new-class">
+            <h3>Create a new class</h3>
+            <p>Import a CSV file containing the student names and their student IDs in your class.</p>
+            <div class="upload-area">
+                <input type="file" id="file-input" hidden>
+                <div class="drag-drop-area" onclick="document.getElementById('file-input').click();">
+                    <p>Click to browse or drag and drop your files</p>
+                </div>
+                <button class="import-btn">Import</button>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
