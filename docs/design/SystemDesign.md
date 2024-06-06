@@ -327,6 +327,21 @@ This database is designed to efficiently manage and store all data associated wi
 The team is required to create comprehensive Level 0 and Level 1 Data Flow Diagrams (DFDs) to visually represent the system’s data flow, including key processes, data stores, and data movements.  The deliverables will include a high-level context diagram, a detailed Level 1 DFD, and supporting documentation to facilitate the understanding of data movement within the system.   Remember that within a L1 DFD, the same general level of abstraction should apply to all processes (review 310 notes for guidance)
 
 ![Level 0 DFD](Level0dfd.jpeg "Level 0 DFD")
+The DFD Level 0 shows a high-level overview of the data flow within the GradeFalcon system, illustrating the primary interactions and data exchanges between students, instructors, administrators, and the central system.
+ ## Data Flow from and to Students:
+- Scanned Bubble Sheets, Report Misgrading (Students to GradeFalcon): Students submit their completed bubble sheets to the GradeFalcon system for processing and marking. Students can report any discrepancies or issues they notice in their grading to the GradeFalcon system for further review.
+- Exam Results, Misgrading Results (GradeFalcon to Students): Once the exams are processed and marked, the results are sent back to the students. If any misgrading was reported and reviewed, the corrected results are communicated to the students.
+
+## Data Flow from and to Instructors:
+- Exam and Class Information, Result Review Requests (Instructors to GradeFalcon): Instructors input details about the exams and associated classes into the GradeFalcon system. Instructors can submit requests for reviewing specific exam results if discrepancies are found.
+- Exam Analysis, Marked Exams (GradeFalcon to Instructors): The GradeFalcon system provides analysis of exam performance, which can include statistical insights and performance metrics. The system returns the marked exams to the instructors for their records and further action if needed.
+
+## Data Flow from and to Administrators
+- Approves Instructor Registration (Administrators to GradeFalcon): Administrators handle the approval of new instructor registrations within the GradeFalcon system.
+- Approval Message for the Instructor (GradeFalcon to Administrators): Once an instructor is approved, the system sends a notification back to the administrator to confirm the approval.
+
+
+  
 ![Level 1 DFD](Level1dfd.jpeg "Level 1 DFD")
 
 ## User Interface (UI) Design
