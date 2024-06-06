@@ -300,9 +300,11 @@ Extending from your requirements, the team will need to develop a set of usage s
 
 Provide an ER diagram of the entities and relationships you anticipate having in your system (this will most likely change, but you need a starting point).  In a few sentences, explain why the data is modelled this way and what is the purpose of each table/attribute.  For this part, you only need to have ONE diagram and an explanation.
 
-!["ER Diagram](er_diagram.jpg "ER Diagram")
+!["ER Diagram](er_diagram.png "ER Diagram")
 
 ### Summary
+
+
 
 This database is designed to efficiently manage and store all data associated with creating, marking, and reviewing bubble sheet exams. It not only handles exam-related data but also manages user records and essential information required for the key functionalities of our system.
 
@@ -330,7 +332,7 @@ The team is required to create comprehensive Level 0 and Level 1 Data Flow Diagr
 
 
 
-![Level 0 DFD](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/e3c4d0d0-ed81-492e-a3ca-5f21f1d95aed)
+![Level 0 DFD](level0dfd.jpeg)
 
 
 The DFD Level 0 shows a high-level overview of the data flow within the GradeFalcon system, illustrating the primary interactions and data exchanges between students, instructors, administrators, and the central system.
@@ -348,7 +350,7 @@ The DFD Level 0 shows a high-level overview of the data flow within the GradeFal
 
 ### Data Flow Diagram (Level 1):
 
-![Level 1 DFD](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/5f19e915-81e9-455d-b806-2c3e6e4ce317)
+![Level 1 DFD](level1dfd.jpeg)
 
 
 The Level 1 Data Flow Diagram (DFD) for the GradeFalcon system provides a more detailed view of the processes and data flows within the system, expanding on the Level 0 DFD. 
