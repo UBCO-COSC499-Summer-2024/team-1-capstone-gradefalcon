@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeFalcon Upload Answer Key</title>
+    <link rel="stylesheet" href="UploadExamKey.css">
+    <style>
+        .upload-area {
+            text-align: center;
+        }
+
+        .drag-drop-area {
+            width: 100%;
+            height: 200px;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #777;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .drag-drop-area:hover {
+            background-color: #f9f9f9;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-later {
+            background-color: #ccc;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .btn-later:hover {
+            background-color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <h1>GradeFalcon</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="Dashboard.html">Dashboard</a></li>
+                <li><a href="Schedule.html">Schedule</a></li>
+                <li><a href="ExamBoard.html">Exam Board</a></li>
+                <li><a href="GradeReport.html">Grade Report</a></li>
+                <li><a href="Classes.html">Classes</a></li>
+                <li><a href="AccountSettings.html">Account Settings</a></li>
+                <li><a href="NotificationPreferences.html">Notification Preferences</a></li>
+                <li><a href="Logout.html">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="main-content">
+        <header>
+            <h2>Answer Key</h2>
+        </header>
+        <section class="upload-key">
+            <h3>Upload the exam answer key as a PDF file.</h3>
+            <div class="upload-area">
+                <input type="file" id="file-input" hidden accept="application/pdf">
+                <div class="drag-drop-area" onclick="document.getElementById('file-input').click();">
+                    <p>Click to browse or drag and drop your files</p>
+                </div>
+                <button class="btn">Import</button>
+                <button class="btn-later">Later</button>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
