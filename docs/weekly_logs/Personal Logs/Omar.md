@@ -123,3 +123,42 @@
   - Work on the video for system architecture.
   - Set up Docker.
   - Start looking into the OCM.
+  
+
+## Applicable Date Range
+- Week of 05/06/2024 to 07/06/2024
+
+## Tasks Worked On
+- **UI and UX Design:**
+  - Finalized the UI mockups.
+  - Added the input exam and answer key pages.
+  - Linked the new pages to the existing design.
+- **Slide Deck:**
+  - Worked on the slide deck for the system design video.
+  - Refined and optimized the look of the slide deck.
+- **User Flow Diagram:**
+  - Worked on creating the user flow diagram.
+- **Docker Setup:**
+  - Set up Docker.
+  - Got the awesome compose file up and running.
+
+## Progress Summary
+- **Completed:**
+  - Finalized UI mockups (Medium).
+  - Added input exam and answer key pages (Small).
+  - Slide deck for system design video (Small).
+  - User flow diagram (Medium).
+  - Docker setup and compose file (Medium).
+
+## Goals Recap
+- **This Week's Goals:**
+  - Finalize UI mockups.
+  - Add input exam and answer key pages.
+  - Work on the slide deck for the system design video.
+  - Create the user flow diagram.
+  - Set up Docker and compose file.
+- **Next Cycle Plan (3-4 Days):**
+  - Start CI/CD set up
+  - Review the front end design developed by my teammmates.
+  - Continue refining Docker setup.
+  - Start looking into the OCM.
