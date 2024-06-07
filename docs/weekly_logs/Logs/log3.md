@@ -37,12 +37,14 @@
 | N/A | Complete system design presentation script | 6 | Nelson |
 
 ## Burn-up Chart (Velocity):
-- ![docs/weekly logs/Burn Up Charts/burn up chart 2.png](docs/weekly_logs/BurnUpCharts/BurnUpChart3.png)
-
+- ![docs/weekly logs/Burn Up Charts/burn up chart 2.png](
+https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/3f93ff8b19b93f594ca09e0ec11e73f528225399/docs/weekly_logs/BurnUpCharts/BurnUpChart3.png
+    )
 ## Times for Team/Individual:
 
 - ![docs/weekly logs/Clockify/Time1.png](
-docs/weekly_logs/Clockify/Time2.png)
+https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/3f93ff8b19b93f594ca09e0ec11e73f528225399/docs/weekly_logs/Clockify/Time2.png
+    )
 
 ## Completed Tasks:
 | Task ID | Description | Completed By |
