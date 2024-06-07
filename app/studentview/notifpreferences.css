@@ -16,7 +16,7 @@ a {
 
 .sidebar {
     width: 250px;
-    background-color: #1A202C;
+    background-color:#4CAF50;
     color: white;
     display: flex;
     flex-direction: column;
@@ -66,8 +66,9 @@ header h2 {
     font-weight: normal;
 }
 
-section {
-    margin-bottom: 20px;
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
 }
 
 .notification-preferences {
@@ -75,33 +76,99 @@ section {
     border-radius: 5px;
     padding: 20px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    flex-basis: 60%;
 }
 
-label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 5px;
+.notification-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+.notification-option label {
+    font-size: 16px;
 }
 
-.save-changes-btn {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
     cursor: pointer;
-    margin-right: 10px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;
 }
 
-.save-changes-btn:hover {
-    background-color: #45a049;
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
 }
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(14px);
+}
+
+.right-sidebar {
+    flex-basis: 35%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.right-sidebar section {
+    margin-bottom: 20px;
+}
+
+.right-sidebar h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.right-sidebar #calendar {
+    background-color: #EDF2F7;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.right-sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.right-sidebar ul li {
+    padding: 10px;
+    background-color: #EDF2F7;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
