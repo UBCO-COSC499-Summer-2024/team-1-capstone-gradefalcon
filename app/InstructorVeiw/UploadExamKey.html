@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GradeFalcon Upload Answer Key</title>
-    <link rel="stylesheet" href="UploadExamKey.css">
+    <link rel="stylesheet" href="ManualExamKey.css">
     <style>
         .upload-area {
             text-align: center;
@@ -100,7 +100,6 @@
             fileInput.addEventListener('change', handleFileSelect);
             importBtn.addEventListener('click', () => resetUpload());
             dragDropArea.addEventListener('click', () => fileInput.click());
-            confirmBtn.addEventListener('click', () => alert('PDF confirmed!'));
         });
     </script>
 </head>
@@ -138,7 +137,7 @@
                 <iframe></iframe>
             </div>
             <button class="btn btn-import">Import</button>
-            <button class="btn-confirm">Confirm</button>
+            <a href="ExamControls.html" class="btn-confirm">Confirm</a>
         </section>
     </div>
 </body>

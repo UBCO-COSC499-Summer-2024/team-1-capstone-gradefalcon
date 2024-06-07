@@ -70,7 +70,7 @@ section {
     margin-bottom: 20px;
 }
 
-.new-exam {
+.exam-controls {
     background-color: white;
     border-radius: 5px;
     padding: 20px;
@@ -78,13 +78,13 @@ section {
     box-sizing: border-box;
 }
 
-.new-exam h3 {
+.exam-controls h3 {
     font-size: 20px;
     font-weight: normal;
     margin-bottom: 10px;
 }
 
-.new-exam p {
+.exam-controls p {
     font-size: 14px;
     margin-bottom: 20px;
     color: #555;
@@ -130,3 +130,20 @@ form {
     display: flex;
     flex-direction: column;
 }
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    curso

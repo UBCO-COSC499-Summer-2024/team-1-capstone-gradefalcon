@@ -30,25 +30,31 @@
         </header>
         <section class="notification-preferences">
             <form>
-                <label for="email-notifications">Email Notifications</label>
-                <select id="email-notifications">
-                    <option value="enabled">Enabled</option>
-                    <option value="disabled">Disabled</option>
-                </select>
+                <div class="control-item">
+                    <span>Email Notifications</span>
+                    <label class="switch">
+                        <input type="checkbox" id="email-notifications">
+                        <span class="slider"></span>
+                    </label>
+                </div>
                 
-                <label for="sms-notifications">SMS Notifications</label>
-                <select id="sms-notifications">
-                    <option value="enabled">Enabled</option>
-                    <option value="disabled">Disabled</option>
-                </select>
+                <div class="control-item">
+                    <span>SMS Notifications</span>
+                    <label class="switch">
+                        <input type="checkbox" id="sms-notifications">
+                        <span class="slider"></span>
+                    </label>
+                </div>
 
-                <label for="push-notifications">Push Notifications</label>
-                <select id="push-notifications">
-                    <option value="enabled">Enabled</option>
-                    <option value="disabled">Disabled</option>
-                </select>
+                <div class="control-item">
+                    <span>Push Notifications</span>
+                    <label class="switch">
+                        <input type="checkbox" id="push-notifications">
+                        <span class="slider"></span>
+                    </label>
+                </div>
                 
-                <button class="save-changes-btn">Save changes</button>
+                <button type="submit" class="btn save-changes-btn">Save changes</button>
             </form>
         </section>
     </div>
