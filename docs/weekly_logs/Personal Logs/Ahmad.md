@@ -63,3 +63,27 @@ Ahmad Saleem Mirza
   - Setup database server in postgres
   - Implement frontend with working navigation
   - Design presentation video
+
+
+## Jun 05 - Jun 07, 2024
+
+### Tasks Worked On
+- **Database Design:**
+  - Created an external PostgreSQL server via *Supabase* for easy storage
+  - Designed all entities and respective fields following agreed upon database schema
+  - Implemented all relationships to ensure consistency between tables
+- **UI Design**
+  - Provided help with the user interface designing process
+
+### Progress Summary
+- **Completed:**
+  - Database now fully functional
+  - Instructor view front end now navigational
+- **In Progress:**
+  - Design video editing
+  - Implement ReactRouter for page navigation
+
+### Goals for Next Cycle (5 days)
+  - Finish design video
+  - Implement ReactRouter for page navigation
+  - Start work on OMR model
