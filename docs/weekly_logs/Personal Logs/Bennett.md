@@ -67,9 +67,32 @@
 - **Next Cycle Plan (Wednessday -> Friday):**
   - Translate UI Mockup into clean and reusable HTML/CSS.
 
+---------------------------------------------------------------------------------------------------------------------------------------------------
 
+# Personal Log
 
+## Applicable Date Range
+-  Week of 06/06/2024 to 12/06/2024
 
+## Tasks Worked On
+- **UI and UX Design:**
+  - Began translating figma document into HTML/CSS
 
+## Features and Associated Tasks
+- **UI/UX Design:**
+  - Valid functioning frontend (zero backend at this time)
+  - 
+## Progress Summary
+- **Completed:**
+  - frontend instructor Veiw (will need revisions) (Large)
+  - 
+- **In Progress:**
+  - Translating remaing figma UI mockup into Student veiw (Large)
+  - Setting up CI/CD
+  - 
+## Goals Recap
+- **Next Cycle Plan (Friday -> Wednessday):**
+  - Translating remaing figma UI mockup into Student veiw (Large)
+  - Setting up CI/CD
 
 
