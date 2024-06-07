@@ -67,3 +67,49 @@
   - Work on the video for system architecture.
   - Set up the frontend for the system mainly on working on implementing the navigation
   - Helping in setting up Docker.
+
+
+
+## Applicable Date Range
+- Week of 06/06/2024 to 11/06/24
+
+## Tasks Worked On
+- **UI and Ux Design:**
+  - Started translating the figma document into HTML/CSS
+ 
+- **System Design Presentation:**
+  - Writing my part of the script for the system design presentation
+
+-- **Design Document:**
+  - Finished my part of design document
+
+## Features and Associated Tasks
+- **UI and UX Design:**
+  - Implemented Frontend Functioning
+
+- **Design Document:**
+  - Completed the DFDs and their descriptions
+ 
+- **System Design Presention:**
+  - Completed the script for my bit for the presentation
+
+
+## Progress Summary
+- **Completed:**
+  - Editing the Front End (Instructor View) (Medium)
+  - Description needed for Design Documentation
+    
+- **In Progress:**
+  - System Design Presenation
+  - Translating the figma mockup UI for student view (Medium)
+  
+- **This Week's Goals:**
+ - Completing the system design presentation
+ - Review the database design created for discussion and any changes if needed
+ - Complete the front end development for all available views of the system
+   
+- **Next Cycle Plan (3-4 Days):**
+  - Working on the system design presentation with the team
+  - Translating the remaining figma UI mockup for Student View(Medium)
+  - Edit and add refinements to the transaltions made for the instructor view figma UI mockup(Medium)
+  - Efforts in Setting up the CI/CD
