@@ -87,4 +87,61 @@
 - **Next Cycle Plan (3-4 Days):**
   - Transform Figma UI mockups into a functional UI using HTML/CSS.
   - Finish Database Constructiom.
-  - Research QR codes and Yolo/OpenCV
+  - Research QR codes and Yolo/Here’s your updated personal log for the week of 04/06/2024:
+
+### Personal Log
+#### Applicable Date Range
+**Week of 06/06/2024**
+
+#### Tasks Worked On
+
+- **Design Document:**
+  - Finished my part of the design document.
+  
+- **Database Creation:**
+  - Created the main database.
+  
+- **Frontend Development:**
+  - Worked on making the frontend functional.
+  
+- **System Design Presentation:**
+  - Writing my part of the script for the system design presentation.
+
+#### Features and Associated Tasks
+
+- **Database Creation:**
+  - Designed and created the main database.
+  
+- **UI Development:**
+  - Made the frontend functional.
+  
+- **Design Document:**
+  - Completed my part of the design document.
+  
+- **System Design Presentation:**
+  - Developed and wrote the script for the presentation.
+
+#### Progress Summary
+
+- **Completed:**
+  - My part of the design document.
+  - Database design and creation.
+  
+- **In Progress:**
+  - UI Development from Figma mockups to a functional state.
+  - Writing the system design presentation script.
+  
+#### Goals Recap
+
+- **This Week's Goals:**
+  - Finalize database design and review with teammates.
+  - Create the first version of the frontend.
+  
+- **Next Cycle Plan (3-4 Days):**
+  - Transform Figma UI mockups into a functional UI using HTML/CSS.
+  - Finish database construction.
+  - Research QR codes and YOLO/OpenCV.
+  - Complete the script for the system design presentation.
+
+
+
