@@ -1,3 +1,5 @@
+-- ////////// Drop tables if they already exist: /////////////////
+
 DROP TABLE IF EXISTS teacher CASCADE;
 DROP TABLE IF EXISTS classes CASCADE;
 DROP TABLE IF EXISTS student CASCADE;
@@ -8,6 +10,9 @@ DROP TABLE IF EXISTS scannedExam CASCADE;
 DROP TABLE IF EXISTS feedback CASCADE;
 DROP TABLE IF EXISTS admins CASCADE;
 DROP TYPE IF EXISTS feedback_status CASCADE;
+
+
+ -- ////////// Create tables: /////////////////
 
 CREATE TABLE teacher (
 	teacher_id serial primary key,
@@ -87,4 +92,43 @@ CREATE TABLE admins(
 	email text not null,
 	password text not null,
 	name text not null
-)
+);
+
+
+-- ////////// Test value insertion: /////////////////
+
+INSERT INTO teacher (email, password, name) VALUES (
+	'teacher@ubc.ca', 'teacher', 'Teacher'
+);
+
+INSERT INTO student (email, password, name) VALUES (
+	'student@ubc.ca', 'student', 'Student'
+);
+
+INSERT INTO classes (teacher_id, course_id) VALUES (
+	1, 'TEST100'
+);
+
+INSERT INTO exam (class_id, total_questions, total_marks) VALUES (
+	1, 50, 50
+);
+
+INSERT INTO solution (exam_id) VALUES (
+	1
+);
+
+INSERT INTO studentResults (student_id, exam_id) VALUES (
+	1, 1
+);
+
+INSERT INTO scannedExam (exam_id) VALUES (
+	1
+);
+
+INSERT INTO feedback (sheet_id, student_id, feedback_text, feedback_time, status) VALUES (
+	1, 1, 'Q5 is incorrectly marked', CURRENT_TIMESTAMP, 'Not Done'
+);
+
+INSERT INTO admins (email, password, name) VALUES (
+	'admin@ubc.ca', 'admin', 'Admin'
+);
