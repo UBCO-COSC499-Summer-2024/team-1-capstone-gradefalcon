@@ -69,16 +69,3 @@ header h2 {
 section {
     margin-bottom: 20px;
 }
-
-.calendar {
-    background-color: white;
-    border-radius: 5px;
-    padding: 15px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-}
-
-#calendar {
-    max-width: 100%;
-    margin: 0 auto;
-}
