@@ -143,5 +143,5 @@ Task 2 was begun with some expirimentation with figma plugins to smoothly reacti
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
   * Porting HTML/CSS UI into react- "reactifying the UI"
-  * Begin creating content and planning for presentation friday
+  * Begin creating implimenting features for friday mini-presentation (team objective)
   * impliment HTML/CSS testing
