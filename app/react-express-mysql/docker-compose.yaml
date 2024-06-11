@@ -7,7 +7,7 @@ services:
       target: development
     command: npm run start-watch
     environment:
-      - DATABASE_DB=example
+      - DATABASE_DB=GradeFalcon
       - DATABASE_USER=root
       - DATABASE_PASSWORD=secret
       - DATABASE_HOST=db
