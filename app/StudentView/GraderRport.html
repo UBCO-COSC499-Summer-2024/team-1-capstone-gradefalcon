@@ -4,7 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GradeFalcon Grade Report</title>
-    <link rel="stylesheet" href="gradereport_student.css">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+    /*CSS not shared between student and instructor veiw for Grade Report because they 
+will have acess to seperate/independant information and styles*/        
+.chart {
+    background-color: white;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.chart h3 {
+    font-size: 20px;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+.chart img {
+    width: 100%;
+    height: auto;
+}
+
+.placeholder {
+    width: 100%;
+    height: 200px;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #555;
+    font-size: 16px;
+}
+    </style>
 </head>
 <body>
     <div class="sidebar">
