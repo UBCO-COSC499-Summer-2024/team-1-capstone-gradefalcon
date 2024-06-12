@@ -6,7 +6,7 @@ Ahmad Saleem Mirza
 
 ### Timesheet
 Clockify report
-![alt text](image_url_here)
+![alt text](../Clockify/Ahmad/June7-12.jpg)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Dockerize database
@@ -45,6 +45,7 @@ Clockify report
         <td>In Progress
         </td>
     </tr>
+    
 </table>
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
@@ -56,6 +57,7 @@ Moreover, as per the new guidelines from Dr. Fazackerley about how our weekly, t
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
   * Continue OMR development
   * Reorganize repo
+  * Class creation
 
 ## Friday (June 5 - 7)
 
