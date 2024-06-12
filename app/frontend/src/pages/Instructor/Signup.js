@@ -1,5 +1,4 @@
 import React from "react";
-import App from "../../App";
 // import { ByClickingContinueYouAgreeToOurTermsOfServiceAndPrivacyPolicy } from "./ByClickingContinueYouAgreeToOurTermsOfServiceAndPrivacyPolicy";
 // import { Google } from "./Google";
 import '../../css/Signup.css';
@@ -34,7 +33,6 @@ export const InstructorSignup = () => {
             </div>
             {/* <ByClickingContinueYouAgreeToOurTermsOfServiceAndPrivacyPolicy className="by-clicking-continue" /> */}
           </div>
-          <App />
         </div>
       </div>
     </div>
