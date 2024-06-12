@@ -57,13 +57,13 @@
 
 | Team Member | Logged Hours |
 | ----------- | ------------ |
-| Omar Ankit      | [Hours]      |
-| Ahmad Mirza      | [Hours]      |
-| Nelson Ngumo      | [Hours]      |
-| Jusnoor Kaur      | [Hours]      |
-| Bennett Witt      | [Hours]      |
+| Omar Ankit      | 4      |
+| Ahmad Mirza      | 13      |
+| Nelson Ngumo      | 11.5]      |
+| Jusnoor Kaur      | 12.5      |
+| Bennett Witt      | 8.5      |
 
-- ![docs/weekly logs/Clockify/[Time Tracking Image]](path/to/timetracking.png)
+- ![docs/weekly logs/Clockify/[Time Tracking Image]](../Clockify/Time4.png)
 
 ## Completed Tasks:
 
