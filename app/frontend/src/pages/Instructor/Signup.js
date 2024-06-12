@@ -1,8 +1,8 @@
 import React from "react";
-import App from "app/frontend/src/App";
-import { ByClickingContinueYouAgreeToOurTermsOfServiceAndPrivacyPolicy } from "./ByClickingContinueYouAgreeToOurTermsOfServiceAndPrivacyPolicy";
-import { Google } from "./Google";
-import "./style.css";
+import App from "../../App";
+// import { ByClickingContinueYouAgreeToOurTermsOfServiceAndPrivacyPolicy } from "./ByClickingContinueYouAgreeToOurTermsOfServiceAndPrivacyPolicy";
+// import { Google } from "./Google";
+import '../../css/Signup.css';
 
 export const InstructorSignup = () => {
   return (
@@ -30,9 +30,9 @@ export const InstructorSignup = () => {
             </div>
             <div className="button-2">
               <div className="text-wrapper-4">Google</div>
-              <Google className="google-instance" />
+              {/* <Google className="google-instance" /> */}
             </div>
-            <ByClickingContinueYouAgreeToOurTermsOfServiceAndPrivacyPolicy className="by-clicking-continue" />
+            {/* <ByClickingContinueYouAgreeToOurTermsOfServiceAndPrivacyPolicy className="by-clicking-continue" /> */}
           </div>
           <App />
         </div>

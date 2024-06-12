@@ -1,6 +1,6 @@
 // src/Instructor/Dashboard.js
 import React from 'react';
-import '../style.css';
+import '../../css/style.css';
 
 const Dashboard = () => {
   return (
