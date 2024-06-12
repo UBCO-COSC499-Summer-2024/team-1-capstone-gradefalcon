@@ -9,7 +9,7 @@ import Dashboard from './pages/Instructor/Dashboard';
 import NotFound from './pages/NotFound';
 import InstructorSignup from './pages/Instructor/Signup';
 import Login from './pages/Instructor/Login';
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const [message, setMessage] = useState("");

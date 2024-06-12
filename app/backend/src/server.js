@@ -19,7 +19,7 @@ const app = express();
 
 //Database
 const { Pool } = require("pg");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const config = require("./config");
@@ -47,10 +47,9 @@ const secretKey = process.env.JWT_SECRET || "secret"; // strong secret key store
 app.post("/register", async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
     const result = await pool.query(
-      // "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id",
-      // [email, hashedPassword]
+      "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id",
+      [email, password]
     );
     res.status(201).json({ userId: result.rows[0].id });
   } catch (err) {
@@ -58,13 +57,13 @@ app.post("/register", async (req, res, next) => {
   }
 });
 
-// User login route
+// User login route without encryption
 app.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
     const user = result.rows[0];
-    if (user && await bcrypt.compare(password, user.password)) {
+    if (user && user.password === password) {
       const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: "1h" });
       res.json({ token });
     } else {
@@ -105,6 +104,7 @@ app.get("/healthz", function(req, res) {
   // do app logic here to determine if app is truly healthy
   // you should return 200 if healthy, and anything else will fail
   // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
+  
   res.send("I am happy and healthy\n");
 });
 
