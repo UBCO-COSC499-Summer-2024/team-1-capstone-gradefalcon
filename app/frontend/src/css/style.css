@@ -19,7 +19,7 @@ a {
 .sidebar {
     width: 250px;
     height: 100%;
-    background-color:#4CAF50; 
+    background-color:#60a248;
     color: white;
     display: flex;
     flex-direction: column;
@@ -244,7 +244,7 @@ input[type="text"], input[type="password"] {
 }
 
 .save-changes-btn {
-    background-color: #4CAF50;
+    background-color: #60a248;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -351,7 +351,7 @@ input[type="text"], input[type="password"] {
 }
 
 input:checked + .slider {
-    background-color: #4CAF50;
+    background-color: #60a248;
 }
 
 input:checked + .slider:before {
@@ -359,7 +359,7 @@ input:checked + .slider:before {
 }
 
 .btn {
-    background-color: #4CAF50;
+    background-color: #60a248;
     color: white;
     border: none;
     padding: 10px 20px;

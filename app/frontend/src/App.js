@@ -36,14 +36,6 @@ function App() {
   return (
     <Router>
       <div className="App">
-        
-        {/* <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>{message || "Loading..."}</p>
-          <p>
-            Welcome to GradeFalcon, an optical marking system for grading bubble sheets.
-          </p>
-        </header> */}
         <Layout>
         <Routes>
           <Route path="/" element={<InstructorSignup />} />
