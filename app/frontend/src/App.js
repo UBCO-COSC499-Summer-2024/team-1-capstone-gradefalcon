@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import logo from "./assets/logo.png";
 import "./css/App.css";
-import "./css/style.css"
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import "./css/style.css";
 
+// Import pages
 import Dashboard from './pages/Instructor/Dashboard';
 import NotFound from './pages/NotFound';
 import InstructorSignup from './pages/Instructor/Signup';
-// import Examboard from '../old html/Examboard';
-// import ExamControls from '../old html/ExamControls';
-// import GradeReport from '../old html/GradeReport';
-// import ManualExamKey from '../old html/ManualExamKey';
-// import NewExam from '../old html/NewExam';
-// import NotificationPreferences from '../old html/NotificationPreferences';
-// import Schedule from '../old html/Schedule';
-// import UploadExamKey from '../old html/UploadExamKey';
-// import AccountSettings from '../old html/AccountSettings';
-// import Classes from '../old html/Classes';
-// import ClassManagement from '../old html/ClassManagement';
 
 function App() {
   const [message, setMessage] = useState("");
-  
+
   useEffect(() => {
     fetch("/api/")
       .then(res => res.json())
@@ -39,12 +29,12 @@ function App() {
             Welcome to GradeFalcon, an optical marking system for grading bubble sheets.
           </p>
         </header>
-        <Switch>
-          <Route exact path="/" component={InstructorSignup} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/signup" component={InstructorSignup} />
-          <Route component={NotFound} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<InstructorSignup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/signup" element={<InstructorSignup />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </div>
     </Router>
   );
