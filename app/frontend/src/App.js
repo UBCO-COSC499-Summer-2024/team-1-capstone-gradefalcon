@@ -8,6 +8,7 @@ import "./css/style.css";
 import Dashboard from './pages/Instructor/Dashboard';
 import NotFound from './pages/NotFound';
 import InstructorSignup from './pages/Instructor/Signup';
+import Login from './pages/Instructor/Login';
 
 function App() {
   const [message, setMessage] = useState("");
@@ -26,6 +27,7 @@ function App() {
           <Route path="/" element={<InstructorSignup />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/signup" element={<InstructorSignup />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
