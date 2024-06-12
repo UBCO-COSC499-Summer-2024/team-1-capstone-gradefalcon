@@ -1,5 +1,70 @@
 # Personal Log
 
+## Friday (6/5- 6/7)
+
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/eb0f920469f1a0df5389c184043ef61251d22275/docs/weekly_logs/Clockify/Omar/Time3.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Database Setup
+  * #2: Configure the Backend to include our Postgres DB
+  * #3: Set Up Routing
+
+### Progress Update (since 6/5/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>#29: Database Setup
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>#49: Configure the Backend to include our Postgres DB
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>#48: Set Up Routing
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>#10: Develop Computer Vision Model
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I completed the Database Setup as planned, but configuring the backend to include our Postgres DB and I am setting up routing is taking longer than expected due to the time I had to spend to integrate the db into the backend, I also ran into some bugs with my github desktop app.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Integrate more pages into our app
+  * Have 2-3 features working properly
+  * Work on the presentation due on Friday
+  * Optimize the UI if time permits
+
+---
+
+
 ## Applicable Date Range
 - Week of 27/05/2024
 
