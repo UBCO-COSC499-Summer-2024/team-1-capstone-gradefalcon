@@ -5,9 +5,9 @@ const readFileSync = filename => fs.readFileSync(filename).toString("utf8");
 // Constants
 module.exports = {
   database: {
-    host: process.env.DATABASE_HOST || "db",
+    host: process.env.DATABASE_HOST || "localhost",
     port: process.env.DATABASE_PORT || '5433',
-    database: process.env.DATABASE_DB || "postgres",
+    database: process.env.DATABASE_DB || "root",
     user: process.env.DATABASE_USER || "root",
     password: process.env.DATABASE_PASSWORD_FILE
     ? readFileSync(process.env.DATABASE_PASSWORD_FILE)
