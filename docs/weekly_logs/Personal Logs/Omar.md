@@ -64,8 +64,6 @@ I completed the Database Setup as planned, but configuring the backend to includ
 
 ---
 
-If you need any more adjustments or additional details, feel free to ask!
-
 
 ## Applicable Date Range
 - Week of 27/05/2024
