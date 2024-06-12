@@ -1,9 +1,5 @@
 # Personal Log
 
-Sure, I can help you with that. Here's how you can fill up the template based on the provided information and images:
-
----
-
 ## Friday (6/5- 6/7)
 
 ### Timesheet
