@@ -9,14 +9,15 @@ import Dashboard from './pages/Instructor/Dashboard';
 import NotFound from './pages/NotFound';
 import InstructorSignup from './pages/Instructor/Signup';
 import Login from './pages/Instructor/Login';
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     fetch("/api/")
-      .then(res => res.json())
-      .then(res => setMessage(res.message))
+      .then((res) => res.json())
+      .then((res) => setMessage(res.message))
       .catch(console.error);
   }, []);
 
@@ -25,7 +26,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<InstructorSignup />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/signup" element={<InstructorSignup />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
