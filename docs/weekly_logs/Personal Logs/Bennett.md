@@ -72,7 +72,7 @@
 # Personal Log
 
 ## Applicable Date Range
--  Week of 06/06/2024 to 12/06/2024
+-  Week of 05/06/2024 to 07/06/2024
 
 ## Tasks Worked On
 - **UI and UX Design:**
@@ -95,4 +95,53 @@
   - Translating remaing figma UI mockup into Student veiw (Large)
   - Setting up CI/CD
 
+---------------------------------------------------------------------------------------------------------------------------------------------------
 
+# Personal Log
+
+## Friday (6/07- 6/12)
+
+### Timesheet
+Clockify report
+![alt text](..\Clockify\Bennett\06_07_2024-06_12_2024.pdf)
+
+
+### Current Tasks (Provide sufficient detail)
+  * #1: HTML/CSS fixes/updates. UI optimization 
+  * #2: Porting HTML/CSS UI into react- "reactifying the UI"
+  
+### Progress Update (since 6/5/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>2
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Task 1 was carried out and while all desired sub-objectives were achieved, it goes through constant revisions due to tweaking of future features and team desires for changes in the UI, this task will likeley persist on and off until project compleation
+
+Task 2 was begun with some expirimentation with figma plugins to smoothly reactify HTML, Minor progress is being made
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Porting HTML/CSS UI into react- "reactifying the UI"
+  * Begin creating implimenting features for friday mini-presentation (team objective)
+  * impliment HTML/CSS testing
