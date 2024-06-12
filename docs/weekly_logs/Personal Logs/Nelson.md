@@ -3,7 +3,7 @@
 
 ### Timesheet
 Clockify report
-![Clockify report](docs/weekly_logs/Clockify/june7_screenshot.png)
+![Clockify report](../weekly_logs/Clockify/june7_screenshot.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Login frontend
