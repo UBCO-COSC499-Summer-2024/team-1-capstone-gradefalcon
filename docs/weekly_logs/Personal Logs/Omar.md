@@ -4,7 +4,7 @@
 
 ### Timesheet
 Clockify report
-![time](..\Clockify\Omar\Time3.png)
+![time]([..\Clockify\Omar\Time3.png](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/c2c20b8ceec552f63703601120599737caf45d32/docs/weekly_logs/Clockify/Omar/Time3.png))
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Database Setup
