@@ -1,6 +1,6 @@
 -- ////////// Drop tables if they already exist: /////////////////
 
-DROP TABLE IF EXISTS teacher CASCADE;
+DROP TABLE IF EXISTS instructor CASCADE;
 DROP TABLE IF EXISTS classes CASCADE;
 DROP TABLE IF EXISTS student CASCADE;
 DROP TABLE IF EXISTS exam CASCADE;
@@ -14,8 +14,8 @@ DROP TYPE IF EXISTS feedback_status CASCADE;
 
  -- ////////// Create tables: /////////////////
 
-CREATE TABLE teacher (
-	teacher_id serial primary key,
+CREATE TABLE instructor (
+	instructor_id serial primary key,
 	email text not null,
 	password text not null,
 	name text not null
@@ -23,9 +23,9 @@ CREATE TABLE teacher (
 
 CREATE TABLE classes (
 	class_id serial primary key,
-	teacher_id int,
+	instructor_id int,
 	course_id text,
-	foreign key (teacher_id) references teacher(teacher_id)
+	foreign key (instructor_id) references instructor(instructor_id)
 );
 
 CREATE TABLE student (
@@ -97,15 +97,15 @@ CREATE TABLE admins(
 
 -- ////////// Test value insertion: /////////////////
 
-INSERT INTO teacher (email, password, name) VALUES (
-	'teacher@ubc.ca', 'teacher', 'Teacher'
+INSERT INTO instructor (email, password, name) VALUES (
+	'instructor@ubc.ca', 'instructor', 'instructor'
 );
 
 INSERT INTO student (email, password, name) VALUES (
 	'student@ubc.ca', 'student', 'Student'
 );
 
-INSERT INTO classes (teacher_id, course_id) VALUES (
+INSERT INTO classes (instructor_id, course_id) VALUES (
 	1, 'TEST100'
 );
 
