@@ -11,9 +11,9 @@ ENV NODE_ENV $NODE_ENV
 WORKDIR /code
 
 # default to port 80 for node, and 9229 and 9230 (tests) for debug
-ARG PORT=80
-ENV PORT $PORT
-EXPOSE $PORT 9229 9230
+# ARG PORT=80
+# ENV PORT $PORT
+EXPOSE $PORT 9229 9230 5001
 
 COPY package.json /code/package.json
 COPY package-lock.json /code/package-lock.json

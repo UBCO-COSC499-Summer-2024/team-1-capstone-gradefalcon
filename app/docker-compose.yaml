@@ -5,7 +5,7 @@ services:
     build:
       args:
         - NODE_ENV=development
-        - PORT=5001
+        # - PORT=5001
       context: backend
       target: development
     command: npm run start-watch
@@ -16,7 +16,8 @@ services:
       - DATABASE_HOST=db
       - NODE_ENV=development
       - JWT_SECRET=secret
-      - PORT=5001
+      - DB_PORT=5432
+      # - PORT=5001
     ports:
       - 5001:5001
       - 9229:9229
