@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -19,6 +21,7 @@ const Login = () => {
         const data = await response.json();
         localStorage.setItem("token", data.token);
         // Redirect to a protected route, e.g., dashboard
+        navigate("/dashboard");
       } else {
         console.error("Login failed");
       }
