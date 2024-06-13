@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   backend:
@@ -16,7 +16,7 @@ services:
       - DATABASE_HOST=db
       - NODE_ENV=development
       - JWT_SECRET=secret
-      - DB_PORT=5432
+      - DATABASE_PORT=5432
       # - PORT=5001
     ports:
       - 5001:5001
