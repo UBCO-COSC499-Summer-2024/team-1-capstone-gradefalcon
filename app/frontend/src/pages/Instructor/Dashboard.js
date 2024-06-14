@@ -1,8 +1,33 @@
 // src/Instructor/Dashboard.js
-import React from 'react';
 import '../../css/style.css';
+import React, { useEffect, useState } from 'react';
 
-const Dashboard = ({userName}) => {
+const Dashboard = () => {
+  const [userName, setUserName] = useState('');
+  useEffect(() => {
+    const fetchSessionInfo = async () => {
+      try {
+        const response = await fetch('/api/session-info', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // This ensures cookies are included in the request
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUserName(data.userName);
+        } else {
+          console.error('Failed to fetch session info');
+        }
+      } catch (error) {
+        console.error('Error fetching session info:', error);
+      }
+    };
+
+    fetchSessionInfo();
+  }, []);
+
   return (
     <div className="App">
       <div className="main-content">

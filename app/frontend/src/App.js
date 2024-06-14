@@ -10,8 +10,6 @@ import Dashboard from './pages/Instructor/Dashboard';
 import NotFound from './pages/NotFound';
 import InstructorSignup from './pages/Instructor/Signup';
 import Login from './pages/Instructor/Login';
-import ProtectedRoute from "./ProtectedRoute";
-
 // Layout component to conditionally render NavBar
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -43,7 +41,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Layout>
+        {/* <Layout> */}
         <Routes>
           <Route path="/" element={<InstructorSignup />} />
            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -51,7 +49,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        </Layout>
+        {/* </Layout> */}
       </div>
     </Router>
   );
