@@ -14,7 +14,7 @@ import ProtectedRoute from "./ProtectedRoute";
 // Layout component to conditionally render NavBar
 // const Layout = ({ children }) => {
 //   const location = useLocation();
-//   const shouldDisplayNavBar = location.pathname !== '/';
+//   const shouldDisplayNavBar = location.pathname !== '/' && ./login;
 
 //   return (
 //     <>

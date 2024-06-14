@@ -26,9 +26,12 @@ app.use(session({
     tableName: 'session' // Use another table-name if you want to override default
   }),
   secret: 'secret', // Change this to a secure secret key
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+  // resave: false, // This is true by default. It is recommended to set it to false
+  // saveUninitialized: false, // This is true by default. It is recommended to set it to false
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    httpOnly: true, // Ensures the cookie is sent only over HTTP(S), not accessible to client JavaScript
+    secure: false, // Set to true if using https
+  }
 }));
 
 // User registration route
