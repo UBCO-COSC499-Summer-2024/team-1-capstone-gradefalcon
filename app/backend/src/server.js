@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 // simple node web server that displays hello world
 // optimized for Docker image
 const express = require("express");
@@ -16,11 +17,22 @@ const app = express();
 const session = require("express-session");
 const PgSession = require("connect-pg-simple")(session);
 //Database
+=======
+const express = require("express");
+const morgan = require("morgan");
+>>>>>>> Stashed changes
 const { Pool } = require("pg");
-// const bcrypt = require("bcrypt");
+const session = require("express-session");
+const PgSession = require("connect-pg-simple")(session);
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const config = require("./config");
+<<<<<<< Updated upstream
+=======
+
+const app = express();
+
+>>>>>>> Stashed changes
 // PostgreSQL pool setup
 const pool = new Pool(config.database);
 
@@ -31,7 +43,10 @@ app.use(bodyParser.json());
 
 const secretKey = process.env.JWT_SECRET || "secret"; // strong secret key store it in environment variables
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 // Set up session middleware
 app.use(session({
   store: new PgSession({
@@ -58,18 +73,29 @@ app.post("/register", async (req, res, next) => {
   }
 });
 
-// User login route without encryption
+// User login route
 app.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const result = await pool.query("SELECT * FROM instructor WHERE email = $1", [email]);
     const user = result.rows[0];
     if (user && user.password === password) {
+<<<<<<< Updated upstream
       const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: "1h" });
       res.json({ token });
       // Save user information in the session
       req.session.userId = user.id;
       res.json({ message: "Login successful" });
+=======
+      // Save user information in the session
+      req.session.userId = user.id;
+      req.session.save(err => {
+        if (err) {
+          return next(err);
+        }
+        res.json({ message: "Login successful" });
+      });
+>>>>>>> Stashed changes
     } else {
       res.status(401).json({ message: "Invalid credentials" });
     }
@@ -78,22 +104,16 @@ app.post("/login", async (req, res, next) => {
   }
 });
 
-// Middleware to protect routes
-const authenticateJWT = (req, res, next) => {
-  const token = req.header("Authorization");
-  if (!token) {
-    return res.status(401).json({ message: "No token provided" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, secretKey);
-    req.userId = decoded.userId;
+// Middleware to check if the user is authenticated
+const isAuthenticated = (req, res, next) => {
+  if (req.session.userId) {
     next();
-  } catch (err) {
-    res.status(401).json({ message: "Invalid token" });
+  } else {
+    res.status(401).json({ message: "You need to log in" });
   }
 };
 
+<<<<<<< Updated upstream
 // Logout route
 app.post("/logout", (req, res) => {
   req.session.destroy(err => {
@@ -105,6 +125,27 @@ app.post("/logout", (req, res) => {
 });
 
 
+=======
+// Protected route example
+app.get("/profile", isAuthenticated, async (req, res, next) => {
+  try {
+    const result = await pool.query("SELECT * FROM users WHERE id = $1", [req.session.userId]);
+    res.json(result.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Logout route
+app.post("/logout", (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ message: "Logout failed" });
+    }
+    res.json({ message: "Logout successful" });
+  });
+});
+>>>>>>> Stashed changes
 
 app.get("/healthz", function(req, res) {
   // do app logic here to determine if app is truly healthy
