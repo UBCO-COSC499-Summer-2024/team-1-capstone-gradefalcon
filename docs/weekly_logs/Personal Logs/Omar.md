@@ -19,7 +19,7 @@ Clockify report
 3. **Database Integration**
    - Set up Express application with PostgreSQL integration.
    - Ensured the database connection works using Express.js.
-   - Installed necessary packages: pg, bcrypt, jsonwebtoken, and body-parser.
+   - Installed necessary packages: pg, jsonwebtoken, and body-parser.
    - Removed bcrypt after initial setup.
 
 ### Progress Update (since 6/5/2024)
@@ -70,7 +70,8 @@ Clockify report
   - Implemented session management and stored session data in cookies.
   - Developed and tested the login feature, including navigation to the dashboard with authentication.
   - Set up and verified the connection between Express and PostgreSQL.
-  - Fixed Root issue in the backend connection.
+  - Fixed backend root issue in the backend connection.
+  - Set up sessions in the database.
 
 - **What Didn't Go Well:**
   - There was a lot of debugging involved in adjusting the ports, fixing the backend connection to the database, and configuring the Docker Compose, Dockerfile, and server.js file.
