@@ -145,3 +145,53 @@ Task 2 was begun with some expirimentation with figma plugins to smoothly reacti
   * Porting HTML/CSS UI into react- "reactifying the UI"
   * Begin creating implimenting features for friday mini-presentation (team objective)
   * impliment HTML/CSS testing
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+# Personal Log
+
+## Friday (6/12 - 6/14)
+
+## TimeSheet
+Clockify report
+![alt text](team-1-capstone-gradefalcon\docs\weekly_logs\Clockify\Bennett\06_12_2024-06_14_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Porting HTML/CSS UI into react- "reactifying the UI"
+  * #2: Frontend Testing
+
+### Progress Update (since 6/5/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>Completed Required Portion for cycle objectives (will need further work)
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>2
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+task 1: Reactying HTML/CSS took longer than excpected to adapt due to a lack of familiararity aswell as some previously nested javascript needing to be adapted outside of the HTML. The CSS also messed up visual alignmnents so that had resulted in some nessesary micro adjustments
+
+task 2: Begand researching frontend testing and decided on jest and learned how to do it, discussion and planning about testing friday's 3 features delayed any tests being produced for the frontend
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * cleaning up remaining visual issues resulting from porting the HTML/CSS ui over to react (which a few pages still need to be adapted to incompadability errors)
+  * frontend testing with jest
+  * feature unit tests with jest/react testing
