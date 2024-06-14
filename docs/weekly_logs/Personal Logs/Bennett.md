@@ -160,7 +160,7 @@ Clockify report
   * #1: Porting HTML/CSS UI into react- "reactifying the UI"
   * #2: Frontend Testing
 
-### Progress Update (since 6/5/2024) 
+### Progress Update (since 6/07/2024) 
 <table>
     <tr>
         <td><strong>TASK/ISSUE #</strong>
