@@ -56,7 +56,8 @@ app.post("/login", async (req, res, next) => {
     const user = result.rows[0];
     if (user && user.password === password) {
       // Save user information in the session
-      req.session.userId = user.instructor_id; 
+      req.session.userId = user.instructor_id;
+      req.session.userName = user.name;
       req.session.save(err => {
         if (err) {
           return next(err);
@@ -83,7 +84,7 @@ const isAuthenticated = (req, res, next) => {
 // Protected route example
 app.get("/profile", isAuthenticated, async (req, res, next) => {
   try {
-    const result = await pool.query("SELECT * FROM users WHERE id = $1", [req.session.userId]);
+    const result = await pool.query("SELECT * FROM FROM instructor WHERE instructor_id= $1", [req.session.userId]);
     res.json(result.rows[0]);
   } catch (err) {
     next(err);

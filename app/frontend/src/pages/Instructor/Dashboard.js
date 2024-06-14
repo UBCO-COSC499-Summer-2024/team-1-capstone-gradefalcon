@@ -2,12 +2,12 @@
 import React from 'react';
 import '../../css/style.css';
 
-const Dashboard = () => {
+const Dashboard = ({userName}) => {
   return (
     <div className="App">
       <div className="main-content">
         <header>
-          <h2>Welcome, Adam!</h2>
+        <h2>Welcome, {userName ? userName : "Guest"}!</h2>
         </header>
         <section className="courses">
           <h3>Enrolled Courses</h3>
