@@ -5,23 +5,6 @@ import '../../css/style.css';
 const Dashboard = () => {
   return (
     <div className="App">
-      <div className="sidebar">
-        <div className="logo">
-          <h1>GradeFalcon</h1>
-        </div>
-        <nav>
-          <ul>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/schedule">Schedule</a></li>
-            <li><a href="/examboard">Exam Board</a></li>
-            <li><a href="/gradereport">Grade Report</a></li>
-            <li><a href="/classes">Classes</a></li>
-            <li><a href="/account-settings">Account Settings</a></li>
-            <li><a href="/notification-preferences">Notification Preferences</a></li>
-            <li><a href="/logout">Logout</a></li>
-          </ul>
-        </nav>
-      </div>
       <div className="main-content">
         <header>
           <h2>Welcome, Adam!</h2>
