@@ -19,7 +19,7 @@ services:
       - DATABASE_PORT=5432
       # - PORT=5001
     ports:
-      - 5001:5001
+      - 80:80
       - 9229:9229
       - 9230:9230
     volumes:
