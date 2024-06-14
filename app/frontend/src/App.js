@@ -4,11 +4,12 @@ import logo from "./assets/logo.png";
 import "./css/App.css";
 import "./css/style.css";
 import NavBar from "./NavBar";
+import ProtectedRoute from "./ProtectedRoute";
 // Import pages
 import Dashboard from './pages/Instructor/Dashboard';
 import NotFound from './pages/NotFound';
 import InstructorSignup from './pages/Instructor/Signup';
-
+import Login from './pages/Instructor/Login';
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
@@ -21,7 +22,7 @@ import UploadExamKey from "./pages/Instructor/UploadExamKey";
 // Layout component to conditionally render NavBar
 const Layout = ({ children }) => {
   const location = useLocation();
-  const shouldDisplayNavBar = location.pathname !== '/' && location.pathname !== './login';
+  const shouldDisplayNavBar = location.pathname !== '/' && location.pathname !== '/login';
 
   return (
     <>
@@ -45,9 +46,10 @@ function App() {
   return (
     <Router>
       <div className="App">
-        {/* <Layout> */}
+        <Layout>
         <Routes>
           <Route path="/" element={<InstructorSignup />} />
+          <Route path="/login" element={<Login />} />
            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/signup" element={<InstructorSignup />} />
           <Route path="/AccountSettings" element={<AccountSettings />} />
@@ -62,7 +64,7 @@ function App() {
           {/* <Route path="/Schedule" element={<Schedule />} /> Schedule plugin is brocken ->will fix */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-        {/* </Layout> */}
+        </Layout>
       </div>
     </Router>
   );
