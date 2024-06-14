@@ -8,6 +8,7 @@ import NavBar from "./NavBar";
 import Dashboard from './pages/Instructor/Dashboard';
 import NotFound from './pages/NotFound';
 import InstructorSignup from './pages/Instructor/Signup';
+
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
@@ -35,8 +36,8 @@ function App() {
 
   useEffect(() => {
     fetch("/api/")
-      .then(res => res.json())
-      .then(res => setMessage(res.message))
+      .then((res) => res.json())
+      .then((res) => setMessage(res.message))
       .catch(console.error);
   }, []);
   
@@ -47,7 +48,7 @@ function App() {
         <Layout>
         <Routes>
           <Route path="/" element={<InstructorSignup />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/signup" element={<InstructorSignup />} />
           <Route path="/AccountSettings" element={<AccountSettings />} />
           <Route path="/Classes" element={<Classes />} />
@@ -59,7 +60,6 @@ function App() {
           <Route path="/NotificationPreferences" element={<NotificationPreferences />} />
           <Route path="/UploadExamKey" element={<UploadExamKey />} />
           {/* <Route path="/Schedule" element={<Schedule />} /> Schedule plugin is brocken ->will fix */}
-
           <Route path="*" element={<NotFound />} />
         </Routes>
         </Layout>

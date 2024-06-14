@@ -19,6 +19,9 @@ COPY package.json /code/package.json
 COPY package-lock.json /code/package-lock.json
 RUN npm ci
 
+# Install PostgreSQL client
+RUN apt-get update && apt-get install -y postgresql-client
+
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK --interval=30s \
   CMD node healthcheck.js

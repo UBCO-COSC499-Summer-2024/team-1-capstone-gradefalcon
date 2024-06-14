@@ -1,17 +1,23 @@
+version: "3.8"
+
 services:
   backend:
     build:
       args:
         - NODE_ENV=development
+        # - PORT=5001
       context: backend
       target: development
     command: npm run start-watch
     environment:
-      - DATABASE_DB=GradeFalcon
+      - DATABASE_DB=root
       - DATABASE_USER=root
       - DATABASE_PASSWORD=secret
       - DATABASE_HOST=db
       - NODE_ENV=development
+      - JWT_SECRET=secret
+      - DATABASE_PORT=5432
+      # - PORT=5001
     ports:
       - 80:80
       - 9229:9229
@@ -27,17 +33,23 @@ services:
     depends_on:
       - db
   db:
-    # Using posgress
+    # Using postgres
     container_name: db-postgres
     ports:
       - 5433:5432
-    hostname: 127.0.0.1
+    hostname: db
+    # 127.0.0.1
     environment:
+      - POSTGRES_DB=root
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=secret
     image: postgres:latest
     volumes:
       - ./db/sql:/docker-entrypoint-initdb.d
+    networks:
+      - public
+      - private
+
   frontend:
     build:
       context: frontend
