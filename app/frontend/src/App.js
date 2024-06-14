@@ -12,17 +12,17 @@ import Login from './pages/Instructor/Login';
 import ProtectedRoute from "./ProtectedRoute";
 
 // Layout component to conditionally render NavBar
-const Layout = ({ children }) => {
-  const location = useLocation();
-  const shouldDisplayNavBar = location.pathname !== '/';
+// const Layout = ({ children }) => {
+//   const location = useLocation();
+//   const shouldDisplayNavBar = location.pathname !== '/';
 
-  return (
-    <>
-      {shouldDisplayNavBar && <NavBar />}
-      {children}
-    </>
-  );
-};
+//   return (
+//     <>
+//       {shouldDisplayNavBar && <NavBar />}
+//       {children}
+//     </>
+//   );
+// };
 
 function App() {
   const [message, setMessage] = useState("");
@@ -38,7 +38,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Layout>
+        {/* <Layout> */}
         <Routes>
           <Route path="/" element={<InstructorSignup />} />
            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -46,7 +46,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        </Layout>
+        {/* </Layout> */}
       </div>
     </Router>
   );
