@@ -1,5 +1,102 @@
 # Personal Log
+## Friday (6/12- 6/14)
 
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/eb0f920469f1a0df5389c184043ef61251d22275/docs/weekly_logs/Clockify/Omar/Time3.png)
+
+### Current Tasks (Provide sufficient detail)
+1. **Session Management Implementation**
+   - Implemented session management to replace JWT authentication.
+   - Stored session information in cookies.
+   - User ID now stored in cookies for session tracking.
+
+2. **Login Feature Development**
+   - Created a mock login page.
+   - Set up navigation to the dashboard page post-login.
+   - Added route protection to authenticate access to certain pages.
+
+3. **Database Integration**
+   - Set up Express application with PostgreSQL integration.
+   - Ensured the database connection works using Express.js.
+   - Installed necessary packages: pg, bcrypt, jsonwebtoken, and body-parser.
+   - Removed bcrypt after initial setup.
+
+### Progress Update (since 6/5/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>#12 Setup Express Application with PostgreSQL Integration
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>#55 Implement Session Management and Creation
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>#62 Instructor Login and Authentication
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Implement Route Protection
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+- **What Went Well:**
+  - Successfully replaced JWT authentication with session management.
+  - Login feature development was completed, adding essential navigation functionalities.
+  - Route protection was successfully implemented.
+
+- **What Was Done:**
+  - Implemented session management and stored session data in cookies.
+  - Developed and tested the login feature, including navigation to the dashboard.
+  - Set up and verified the connection between Express and PostgreSQL.
+
+- **What Didn't Go Well:**
+  - There was a lot of debugging involved in adjusting the ports, fixing the backend connection to the database, and configuring the Docker Compose, Dockerfile, and server.js file.
+  - Encountered significant issues with configuration and integration, which took a considerable amount of time to resolve.
+
+- **Retrospective:**
+  - The process of integrating session management was challenging, with many obstacles to overcome.
+  - The overall workflow is progressing, although it has required considerable effort and debugging to ensure tasks are completed.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+1. **Exam Creation and OMR:**
+   - Work on implementing features for exam creation and Optical Mark Recognition (OMR).
+
+2. **Role-Based Authentication:**
+   - Implement role-based authentication to manage different user types.
+
+3. **Server.js Adjustments:**
+   - Adjust the server.js code to handle all user types effectively.
+
+4. **CSV Import Feature:**
+   - Implement the import CSV feature to facilitate data import.
+
+5. **Documentation and Testing:**
+   - Document the new features and improvements.
+   - Write unit tests for the new functionalities to ensure reliability.
+
+   
 ## Friday (6/5- 6/7)
 
 ### Timesheet
