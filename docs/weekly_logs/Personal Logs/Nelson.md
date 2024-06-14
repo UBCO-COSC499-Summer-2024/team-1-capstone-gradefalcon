@@ -1,9 +1,64 @@
+## Wednesday (12/7- 14/7)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/june14_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Writing fully functional login page
+  * #2: Writing fully functional sign up page
+  * #3: API routes for database query using express
+
+### Progress Update (since 6/5/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Writing fully functional login page
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Writing fully functional sign up page
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>API routes for database query's using express
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+This cycle felt much longer than the rest I faced quite a few challenges with the technologies we were using mainly because I did not understand the technologies as well as I thought. I was struggling quite a bit with docker and express especially when it came to connecting to the database and making queries to and from. I think it was really challenging because of how complex postgre is. Thankyfully my teammates were able to help me out and were patient with me. 
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Backend API making sure express is fully functional with the rest of the pages.
+  * Create a little demo bubble sheet scanner to demo idea's.
+  * Research the best place to store the pdf's either locally or the cloud and create a little demo.
+
+
+
 
 ## Wednesday (7/7- 12/7)
 
 ### Timesheet
 Clockify report
-![alt text](image_url_here)
+![Clockify report](../Clockify/june7_screenshot.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Login frontend
