@@ -29,10 +29,12 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.15.0",
-    "@testing-library/react": "^12.1.2",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
     "http-proxy-middleware": "^2.0.1",
+    "jest": "^27.5.1",
+    "jest-fetch-mock": "^3.0.3",
     "react-scripts": "^5.0.0"
   }
 }
