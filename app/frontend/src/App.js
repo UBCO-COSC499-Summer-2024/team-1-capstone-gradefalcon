@@ -18,6 +18,7 @@ import ExamControls from "./pages/Instructor/ExamControls";
 import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
+import ProtectedRoute from "./ProtectedRoute";
 // Layout component to conditionally render NavBar
 const Layout = ({ children }) => {
   const location = useLocation();
