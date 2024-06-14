@@ -3,7 +3,7 @@
 
 ### Timesheet
 Clockify report
-![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/eb0f920469f1a0df5389c184043ef61251d22275/docs/weekly_logs/Clockify/Omar/Time3.png)
+![time]([https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/eb0f920469f1a0df5389c184043ef61251d22275/docs/weekly_logs/Clockify/Omar/Time3.png](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/30dc1b2adfda3ae85638a99d5db0fcf800614b26/docs/weekly_logs/Clockify/Omar/Time4.png))
 
 ### Current Tasks (Provide sufficient detail)
 1. **Session Management Implementation**
