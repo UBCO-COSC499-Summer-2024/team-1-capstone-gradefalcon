@@ -26,8 +26,8 @@ app.use(session({
     tableName: 'session' // Use another table-name if you want to override default
   }),
   secret: 'secret', // Change this to a secure secret key
-  // resave: false, // This is true by default. It is recommended to set it to false
-  // saveUninitialized: false, // This is true by default. It is recommended to set it to false
+  resave: false, // This is true by default. It is recommended to set it to false
+  saveUninitialized: false, // This is true by default. It is recommended to set it to false
   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     httpOnly: true, // Ensures the cookie is sent only over HTTP(S), not accessible to client JavaScript
     secure: false, // Set to true if using https
@@ -56,7 +56,8 @@ app.post("/login", async (req, res, next) => {
     const user = result.rows[0];
     if (user && user.password === password) {
       // Save user information in the session
-      req.session.userId = user.instructor_id; 
+      req.session.userId = user.instructor_id;
+      req.session.userName = user.name;
       req.session.save(err => {
         if (err) {
           return next(err);
@@ -80,10 +81,17 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
+
+// Session info route
+app.get("/session-info", (req, res) => {
+  res.json({ userId: req.session.userId, userName: req.session.userName });
+});
+
+
 // Protected route example
 app.get("/profile", isAuthenticated, async (req, res, next) => {
   try {
-    const result = await pool.query("SELECT * FROM users WHERE id = $1", [req.session.userId]);
+    const result = await pool.query("SELECT * FROM instructor WHERE instructor_id= $1", [req.session.userId]);
     res.json(result.rows[0]);
   } catch (err) {
     next(err);
