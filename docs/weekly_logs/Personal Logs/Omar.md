@@ -68,8 +68,9 @@ Clockify report
 
 - **What Was Done:**
   - Implemented session management and stored session data in cookies.
-  - Developed and tested the login feature, including navigation to the dashboard.
+  - Developed and tested the login feature, including navigation to the dashboard with authentication.
   - Set up and verified the connection between Express and PostgreSQL.
+  - Fixed Root issue in the backend connection.
 
 - **What Didn't Go Well:**
   - There was a lot of debugging involved in adjusting the ports, fixing the backend connection to the database, and configuring the Docker Compose, Dockerfile, and server.js file.
