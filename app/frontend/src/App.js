@@ -21,7 +21,7 @@ import UploadExamKey from "./pages/Instructor/UploadExamKey";
 // Layout component to conditionally render NavBar
 const Layout = ({ children }) => {
   const location = useLocation();
-  const shouldDisplayNavBar = location.pathname !== '/';
+  const shouldDisplayNavBar = location.pathname !== '/' && location.pathname !== './login';
 
   return (
     <>
@@ -45,7 +45,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Layout>
+        {/* <Layout> */}
         <Routes>
           <Route path="/" element={<InstructorSignup />} />
            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -62,7 +62,7 @@ function App() {
           {/* <Route path="/Schedule" element={<Schedule />} /> Schedule plugin is brocken ->will fix */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-        </Layout>
+        {/* </Layout> */}
       </div>
     </Router>
   );
