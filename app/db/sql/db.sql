@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS studentResults CASCADE;
 DROP TABLE IF EXISTS scannedExam CASCADE;
 DROP TABLE IF EXISTS feedback CASCADE;
 DROP TABLE IF EXISTS admins CASCADE;
+DROP TABLE IF EXISTS sessions CASCADE;
 DROP TYPE IF EXISTS feedback_status CASCADE;
 
 
@@ -93,6 +94,17 @@ CREATE TABLE admins(
 	password text not null,
 	name text not null
 );
+
+CREATE TABLE "session" (
+    "sid" varchar NOT NULL COLLATE "default",
+    "sess" json NOT NULL,
+    "expire" timestamp(6) NOT NULL
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid");
+
+CREATE INDEX "IDX_session_expire" ON "session" ("expire");
 
 
 -- ////////// Test value insertion: /////////////////
