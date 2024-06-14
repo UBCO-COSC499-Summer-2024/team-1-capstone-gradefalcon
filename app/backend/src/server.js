@@ -56,7 +56,7 @@ app.post("/login", async (req, res, next) => {
     const user = result.rows[0];
     if (user && user.password === password) {
       // Save user information in the session
-      req.session.userId = user.id;
+      req.session.userId = user.instructor_id; 
       req.session.save(err => {
         if (err) {
           return next(err);
