@@ -37,7 +37,7 @@ app.use(
 
 app.post("/classes", async (req, res, next) => {
   try {
-    const instructorId = 1; // Assuming you want to hardcode the instructor_id as 1
+    const instructorId = req.session.userId; // Get the instructor ID from the session
     const result = await pool.query(
       "SELECT * FROM classes WHERE instructor_id = $1",
       [instructorId]

@@ -31,12 +31,11 @@ const ListClasses = () => {
 
   return (
     <>
-      <div>HELLO! Here are the classes:</div>
       <ul>
         {classes.map((classItem) => (
           <div className="class-card" key={classItem.course_id}>
             <h4>
-              <a href="ClassManagement.html">{classItem.course_id}</a>
+              <a href="/ClassManagement">{classItem.course_id}</a>
             </h4>
             <p>Details about Class 1</p>
           </div>

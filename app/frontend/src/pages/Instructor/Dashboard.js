@@ -14,7 +14,6 @@ const Dashboard = () => {
           },
           credentials: "include", // This ensures cookies are included in the request
         });
-        console.log(response);
         if (response.ok) {
           const data = await response.json();
           setUserName(data.userName);
