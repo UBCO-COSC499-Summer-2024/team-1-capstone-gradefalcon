@@ -10,7 +10,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -29,10 +29,15 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@babel/preset-react": "^7.24.7",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
+    "babel-jest": "^29.7.0",
     "http-proxy-middleware": "^2.0.1",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
     "jest-fetch-mock": "^3.0.3",
     "react-scripts": "^5.0.0"
