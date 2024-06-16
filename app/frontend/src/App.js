@@ -73,7 +73,10 @@ function App() {
             <Route path="/signup" element={<InstructorSignup />} />
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/classes" element={<Classes />} />
-            <Route path="/ClassManagement" element={<ClassManagement />} />
+            <Route
+              path="/ClassManagement/:course_id"
+              element={<ClassManagement />}
+            />
             <Route path="/NewExam" element={<NewExam />} />
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />

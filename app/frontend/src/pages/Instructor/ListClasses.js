@@ -35,7 +35,9 @@ const ListClasses = () => {
         {classes.map((classItem) => (
           <div className="class-card" key={classItem.course_id}>
             <h4>
-              <a href="/ClassManagement">{classItem.course_id}</a>
+              <a href={`/classManagement/${classItem.course_id}`}>
+                {classItem.course_id}
+              </a>
             </h4>
             <p>Details about Class 1</p>
           </div>

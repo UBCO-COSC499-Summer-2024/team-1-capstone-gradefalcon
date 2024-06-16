@@ -35,6 +35,7 @@ app.use(
   })
 );
 
+// Display classes
 app.post("/classes", async (req, res, next) => {
   try {
     const instructorId = req.session.userId; // Get the instructor ID from the session
@@ -46,6 +47,22 @@ app.post("/classes", async (req, res, next) => {
     res.json(classes); // Send the list of classes as JSON
   } catch (err) {
     next(err);
+  }
+});
+
+// Display class details
+app.post("/classManagement/:course_id", async (req, res, next) => {
+  try {
+    const instructorId = req.session.userId; // Get the instructor ID from the session
+    const courseId = req.params.course_id; // Get the course ID from the URL
+    const result = await pool.query(
+      "SELECT * FROM enrollment WHERE course_id = $1",
+      [courseId]
+    );
+    const classData = result.rows; // Get the first row only
+    res.json(classData); // Send the class data as JSON
+  } catch (error) {
+    next(error);
   }
 });
 
