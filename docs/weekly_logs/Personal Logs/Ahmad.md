@@ -2,6 +2,71 @@
 Ahmad Saleem Mirza
 
 
+## Friday (June 12 - 14)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/June12-14.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Class creation
+  * #2: Backend Express diagnostics
+  * #3: Team Log
+  * #4: Login page
+
+### Progress Update (since 6/5/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Class creation
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Backend fixes
+        </td>
+        <!-- Status -->
+        <td>completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Organizing the repo
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Login page
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Though in the last cycle I managed to get the database running in the prebuilt awesome-compose container, it took significantly longer to connect the backend. This is primarily because of how Docker interacts with various frameworks differently as opposed to running those same frameworks natively. Many, many hours of troubleshooting various ports, ip addresses and hostnames I was able to get the backend up and running.
+
+With that out of the way, I worked on the login page and class creation page, porting the HTML and CSS code over to ReactJS and ensuring that ExpressJS is able to read from the database and reflect those changes in our React frontend, all in accordance with the rules of our MVC architecture. In hindsight, we should have begun writing our code in ReactJS, as opposed to first writing it in HTML as a visualization exercise.  
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Exam creation
+  * Reorganize repo
+  * OMR development
+
+
 ## Wednesday (June 7 - 12)
 
 ### Timesheet
