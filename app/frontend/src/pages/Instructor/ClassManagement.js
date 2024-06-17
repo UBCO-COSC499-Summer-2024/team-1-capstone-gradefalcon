@@ -18,7 +18,7 @@ const ClassManagement = () => {
     const fetchClassData = async () => {
       try {
         const response = await fetch(
-          `/api/classManagement/${params.course_id}`,
+          `/api/classManagement/${params.class_id}`,
           {
             method: "POST",
             headers: {
@@ -29,7 +29,7 @@ const ClassManagement = () => {
         );
         if (response.ok) {
           const data = await response.json();
-          setClassData(data); // Set the classData state with the fetched data
+          setClassData(data); // Set the class data state with the fetched data
         } else {
           console.error("Failed to fetch class data");
         }
@@ -39,7 +39,12 @@ const ClassManagement = () => {
     };
 
     fetchClassData();
-  }, [params.course_id]);
+  }, []);
+
+  // Display the class data
+  useEffect(() => {
+    console.log("classData: ", [classData[0]]); // []
+  }, [classData]);
 
   return (
     <>
@@ -79,7 +84,7 @@ table {
 
 thead th {
     padding: 10px;
-    background-color: #f2f2f2;
+    background-color: #4CAF50;
     border-bottom: 1px solid #ddd;
 }
 
@@ -120,7 +125,7 @@ tbody td {
       <div class="main-content">
         <header>
           <h2>Advanced Web Design</h2>
-          <h2>No. of students: {classData[0].student_id}</h2>
+          <h2>{params.class_id}</h2>
         </header>
         <section class="class-management">
           <a href="NewExam.html" class="new-exam-btn">
@@ -132,34 +137,15 @@ tbody td {
               <tr>
                 <th>Student Name</th>
                 <th>Student ID</th>
-                <th>Midterm 1</th>
-                <th>Midterm 2</th>
-                <th>Final</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>John Doe</td>
-                <td>19345113</td>
-                <td class="grade-cell grade-85">85%</td>
-                <td class="grade-cell grade-89">89%</td>{" "}
-                {/* Will become functions of the backend v */}
-                <td class="grade-cell grade-75">75%</td>
-              </tr>
-              <tr>
-                <td>Jane Doe</td>
-                <td>12345678</td>
-                <td class="grade-cell grade-75">75%</td>
-                <td class="grade-cell grade-67">67%</td>
-                <td class="grade-cell grade-78">78%</td>
-              </tr>
-              <tr>
-                <td>Anthony Smith</td>
-                <td>54326768</td>
-                <td class="grade-cell grade-55">55%</td>
-                <td class="grade-cell grade-34">34%</td>
-                <td class="grade-cell grade-75">75%</td>
-              </tr>
+              {classData.map((student) => (
+                <tr>
+                  <td>{student.student_id}</td>
+                  <td>{student.name}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
           <button class="export-btn">Export</button>

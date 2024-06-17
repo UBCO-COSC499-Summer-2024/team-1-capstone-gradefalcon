@@ -74,7 +74,7 @@ function App() {
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/classes" element={<Classes />} />
             <Route
-              path="/ClassManagement/:course_id"
+              path="/ClassManagement/:class_id"
               element={<ClassManagement />}
             />
             <Route path="/NewExam" element={<NewExam />} />

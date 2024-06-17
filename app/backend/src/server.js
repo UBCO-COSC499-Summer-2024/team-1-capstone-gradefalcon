@@ -50,17 +50,44 @@ app.post("/classes", async (req, res, next) => {
   }
 });
 
-// Display class details
-app.post("/classManagement/:course_id", async (req, res, next) => {
+app.param("class_id", function (req, res, next, class_id) {
+  req.session.class_id = class_id;
+  req.session.save();
+  next();
+});
+
+// Display students enrolled, exam grades too
+app.post("/classManagement/:class_id", async (req, res, next) => {
   try {
-    const instructorId = req.session.userId; // Get the instructor ID from the session
-    const courseId = req.params.course_id; // Get the course ID from the URL
+    // Get the student_id and name
+    // This will always be displayed regardless of exams taken
+    const class_id = req.session.class_id;
     const result = await pool.query(
-      "SELECT * FROM enrollment WHERE course_id = $1",
-      [courseId]
+      "SELECT student_id, name FROM enrollment JOIN student USING (student_id) WHERE class_id = $1",
+      [class_id]
     );
     const classData = result.rows; // Get the first row only
-    res.json(classData); // Send the class data as JSON
+    // res.json(classData); // Send the class data as JSON
+
+    // Get the exam_id and grade
+    // This will only be displayed if the student has taken the exam
+
+    const examResults = classData.map((student) =>
+      pool
+        .query(
+          "SELECT exam_id, grade FROM studentResults WHERE student_id = $1",
+          [student.student_id]
+        )
+        .then((result) => ({
+          student_id: student.student_id,
+          name: student.name,
+          exams: result.rows, // This will be an array of exam results
+        }))
+    );
+
+    // Wait for all promises to resolve
+    const combinedResults = await Promise.all(examResults);
+    res.json(combinedResults);
   } catch (error) {
     next(error);
   }
