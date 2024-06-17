@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../css/style.css';
 
-const ManualAnswerKey = () => {
+const ManualExamKey = () => {
   const [numQuestions, setNumQuestions] = useState(80);
   const [numOptions, setNumOptions] = useState(5);
 
@@ -166,9 +166,10 @@ const ManualAnswerKey = () => {
                 id="num-questions"
                 className="input-field"
                 value={numQuestions}
-                onChange={(e) => setNumQuestions(e.target.value)}
+                onChange={(e) => setNumQuestions(parseInt(e.target.value))}
                 min="1"
                 max="300"
+                data-testid="num-questions-input"
               />
 
               <label htmlFor="num-options">#Options per question:</label>
@@ -177,13 +178,14 @@ const ManualAnswerKey = () => {
                 id="num-options"
                 className="input-field"
                 value={numOptions}
-                onChange={(e) => setNumOptions(e.target.value)}
+                onChange={(e) => setNumOptions(parseInt(e.target.value))}
                 min="1"
                 max="26"
+                data-testid="num-options-input"
               />
 
               <div className="nested-window">
-                <div className="bubble-grid"></div>
+                <div className="bubble-grid" data-testid="bubble-grid"></div>
               </div>
 
               <a href="./ExamControls" className="btn">Next</a>
@@ -195,4 +197,4 @@ const ManualAnswerKey = () => {
   );
 };
 
-export default ManualAnswerKey;
+export default ManualExamKey;
