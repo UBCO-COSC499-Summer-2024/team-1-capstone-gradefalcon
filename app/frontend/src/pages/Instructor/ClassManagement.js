@@ -41,10 +41,15 @@ const ClassManagement = () => {
     fetchClassData();
   }, []);
 
+  const maxExams = classData.reduce(
+    (max, student) => Math.max(max, student.exams.length),
+    0
+  );
+
   // Display the class data
-  useEffect(() => {
-    console.log("classData: ", [classData[0]]); // []
-  }, [classData]);
+  // useEffect(() => {
+  //   console.log("classData: ", [classData[0]]); // []
+  // }, [classData]);
 
   return (
     <>
@@ -137,6 +142,9 @@ tbody td {
               <tr>
                 <th>Student Name</th>
                 <th>Student ID</th>
+                {[...Array(maxExams).keys()].map((_, index) => (
+                  <th key={index}>Exam {index + 1}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -144,6 +152,15 @@ tbody td {
                 <tr>
                   <td>{student.student_id}</td>
                   <td>{student.name}</td>
+                  {student.exams.map((exam, index) => (
+                    <td key={index}>{exam.grade}</td>
+                  ))}
+                  {/* Fill in empty cells if a student has fewer exams than the max */}
+                  {[...Array(maxExams - student.exams.length).keys()].map(
+                    (_, index) => (
+                      <td key={index}>-</td>
+                    )
+                  )}
                 </tr>
               ))}
             </tbody>
