@@ -1,47 +1,38 @@
-// simple node web server that displays hello world
-// optimized for Docker image
-
 const express = require("express");
-// this example uses express web framework so we know what longer build times
-// do and how Dockerfile layer ordering matters. If you mess up Dockerfile ordering
-// you'll see long build times on every code change + build. If done correctly,
-// code changes should be only a few seconds to build locally due to build cache.
-
 const morgan = require("morgan");
-// morgan provides easy logging for express, and by default it logs to stdout
-// which is a best practice in Docker. Friends don't let friends code their apps to
-// do app logging to files in containers.
-
-const database = require("./database");
-
-// Appi
-const app = express();
-
-//Database
 const { Pool } = require("pg");
-// const bcrypt = require("bcrypt");
+const session = require("express-session");
+const PgSession = require("connect-pg-simple")(session);
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const config = require("./config");
 
+const app = express();
+
 // PostgreSQL pool setup
 const pool = new Pool(config.database);
+
+
 
 app.use(morgan("common"));
 app.use(bodyParser.json());
 
 const secretKey = process.env.JWT_SECRET || "secret"; // strong secret key store it in environment variables
 
-//test database connection
-// pool.query("select * from exam", (err, res) => {
-
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     console.log(res.rows);
-//     pool.end()
-//   }
-// });
+// Set up session middleware
+app.use(session({
+  store: new PgSession({
+    pool: pool, // Connection pool
+    tableName: 'session' // Use another table-name if you want to override default
+  }),
+  secret: 'secret', // Change this to a secure secret key
+  resave: false, // This is true by default. It is recommended to set it to false
+  saveUninitialized: false, // This is true by default. It is recommended to set it to false
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    httpOnly: true, // Ensures the cookie is sent only over HTTP(S), not accessible to client JavaScript
+    secure: false, // Set to true if using https
+  }
+}));
 
 // User registration route
 app.post("/register", async (req, res, next) => {
@@ -57,15 +48,22 @@ app.post("/register", async (req, res, next) => {
   }
 });
 
-// User login route without encryption
+// User login route
 app.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const result = await pool.query("SELECT * FROM instructor WHERE email = $1", [email]);
     const user = result.rows[0];
     if (user && user.password === password) {
-      const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: "1h" });
-      res.json({ token });
+      // Save user information in the session
+      req.session.userId = user.instructor_id;
+      req.session.userName = user.name;
+      req.session.save(err => {
+        if (err) {
+          return next(err);
+        }
+        res.json({ message: "Login successful" });
+      });
     } else {
       res.status(401).json({ message: "Invalid credentials" });
     }
@@ -74,30 +72,40 @@ app.post("/login", async (req, res, next) => {
   }
 });
 
-// Middleware to protect routes
-const authenticateJWT = (req, res, next) => {
-  const token = req.header("Authorization");
-  if (!token) {
-    return res.status(401).json({ message: "No token provided" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, secretKey);
-    req.userId = decoded.userId;
+// Middleware to check if the user is authenticated
+const isAuthenticated = (req, res, next) => {
+  if (req.session.userId) {
     next();
-  } catch (err) {
-    res.status(401).json({ message: "Invalid token" });
+  } else {
+    res.status(401).json({ message: "You need to log in" });
   }
 };
 
+
+// Session info route
+app.get("/session-info", (req, res) => {
+  res.json({ userId: req.session.userId, userName: req.session.userName });
+});
+
+
 // Protected route example
-app.get("/profile", authenticateJWT, async (req, res, next) => {
+app.get("/profile", isAuthenticated, async (req, res, next) => {
   try {
-    const result = await pool.query("SELECT * FROM users WHERE id = $1", [req.userId]);
+    const result = await pool.query("SELECT * FROM instructor WHERE instructor_id= $1", [req.session.userId]);
     res.json(result.rows[0]);
   } catch (err) {
     next(err);
   }
+});
+
+// Logout route
+app.post("/logout", (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ message: "Logout failed" });
+    }
+    res.json({ message: "Logout successful" });
+  });
 });
 
 app.get("/healthz", function(req, res) {
@@ -109,7 +117,7 @@ app.get("/healthz", function(req, res) {
 });
 
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 80;
 console.log(`Starting server on port ${PORT}`);
 // app.listen(PORT, () => {
 //   console.log(`Server is running on port ${PORT}`);
