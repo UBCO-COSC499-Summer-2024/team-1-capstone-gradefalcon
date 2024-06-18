@@ -151,8 +151,8 @@ tbody td {
           <table>
             <thead>
               <tr>
-                <th>Student Name</th>
                 <th>Student ID</th>
+                <th>Student Name</th>
                 {[...Array(maxExams).keys()].map((_, index) => (
                   <th key={index}>Exam {index + 1}</th>
                 ))}
