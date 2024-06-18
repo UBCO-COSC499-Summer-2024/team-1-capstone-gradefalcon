@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import ExportCSV from "./ExportCSV";
 import "../../css/style.css";
 
 // We need the following data:
@@ -52,10 +53,53 @@ const ClassManagement = () => {
   const courseDetails = classData.courseDetails;
 
   // Display the class data
-  useEffect(() => {
-    console.log("classData: ", [classData[0]]);
-    console.log("courseDetails: ", courseDetails);
-  }, [classData, courseDetails]);
+  // useEffect(() => {
+  //   console.log("classData: ", [classData[0]]);
+  //   console.log("courseDetails: ", courseDetails);
+  // }, [classData, courseDetails]);
+
+  const exportToCSV = () => {
+    // Define CSV headers
+    let csvContent = "";
+    csvContent +=
+      "Student ID,Student Name," +
+      [...Array(maxExams).keys()].map((i) => `Exam ${i + 1}`).join(",") +
+      "\r\n";
+
+    // Add rows for each student
+    classData.studentInfo.forEach((student) => {
+      let row = [
+        student.student_id,
+        student.name,
+        ...student.exams.map((exam) => exam.grade),
+      ];
+      // Fill in empty cells if a student has fewer exams than the max
+      for (let i = student.exams.length; i < maxExams; i++) {
+        row.push("-");
+      }
+      csvContent += row.join(",") + "\r\n";
+    });
+
+    // Create a Blob from the CSV String
+    var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    var url = URL.createObjectURL(blob);
+
+    // Create a link and trigger the download
+    var link = document.createElement("a");
+    if (link.download !== undefined) {
+      // feature detection
+      // Browsers that support HTML5 download attribute
+      link.setAttribute("href", url);
+      link.setAttribute(
+        "download",
+        `${courseDetails[0].course_id}_results.csv`
+      );
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
 
   return (
     <>
@@ -177,7 +221,9 @@ tbody td {
                 ))}
             </tbody>
           </table>
-          <button class="export-btn">Export</button>
+          <button className="export-btn" onClick={exportToCSV}>
+            Export
+          </button>
           <p>Export student grades into a csv file.</p>
         </section>
       </div>
