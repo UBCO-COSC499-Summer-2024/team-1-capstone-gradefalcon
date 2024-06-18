@@ -110,7 +110,7 @@ const UploadExamKey = () => {
               </div>
             </div>
             <div className="pdf-display" style={{ display: fileURL ? 'block' : 'none' }}>
-              <iframe src={fileURL}></iframe>
+             <iframe src={fileURL} title="PDF Preview"></iframe>
             </div>
             <button className="btn btn-import" onClick={resetUpload}>Import</button>
             <a href="ExamControls.html" className="btn-confirm">Confirm</a>

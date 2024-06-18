@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../../css/style.css';
 
 const ManualExamKey = () => {
   const [numQuestions, setNumQuestions] = useState(80);
   const [numOptions, setNumOptions] = useState(5);
 
-  useEffect(() => {
-    updateQuestions();
-  }, [numQuestions, numOptions]);
-
   const toggleSelection = (event) => {
     event.target.classList.toggle('selected');
   };
 
-  const updateQuestions = () => {
+  const updateQuestions = useCallback(() => {
     const bubbleGrid = document.querySelector('.bubble-grid');
 
     bubbleGrid.innerHTML = '';
@@ -35,7 +31,11 @@ const ManualExamKey = () => {
 
       bubbleGrid.appendChild(questionDiv);
     }
-  };
+  }, [numQuestions, numOptions]);
+
+  useEffect(() => {
+    updateQuestions();
+  }, [numQuestions, numOptions, updateQuestions]);
 
   return (
     <>
