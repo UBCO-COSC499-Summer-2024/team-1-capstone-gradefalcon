@@ -67,7 +67,6 @@ app.post("/classManagement/:class_id", async (req, res, next) => {
       [class_id]
     );
     const classData = result.rows; // Get the first row only
-    // res.json(classData); // Send the class data as JSON
 
     // Get the exam_id and grade
     // This will only be displayed if the student has taken the exam
@@ -87,7 +86,20 @@ app.post("/classManagement/:class_id", async (req, res, next) => {
 
     // Wait for all promises to resolve
     const combinedResults = await Promise.all(examResults);
-    res.json(combinedResults);
+
+    // Now let's get the course code and course name given class_id
+    const courseQuery = await pool.query(
+      "SELECT course_id, course_name FROM classes WHERE class_id = $1",
+      [class_id]
+    );
+    const courseDetails = courseQuery.rows;
+
+    // Combine the students info and course details
+    const response = {
+      studentInfo: combinedResults,
+      courseDetails: courseDetails,
+    };
+    res.json(response);
   } catch (error) {
     next(error);
   }

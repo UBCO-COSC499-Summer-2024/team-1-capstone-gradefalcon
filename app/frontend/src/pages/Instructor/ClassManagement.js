@@ -11,7 +11,7 @@ import "../../css/style.css";
 const ClassManagement = () => {
   const params = useParams();
   //   let classData = null;
-  const [classData, setClassData] = useState([]); // Change to use an object
+  const [classData, setClassData] = useState({ courseDetails: {} });
 
   // Fetch class data from the backend
   useEffect(() => {
@@ -41,15 +41,21 @@ const ClassManagement = () => {
     fetchClassData();
   }, []);
 
-  const maxExams = classData.reduce(
-    (max, student) => Math.max(max, student.exams.length),
-    0
-  );
+  // Calculate the maximum number of exams taken by a student
+  const maxExams = classData.studentInfo
+    ? classData.studentInfo.reduce(
+        (max, student) => Math.max(max, student.exams.length),
+        0
+      )
+    : 0;
+
+  const courseDetails = classData.courseDetails;
 
   // Display the class data
-  // useEffect(() => {
-  //   console.log("classData: ", [classData[0]]); // []
-  // }, [classData]);
+  useEffect(() => {
+    console.log("classData: ", [classData[0]]);
+    console.log("courseDetails: ", courseDetails);
+  }, [classData, courseDetails]);
 
   return (
     <>
@@ -129,8 +135,13 @@ tbody td {
       </style>
       <div class="main-content">
         <header>
-          <h2>Advanced Web Design</h2>
-          <h2>{params.class_id}</h2>
+          <h2>
+            {/* Display the course ID and course name */}
+            {courseDetails[0] ? courseDetails[0].course_id : "loading..."}
+          </h2>
+          <h2>
+            {courseDetails[0] ? courseDetails[0].course_name : "loading..."}
+          </h2>
         </header>
         <section class="class-management">
           <a href="NewExam.html" class="new-exam-btn">
@@ -148,21 +159,22 @@ tbody td {
               </tr>
             </thead>
             <tbody>
-              {classData.map((student) => (
-                <tr>
-                  <td>{student.student_id}</td>
-                  <td>{student.name}</td>
-                  {student.exams.map((exam, index) => (
-                    <td key={index}>{exam.grade}</td>
-                  ))}
-                  {/* Fill in empty cells if a student has fewer exams than the max */}
-                  {[...Array(maxExams - student.exams.length).keys()].map(
-                    (_, index) => (
-                      <td key={index}>-</td>
-                    )
-                  )}
-                </tr>
-              ))}
+              {classData.studentInfo &&
+                classData.studentInfo.map((student) => (
+                  <tr>
+                    <td>{student.student_id}</td>
+                    <td>{student.name}</td>
+                    {student.exams.map((exam, index) => (
+                      <td key={index}>{exam.grade}</td>
+                    ))}
+                    {/* Fill in empty cells if a student has fewer exams than the max */}
+                    {[...Array(maxExams - student.exams.length).keys()].map(
+                      (_, index) => (
+                        <td key={index}>-</td>
+                      )
+                    )}
+                  </tr>
+                ))}
             </tbody>
           </table>
           <button class="export-btn">Export</button>
