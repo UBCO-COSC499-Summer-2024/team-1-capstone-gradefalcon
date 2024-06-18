@@ -35,14 +35,32 @@ app.use(session({
 }));
 
 // User registration route
-app.post("/register", async (req, res, next) => {
-  const { email, password } = req.body;
+// User registration route
+app.post("/signup", async (req, res, next) => {
+  const { email, password, name, role } = req.body;
+
   try {
-    const result = await pool.query(
-      "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id",
-      [email, password]
+      // Check if the email already exists
+      let existingUser;
+      
+      existingUser = await pool.query("SELECT * FROM student WHERE email = $1", [email]);
+  
+      if (existingUser.rows.length > 0) {
+        return res.status(409).json({ message: "Email already exists" });
+      }
+    let result;
+      // const hashedPassword = await bcrypt.hash(password, 10);
+      result = await pool.query(
+        "INSERT INTO student (email, password, name) VALUES ($1, $2, $3) RETURNING student_id",
+        [email, password, name]
+      );
+
+    const token = jwt.sign(
+      { userId: result.rows[0].instructor_id || result.rows[0].student_id },
+      secretKey,
+      { expiresIn: "1h" }
     );
-    res.status(201).json({ userId: result.rows[0].id });
+    res.status(201).json({ token });
   } catch (err) {
     next(err);
   }
@@ -51,26 +69,158 @@ app.post("/register", async (req, res, next) => {
 // User login route
 app.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
+
   try {
-    const result = await pool.query("SELECT * FROM instructor WHERE email = $1", [email]);
-    const user = result.rows[0];
+    // Check if the user is an instructor
+    let result = await pool.query("SELECT * FROM instructor WHERE email = $1", [email]);
+    let user = result.rows[0];
     if (user && user.password === password) {
-      // Save user information in the session
       req.session.userId = user.instructor_id;
       req.session.userName = user.name;
+      req.session.role = 'instructor';
       req.session.save(err => {
         if (err) {
           return next(err);
         }
-        res.json({ message: "Login successful" });
+        return res.json({ message: "Login successful", role: 'instructor' });
       });
-    } else {
-      res.status(401).json({ message: "Invalid credentials" });
+      return;
     }
+
+    // Check if the user is a student
+    result = await pool.query("SELECT * FROM student WHERE email = $1", [email]);
+    user = result.rows[0];
+    if (user && user.password === password) {
+      req.session.userId = user.student_id;
+      req.session.userName = user.name;
+      req.session.role = 'student';
+      req.session.save(err => {
+        if (err) {
+          return next(err);
+        }
+        return res.json({ message: "Login successful", role: 'student' });
+      });
+      return;
+    }
+
+    // Check if the user is an admin
+    result = await pool.query("SELECT * FROM admins WHERE email = $1", [email]);
+    user = result.rows[0];
+    if (user && user.password === password) {
+      req.session.userId = user.admin_id;
+      req.session.userName = user.name;
+      req.session.role = 'admin';
+      req.session.save(err => {
+        if (err) {
+          return next(err);
+        }
+        return res.json({ message: "Login successful", role: 'admin' });
+      });
+      return;
+    }
+
+    // If no user found
+    res.status(401).json({ message: "Invalid credentials" });
+
   } catch (err) {
     next(err);
   }
 });
+
+// Get all instructors
+app.get("/instructors", async (req, res, next) => {
+  try {
+    const result = await pool.query("SELECT * FROM instructor");
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Get all students
+app.get("/students", async (req, res, next) => {
+  try {
+    const result = await pool.query("SELECT * FROM student");
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Get all admins
+app.get("/admins", async (req, res, next) => {
+  try {
+    const result = await pool.query("SELECT * FROM admins");
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Add these routes to your server.js
+
+// Create a new user
+app.post("/users", async (req, res, next) => {
+  const { email, password, name, role } = req.body;
+
+  let table;
+  switch (role) {
+    case 'instructor':
+      table = 'instructor';
+      break;
+    case 'student':
+      table = 'student';
+      break;
+    case 'administrator':
+      table = 'admins';
+      break;
+    default:
+      return res.status(400).json({ error: "Invalid role" });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO ${table} (email, password, name) VALUES ($1, $2, $3) RETURNING *`,
+      [email, password, name]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Update user details
+app.put("/users/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const { email, name, role } = req.body;
+
+  let table;
+  switch (role) {
+    case 'instructor':
+      table = 'instructor';
+      break;
+    case 'student':
+      table = 'student';
+      break;
+    case 'administrator':
+      table = 'admins';
+      break;
+    default:
+      return res.status(400).json({ error: "Invalid role" });
+  }
+
+  try {
+    const result = await pool.query(
+      `UPDATE ${table} SET email = $1, name = $2 WHERE ${table}_id = $3 RETURNING *`,
+      [email, name, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+
 
 // Middleware to check if the user is authenticated
 const isAuthenticated = (req, res, next) => {

@@ -19,11 +19,13 @@ import ExamControls from "./pages/Instructor/ExamControls";
 import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
+import AdminDashboard from "./pages/Administator/AdminDashboard";
+import UserManagment from "./pages/Administator/UserManagment";
 
 // Layout component to conditionally render NavBar
 const Layout = ({ children }) => {
   const location = useLocation();
-  const shouldDisplayNavBar = location.pathname !== '/' && location.pathname !== '/login';
+  const shouldDisplayNavBar = location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/adminDashboard' && location.pathname !== '/signup' && location.pathname !== '/UserManagment';
 
   return (
     <>
@@ -66,6 +68,8 @@ function App() {
           <Route path="/ManualExamKey" element={<ManualExamKey />} />
           <Route path="/NotificationPreferences" element={<NotificationPreferences />} />
           <Route path="/UploadExamKey" element={<UploadExamKey />} />
+          <Route path="/adminDashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/userManagment" element={<ProtectedRoute><UserManagment /></ProtectedRoute>} />
           {/* <Route path="/Schedule" element={<Schedule />} /> Schedule plugin is brocken ->will fix */}
           <Route path="*" element={<NotFound />} />
         </Routes>
