@@ -3,7 +3,7 @@ import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
 import "../../css/style.css";
 import "../../css/NewClass.css";
-import Toast from "../../Toast";
+import Toast from "../../components/Toast";
 
 const NewClass = () => {
   const [col, setCol] = useState([]);
