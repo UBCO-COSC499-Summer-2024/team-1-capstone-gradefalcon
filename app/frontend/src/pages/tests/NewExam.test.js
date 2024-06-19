@@ -20,8 +20,8 @@ describe('NewExam Component', () => {
   test('exam title input prevents SQL injection characters', () => {
     render(<NewExam />);
     const examTitleInput = screen.getByTestId('exam-title-input');
-    fireEvent.change(examTitleInput, { target: { value: 'Graphic; DROP \'\"TABLE NotaTable;' } });
-    expect(examTitleInput).toHaveValue('Graphic DROP TABLE NotaTable'); //proof of conncept, test file is not co
+    fireEvent.change(examTitleInput, { target: { value: 'String; Break \'\"Attempt;' } });
+    expect(examTitleInput).toHaveValue('String Break Attempt'); //SQL injection will be prevented in the handling anyway, its just an extra layer 
   });
 });
  test('correct input for \"exam title\"', () => {
