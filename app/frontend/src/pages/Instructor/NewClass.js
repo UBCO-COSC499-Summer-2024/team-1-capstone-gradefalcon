@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
+import { useHistory } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../../css/style.css';
 import '../../css/NewClass.css';
 
@@ -9,34 +12,7 @@ const NewClass = () => {
   const [file, setFile] = useState(null);
   const [courseName, setCourseName] = useState('');
   const [courseId, setCourseId] = useState('');
-  const [userName, setUserName] = useState('');
-  const [instructorId, setInstructorId] = useState(null);
-
-  useEffect(() => {
-    const fetchSessionInfo = async () => {
-      try {
-        const response = await fetch('/api/session-info', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // This ensures cookies are included in the request
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setUserName(data.userName);
-          setInstructorId(data.instructorId); // Assuming the response contains instructorId
-        } else {
-          console.error('Failed to fetch session info');
-        }
-      } catch (error) {
-        console.error('Error fetching session info:', error);
-      }
-    };
-
-    fetchSessionInfo();
-  }, []);
-
+ 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
@@ -59,16 +35,15 @@ const NewClass = () => {
     console.log('File:', file); // Debugging log
     console.log('Course Name:', courseName); // Debugging log
     console.log('Course ID:', courseId); // Debugging log
-    console.log('Instructor ID:', instructorId); // Debugging log
-
-    if (file && courseName && courseId && instructorId) {
+  
+    if (file && courseName && courseId) {
       // Validate the parsed data
       const validStudents = val.every(row => row.length > 1 && row[0] && row[1]);
       if (!validStudents) {
         alert('CSV file contains invalid student data. Please ensure all rows have studentID and studentName.');
         return;
       }
-
+  
       // Send the parsed data to the backend
       fetch('/api/import-class', {
         method: 'POST',
@@ -78,7 +53,6 @@ const NewClass = () => {
         body: JSON.stringify({
           courseName,
           courseId,
-          instructorId,
           students: val.map(row => ({ studentID: row[1], studentName: row[0] })),
         }),
       })
@@ -86,6 +60,11 @@ const NewClass = () => {
       .then((data) => {
         console.log('Success:', data);
         // Handle success (e.g., show a message or update the UI)
+        // Show success toast and navigate to classManagement page
+        toast.success('Class successfully added!');
+        setTimeout(() => {
+          history.push('/classManagement');
+        }, 2000); // Delay to allow the toast to be visible for a moment
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -95,6 +74,7 @@ const NewClass = () => {
       alert('Please provide a course name, course ID, and a CSV file:');
     }
   };
+  
 
   return (
     <div className="App">

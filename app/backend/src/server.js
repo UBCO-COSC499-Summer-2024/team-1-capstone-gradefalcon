@@ -19,31 +19,6 @@ app.use(bodyParser.json());
 
 const secretKey = process.env.JWT_SECRET || "secret"; // strong secret key store it in environment variables
 
-app.post("/import-class", async (req, res) => {
-  const { students } = req.body;
-  try {
-    const insertPromises = students.map(student => {
-      const { studentID, studentName } = student;
-
-      // Validate that studentID and studentName are not null or undefined
-      if (!studentID || !studentName) {
-        console.error('Invalid student data:', student); // Log invalid student data
-        throw new Error('Invalid student data: studentID and studentName are required');
-      }
-
-      return pool.query(
-        "INSERT INTO student (student_id, name) VALUES ($1, $2) ON CONFLICT (student_id) DO NOTHING",
-        [studentID, studentName]
-      );
-    });
-    await Promise.all(insertPromises);
-    res.status(201).json({ message: "Class imported successfully" });
-  } catch (err) {
-    console.error('Error importing class:', err.message); // Log the error message
-    res.status(500).json({ message: "Error importing class" });
-  }
-});
-
 
 // Set up session middleware
 app.use(session({
@@ -140,6 +115,73 @@ app.get("/healthz", function(req, res) {
   // if you want, you should be able to restrict this to localhost (include ipv4 and ipv6)
   
   res.send("I am happy and healthy\n");
+});
+
+/// Import class route
+app.post("/import-class", async (req, res) => {
+  const { students, courseName, courseId } = req.body;
+  const instructorId = req.session.userId; // Retrieve instructor ID from session
+
+  if (!instructorId) {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    // Check if the class already exists for the given instructor and course
+    let classQuery = await pool.query(
+      "SELECT class_id FROM classes WHERE course_id = $1 AND instructor_id = $2",
+      [courseId, instructorId]
+    );
+
+    let classId;
+
+    if (classQuery.rows.length === 0) {
+      // If class does not exist, create it
+      const newClassQuery = await pool.query(
+        "INSERT INTO classes (course_id, instructor_id) VALUES ($1, $2) RETURNING class_id",
+        [courseId, instructorId]
+      );
+      classId = newClassQuery.rows[0].class_id;
+    } else {
+      // If class exists, use the existing class_id
+      classId = classQuery.rows[0].class_id;
+    }
+
+    // Validate and insert students
+    const insertPromises = students.map(async student => {
+      const { studentID, studentName } = student;
+
+      if (!studentID || !studentName) {
+        throw new Error('Invalid student data: studentID and studentName are required');
+      }
+
+      // Check if student already exists in the student table
+      let studentQuery = await pool.query(
+        "SELECT student_id FROM student WHERE student_id = $1",
+        [studentID]
+      );
+
+      if (studentQuery.rows.length === 0) {
+        // Insert the student into the student table if not exist
+        await pool.query(
+          "INSERT INTO student (student_id, name) VALUES ($1, $2)",
+          [studentID, studentName]
+        );
+      }
+
+      // Insert into enrollment table
+      return pool.query(
+        "INSERT INTO enrollment (class_id, student_id) VALUES ($1, $2)",
+        [classId, studentID]
+      );
+    });
+
+    await Promise.all(insertPromises);
+    res.status(201).json({ message: "Class imported successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error importing class" });
+  }
 });
 
 

@@ -27,6 +27,8 @@ CREATE TABLE classes (
 	class_id serial primary key,
 	instructor_id int,
 	course_id text,
+	course_name text,
+	unique (instructor_id, course_id),
 	foreign key (instructor_id) references instructor(instructor_id)
 );
 
