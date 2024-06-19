@@ -1,27 +1,27 @@
 // src/Instructor/Dashboard.js
-import '../../css/style.css';
-import React, { useEffect, useState } from 'react';
+import "../../css/style.css";
+import React, { useEffect, useState } from "react";
 
 const Dashboard = () => {
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState("");
   useEffect(() => {
     const fetchSessionInfo = async () => {
       try {
-        const response = await fetch('/api/session-info', {
-          method: 'GET',
+        const response = await fetch("/api/session-info", {
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          credentials: 'include', // This ensures cookies are included in the request
+          credentials: "include", // This ensures cookies are included in the request
         });
         if (response.ok) {
           const data = await response.json();
           setUserName(data.userName);
         } else {
-          console.error('Failed to fetch session info');
+          console.error("Failed to fetch session info");
         }
       } catch (error) {
-        console.error('Error fetching session info:', error);
+        console.error("Error fetching session info:", error);
       }
     };
 
@@ -32,29 +32,29 @@ const Dashboard = () => {
     <div className="App">
       <div className="main-content">
         <header>
-        <h2>Welcome, {userName ? userName : "Guest"}!</h2>
+          <h2>Welcome, {userName ? userName : "Guest"}!</h2>
         </header>
         <section className="courses">
           <h3>Enrolled Courses</h3>
-          <div className="course-card" style={{ backgroundColor: '#E9D8FD' }}>
+          <div className="course-card" style={{ backgroundColor: "#E9D8FD" }}>
             <h4>Graphic Fundamentals - ART101</h4>
             <p>Monday & Wednesday</p>
             <p>9:00 AM - 10:30 AM</p>
             <p>Design Studio A</p>
           </div>
-          <div className="course-card" style={{ backgroundColor: '#FEEBC8' }}>
+          <div className="course-card" style={{ backgroundColor: "#FEEBC8" }}>
             <h4>Advanced Web Design - ITD201</h4>
             <p>Tuesday & Thursday</p>
             <p>1:30 PM - 3:00 PM</p>
             <p>Computer Lab 3</p>
           </div>
-          <div className="course-card" style={{ backgroundColor: '#BEE3F8' }}>
+          <div className="course-card" style={{ backgroundColor: "#BEE3F8" }}>
             <h4>User Experience Research - UXD301</h4>
             <p>Monday & Saturday</p>
             <p>11:00 AM - 12:30 PM</p>
             <p>Design Lab 2</p>
           </div>
-          <div className="course-card" style={{ backgroundColor: '#C6F6D5' }}>
+          <div className="course-card" style={{ backgroundColor: "#C6F6D5" }}>
             <h4>3D Animation Techniques - ANI301</h4>
             <p>Wednesday</p>
             <p>2:00 PM - 5:00 PM</p>
