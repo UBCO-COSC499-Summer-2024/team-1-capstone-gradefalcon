@@ -19,6 +19,32 @@ app.use(bodyParser.json());
 
 const secretKey = process.env.JWT_SECRET || "secret"; // strong secret key store it in environment variables
 
+app.post("/import-class", async (req, res) => {
+  const { students } = req.body;
+  try {
+    const insertPromises = students.map(student => {
+      const { studentID, studentName } = student;
+
+      // Validate that studentID and studentName are not null or undefined
+      if (!studentID || !studentName) {
+        console.error('Invalid student data:', student); // Log invalid student data
+        throw new Error('Invalid student data: studentID and studentName are required');
+      }
+
+      return pool.query(
+        "INSERT INTO student (student_id, name) VALUES ($1, $2) ON CONFLICT (student_id) DO NOTHING",
+        [studentID, studentName]
+      );
+    });
+    await Promise.all(insertPromises);
+    res.status(201).json({ message: "Class imported successfully" });
+  } catch (err) {
+    console.error('Error importing class:', err.message); // Log the error message
+    res.status(500).json({ message: "Error importing class" });
+  }
+});
+
+
 // Set up session middleware
 app.use(session({
   store: new PgSession({

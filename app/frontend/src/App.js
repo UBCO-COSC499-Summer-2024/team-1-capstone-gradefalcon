@@ -13,6 +13,7 @@ import Login from './pages/Instructor/Login';
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
+import NewClass from './pages/Instructor/NewClass';
 import NewExam from "./pages/Instructor/NewExam";
 import ExamBoard from "./pages/Instructor/Examboard";
 import ExamControls from "./pages/Instructor/ExamControls";
@@ -59,6 +60,7 @@ function App() {
           <Route path="/signup" element={<InstructorSignup />} />
           <Route path="/AccountSettings" element={<AccountSettings />} />
           <Route path="/Classes" element={<Classes />} />
+          <Route path="/new-class" element={<NewClass />} />
           <Route path="/ClassManagement" element={<ClassManagement />} />
           <Route path="/NewExam" element={<NewExam />} />
           <Route path="/ExamBoard" element={<ExamBoard />} />
