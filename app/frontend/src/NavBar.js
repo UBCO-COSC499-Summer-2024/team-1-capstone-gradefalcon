@@ -6,7 +6,7 @@ export default function NavBar(){
         <nav>
             <ul>
                 <li><a href="./Dashboard">Dashboard</a></li>
-                <li><a href="Schedule.html">Schedule</a></li>
+                <li><a href="Schedule.js">Schedule</a></li>
                 <li><a href="./Examboard">Exam Board</a></li>
                 <li><a href="GradeReport.html">Grade Report</a></li>
                 <li><a href="./Classes">Classes</a></li>

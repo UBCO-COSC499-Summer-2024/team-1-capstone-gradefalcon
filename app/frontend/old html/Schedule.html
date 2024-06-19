@@ -12,13 +12,13 @@ const Schedule = () => {
         center: 'title',
         right: 'month,agendaWeek,agendaDay',
       },
-      defaultDate: new Date(),
+      defaultDate: moment().format('YYYY-MM-DD'),
       navLinks: true,
       editable: true,
       eventLimit: true,
       events: [
         {
-          title: 'Graphic fundamentals Final Exam',
+          title: 'Graphic Fundamentals Final Exam',
           start: '2024-12-30T13:00:00',
           end: '2024-12-30T16:00:00',
         },
@@ -29,6 +29,11 @@ const Schedule = () => {
         },
       ],
     });
+
+    // Clean up function to destroy calendar when component unmounts
+    return () => {
+      $('#calendar').fullCalendar('destroy');
+    };
   }, []);
 
   return (
