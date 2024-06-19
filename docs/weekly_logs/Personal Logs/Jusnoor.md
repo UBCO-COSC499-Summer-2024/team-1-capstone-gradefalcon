@@ -1,8 +1,67 @@
 
- 
 # Personal Log
 
 
+## Wednesday (15/6 - 18/6)
+
+### Timesheet 
+clockify report 
+
+![Time4_1](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/96af9ab1-8b82-4f0b-864b-2fe88d78bebc)
+
+
+
+### Current Tasks (Provide Details):
+- #1: Student Interface Development : Created the student view pages(reactifying them) using the previosuly created html and css files 
+- #2: Front End Testing of the student view ( still in progress while doing some research on the same )
+- #3: Data Visualization (Technological research is in progress , in order to get performance insights using the visualization tools)
+
+
+  
+### Progress Update (since 6/5/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>Student Interface Created #37
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Testing for front end student view pages #37
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Data Visualization #16 ( Startting off after some research on the same)
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I took up on creating the user interface for the student view by using the already created html and css files previously by using React in order to create dynamic and responsive user design layout for students. I did some research for the front end testing for the student view to be implemented (which is in progress and will be completed by the next cycle). I have currently taken up on the user story:Data Visualization #16 and doing some research on the same and intend to start working on the same by the next cycle and witness some progress.
+
+
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Testing for front end student view pages #37
+- Data Visualization #16 ( Startting off after some research on the same)
+
+  
 ## Friday (12/6 - 14/6)
 
 ### Timesheet 
