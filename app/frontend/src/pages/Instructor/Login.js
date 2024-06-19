@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import '../../css/Signin.css';
+import logo from "../../assets/logo.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -32,7 +34,11 @@ const Login = () => {
   };
 
   return (
+    <div className="login-form">
     <form onSubmit={handleSubmit}>
+    <div className="logo-container">
+          <img src={logo} alt="Logo" className="logo" />
+        </div>
       <div>
         <label>Email</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -43,6 +49,8 @@ const Login = () => {
       </div>
       <button type="submit">Login</button>
     </form>
+  </div>
+
   );
 };
 

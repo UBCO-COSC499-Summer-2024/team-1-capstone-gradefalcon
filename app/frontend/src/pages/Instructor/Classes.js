@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import "../../css/style.css";
 import "../../css/Classes.css";
 import ListClasses from "./ListClasses";
@@ -18,20 +19,8 @@ const Classes = () => {
             </section>
             <section className="new-class">
               <h3>Create a new class</h3>
-              <p>
-                Import a CSV file containing the student names and their student
-                IDs in your class.
-              </p>
-              <div className="upload-area">
-                <input type="file" id="file-input" hidden />
-                <div
-                  className="drag-drop-area"
-                  onClick={() => document.getElementById("file-input").click()}
-                >
-                  <p>Click to browse or drag and drop your files</p>
-                </div>
-                <button className="import-btn">Import</button>
-              </div>
+              <p>Import a CSV file containing the student names and their student IDs in your class.</p>
+              <Link to="/new-class" className="btn">Create Class</Link>
             </section>
           </div>
         </div>
