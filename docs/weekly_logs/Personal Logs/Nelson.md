@@ -1,4 +1,75 @@
-## Wednesday (12/7- 14/7)
+## Wednesday (15/6- 18/6)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/june18_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Redesign login/signup Page.
+  * #2: Create Admin View frontend (Shell)
+  * #3: Create User Management section (Admin View)
+  * #4: Start working on setting up CI/CD
+  * #5: Finish adding functionality too AdminViiew
+
+### Progress Update (since 6/18/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Redesign login/signup Page.
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Create Admin View frontend (Shell)
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Finish adding functionality too AdminViiew
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Start working on setting up CI/CD
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Start working on setting up CI/CD
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+This cycle was a litte more challenging than the rest because I had to take care of some personal issues that needed my attention, I likely feel like I was able to handle it very well and was still able to do a little bit of work. The main object was to redesign the signup/login page to allow role based authenication, and to also allow admins to create and add users to the system and maanage users. Now I that it is working I am working on connecting the CI/CD. I also did a little bit of research to increase my knowledge.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Gte CI/CD connected and working.
+  * Finishe adding functionality for Admin View
+  * Research the best more about computer vision and OMR
+
+## Wednesday (12/6- 14/6)
 
 ### Timesheet
 Clockify report
