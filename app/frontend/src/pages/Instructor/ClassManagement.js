@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ExportCSV from "./ExportCSV";
 import "../../css/style.css";
 
 // We need the following data:
