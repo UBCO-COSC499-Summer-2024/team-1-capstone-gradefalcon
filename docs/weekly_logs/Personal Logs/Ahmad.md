@@ -1,6 +1,69 @@
 # Personal Log
 Ahmad Saleem Mirza
 
+## Friday (June 14 - 19)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/June14-19.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Class management
+  * #2: Displaying student results
+  * #3: Export results as csv
+  * #4: Testing class management system
+
+### Progress Update (since 6/5/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Class management
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Displaying student results
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Export results as csv
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Testing class management system
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+This past cycle was spent trying to understand how to pass different data from the backend to the frontend. There were various issues with which specific route to reference in the react fetch function, because it couldn't seem to find that the express methods were posting. Once that was sorted, I had to figure out how to send the data: the best way turned out to be as an object, since that allowed me send the results of multiple postgreSQL queries and unpack them as necessary using React. Then there were issues with unpacking the files, and return them in the DOM element. But once all these were resolved, I finally managed to display the information correctly on the page. 
+
+Now that I am significantly more familiar with how data querying and displaying works, the rest of the process with respect to the core functionality of the application is also much more straightforward. The next user story, exam management, will be more easier and quicker given my newfound knowledge. However, the challenge for the next cycle is figuring out the testing environment, namely how JEST and Supertest work. 
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Class system tests
+  * Exam creation
 
 ## Friday (June 12 - 14)
 
