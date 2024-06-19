@@ -146,7 +146,7 @@ Task 2 was begun with some expirimentation with figma plugins to smoothly reacti
   * Begin creating implimenting features for friday mini-presentation (team objective)
   * impliment HTML/CSS testing
 
------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
 
 # Personal Log
 
@@ -195,3 +195,55 @@ task 2: Begand researching frontend testing and decided on jest and learned how 
   * cleaning up remaining visual issues resulting from porting the HTML/CSS ui over to react (which a few pages still need to be adapted to incompadability errors)
   * frontend testing with jest
   * feature unit tests with jest/react testing
+
+
+  -------------------------------------------------------------------------------------------------------------------------------------------
+
+# Personal Log
+
+## Wednessday (6/14 - 6/19)
+
+## TimeSheet
+Clockify report
+![alt text](..\Clockify\Bennett\06_14_2024-06_19_2024.pdf)
+* # READ
+There is 8.5 hours of overlap in my reports because the Report Function on clockify does not allow for me to segregate by time of day.
+### Current Tasks (Provide sufficient detail)
+  * #1: Frontend Testing
+  * #2: Backend Testing
+
+### Progress Update (since 6/07/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>Most major tests done, missed details and tests arising from future edits are what is left
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>2
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+task 1: Only a few tests were ready for fridays presentation and jest required imeanse initial configuration in order to handle the project conventions, after the presentation I reworked the jest configuration so outdated dependancies would no longer be used
+
+task 2: Researched how to impliment backend testing on react and how to tie it to pages which has processing nested in frontend pages, (to begin coding on wednessday morning before the meeting and ideally have one good backend test file before the meeting), once an initial good/quality test file is created as an example, test files will be generated for every feature
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Create backend testing for all features existing before backend tests are implimented
+  * What additional features to work on will be decided after my two finals on (06/24->25), I disclosed this to the group and garanteed that I will more than make up for any missed work.
+
