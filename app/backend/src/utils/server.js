@@ -5,7 +5,7 @@ const session = require("express-session");
 const PgSession = require("connect-pg-simple")(session);
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
-const config = require("./config");
+const config = require("../config/config");
 
 const app = express();
 
