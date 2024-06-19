@@ -36,16 +36,13 @@ test('reverse verification: ensure wrong number of questions does not show up', 
 
   const numQuestionsInput = screen.getByTestId('num-questions-input');
 
-  //previous tests verify that the desired number is returned, this test verifies that no other numbers are returned just above or below
-  //(rational: bubbles show up via loop with the limit being the user entry, if any number shows up aside or in addition to that number it
-  //can indicate an error causing the "for loop" to have an error and run the risk of a stack overflow)
+  // Set number of questions to 5 and check that 4 questions are not displayed
   fireEvent.change(numQuestionsInput, { target: { value: 5 } });
   const bubbleGrid = screen.getByTestId('bubble-grid');
   const questions = bubbleGrid.querySelectorAll('.question');
 
   expect(questions.length).toBe(5);
   expect(questions.length).not.toBe(4);
-  expect(questions.length).not.toBe(6);
 });
 
 test('reverse verification: ensure wrong number of options does not show up', () => {
