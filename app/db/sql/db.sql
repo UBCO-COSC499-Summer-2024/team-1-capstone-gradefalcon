@@ -124,27 +124,30 @@ INSERT INTO instructor (email, password, name) VALUES (
 	'instructor@ubc.ca', 'instructor', 'instructor'
 );
 
-INSERT INTO student (email, password, name) VALUES (
-	'student@ubc.ca', 'student', 'Student'
-);
+INSERT INTO student (email, password, name) VALUES 
+	('student@ubc.ca', 'student', 'Student'),
+	('student2@ubc.ca', 'student', 'Student II');
 
-INSERT INTO classes (instructor_id, course_id) VALUES (
-	1, 'TEST100'
-);
+INSERT INTO classes (instructor_id, course_id, course_name) VALUES
+ 	(1, 'TEST100', 'Database Test'),
+	(1, 'TEST200', 'Database Test 2');
 
-INSERT INTO exam (class_id, total_questions, total_marks) VALUES (
-	1, 50, 50
-);
+INSERT INTO exam (class_id, total_questions, total_marks) VALUES
+ 	(1, 50, 50),
+ 	(1, 5, 100);
 
-INSERT INTO solution (exam_id) VALUES (
-	1
-);
+INSERT INTO solution (exam_id) VALUES
+	(1),
+ 	(2);
 
-INSERT INTO enrollment (class_id, student_id) VALUES (1,1); 
+INSERT INTO enrollment (class_id, student_id) VALUES 
+	(1, 1),
+	(1, 2); 
 
-INSERT INTO studentResults (student_id, exam_id) VALUES (
-	1, 1
-);
+INSERT INTO studentResults (student_id, exam_id, grade) VALUES
+	(1, 1, 50),
+	(2, 1, 11),
+	(1, 2, 69);
 
 INSERT INTO scannedExam (exam_id) VALUES (
 	1
