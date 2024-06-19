@@ -1,4 +1,109 @@
 # Personal Log
+
+
+Here is the updated personal log incorporating the tasks you're actively working on:
+
+# Personal Log
+
+## Wednesday (6/14- 6/18)
+
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/30dc1b2adfda3ae85638a99d5db0fcf800614b26/docs/weekly_logs/Clockify/Omar/Time4.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Implement Class Creation Functionality**
+   - Add functionality to create classes, including adding the Instructor ID and Class ID to the database.
+
+2. **User Story: Import Class as a CSV file**
+   - Develop the functionality to import classes with student data from CSV files.
+   - Ensure that each class is associated with an instructor and has a unique combination of instructor ID and course ID.
+   - Validate student data before inserting it into the database.
+
+3. **User Story: Create and Manage Classes**
+   - Enable class creation and management, ensuring proper association with instructors.
+   - Implement features to manage class details and enrollments.
+
+
+### Progress Update (since 14/6/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <td>#82 - Implement Class Creation Functionality
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <td>#54 - User Story: Import Class as a CSV file
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <td>#21 - User Story: Create and Manage Classes
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <td>Student Data Validation
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <td>Implement Route Protection
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+- **What Went Well:**
+  - Successfully implemented create new class feature.
+  - Improved validation for student data during import.
+
+- **What Was Done:**
+  - Developed server-side logic to handle class and student data import.
+  - Enhanced client-side code to fetch session info and validate student data before sending it to the server.
+
+- **What Didn't Go Well:**
+  - Initial issues with session cookie storage were resolved by adjusting session middleware settings.
+  - Debugging and parsing the csv file properly took longer than expected,  sending the file over to the backend as well was a hassle.
+
+- **Retrospective:**
+  - Some good progress was done in regard to the create class feature.
+  - Need to assign tasks to team members stragically.
+  - need to reevaluate some UI design choices and some of the code logic in our server.js file to take into account, RBAC, authentication, route protection and encryption.
+
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+1. **Exam Creation and OMR:**
+   - Work on implementing features for exam creation and Optical Mark Recognition (OMR).
+
+2. **Role-Based Authentication:**
+   - Implement role-based authentication to manage different user types.
+
+3. **Server.js Adjustments:**
+   - Adjust the server.js code to handle all user types effectively.
+
+4. **Documentation and Backend Testing:**
+   - Document the new features and improvements.
+   - Write unit tests for the new functionalities to ensure reliability.
+
+5. **CSV Import Feature Refinement:**
+   - Enhance the CSV import feature to handle edge cases and improve error handling.
+   - Implement feedback messages for successful and failed imports.
+
+
 ## Friday (6/12- 6/14)
 
 ### Timesheet
