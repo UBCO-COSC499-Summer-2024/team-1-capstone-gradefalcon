@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import './css/style.css'; 
+import React, { useEffect } from "react";
+import "../css/style.css";
 
 const Toast = ({ message, type, onClose }) => {
   useEffect(() => {
@@ -13,7 +13,9 @@ const Toast = ({ message, type, onClose }) => {
   return (
     <div className={`toast ${type}`}>
       {message}
-      <button onClick={onClose} className="close-btn">&times;</button>
+      <button onClick={onClose} className="close-btn">
+        &times;
+      </button>
     </div>
   );
 };
