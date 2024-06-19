@@ -17,7 +17,19 @@ const ExamControls = () => {
               box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
               box-sizing: border-box;
               width: 350px;
-        }     
+              position: relative;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
         .switch {
             position: relative;
             display: inline-block;
@@ -104,42 +116,38 @@ const ExamControls = () => {
             flex-grow: 1;
         }
             `}
-    </style>
-    <div className="App">
+      </style>
+      <div className="App">
         <div className="main-content">
           <header>
             <h2>Create New Exam</h2>
           </header>
           <section className="exam-controls">
-            <div className="button-group">
-              <button className="btn">Create</button>
-              <button className="btn">Configure</button>
-              <button className="btn">Publish</button>
-            </div>
+            <button className="back-button" onClick={() => window.history.back()}>&larr;</button>
             <div className="controls">
               <div className="control-item">
                 <span>Students can view their exam</span>
                 <label className="switch">
-                  <input type="checkbox" />
+                  <input type="checkbox" data-testid="toggle-view-exam" />
                   <span className="slider"></span>
                 </label>
               </div>
               <div className="control-item">
                 <span>Students can view correct answers</span>
                 <label className="switch">
-                  <input type="checkbox" />
+                  <input type="checkbox" data-testid="toggle-view-answers" />
                   <span className="slider"></span>
                 </label>
               </div>
               <div className="control-item">
                 <span>Students can see exam statistics</span>
                 <label className="switch">
-                  <input type="checkbox" />
+                  <input type="checkbox" data-testid="toggle-view-stats" />
                   <span className="slider"></span>
                 </label>
               </div>
             </div>
-            <a href="./ExamBoard" className="btn">Confirm</a>
+            <a href="./ExamBoard" className="btn" data-testid="confirm-btn">Confirm</a>
           </section>
         </div>
       </div>
