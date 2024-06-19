@@ -47,6 +47,17 @@ const ManualExamKey = () => {
             padding: 20px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
+            position: relative;
+          }
+
+          .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
           }
 
           .new-exam h3 {
@@ -154,9 +165,7 @@ const ManualExamKey = () => {
             <h2>Create New Exam</h2>
           </header>
           <section className="new-exam">
-            <button className="btn">Create</button>
-            <button className="btn">Configure</button>
-            <button className="btn">Publish</button>
+            <button className="back-button" onClick={() => window.history.back()}>&larr; Back</button>
             <h3>Questions</h3>
             <p>*The following details will be printed on the exam*</p>
             <form>
@@ -166,7 +175,7 @@ const ManualExamKey = () => {
                 id="num-questions"
                 className="input-field"
                 value={numQuestions}
-                onChange={(e) => setNumQuestions(parseInt(e.target.value))}
+                onChange={(e) => setNumQuestions(Math.min(300, parseInt(e.target.value)))}
                 min="1"
                 max="300"
                 data-testid="num-questions-input"
@@ -178,7 +187,7 @@ const ManualExamKey = () => {
                 id="num-options"
                 className="input-field"
                 value={numOptions}
-                onChange={(e) => setNumOptions(parseInt(e.target.value))}
+                onChange={(e) => setNumOptions(Math.min(26, parseInt(e.target.value)))}
                 min="1"
                 max="26"
                 data-testid="num-options-input"

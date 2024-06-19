@@ -11,7 +11,7 @@ const AccountSettings = () => {
         </header>
         <section className="account-settings">
           <div className="user-info">
-            <p>User ID: 75826488</p>
+            <p>User ID: 75826488</p> {/* //dummy input, will be retreived with SQL query when implimented */}
             <label htmlFor="username">Username</label>
             <input type="text" id="username" defaultValue="Dr. Pepper" />
             <p>*A GradeFalcon Employee will never ask for your password*</p>
