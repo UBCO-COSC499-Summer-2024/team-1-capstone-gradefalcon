@@ -7,7 +7,7 @@
 ### Timesheet 
 clockify report 
 
-![Time4](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/343f19bf-fc4f-4e04-ac59-029c8bf6a638)
+![Time4_1](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/96af9ab1-8b82-4f0b-864b-2fe88d78bebc)
 
 
 
