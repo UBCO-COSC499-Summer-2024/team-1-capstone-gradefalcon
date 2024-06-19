@@ -17,7 +17,6 @@ app.use(bodyParser.json());
 
 const secretKey = process.env.JWT_SECRET || "secret"; // strong secret key store it in environment variables
 
-
 // Set up session middleware
 app.use(
   session({
@@ -196,7 +195,6 @@ app.get("/healthz", function (req, res) {
   res.send("I am happy and healthy\n");
 });
 
-
 /// Import class route
 app.post("/import-class", async (req, res) => {
   const { students, courseName, courseId } = req.body;
@@ -218,8 +216,8 @@ app.post("/import-class", async (req, res) => {
     if (classQuery.rows.length === 0) {
       // If class does not exist, create it
       const newClassQuery = await pool.query(
-        "INSERT INTO classes (course_id, instructor_id) VALUES ($1, $2) RETURNING class_id",
-        [courseId, instructorId]
+        "INSERT INTO classes (course_id, instructor_id, course_name) VALUES ($1, $2, $3) RETURNING class_id",
+        [courseId, instructorId, courseName]
       );
       classId = newClassQuery.rows[0].class_id;
     } else {
@@ -228,11 +226,13 @@ app.post("/import-class", async (req, res) => {
     }
 
     // Validate and insert students
-    const insertPromises = students.map(async student => {
+    const insertPromises = students.map(async (student) => {
       const { studentID, studentName } = student;
 
       if (!studentID || !studentName) {
-        throw new Error('Invalid student data: studentID and studentName are required');
+        throw new Error(
+          "Invalid student data: studentID and studentName are required"
+        );
       }
 
       // Check if student already exists in the student table

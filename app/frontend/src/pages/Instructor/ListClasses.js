@@ -39,7 +39,7 @@ const ListClasses = () => {
                 {classItem.course_id}
               </a>
             </h4>
-            <p>Details about Class 1</p>
+            <p>{classItem.course_name}</p>
           </div>
         ))}
       </ul>
