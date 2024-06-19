@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
-import { useHistory } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 import '../../css/style.css';
 import '../../css/NewClass.css';
+import Toast from '../../Toast';
 
 const NewClass = () => {
   const [col, setCol] = useState([]);
@@ -12,6 +11,8 @@ const NewClass = () => {
   const [file, setFile] = useState(null);
   const [courseName, setCourseName] = useState('');
   const [courseId, setCourseId] = useState('');
+  const navigate = useNavigate();
+  const [toast, setToast] = useState(null);
  
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -61,9 +62,9 @@ const NewClass = () => {
         console.log('Success:', data);
         // Handle success (e.g., show a message or update the UI)
         // Show success toast and navigate to classManagement page
-        toast.success('Class successfully added!');
+        setToast({ message: 'Class successfully added!', type: 'success' });
         setTimeout(() => {
-          history.push('/classManagement');
+          navigate('/classManagement');
         }, 2000); // Delay to allow the toast to be visible for a moment
       })
       .catch((error) => {
@@ -79,6 +80,7 @@ const NewClass = () => {
   return (
     <div className="App">
       <div className="main-content">
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
         <header>
           <h2>Create New Class</h2>
         </header>
