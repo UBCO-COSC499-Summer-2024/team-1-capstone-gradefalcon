@@ -10,7 +10,7 @@ const AdminDashboard = () => {
           <nav>
             <ul>
               <li><a href="/website-overview">Website Overview</a></li>
-              <li><a href="./UserManagment">User Management</a></li>
+              <li><a href="/userManagement">User Management</a></li>
               <li><a href="/system-preferences">System Preferences</a></li>
               <li><a href="/omr-management">OMR Management</a></li>
             </ul>
