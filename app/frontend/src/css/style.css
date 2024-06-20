@@ -256,7 +256,7 @@ input[type="text"], input[type="password"] {
 }
 
 .save-changes-btn:hover {
-    background-color: #45a049;
+    background-color: #60a248;
 }
 
 .delete-account-btn {
@@ -374,7 +374,7 @@ input:checked + .slider:before {
 }
 
 .btn:hover {
-    background-color: #45a049;
+    background-color: #60a248;
 }
 
 .save-changes-btn {
@@ -399,7 +399,7 @@ input:checked + .slider:before {
   }
   
   .toast.success {
-    background-color: #4caf50;
+    background-color: #60a248;
   }
   
   .toast.error {

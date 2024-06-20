@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route, useLocation} from "react-router-dom";
+import { LogtoProvider } from '@logto/react';
+import LogtoConfig from './LogtoConfig';
 
-import logo from "./assets/logo.png";
 import "./css/App.css";
 import "./css/style.css";
 import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
+
 // Import pages
+import Login from "./pages/Login";
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./pages/NotFound";
 import InstructorSignup from "./pages/Instructor/Signup";
-import Login from "./pages/Instructor/Login";
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
@@ -44,6 +41,7 @@ const Layout = ({ children }) => {
 };
 
 function App() {
+
   const [message, setMessage] = useState("");
   const [userName, setUserName] = useState("");
 
@@ -59,52 +57,27 @@ function App() {
   }, []);
 
   return (
+    <LogtoProvider config={LogtoConfig}>
     <Router>
       <div className="App">
         <Layout>
           <Routes>
             <Route path="/" element={<InstructorSignup />} />
             <Route path="/login" element={<Login />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/adminDashboard"
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/userManagement"
-              element={
-                <ProtectedRoute>
-                  <UserManagement />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/callback" element={<Callback />} />
+            <Route path="/dashboard" element={ <ProtectedRoute> <Dashboard /> </ProtectedRoute>} />
+            <Route path="/adminDashboard" element={<ProtectedRoute> <AdminDashboard /> </ProtectedRoute> } />
+            <Route path="/userManagement" element={ <ProtectedRoute> <UserManagement /> </ProtectedRoute> } />
             <Route path="/signup" element={<InstructorSignup />} />
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/classes" element={<Classes />} />
             <Route path="/new-class" element={<NewClass />} />
-            <Route
-              path="/ClassManagement/:class_id"
-              element={<ClassManagement />}
-            />
+            <Route path="/ClassManagement/:class_id" element={<ClassManagement />} />
             <Route path="/NewExam" element={<NewExam />} />
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
             <Route path="/ManualExamKey" element={<ManualExamKey />} />
-            <Route
-              path="/NotificationPreferences"
-              element={<NotificationPreferences />}
-            />
+            <Route path="/NotificationPreferences" element={<NotificationPreferences />} />
             <Route path="/UploadExamKey" element={<UploadExamKey />} />
             {/* <Route path="/Schedule" element={<Schedule />} /> Schedule plugin is brocken ->will fix */}
             <Route path="*" element={<NotFound />} />
@@ -112,6 +85,7 @@ function App() {
         </Layout>
       </div>
     </Router>
+    </LogtoProvider>
   );
 }
 export default App;
