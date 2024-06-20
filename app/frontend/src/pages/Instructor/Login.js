@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import '../css/Login.css';
-import logo from "../assets/logo.png";
-import { useLogto } from "@logto/react";
+import '../../css/Login.css';
+import logo from "../../assets/logo.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate(); 
-  const {isAuthenticated} = useLogto();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -22,31 +20,25 @@ const Login = () => {
         credentials: 'include',
       });
 
-        if (isAuthenticated) {
-          return <div>Signed in</div>;
-      }
-
-
-
-      // if (response.ok) {
-      //   const data = await response.json();
-      //   localStorage.setItem("token", data.token);
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("token", data.token);
         
-      //   // Redirect to the appropriate dashboard based on the role
-      //   if (data.role === 'instructor') {
-      //     navigate("/dashboard");
-      //   } else if (data.role === 'student') {
-      //     navigate("/student-dashboard");
-      //   } else if (data.role === 'admin') {
-      //     navigate("/adminDashboard");
-      //   }
-      // } else {
-      //   console.error("Login failed");
-      // }
+        // Redirect to the appropriate dashboard based on the role
+        if (data.role === 'instructor') {
+          navigate("/dashboard");
+        } else if (data.role === 'student') {
+          navigate("/student-dashboard");
+        } else if (data.role === 'admin') {
+          navigate("/adminDashboard");
+        }
+      } else {
+        console.error("Login failed");
+      }
     } catch (error) {
       console.error("Error:", error);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -79,8 +71,6 @@ const Login = () => {
                 aria-label="password-input"
               />
             </div>
-            <SignIn/>
-            isAuthenticated && <SignOut/>
             <button type="submit" className="button">
               Login
             </button>
