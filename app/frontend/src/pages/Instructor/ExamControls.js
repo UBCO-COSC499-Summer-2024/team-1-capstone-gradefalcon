@@ -28,7 +28,7 @@ const ExamControls = () => {
             border: none;
             font-size: 16px;
             cursor: pointer;
-        }
+        }     
 
         .switch {
             position: relative;
@@ -116,14 +116,18 @@ const ExamControls = () => {
             flex-grow: 1;
         }
             `}
-      </style>
-      <div className="App">
+    </style>
+    <div className="App">
         <div className="main-content">
           <header>
             <h2>Create New Exam</h2>
           </header>
           <section className="exam-controls">
             <button className="back-button" onClick={() => window.history.back()}>&larr;</button>
+
+
+
+
             <div className="controls">
               <div className="control-item">
                 <span>Students can view their exam</span>

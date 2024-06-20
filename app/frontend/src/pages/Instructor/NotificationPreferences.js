@@ -47,10 +47,8 @@ const NotificationPreferences = () => {
           }
 
           .btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
+
+@@ -54,101 +47,98 @@
             border-radius: 5px;
             cursor: pointer;
             margin-top: 10px;

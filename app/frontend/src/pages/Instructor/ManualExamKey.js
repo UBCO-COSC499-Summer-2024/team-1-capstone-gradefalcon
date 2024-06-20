@@ -5,6 +5,10 @@ const ManualExamKey = () => {
   const [numQuestions, setNumQuestions] = useState(80);
   const [numOptions, setNumOptions] = useState(5);
 
+
+
+
+
   const toggleSelection = (event) => {
     event.target.classList.toggle('selected');
   };
@@ -166,6 +170,8 @@ const ManualExamKey = () => {
           </header>
           <section className="new-exam">
             <button className="back-button" onClick={() => window.history.back()}>&larr; Back</button>
+
+
             <h3>Questions</h3>
             <p>*The following details will be printed on the exam*</p>
             <form>
