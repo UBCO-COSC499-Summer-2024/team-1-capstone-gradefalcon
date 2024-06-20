@@ -21,32 +21,40 @@ const NotificationPreferences = () => {
       <style>
         {`
           .notification-preferences {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
             background-color: white;
             border-radius: 5px;
             padding: 20px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
+            width: 350px;
+            position: relative;
           }
 
           .control-item {
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
           }
 
           .control-item span {
-            flex: 1;
+            flex-grow: 1;
+            text-align: left; /* Align text to the left */
           }
 
           .btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
+
+@@ -54,101 +47,98 @@
             border-radius: 5px;
             cursor: pointer;
             margin-top: 10px;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
           }
 
           .btn:hover {
@@ -110,7 +118,7 @@ const NotificationPreferences = () => {
               <div className="control-item">
                 <span>Email Notifications</span>
                 <label className="switch">
-                  <input type="checkbox" id="email-notifications" />
+                  <input type="checkbox" id="email-notifications" data-testid="toggle-email-notifications" />
                   <span className="slider"></span>
                 </label>
               </div>
@@ -118,7 +126,7 @@ const NotificationPreferences = () => {
               <div className="control-item">
                 <span>SMS Notifications</span>
                 <label className="switch">
-                  <input type="checkbox" id="sms-notifications" />
+                  <input type="checkbox" id="sms-notifications" data-testid="toggle-sms-notifications" />
                   <span className="slider"></span>
                 </label>
               </div>
@@ -126,12 +134,12 @@ const NotificationPreferences = () => {
               <div className="control-item">
                 <span>Push Notifications</span>
                 <label className="switch">
-                  <input type="checkbox" id="push-notifications" />
+                  <input type="checkbox" id="push-notifications" data-testid="toggle-push-notifications" />
                   <span className="slider"></span>
                 </label>
               </div>
               
-              <button type="submit" className="btn save-changes-btn">Save changes</button>
+              <button type="submit" className="btn save-changes-btn" data-testid="save-changes-btn">Save changes</button>
             </form>
           </section>
         </div>
