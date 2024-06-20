@@ -58,7 +58,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="email-input"
+                aria-label="email-input"
               />
             </div>
             <div>
@@ -68,7 +68,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="password-input"
+                aria-label="password-input"
               />
             </div>
             <button type="submit" className="button">
