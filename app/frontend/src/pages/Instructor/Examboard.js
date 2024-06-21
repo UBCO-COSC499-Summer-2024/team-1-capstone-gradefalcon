@@ -1,42 +1,9 @@
 import React from 'react';
 import '../../css/App.css';
+import '../../css/ExamBoard.css';
 
 const ExamBoard = () => {
   return (
-    <>
-      <style>
-        {`
-
-.create-new-btn {
-    display: inline-block;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    margin-bottom: 20px;
-}
-
-.create-new-btn:hover {
-    background-color: #45a049;
-}
-
-.exam-list h3 {
-    font-size: 20px;
-    font-weight: normal;
-    margin-bottom: 10px;
-}
-
-.exam-list p {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 5px;
-}
-`}
-    </style>
     <div className="App">
     <div class="main-content">
         <header>
@@ -60,7 +27,6 @@ const ExamBoard = () => {
         </section>
     </div>
     </div>
-    </>
     );
 };
 

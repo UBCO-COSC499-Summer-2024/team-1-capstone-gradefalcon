@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from "react";
 import '../../css/App.css';
-import logo from '../../assets/logo.png';
 
 const UserManagement = () => {
   const [activeTab, setActiveTab] = useState('create');
