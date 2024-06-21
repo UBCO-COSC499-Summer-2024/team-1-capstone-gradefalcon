@@ -19,7 +19,7 @@ const ClassManagement = () => {
     const fetchClassData = async () => {
       try {
         const response = await fetch(
-          `/api/classManagement/${params.class_id}`,
+          `/api/class/classManagement/${params.class_id}`,
           {
             method: "POST",
             headers: {
