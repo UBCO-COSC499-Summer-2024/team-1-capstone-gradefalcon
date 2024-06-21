@@ -1,7 +1,50 @@
 # Personal Log
 Ahmad Saleem Mirza
 
-## Friday (June 14 - 19)
+## Friday (June 19 - 21)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/June19-21.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Testing class management system
+  * #2: Create and manage exams
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Testing Class management
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Create and manage exams
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>    
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+An issue I'm encountering with testing is that whilst I can access the api calls, I am unable to create a connection to the database to so I can run a test query. I suspect this is because I am running Docker and it cannot find the database host but I have yet to find a solution for this. In the meantime, I am making progress towards the exam creation section.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Class system tests
+  * Exam creation
+
+## Wednesday (June 14 - 19)
 
 ### Timesheet
 Clockify report
