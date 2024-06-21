@@ -2,6 +2,72 @@
 # Personal Log
 
 
+## Friday (19/6 - 21/6)
+
+### Timesheet 
+
+clockify report 
+
+
+
+![Time5](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/374d057e-7f44-4c8e-b374-adc53f06e0c4)
+
+
+
+
+
+
+### Current Tasks (Provide Details):
+- #1: Front End Testing of the student view ( still in progress while doing some research on the same )
+- #2: Data Visualization (Technological research is in progress , in order to get performance insights using the visualization tools)
+- #3: Enhancing the front end UI using Shad cn
+
+
+  
+### Progress Update (since 6/5/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Testing for front end student view pages #37
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Data Visualization #16 ( Startting off after some research on the same)
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+After completing the student interface(using React), I have taken up on enhancing the front end using Shad cn and the related packages to make the system look attractive to the user. I have currently also taken up on the user story:Data Visualization #16 and doing some research on the same and intend to update more on the progress of the sam eby the next cycle.
+
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Testing for front end student view pages #37
+- Data Visualization #16 ( Startting off after some research on the same)
+- Enhancing the front end UI using Shad cn
+
+
 ## Wednesday (15/6 - 18/6)
 
 ### Timesheet 
