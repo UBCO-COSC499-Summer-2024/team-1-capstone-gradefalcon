@@ -39,7 +39,7 @@ const ExamControls = () => {
                 </label>
               </div>
             </div>
-            <a href="./ExamBoard" className="btn" data-testid="confirm-btn">Confirm</a>
+            <a href="./Examboard" className="btn" data-testid="confirm-btn">Confirm</a>
           </section>
         </div>
       </div>

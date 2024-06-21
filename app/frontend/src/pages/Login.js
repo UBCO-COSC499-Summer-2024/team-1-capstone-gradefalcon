@@ -76,16 +76,6 @@ const Login = () => {
             <button type="submit" className="button">
               Login
             </button>
-            <div className="divider">
-              <div className="rectangle" />
-              <div className="text-wrapper-3">or continue with</div>
-              <div className="rectangle" />
-            </div>
-            <button type="button" className="google-button">Google</button>
-            <p className="terms">
-              By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-            </p>
-            <a href="./Signup" className="switch-link">Don't have an account? Sign up</a>
           </div>
         </div>
       </div>

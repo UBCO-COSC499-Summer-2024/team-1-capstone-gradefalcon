@@ -14,7 +14,7 @@ import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
 import NewClass from "./pages/Instructor/NewClass";
 import NewExam from "./pages/Instructor/NewExam";
-import ExamBoard from "./pages/Instructor/ExamBoard";
+import Examboard from "./pages/Instructor/Examboard";
 import ExamControls from "./pages/Instructor/ExamControls";
 import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
@@ -67,7 +67,7 @@ function App() {
             <Route path="/New-Class" element={<NewClass />} />
             <Route path="/ClassManagement/:class_id" element={<ClassManagement />} />
             <Route path="/NewExam" element={<NewExam />} />
-            <Route path="/ExamBoard" element={<ExamBoard />} />
+            <Route path="/Examoard" element={<Examboard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
             <Route path="/ManualExamKey" element={<ManualExamKey />} />
             <Route path="/NotificationPreferences" element={<NotificationPreferences />} />

@@ -21,7 +21,7 @@ test('renders Exam Board link', () => {
     render(React.createElement(NavBar));
     const linkElement = screen.getByText(/Exam Board/i);
     expect(linkElement).toBeInTheDocument();
-    expect(linkElement.closest('a')).toHaveAttribute('href', '/ExamBoard');
+    expect(linkElement.closest('a')).toHaveAttribute('href', '/Examboard');
 });
 
 test('renders Grade Report link', () => {

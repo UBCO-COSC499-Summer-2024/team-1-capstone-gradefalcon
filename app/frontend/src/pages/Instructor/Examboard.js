@@ -1,8 +1,8 @@
 import React from 'react';
 import '../../css/App.css';
-import '../../css/ExamBoard.css';
+import '../../css/Examboard.css';
 
-const ExamBoard = () => {
+const Examboard = () => {
   return (
     <div className="App">
     <div class="main-content">
@@ -30,4 +30,4 @@ const ExamBoard = () => {
     );
 };
 
-export default ExamBoard;
+export default Examboard;
