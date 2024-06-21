@@ -1,6 +1,23 @@
 const pool = require('../utils/db');
 const jwt = require('jsonwebtoken');
 
+// User registration controller
+const signup = async (req, res, next) => {
+  const { email, password, name } = req.body;
+  try {
+    let existingUser = await pool.query("SELECT * FROM student WHERE email = $1", [email]);
+    if (existingUser.rows.length > 0) {
+      return res.status(409).json({ message: "Email already exists" });
+    }
+    let result = await pool.query("INSERT INTO student (email, password, name) VALUES ($1, $2, $3) RETURNING student_id", [email, password, name]);
+    const token = jwt.sign({ userId: result.rows[0].student_id }, process.env.JWT_SECRET || "secret", { expiresIn: "1h" });
+    res.status(201).json({ token });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// User login controller
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
@@ -49,19 +66,14 @@ const login = async (req, res, next) => {
   }
 };
 
-const signup = async (req, res, next) => {
-  const { email, password, name } = req.body;
-  try {
-    let existingUser = await pool.query("SELECT * FROM student WHERE email = $1", [email]);
-    if (existingUser.rows.length > 0) {
-      return res.status(409).json({ message: "Email already exists" });
+// User logout controller
+const logout = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Logout failed" });
     }
-    let result = await pool.query("INSERT INTO student (email, password, name) VALUES ($1, $2, $3) RETURNING student_id", [email, password, name]);
-    const token = jwt.sign({ userId: result.rows[0].student_id }, process.env.JWT_SECRET || "secret", { expiresIn: "1h" });
-    res.status(201).json({ token });
-  } catch (err) {
-    next(err);
-  }
+    res.json({ message: "Logout successful" });
+  });
 };
 
-module.exports = { login, signup };
+module.exports = { login, signup, logout };
