@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
-import "../../css/style.css";
+import "../../css/App.css";
 import "../../css/NewClass.css";
 import Toast from "../../components/Toast";
 

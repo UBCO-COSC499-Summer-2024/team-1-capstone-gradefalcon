@@ -8,7 +8,7 @@ import {
 
 import logo from "./assets/logo.png";
 import "./css/App.css";
-import "./css/style.css";
+import "./css/App.css";
 import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
 // Import pages

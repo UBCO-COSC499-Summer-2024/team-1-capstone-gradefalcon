@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../css/style.css";
+import "../css/App.css";
 
 const ListClasses = () => {
   const [classes, setClasses] = useState([]); // Change to use an array

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import '../../css/style.css';
+import '../../css/App.css';
 
 const ManualExamKey = () => {
   const [numQuestions, setNumQuestions] = useState(80);

@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import "../../css/style.css";
+import "../../css/App.css";
 import "../../css/ClassManagement.css";
 
 // We need the following data:

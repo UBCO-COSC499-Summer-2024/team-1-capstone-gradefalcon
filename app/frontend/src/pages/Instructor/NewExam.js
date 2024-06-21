@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../css/style.css';
+import '../../css/App.css';
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState('Graphic Fundamentals 101 Final Exam'); //dummy input, will be altered when exam creation is implimented

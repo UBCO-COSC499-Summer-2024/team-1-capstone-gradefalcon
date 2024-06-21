@@ -1,38 +1,417 @@
-.App {
-  text-align: center;
+/*Navbar/shared elements CSS*/
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    display: flex;
+    height: 100vh; 
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1, h2, h3, h4, p {
+    margin: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100%;
+    background-color:#60a248;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+    position:fixed;
+    z-index:1; 
+}
+
+
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin-bottom: 10px;
+}
+
+nav ul li a {
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: #2D3748;
+}
+
+.main-content {
+    height: 100vh;
+    width: 120%;
+    margin-left: 250px;
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #EDF2F7;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+header h2 {
+    font-size: 24px;
+    font-weight: normal;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+/* Dashboard shared CSS*/
+section h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.course-card, .assignment-card {
+    background-color: white;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.course-card {
+    width: calc(25% - 10px);
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+.course-card:last-child, .assignment-card:last-child {
+    margin-right: 0;
+}
+
+.course-card h4, .assignment-card h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.course-card p, .assignment-card p {
+    font-size: 14px;
+    color: #555;
+}
+
+.course-card {
+    background-color: #F7FAFC;
+}
+
+.course-card:nth-child(1) {
+    background-color: #E9D8FD;
+}
+
+.course-card:nth-child(2) {
+    background-color: #FEEBC8;
+}
+
+.course-card:nth-child(3) {
+    background-color: #BEE3F8;
+}
+
+.course-card:nth-child(4) {
+    background-color: #C6F6D5;
+}
+
+.assignment-card h4 {
+    font-size: 16px;
+}
+
+.assignment-card p {
+    font-size: 12px;
+}
+
+.assignment-card:not(.completed) {
+    border-left: 5px solid #E53E3E;
+}
+
+.assignment-card.completed {
+    border-left: 5px solid #48BB78;
+}
+
+.exam-board {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+thead {
+    background-color: #2C7A7B;
+    color: white;
+}
+
+thead th {
+    padding: 10px;
+    text-align: left;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.status.completed {
+    background-color: #48BB78;
+    color: white;
+}
+
+.status.upcoming {
+    background-color: #ED8936;
+    color: white;
+}
+
+.status.not-submitted {
+    background-color: #E53E3E;
+    color: white;
+}
+
+.status.in-progress {
+    background-color: #ECC
+}
+
+/*AccountSettings shared CSS*/
+
+.account-settings {
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+    margin-bottom: 20px;
+}
+
+.user-info p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.save-changes-btn {
+    background-color: #60a248;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.save-changes-btn:hover {
+    background-color: #45a049;
+}
+
+.delete-account-btn {
+    background-color: #E53E3E;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-account-btn:hover {
+    background-color: #C53030;
+}
+
+/*schedule shared CSS*/
+
+.calendar {
+    background-color: white;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+#calendar {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/*notification prefferances shared CSS*/
+
+.notification-preferences {
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    width: 350px;
+}
+
+.notification-preferences form {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-preferences .control-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.notification-preferences .control-item span {
+    flex-grow: 1;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+    margin-left: 5px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 17px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #60a248;
+}
+
+input:checked + .slider:before {
+    transform: translateX(13px);
+}
+
+.btn {
+    background-color: #60a248;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #45a049;
+}
+
+.save-changes-btn {
+    align-self: flex-start;
+}
+
+
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 16px;
+    border-radius: 4px;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 250px;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  
+  .toast.success {
+    background-color: #4caf50;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .toast.error {
+    background-color: #f44336;
   }
-}
+  
+  .close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+
