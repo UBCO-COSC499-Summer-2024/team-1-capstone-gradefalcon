@@ -19,7 +19,7 @@ a {
 .sidebar {
     width: 250px;
     height: 100%;
-    background-color:#60a248;
+    background-color:#45a049;
     color: white;
     display: flex;
     flex-direction: column;
@@ -150,7 +150,7 @@ section h3 {
 }
 
 .assignment-card.completed {
-    border-left: 5px solid #48BB78;
+    border-left: 5px solid #45a049;
 }
 
 .exam-board {
@@ -194,7 +194,7 @@ tbody td {
 }
 
 .status.completed {
-    background-color: #48BB78;
+    background-color: #45a049;
     color: white;
 }
 
@@ -246,7 +246,7 @@ input[type="text"], input[type="password"] {
 }
 
 .save-changes-btn {
-    background-color: #60a248;
+    background-color: #45a049;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -353,7 +353,7 @@ input[type="text"], input[type="password"] {
 }
 
 input:checked + .slider {
-    background-color: #60a248;
+    background-color: #45a049;
 }
 
 input:checked + .slider:before {
@@ -361,7 +361,7 @@ input:checked + .slider:before {
 }
 
 .btn {
-    background-color: #60a248;
+    background-color: #45a049;
     color: white;
     border: none;
     padding: 10px 20px;
