@@ -4,7 +4,7 @@
 
 ## TimeSheet
 Clockify report
-N/A (explained in appropriate sections)
+N/A (explained in appropriate sections) (0 hours)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Objectives suspended until (6/25)
