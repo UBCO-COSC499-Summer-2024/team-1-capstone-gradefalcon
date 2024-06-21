@@ -26,11 +26,11 @@ const Login = () => {
         
         // Redirect to the appropriate dashboard based on the role
         if (data.role === 'instructor') {
-          navigate("/dashboard");
+          navigate("/Dashboard");
         } else if (data.role === 'student') {
           navigate("/student-dashboard");
         } else if (data.role === 'admin') {
-          navigate("/adminDashboard");
+          navigate("/AdminDashboard");
         }
       } else {
         console.error("Login failed");

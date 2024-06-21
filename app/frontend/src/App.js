@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation} from "react-router-dom";
 import "./css/App.css";
-import "./css/App.css";
 import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -27,7 +26,7 @@ import UserManagement from "./pages/Administator/UserManagment";
 const Layout = ({ children }) => {
   const location = useLocation();
   const shouldDisplayNavBar =
-    location.pathname !== "/" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/adminDashboard" && location.pathname !== "/userManagement";
+    location.pathname !== "/" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement";
 
   return (
     <>
