@@ -7,15 +7,15 @@ import ProtectedRoute from "./ProtectedRoute";
 
 // Import pages
 import Dashboard from "./pages/Instructor/Dashboard";
-import NotFound from "./pages/NotFound";
+import NotFound from "./components/NotFound";
 import Signup from "./pages/Signup";
-import Login from "./pages/Instructor/Login";
+import Login from "./pages/Login";
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
 import NewClass from "./pages/Instructor/NewClass";
 import NewExam from "./pages/Instructor/NewExam";
-import ExamBoard from "./pages/Instructor/Examboard";
+import ExamBoard from "./pages/Instructor/ExamBoard";
 import ExamControls from "./pages/Instructor/ExamControls";
 import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
