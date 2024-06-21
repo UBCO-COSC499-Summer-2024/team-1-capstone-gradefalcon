@@ -52,7 +52,7 @@ const NewClass = () => {
       }
 
       // Send the parsed data to the backend
-      fetch("/api/import-class", {
+      fetch("/api/class/import-class", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -7,7 +7,7 @@ const ListClasses = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await fetch("/api/classes", {
+        const response = await fetch("/api/class/classes", {
           // Change to the correct endpoint
           method: "POST", // Ensure method matches your server's endpoint
           headers: {

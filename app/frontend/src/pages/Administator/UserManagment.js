@@ -24,9 +24,9 @@ const UserManagement = () => {
   const fetchUsers = async () => {
     try {
       const [studentsRes, instructorsRes, adminsRes] = await Promise.all([
-        fetch("/api/students"),
-        fetch("/api/instructors"),
-        fetch("/api/admins")
+        fetch("/api/users/students"),
+        fetch("/api/users/instructors"),
+        fetch("/api/users/admins")
       ]);
   
       // Check if the responses are OK and return JSON, otherwise throw an error

@@ -11,7 +11,7 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch("api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,6 +23,7 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.token);
+        console.log("Login successful, role:", data.role); // Debugging log
         
         // Redirect to the appropriate dashboard based on the role
         if (data.role === 'instructor') {

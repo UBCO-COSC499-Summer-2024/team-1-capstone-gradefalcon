@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { ByClickingContinueYouAgreeToOurTermsOfServiceAndPrivacyPolicy } from "./ByClickingContinueYouAgreeToOurTermsOfServiceAndPrivacyPolicy";
-// import { Google } from "./Google";
 import '../css/Signup.css';
 import logo from '../assets/logo.png';
 
@@ -15,7 +13,7 @@ const Popup = ({ message, onClose }) => (
   </div>
 );
 
-export const InstructorSignup = () => {
+export const Signup = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -44,7 +42,7 @@ export const InstructorSignup = () => {
       return;
     }
     try {
-      const response = await fetch("/api/signup", {
+      const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -169,4 +167,4 @@ export const InstructorSignup = () => {
 };
 
 
-export default InstructorSignup;
+export default Signup;

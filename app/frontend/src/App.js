@@ -56,7 +56,7 @@ function App() {
       <div className="App">
         <Layout>
           <Routes>
-            <Route path="/" element={<Signup />} />
+            <Route path="/" element={<Login />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/Dashboard"element={ <ProtectedRoute> <Dashboard /></ProtectedRoute>}/>
             <Route path="/AdminDashboard" element={<ProtectedRoute> <AdminDashboard /></ProtectedRoute>}/>
