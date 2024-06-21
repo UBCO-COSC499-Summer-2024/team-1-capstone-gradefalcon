@@ -1,211 +1,130 @@
-.instructor-signup {
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-  }
-  
-  .instructor-signup .div {
-    background-color: #ffffff;
-    height: 931px;
-    position: relative;
-    width: 1480px;
-  }
-  
-  .instructor-signup .text-wrapper {
-    color: #000000;
-    font-family: "Inter-SemiBold", Helvetica;
-    font-size: 20px;
-    font-weight: 600;
-    height: 30px;
-    left: 24px;
-    letter-spacing: -0.2px;
-    line-height: 30px;
-    position: absolute;
-    top: 23px;
-    white-space: nowrap;
-  }
-  
-  .instructor-signup .overlap-group {
-    height: 614px;
-    left: 540px;
-    position: absolute;
-    top: 35px;
-    width: 400px;
-  }
-  
-  .instructor-signup .content {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    left: 0;
-    position: absolute;
-    top: 246px;
-    width: 400px;
-  }
-  
-  .instructor-signup .copy {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    gap: 4px;
-    position: relative;
-  }
-  
-  .instructor-signup .text-wrapper-2 {
-    color: #000000;
-    font-family: "Poppins-SemiBold", Helvetica;
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: -0.24px;
-    line-height: 36px;
-    margin-top: -1px;
-    position: relative;
-    text-align: center;
-    white-space: nowrap;
-    width: fit-content;
-  }
-  
-  .instructor-signup .p {
-    color: #000000;
-    font-family: "Poppins-Regular", Helvetica;
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: 24px;
-    position: relative;
-    text-align: center;
-    white-space: nowrap;
-    width: fit-content;
-  }
-  
-  .instructor-signup .input-and-button {
-    align-items: flex-start;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    gap: 16px;
-    position: relative;
-  }
-  
-  .instructor-signup .field {
-    background-color: #ffffff;
-    border: 1px solid;
-    border-color: #e0e0e0;
-    border-radius: 8px;
-    color: #828282;
-    flex: 1;
-    font-family: "Poppins-Medium", Helvetica;
-    font-size: 20px;
-    font-weight: 500;
-    height: 40px;
-    letter-spacing: 0;
-    line-height: 30px;
-    margin-bottom: -2px;
-    margin-top: -4px;
-    padding: 8px 16px;
-    position: relative;
-    width: 400px;
-  }
-  
-  .instructor-signup .button {
-    all: unset;
-    align-items: center;
-    background-color: #60a248;
-    border-radius: 8px;
-    box-sizing: border-box;
-    display: flex;
-    gap: 8px;
-    height: 40px;
-    justify-content: center;
-    padding: 0px 16px;
-    position: relative;
-    width: 400px;
-  }
-  
-  .instructor-signup .label {
-    color: #ffffff;
-    font-family: "Poppins-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 0;
-    line-height: 24px;
-    position: relative;
-    white-space: nowrap;
-    width: fit-content;
-  }
-  
-  .instructor-signup .divider {
-    align-items: center;
-    align-self: stretch;
-    display: flex;
-    flex: 0 0 auto;
-    gap: 8px;
-    justify-content: center;
-    position: relative;
-    width: 100%;
-  }
-  
-  .instructor-signup .rectangle {
-    background-color: #e6e6e6;
-    flex: 1;
-    flex-grow: 1;
-    height: 1px;
-    position: relative;
-  }
-  
-  .instructor-signup .text-wrapper-3 {
-    color: #828282;
-    font-family: "Poppins-Regular", Helvetica;
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: 24px;
-    margin-top: -1px;
-    position: relative;
-    text-align: center;
-    white-space: nowrap;
-    width: fit-content;
-  }
-  
-  .instructor-signup .button-2 {
-    align-self: stretch;
-    background-color: #eeeeee;
-    border-radius: 8px;
-    height: 40px;
-    position: relative;
-    width: 100%;
-  }
-  
-  .instructor-signup .text-wrapper-4 {
-    color: #000000;
-    font-family: "Poppins-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 500;
-    height: 24px;
-    left: 172px;
-    letter-spacing: 0;
-    line-height: 24px;
-    position: absolute;
-    top: 7px;
-    white-space: nowrap;
-  }
-  
-  .instructor-signup .google-instance {
-    height: 20px !important;
-    left: 14px !important;
-    position: absolute !important;
-    top: 10px !important;
-    width: 20px !important;
-  }
-  
-  .instructor-signup .by-clicking-continue {
-    align-self: stretch !important;
-    flex: 0 0 auto !important;
-    position: relative !important;
-    width: 100% !important;
-  }
- 
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.form-box {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  width: 400px;
+}
+
+.logo {
+  width: 250px;
+  margin-bottom: 5px;
+}
+
+.copy {
+  margin-bottom: 20px;
+}
+
+.text-wrapper {
+  font-size: 24px;
+  color: #333;
+}
+
+.email{
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.password-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.rectangle {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #ccc;
+}
+
+.text-wrapper-3 {
+  margin: 0 10px;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.google-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.google-button img {
+  width: 20px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.terms {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 20px;
+}
+
+.terms a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
+
+.switch-link {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.switch-link:hover {
+  text-decoration: underline;
+}

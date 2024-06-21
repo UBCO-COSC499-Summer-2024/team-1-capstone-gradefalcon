@@ -53,6 +53,16 @@ const NewExam = () => {
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+
+
+
+
+
+
+
+
+
+
           }
 
           .btn {
@@ -87,6 +97,8 @@ const NewExam = () => {
           </header>
           <section className="new-exam">
             <button className="back-button" onClick={() => window.history.back()}>&larr;</button>
+
+
             <h3>General</h3>
             <p>*The following details will be printed on the exam*</p>
             <form>
@@ -104,7 +116,45 @@ const NewExam = () => {
               <div>
                 <a href="./UploadExamKey" className="btn" data-testid="upload-answer-key-btn">Upload Answer Key</a>
                 <a href="./ManualExamKey" className="btn" data-testid="manual-answer-key-btn">Manually Select Answers</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               </div>
+
+
+
+
+
+
+
+
             </form>
           </section>
         </div>
