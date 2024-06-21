@@ -1,9 +1,144 @@
 # Personal Log
+## Friday (6/18- 6/20)
+
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/1de260fc4922625806760703df42cffda4792371/docs/weekly_logs/Clockify/Omar/Time6.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Implement Class Creation Functionality**
+   - Made some final changes to this feature: Verify on the backend if the class and student exist in the database. If not, create them and update the relevant tables, particularly the enrollment table, as per the ER diagram. The enrollment table uses unique instructor_id and course_id to allow instructors to have multiple courses with the same name. If the class exists, use the existing class_id.
+   - I most notably added a feature to notify the user on the front-end if the class already exists. Display a toast message confirming the class creation and then navigate the user to the class-management tab.
+
+2. **Integrate Auth0 for Authentication and Authorization**
+
+    1. **Install Auth0 SDK**:
+      - Installed Auth0 React SDK using `npm install @auth0/auth0-react`.
+
+    2. **Configure Auth0Provider in `App.js`**:
+      - Wrapped the application with `Auth0Provider` to enable Auth0 across the app.
+      - Configured the Auth0 provider with the domain and client ID.
+
+    3. **Update `ProtectedRoute` Component**:
+      - Modified the `ProtectedRoute` component to use Auth0's authentication status.
+      - Ensured only authenticated users can access protected routes.
+
+    4. **Update `Login` Component**:
+      - Replaced manual login handling with Auth0's `loginWithRedirect` method.
+      - Simplified the login process by leveraging Auth0's authentication.
+
+    5. **Add `LogoutButton` Component**:
+      - Created a `LogoutButton` component using Auth0's `logout` method.
+      - Configured the button to redirect users to the Auth0 logout endpoint and then back to the application.
+
+    6. **Add `Profile` Component**:
+      - Created a `Profile` component to display user information such as name and profile picture using Auth0.
+      - Used the `useAuth0` hook to fetch and display user profile details.
+
+    7. **Update `NavBar` Component**:
+      - Integrated `Profile` and `LogoutButton` components into the `NavBar`.
+      - Ensured the `NavBar` displays user information and includes a logout option.
+
+    8. **Configure Auth0 Application Settings**:
+      - Set the following URLs in the Auth0 application settings:
+        - **Allowed Callback URLs**: `http://localhost:3000`
+        - **Allowed Logout URLs**: `http://localhost:3000`
+        - **Allowed Web Origins**: `http://localhost:3000`
+      - Prepared similar configurations for the production environment with the appropriate domain.
+      
+  3. **Refactored File Structure and code for Maintainability on both the Frontend and Backend**
+
+  3. **Started work on Computer Vision model**
+
+### Progress Update (since 18/6/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <td>#82 - Implement Class Creation Functionality
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <td>#54 - User Story: Import Class as a CSV file
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <td>#21 - User Story: Create and Manage Classes
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <td>#97 - Refactor Backend Structure for Improved Maintainability
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+        <tr>
+        <td>#98 - Refactor Frontend Structure for Improved Maintainability
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+        <tr>
+        <td>#61 - Create User Roles and Permissions, Auth0
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+        </tr>
+        <tr>
+        <td>#10 - User Story: Develop Computer Vision Model
+         </td>
+        <td>In Progress
+        </td>
+    </tr>
+
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+- **What Went Well:**
+  - Refactored code successfully
+  - Got a draft for the Auth0 running
+
+- **What Was Done:**
+  -  added a feature to notify the user on the front-end if the class already exists. Display a toast message confirming the class creation and then navigate the user to the class-management tab.
+  - Refactored login and sign up with Auth0
+  - Refactor Backend and Frontend
+
+- **What Didn't Go Well:**
+  - Before trying Auth0 I tried a different 3rd party service authentication Logto but had dependencies issues half way through my setup so I had to ditch it and essently lost about 5h of work. 
+  - Refactoring the code in include Auth0 is proving to be a daunting task and I don't know if it's worth it
+  - Had to do a bunch of code review on big PRs.
+
+- **Retrospective:**
+  - Got a draft running for Auth0.
+  - Reorganized file structure.
+  - Got started on Computer Vision model.
 
 
-Here is the updated personal log incorporating the tasks you're actively working on:
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
 
-# Personal Log
+1. **OMR:**
+   - Work on implementing features for exam creation and Optical Mark Recognition (OMR).
+
+2. **Role-Based Authentication:**
+   - Implement role-based authentication to manage different user types.
+
+4. **Documentation and Backend Testing:**
+   - Document the new features and improvements.
+   - Write unit tests for the new functionalities to ensure reliability.
+
+5. **Possibly revisit UI:**
 
 ## Wednesday (6/14- 6/18)
 
