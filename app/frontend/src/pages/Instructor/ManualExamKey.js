@@ -1,16 +1,34 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import "../../css/style.css";
+import "../../css/ManualExamKey.css";
 
 const ManualExamKey = (props) => {
   const location = useLocation();
   const examTitle = location.state || {};
-  console.log(examTitle);
-  const [numQuestions, setNumQuestions] = useState(80);
-  const [numOptions, setNumOptions] = useState(5);
 
-  const toggleSelection = (event) => {
+  let questions = [];
+
+  const [numQuestions, setNumQuestions] = useState(10);
+  const [numOptions, setNumOptions] = useState(5);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const removeQuestion = (questionNumber, option) => {
+    questions = questions.filter(
+      (question) =>
+        question.question !== questionNumber || question.option !== option
+    );
+  };
+  const toggleSelection = (selection) => (event) => {
     event.target.classList.toggle("selected");
+    if (!questions.includes(selection)) {
+      questions.push(selection);
+      console.log(`Added: ${selection.question} ${selection.option}`);
+    } else {
+      removeQuestion(selection.question, selection.option);
+      console.log(`Removed: ${selection.question} ${selection.option}`);
+    }
+    console.log(questions);
   };
 
   const updateQuestions = useCallback(() => {
@@ -29,7 +47,10 @@ const ManualExamKey = (props) => {
         const optionSpan = document.createElement("span");
         optionSpan.className = "option";
         optionSpan.innerText = String.fromCharCode(65 + j);
-        optionSpan.onclick = toggleSelection;
+        optionSpan.onclick = toggleSelection({
+          question: i,
+          option: optionSpan.innerText,
+        });
         optionsDiv.appendChild(optionSpan);
       }
 
@@ -43,126 +64,6 @@ const ManualExamKey = (props) => {
 
   return (
     <>
-      <style>
-        {`
-          .new-exam {
-            background-color: white;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-            position: relative;
-          }
-
-          .back-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: none;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-          }
-
-          .new-exam h3 {
-            font-size: 20px;
-            font-weight: normal;
-            margin-bottom: 10px;
-          }
-
-          .new-exam p {
-            font-size: 14px;
-            margin-bottom: 20px;
-            color: #555;
-          }
-
-          .input-field {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-          }
-
-          .schedule-field {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          }
-
-          .schedule-field input {
-            width: 23%;
-          }
-
-          .btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-          }
-
-          .btn:hover {
-            background-color: #45a049;
-          }
-
-          form {
-            display: flex;
-            flex-direction: column;
-          }
-
-          .bubble-grid {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-          }
-
-          .question {
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-          }
-
-          .options {
-            margin-left: 10px;
-            flex: 1;
-          }
-
-          .option {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            margin: 0 5px;
-            border-radius: 50%;
-            border: 2px solid #333;
-            text-align: center;
-            line-height: 30px;
-            cursor: pointer;
-          }
-
-          .option.selected {
-            background-color: #4CAF50;
-            color: white;
-          }
-
-          .nested-window {
-            width: 100%;
-            height: 400px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            box-sizing: border-box;
-            margin-top: 20px;
-          }
-        `}
-      </style>
       <div className="App">
         <div className="main-content">
           <header>
