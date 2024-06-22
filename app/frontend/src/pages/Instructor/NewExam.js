@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../../css/style.css";
 import "../../css/NewExam.css";
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");
-
+  const params = useParams();
+  const class_id = params.class_id;
   const handleInputChange = (event) => {
     const value = event.target.value;
     // blocks chars that could cause error (i.e " ')
@@ -23,6 +24,7 @@ const NewExam = () => {
         <div className="main-content">
           <header>
             <h2>Create New Exam</h2>
+            <h2>ClassId = {class_id}</h2>
           </header>
           <section className="new-exam">
             <button
@@ -56,7 +58,7 @@ const NewExam = () => {
                 </a>
                 <Link
                   to={isFormValid() ? "/ManualExamKey" : "#"}
-                  state={examTitle} // Pass examTitle as state
+                  state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
                   className="btn"
                   data-testid="manual-answer-key-btn"
                 >

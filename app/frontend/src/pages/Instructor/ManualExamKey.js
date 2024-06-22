@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import "../../css/style.css";
 import "../../css/ManualExamKey.css";
 
 const ManualExamKey = (props) => {
   const location = useLocation();
-  const examTitle = location.state || {};
+  const { examTitle, classID } = location.state || {};
 
   let questions = [];
 
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(5);
+  const [numMarks, setNumMarks] = useState(10);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   const removeQuestion = (questionNumber, option) => {
@@ -110,13 +111,33 @@ const ManualExamKey = (props) => {
                 data-testid="num-options-input"
               />
 
+              <label htmlFor="num-marks">#Total marks:</label>
+              <input
+                type="number"
+                id="num-marks"
+                className="input-field"
+                value={numMarks}
+                onChange={(e) => setNumMarks(e.target.value)}
+                min="1"
+                data-testid="num-marks-input"
+              />
+
               <div className="nested-window">
                 <div className="bubble-grid" data-testid="bubble-grid"></div>
               </div>
 
-              <a href="./ExamControls" className="btn">
+              <Link
+                to="/ExamControls"
+                state={{
+                  classID: classID,
+                  examTitle: examTitle,
+                  questions: questions,
+                  numQuestions: numQuestions,
+                }}
+                className="btn"
+              >
                 Next
-              </a>
+              </Link>
             </form>
           </section>
         </div>

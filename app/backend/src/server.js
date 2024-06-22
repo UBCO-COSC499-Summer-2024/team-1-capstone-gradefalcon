@@ -56,6 +56,37 @@ app.param("class_id", function (req, res, next, class_id) {
   next();
 });
 
+app.post("/saveQuestions", async (req, res, next) => {
+  const questions = req.body.questions; // Assuming questions is an array of question objects
+  const classID = req.body.classID;
+  const examTitle = req.body.examTitle;
+  const numQuestions = req.body.numQuestions;
+
+  // Convert the questions dictionary into an array of strings
+  const questionsArray = Object.entries(questions).map(
+    ([key, value]) => `${value.question}:${value.option}`
+  );
+
+  try {
+    const writeToExam = await pool.query(
+      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES ($1, $2, $3, 10) RETURNING exam_id",
+      [classID, examTitle, numQuestions]
+    );
+    const insertedRowId = writeToExam.rows[0].exam_id;
+    const writeToSolution = await pool.query(
+      "INSERT INTO solution (exam_id, answers) VALUES ($1, $2)",
+      [insertedRowId, questionsArray]
+    );
+    const results = await Promise.all(insertPromises);
+    res.status(201).json({
+      success: true,
+      insertedQuestions: results.map((r) => r.rows[0]),
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Display students enrolled, exam grades too
 app.post("/classManagement/:class_id", async (req, res, next) => {
   try {
