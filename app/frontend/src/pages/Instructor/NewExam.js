@@ -1,103 +1,34 @@
-import React, { useState } from 'react';
-import '../../css/style.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../../css/style.css";
+import "../../css/NewExam.css";
 
 const NewExam = () => {
-  const [examTitle, setExamTitle] = useState('Graphic Fundamentals 101 Final Exam'); //dummy input, will be altered when exam creation is implimented
+  const [examTitle, setExamTitle] = useState("");
 
   const handleInputChange = (event) => {
     const value = event.target.value;
     // blocks chars that could cause error (i.e " ')
-    const sanitizedValue = value.replace(/[^a-zA-Z0-9\s.,!?-]/g, '');
+    const sanitizedValue = value.replace(/[^a-zA-Z0-9\s.,!?-]/g, "");
     setExamTitle(sanitizedValue);
+  };
+
+  const isFormValid = () => {
+    return examTitle.trim() !== ""; // Simple validation check
   };
 
   return (
     <>
-      <style>
-        {`
-          .new-exam {
-            background-color: white;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-            position: relative;
-          }
-
-          .back-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: none;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-          }
-
-          .new-exam h3 {
-            font-size: 20px;
-            font-weight: normal;
-            margin-bottom: 10px;
-          }
-
-          .new-exam p {
-            font-size: 14px;
-            margin-bottom: 20px;
-            color: #555;
-          }
-
-          .input-field {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-
-
-
-
-
-
-
-
-
-
-          }
-
-          .btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            display: inline-block;
-            text-align: center;
-            text-decoration: none;
-            margin-right: 10px;
-            margin-left: 10px;
-          }
-
-          .btn:hover {
-            background-color: #45a049;
-          }
-
-          form {
-            display: flex;
-            flex-direction: column;
-          }
-        `}
-      </style>
       <div className="App">
         <div className="main-content">
           <header>
             <h2>Create New Exam</h2>
           </header>
           <section className="new-exam">
-            <button className="back-button" onClick={() => window.history.back()}>&larr;</button>
-
+            <button
+              className="back-button"
+              onClick={() => window.history.back()}
+            ></button>
 
             <h3>General</h3>
             <p>*The following details will be printed on the exam*</p>
@@ -107,54 +38,31 @@ const NewExam = () => {
                 type="text"
                 id="exam-title"
                 className="input-field"
+                placeholder="Enter exam title"
                 value={examTitle}
                 onChange={handleInputChange}
                 data-testid="exam-title-input"
+                required
               />
 
               <label htmlFor="answer-key">Answer Key:</label>
               <div>
-                <a href="./UploadExamKey" className="btn" data-testid="upload-answer-key-btn">Upload Answer Key</a>
-                <a href="./ManualExamKey" className="btn" data-testid="manual-answer-key-btn">Manually Select Answers</a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                <a
+                  href="../UploadExamKey"
+                  className="btn"
+                  data-testid="upload-answer-key-btn"
+                >
+                  Upload Answer Key
+                </a>
+                <Link
+                  to={isFormValid() ? "/ManualExamKey" : "#"}
+                  state={examTitle} // Pass examTitle as state
+                  className="btn"
+                  data-testid="manual-answer-key-btn"
+                >
+                  Manually Select Answers
+                </Link>
               </div>
-
-
-
-
-
-
-
-
             </form>
           </section>
         </div>

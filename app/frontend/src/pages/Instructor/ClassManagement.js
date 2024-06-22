@@ -114,7 +114,7 @@ const ClassManagement = () => {
           </h2>
         </header>
         <section class="class-management">
-          <a href="/NewExam" class="new-exam-btn">
+          <a href={`../NewExam/${params.class_id}`} class="new-exam-btn">
             + New Exam
           </a>
           <h3>Grades</h3>

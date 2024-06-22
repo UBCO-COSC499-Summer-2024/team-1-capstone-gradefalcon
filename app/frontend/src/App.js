@@ -33,7 +33,11 @@ import UserManagement from "./pages/Administator/UserManagment";
 const Layout = ({ children }) => {
   const location = useLocation();
   const shouldDisplayNavBar =
-    location.pathname !== "/" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/adminDashboard" && location.pathname !== "/userManagement";
+    location.pathname !== "/" &&
+    location.pathname !== "/login" &&
+    location.pathname !== "/signup" &&
+    location.pathname !== "/adminDashboard" &&
+    location.pathname !== "/userManagement";
 
   return (
     <>
@@ -97,7 +101,7 @@ function App() {
               path="/ClassManagement/:class_id"
               element={<ClassManagement />}
             />
-            <Route path="/NewExam" element={<NewExam />} />
+            <Route path="/NewExam/:class_id" element={<NewExam />} />
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
             <Route path="/ManualExamKey" element={<ManualExamKey />} />
