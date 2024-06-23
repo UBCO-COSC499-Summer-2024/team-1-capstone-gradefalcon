@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../css/style.css'; 
 
-const GradeReport_student = () => {
+const StudentGradeReport = () => {
   return (
     <div className="main-content">
       <header>
@@ -29,4 +29,4 @@ const GradeReport_student = () => {
   );
 };
 
-export default GradeReport_student;
+export default StudentGradeReport;

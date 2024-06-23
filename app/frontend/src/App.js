@@ -19,14 +19,14 @@ import ExamControls from "./pages/Instructor/ExamControls";
 import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
+//admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
-
-//import student pages 
-import Dashboard_student from "./pages/Student/Dashboard_student";
-import AccountSettings_student from "./pages/Student/AccountSettings_student";
-import NotificationPreferences_student from "./pages/Student/NotificationPreferences_student";
-import GradeReport_student from "./pages/Student/GradeReport_student";
+//student pages 
+import StudentDashboard from "./pages/Student/StudentDashboard";
+import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
+import StudentNotificationPreferences from "./pages/Student/StudentNotificationPreferences";
+import StudentGradeReport from "./pages/Student/StudentGradeReport";
 
 
 
@@ -37,10 +37,7 @@ const Layout = ({ children }) => {
     location.pathname !== "/" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement";
 
   return (
-    <>
-      {shouldDisplayNavBar && <NavBar />}
-      {children}
-    </>
+    <>{shouldDisplayNavBar && <NavBar />}{children}</>
   );
 };
 
@@ -81,10 +78,10 @@ function App() {
             <Route path="/NotificationPreferences" element={<NotificationPreferences />} />
             <Route path="/UploadExamKey" element={<UploadExamKey />} />
             {/* <Route path="/Schedule" element={<Schedule />} /> Schedule plugin is brocken ->will fix */}
-            <Route path="/Dashboard_student" element={<ProtectedRoute><Dashboard_student /></ProtectedRoute>} />
-            <Route path="/GradeReport_student" element={<GradeReport_student />} />
-            <Route path="/AccountSettings_student" element={<AccountSettings_student />} />
-            <Route path="/NotificationsPreferences_student" element={<NotificationPreferences_student />} />
+            <Route path="/StudentDashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
+            <Route path="/StudentGradeReport" element={<StudentGradeReport />} />
+            <Route path="/StudentAccountSettings" element={<StudentAccountSettings />} />
+            <Route path="/StudentNotificationPreferences" element={<StudentNotificationPreferences />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

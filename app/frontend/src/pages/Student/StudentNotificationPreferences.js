@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../css/style.css';
 
-const NotificationPreferences_student = () => {
+const StudentNotificationPreferences = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const emailNotifications = document.getElementById('email-notifications').checked;
@@ -130,4 +130,4 @@ const NotificationPreferences_student = () => {
   );
 };
 
-export default NotificationPreferences_student;
+export default StudentNotificationPreferences;
