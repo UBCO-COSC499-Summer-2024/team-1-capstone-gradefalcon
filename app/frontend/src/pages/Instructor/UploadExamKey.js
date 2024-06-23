@@ -38,6 +38,16 @@ const UploadExamKey = () => {
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
             text-align: center;
+            position: relative;
+          }
+          .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
           }
           .upload-area {
             text-align: center;
@@ -102,6 +112,7 @@ const UploadExamKey = () => {
             <h2>Answer Key</h2>
           </header>
           <section className="upload-key">
+            <button className="back-button" onClick={() => window.history.back()}>&larr;</button>
             <h3>Upload the exam answer key as a PDF file.</h3>
             <div className="upload-area" style={{ display: fileURL ? 'none' : 'block' }}>
               <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} />
@@ -110,10 +121,10 @@ const UploadExamKey = () => {
               </div>
             </div>
             <div className="pdf-display" style={{ display: fileURL ? 'block' : 'none' }}>
-              <iframe src={fileURL}></iframe>
+             <iframe src={fileURL} title="PDF Preview"></iframe>
             </div>
             <button className="btn btn-import" onClick={resetUpload}>Import</button>
-            <a href="ExamControls.html" className="btn-confirm">Confirm</a>
+            <a href="/ExamControls" className="btn-confirm">Confirm</a>
           </section>
         </div>
       </div>
