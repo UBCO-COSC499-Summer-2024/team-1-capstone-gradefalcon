@@ -1,6 +1,6 @@
 // src/Student/StudentAccountSettings.js
 import React from 'react';
-import '../../css/style.css';
+import '../../css/App.css';
 
 const StudentAccountSettings = () => {
   return (
