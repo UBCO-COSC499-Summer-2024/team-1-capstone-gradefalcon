@@ -1,10 +1,11 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import "../../css/style.css";
 import "../../css/ExamControls.css";
 
 const ExamControls = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { classID, examTitle, questions, numQuestions } = location.state || {};
   console.log(questions);
 
@@ -74,16 +75,21 @@ const ExamControls = () => {
                 </label>
               </div>
             </div>
-            <a href="./ExamBoard" className="btn" data-testid="confirm-btn">
-              Confirm
-            </a>
-            <button
+            {/* <button
               className="btn"
               data-testid="confirm-btn"
               onClick={handleConfirm}
             >
-              ConfirmMe
-            </button>
+              Confirm
+            </button> */}
+            <Link
+              to="/ExamBoard"
+              className="btn"
+              data-testid="confirm-btn"
+              onClick={handleConfirm}
+            >
+              Confirm
+            </Link>
           </section>
         </div>
       </div>

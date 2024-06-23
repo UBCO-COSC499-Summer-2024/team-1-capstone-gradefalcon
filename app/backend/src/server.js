@@ -77,11 +77,7 @@ app.post("/saveQuestions", async (req, res, next) => {
       "INSERT INTO solution (exam_id, answers) VALUES ($1, $2)",
       [insertedRowId, questionsArray]
     );
-    const results = await Promise.all(insertPromises);
-    res.status(201).json({
-      success: true,
-      insertedQuestions: results.map((r) => r.rows[0]),
-    });
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }
