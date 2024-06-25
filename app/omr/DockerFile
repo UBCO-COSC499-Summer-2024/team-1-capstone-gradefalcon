@@ -1,0 +1,17 @@
+# OMR/Dockerfile
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy OMR code
+COPY . .
+
+# Expose the port the OMR service will run on
+EXPOSE 5000
+
+# Run the OMR application
+CMD ["python", "app.py"]
