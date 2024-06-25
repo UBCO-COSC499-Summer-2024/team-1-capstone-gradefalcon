@@ -36,6 +36,7 @@ const ExamControls = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+    navigate("/ExamBoard");
   };
 
   return (

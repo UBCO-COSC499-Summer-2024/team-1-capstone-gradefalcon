@@ -147,6 +147,21 @@ app.post("/NewExam/:class_id", async (req, res, next) => {
   }
 });
 
+// Display classes and their exams route
+app.post("/ExamBoard", async (req, res, next) => {
+  const instructorId = req.session.userId;
+  try {
+    const classes = await pool.query(
+      "SELECT exam_id, classes.class_id, exam_title, course_id, course_name FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
+      [instructorId]
+    );
+
+    res.json({ classes: classes.rows });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // User registration route
 app.post("/signup", async (req, res, next) => {
   const { email, password, name, role } = req.body;

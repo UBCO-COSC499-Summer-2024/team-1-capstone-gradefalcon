@@ -24,7 +24,6 @@ const NewExam = () => {
         <div className="main-content">
           <header>
             <h2>Create New Exam</h2>
-            <h2>ClassId = {class_id}</h2>
           </header>
           <section className="new-exam">
             <button
