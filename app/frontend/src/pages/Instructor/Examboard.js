@@ -8,7 +8,7 @@ const ExamBoard = () => {
   useEffect(() => {
     const fetchClassData = async () => {
       try {
-        const response = await fetch(`/api/ExamBoard`, {
+        const response = await fetch(`/api/exam/ExamBoard`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

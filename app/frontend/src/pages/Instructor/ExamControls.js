@@ -12,7 +12,7 @@ const ExamControls = () => {
   const handleConfirm = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("/api/saveQuestions", {
+      const response = await fetch("/api/exam/saveQuestions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
