@@ -1,8 +1,8 @@
-// src/Student/AccountSettings_student.js
+// src/Student/StudentAccountSettings.js
 import React from 'react';
-import '../../css/style.css';
+import '../../css/App.css';
 
-const AccountSettings_student = () => {
+const StudentAccountSettings = () => {
   return (
     <div className="App">
       <div className="main-content">
@@ -31,4 +31,4 @@ const AccountSettings_student = () => {
     </div>
   );
 };
-export default AccountSettings_student;
+export default StudentAccountSettings;

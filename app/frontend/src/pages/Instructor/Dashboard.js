@@ -1,5 +1,5 @@
 // src/Instructor/Dashboard.js
-import "../../css/style.css";
+import "../../css/App.css";
 import React, { useEffect, useState } from "react";
 
 const Dashboard = () => {

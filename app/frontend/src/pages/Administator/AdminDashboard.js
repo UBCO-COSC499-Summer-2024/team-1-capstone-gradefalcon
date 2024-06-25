@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../css/adminDashStyle.css';
+import '../../css/AdminDashboard.css';
 
 const AdminDashboard = () => {
   return (

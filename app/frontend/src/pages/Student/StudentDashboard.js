@@ -1,8 +1,8 @@
-// src/Student/Dashboard_student.js
+// src/Student/StudentDashboard.js
 import React from 'react';
-import '../../css/style.css';
+import '../../css/App.css';
 
-const Dashboard_student = () => {
+const StudentDashboard = () => {
   return (
     <div className="App">
       <div className="main-content">
@@ -93,4 +93,4 @@ const Dashboard_student = () => {
   );
 };
 
-export default Dashboard_student;
+export default StudentDashboard;
