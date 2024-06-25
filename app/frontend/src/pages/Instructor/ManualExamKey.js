@@ -64,6 +64,7 @@ const ManualExamKey = (props) => {
   }, [numQuestions, numOptions, updateQuestions]);
 
   return (
+    <>
       <div className="App">
         <div className="main-content">
           <header>
@@ -141,6 +142,7 @@ const ManualExamKey = (props) => {
           </section>
         </div>
       </div>
+      </>
   );
 };
 

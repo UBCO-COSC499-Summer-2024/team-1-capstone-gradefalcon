@@ -19,7 +19,7 @@ const NewExam = () => {
   };
 
   return (
-+
+    <>
       <div className="App">
         <div className="main-content">
           <header>
@@ -68,6 +68,7 @@ const NewExam = () => {
           </section>
         </div>
       </div>
+          </>
   );
 };
 

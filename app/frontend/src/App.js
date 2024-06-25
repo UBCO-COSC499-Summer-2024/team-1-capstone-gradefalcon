@@ -14,7 +14,7 @@ import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
 import NewClass from "./pages/Instructor/NewClass";
 import NewExam from "./pages/Instructor/NewExam";
-import Examboard from "./pages/Instructor/Examboard";
+import ExamBoard from "./pages/Instructor/Examboard";
 import ExamControls from "./pages/Instructor/ExamControls";
 import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
@@ -34,7 +34,7 @@ import StudentGradeReport from "./pages/Student/StudentGradeReport";
 const Layout = ({ children }) => {
   const location = useLocation();
   const shouldDisplayNavBar =
-  location.pathname !== "/" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement";
+  location.pathname !== "/" && location.pathname !== "/*" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement";
 
   return (
     <>{shouldDisplayNavBar && <NavBar />}{children}</>
@@ -71,8 +71,8 @@ function App() {
             <Route path="/Classes" element={<Classes />} />
             <Route path="/New-Class" element={<NewClass />} />
             <Route path="/ClassManagement/:class_id" element={<ClassManagement />} />
-            <Route path="/NewExam" element={<NewExam />} />
-            <Route path="/ExamBoard" element={<Examboard />} />
+            <Route path="/NewExam/:class_id" element={<NewExam />} />
+            <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
             <Route path="/ManualExamKey" element={<ManualExamKey />} />
             <Route path="/NotificationPreferences" element={<NotificationPreferences />} />
