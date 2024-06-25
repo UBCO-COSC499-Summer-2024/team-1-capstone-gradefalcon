@@ -1,6 +1,6 @@
 // src/Instructor/AccountSettings.js
 import React, { useState } from 'react';
-import '../../css/style.css';
+import '../../css/App.css';
 
 const AccountSettings = () => {
   const [username, setUsername] = useState('Dr. Pepper');

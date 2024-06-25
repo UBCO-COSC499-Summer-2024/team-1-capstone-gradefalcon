@@ -1,125 +1,131 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .form-box {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    text-align: center;
-    width: 400px;
-  }
-  
-  .logo {
-    width: 250px;
-    margin-bottom: 5px;
-  }
-  
-  .copy {
-    margin-bottom: 20px;
-  }
-  
-  .text-wrapper {
-    font-size: 24px;
-    color: #333;
-  }
-  
-  .email-input,
-  .password-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .button {
-    width: 100%;
-    padding: 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-bottom: 20px;
-  }
-  
-  .button:hover {
-    background-color: #218838;
-  }
-  
-  .divider {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .rectangle {
-    flex: 1;
-    height: 1px;
-    background-color: #ccc;
-  }
-  
-  .text-wrapper-3 {
-    margin: 0 10px;
-    font-size: 14px;
-    color: #aaa;
-  }
-  
-  .google-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .google-button img {
-    width: 20px;
-    vertical-align: middle;
-    margin-right: 10px;
-  }
-  
-  .terms {
-    font-size: 12px;
-    color: #aaa;
-    margin-top: 20px;
-  }
-  
-  .terms a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .terms a:hover {
-    text-decoration: underline;
-  }
-  
-  .switch-link {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .switch-link:hover {
-    text-decoration: underline;
-  }
-  
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.form-box {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  width: 250px;
+  margin-bottom: 5px;
+}
+
+.copy {
+  margin-bottom: 20px;
+}
+
+.text-wrapper {
+  font-size: 24px;
+  color: #333;
+}
+
+.input-box {
+  width: 100%;
+  max-width: 300px; 
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.button:hover {
+  background-color: #218838;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 300px; /* Ensure the divider doesn't get too wide */
+  margin-bottom: 20px;
+}
+
+.rectangle {
+  flex: 1;
+  height: 1px;
+  background-color: #ccc;
+}
+
+.text-wrapper-3 {
+  margin: 0 10px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.google-button {
+  width: 100%;
+  max-width: 300px; /* Ensure the button doesn't get too wide */
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.google-button img {
+  width: 20px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.terms {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 20px;
+}
+
+.terms a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
+
+.switch-link {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.switch-link:hover {
+  text-decoration: underline;
+}

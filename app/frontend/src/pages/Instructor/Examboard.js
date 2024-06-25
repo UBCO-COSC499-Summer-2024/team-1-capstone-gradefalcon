@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../css/style.css";
+import "../../css/App.css";
 import "../../css/Examboard.css";
 
 const ExamBoard = () => {

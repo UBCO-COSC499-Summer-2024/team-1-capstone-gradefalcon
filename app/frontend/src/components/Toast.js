@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "../css/style.css";
+import "../css/App.css";
 
 const Toast = ({ message, type, onClose }) => {
   useEffect(() => {

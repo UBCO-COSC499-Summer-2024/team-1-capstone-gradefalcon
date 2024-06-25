@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import "../../css/style.css";
+import '../../css/App.css';
 import "../../css/ExamControls.css";
 
 const ExamControls = () => {
@@ -40,8 +40,7 @@ const ExamControls = () => {
   };
 
   return (
-    <>
-      <div className="App">
+    <div className="App">
         <div className="main-content">
           <header>
             <h2>Create New Exam</h2>
@@ -94,7 +93,6 @@ const ExamControls = () => {
           </section>
         </div>
       </div>
-    </>
   );
 };
 

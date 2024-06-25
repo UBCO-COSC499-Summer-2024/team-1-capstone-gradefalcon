@@ -22,7 +22,7 @@ export default function NavBar() {
                     {React.createElement(
                         'li',
                         null,
-                        React.createElement('a', { href: '/ExamBoard' }, 'Exam Board')
+                        React.createElement('a', { href: '/Examboard' }, 'Exam Board')
                     )}
                     {React.createElement(
                         'li',

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, Link } from "react-router-dom";
-import "../../css/style.css";
+import '../../css/App.css';
 import "../../css/ManualExamKey.css";
 
 const ManualExamKey = (props) => {
@@ -64,7 +64,6 @@ const ManualExamKey = (props) => {
   }, [numQuestions, numOptions, updateQuestions]);
 
   return (
-    <>
       <div className="App">
         <div className="main-content">
           <header>
@@ -142,7 +141,6 @@ const ManualExamKey = (props) => {
           </section>
         </div>
       </div>
-    </>
   );
 };
 
