@@ -36,7 +36,7 @@ const Layout = ({ children }) => {
     </>
   );
 };
-
+//Auth0
 const ProtectedRoute = ({ component }) => {
   const Component = withAuthenticationRequired(component);
   return <Component />;
