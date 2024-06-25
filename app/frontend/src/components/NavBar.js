@@ -1,6 +1,5 @@
 import React from 'react';
 import LogoutButton from './LogoutButton';
-import Profile from './Profile';
 
 const NavBar = () => {
   return (
@@ -8,7 +7,6 @@ const NavBar = () => {
       <div className="logo">
         <h1>GradeFalcon</h1>
       </div>
-      <Profile />
       <nav>
         <ul>
           <li>

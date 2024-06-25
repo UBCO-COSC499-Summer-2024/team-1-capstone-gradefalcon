@@ -7,7 +7,7 @@ import NavBar from "../src/components/NavBar";
 // Import pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./pages/NotFound";
-import AccountSettings from "./pages/Instructor/AccountSettings";
+import AccountSettings from "./pages/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
 import NewClass from "./pages/Instructor/NewClass";

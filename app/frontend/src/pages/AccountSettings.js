@@ -1,35 +1,84 @@
-// src/Instructor/AccountSettings.js
-import React, { useState } from 'react';
-import '../../css/style.css';
+import React, { useState, useEffect } from 'react';
+import { useAuth0 } from "@auth0/auth0-react";
+import '../css/style.css';
 
 const AccountSettings = () => {
-  const [username, setUsername] = useState('Dr. Pepper');
+  const { user, getAccessTokenSilently } = useAuth0();
+  const [username, setUsername] = useState(user ? user.name : '');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  useEffect(() => {
+    if (user) {
+      setUsername(user.name);
+    }
+  }, [user]);
+
   const handleInputChange = (e, setState) => {
     const value = e.target.value;
-    const sanitizedValue = value.replace(/[^a-zA-Z0-9\s.,!?-]/g, ''); //restricts string altering characters
-
+    const sanitizedValue = value.replace(/[^a-zA-Z0-9\s.,!?-]/g, ''); // restricts string altering characters
     setState(sanitizedValue);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (newPassword !== confirmPassword) {
       alert('New passwords do not match');
       return;
     }
-    // Backend call for saving changes
-    // Implement the backend API call here
-    // NOTE: can discord this if you with to impliment in a differant manner
+    try {
+      const token = await getAccessTokenSilently({
+        audience: 'https://dev-yqcwuih0t2m7u447.us.auth0.com/api/v2/',
+        scope: 'update:users',
+      });
 
+      const response = await fetch(`https://dev-yqcwuih0t2m7u447.us.auth0.com/api/v2/users/${user.sub}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: username,
+          password: newPassword,
+        }),
+      });
+
+      if (response.ok) {
+        alert('Profile updated successfully');
+      } else {
+        alert('Failed to update profile');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error updating profile');
+    }
   };
 
-  const handleDeleteAccount = () => {
-    // Backend call for deleting account
-    // Implement the backend API call here
-    // NOTE: can discord this if you with to impliment in a differant manner
+  const handleDeleteAccount = async () => {
+    try {
+      const token = await getAccessTokenSilently({
+        audience: 'https://dev-yqcwuih0t2m7u447.us.auth0.com/api/v2/',
+        scope: 'delete:users',
+      });
+
+      const response = await fetch(`https://dev-yqcwuih0t2m7u447.us.auth0.com/api/v2/users/${user.sub}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        alert('Account deleted successfully');
+        // Redirect or perform additional actions after account deletion
+      } else {
+        alert('Failed to delete account');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error deleting account');
+    }
   };
 
   return (
@@ -40,7 +89,7 @@ const AccountSettings = () => {
         </header>
         <section className="account-settings">
           <div className="user-info">
-            <p>User ID: 75826488</p> {/* //dummy input, will be retrieved with SQL query when implemented */}
+            <p>User ID: {user ? user.sub : ''}</p>
             <label htmlFor="username">Username</label>
             <input
               type="text"
@@ -49,7 +98,6 @@ const AccountSettings = () => {
               onChange={(e) => handleInputChange(e, setUsername)}
               data-testid="username-input"
             />
-            <p>*A GradeFalcon Employee will never ask for your password*</p>
           </div>
           <div className="change-password">
             <label htmlFor="old-password">Old Password</label>
