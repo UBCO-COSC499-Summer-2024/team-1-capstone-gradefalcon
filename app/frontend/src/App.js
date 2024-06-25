@@ -2,10 +2,10 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { Auth0Provider, withAuthenticationRequired } from "@auth0/auth0-react";
 import NavBar from "../src/components/NavBar";
+import NotFound from "./components/NotFound";
 import "./css/App.css";
 // Import pages
 import Dashboard from "./pages/Instructor/Dashboard";
-import NotFound from "./pages/NotFound";
 import AccountSettings from "./pages/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
@@ -60,27 +60,25 @@ function App() {
       <div className="App">
         <Layout>
           <Routes>
-          <Route path="/" element={<ProtectedRoute><Login /></ProtectedRoute>} />
-          <Route path="/Login" element={<ProtectedRoute><Login /></ProtectedRoute>} />
-          <Route path="/Dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/AdminDashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/UserManagement" element={<ProtectedRoute><UserManagement /></ProtectedRoute>} />
-          <Route path="/Signup" element={<ProtectedRoute><Signup /></ProtectedRoute>} />
-          <Route path="/AccountSettings" element={<ProtectedRoute><AccountSettings /></ProtectedRoute>} />
-          <Route path="/Classes" element={<ProtectedRoute><Classes /></ProtectedRoute>} />
-          <Route path="/New-Class" element={<ProtectedRoute><NewClass /></ProtectedRoute>} />
-          <Route path="/ClassManagement/:class_id" element={<ProtectedRoute><ClassManagement /></ProtectedRoute>} />
-          <Route path="/NewExam" element={<ProtectedRoute><NewExam /></ProtectedRoute>} />
-          <Route path="/Examboard" element={<ProtectedRoute><Examboard /></ProtectedRoute>} />
-          <Route path="/ExamControls" element={<ProtectedRoute><ExamControls /></ProtectedRoute>} />
-          <Route path="/ManualExamKey" element={<ProtectedRoute><ManualExamKey /></ProtectedRoute>} />
-          <Route path="/NotificationPreferences" element={<ProtectedRoute><NotificationPreferences /></ProtectedRoute>} />
-          <Route path="/UploadExamKey" element={<ProtectedRoute><UploadExamKey /></ProtectedRoute>} />
-          <Route path="/StudentDashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
-          <Route path="/StudentGradeReport" element={<ProtectedRoute><StudentGradeReport /></ProtectedRoute>} />
-          <Route path="/StudentAccountSettings" element={<ProtectedRoute><StudentAccountSettings /></ProtectedRoute>} />
-          <Route path="/StudentNotificationPreferences" element={<ProtectedRoute><StudentNotificationPreferences /></ProtectedRoute>} />
-          <Route path="*" element={<ProtectedRoute><NotFound /></ProtectedRoute>} />
+          <Route path="/" element={<ProtectedRoute component={Dashboard} />} />
+          <Route path="/Dashboard" element={<ProtectedRoute component={Dashboard} />} />
+          <Route path="/AdminDashboard" element={<ProtectedRoute component={AdminDashboard} />} />
+          <Route path="/UserManagement" element={<ProtectedRoute component={UserManagement} />} />
+          <Route path="/AccountSettings" element={<ProtectedRoute component={AccountSettings} />} />
+          <Route path="/Classes" element={<ProtectedRoute component={Classes} />} />
+          <Route path="/New-Class" element={<ProtectedRoute component={NewClass} />} />
+          <Route path="/ClassManagement/:class_id" element={<ProtectedRoute component={ClassManagement} />} />
+          <Route path="/NewExam" element={<ProtectedRoute component={NewExam} />} />
+          <Route path="/Examboard" element={<ProtectedRoute component={Examboard} />} />
+          <Route path="/ExamControls" element={<ProtectedRoute component={ExamControls} />} />
+          <Route path="/ManualExamKey" element={<ProtectedRoute component={ManualExamKey} />} />
+          <Route path="/NotificationPreferences" element={<ProtectedRoute component={NotificationPreferences} />} />
+          <Route path="/UploadExamKey" element={<ProtectedRoute component={UploadExamKey} />} />
+          <Route path="/StudentDashboard" element={<ProtectedRoute component={StudentDashboard} />} />
+          <Route path="/StudentGradeReport" element={<ProtectedRoute component={StudentGradeReport} />} />
+          <Route path="/StudentAccountSettings" element={<ProtectedRoute component={StudentAccountSettings} />} />
+          <Route path="/StudentNotificationPreferences" element={<ProtectedRoute component={StudentNotificationPreferences} />} />
+          <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
       </div>
