@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import '../../css/style.css';
-import logo from '../../assets/logo.png';
+import '../../css/App.css';
 
 const UserManagement = () => {
   const [activeTab, setActiveTab] = useState('create');
@@ -25,9 +24,9 @@ const UserManagement = () => {
   const fetchUsers = async () => {
     try {
       const [studentsRes, instructorsRes, adminsRes] = await Promise.all([
-        fetch("/api/students"),
-        fetch("/api/instructors"),
-        fetch("/api/admins")
+        fetch("/api/users/students"),
+        fetch("/api/users/instructors"),
+        fetch("/api/users/admins")
       ]);
   
       // Check if the responses are OK and return JSON, otherwise throw an error

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../css/style.css";
+import "../css/App.css";
 
 const ListClasses = () => {
   const [classes, setClasses] = useState([]); // Change to use an array
@@ -7,7 +7,7 @@ const ListClasses = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await fetch("/api/classes", {
+        const response = await fetch("/api/class/classes", {
           // Change to the correct endpoint
           method: "POST", // Ensure method matches your server's endpoint
           headers: {
