@@ -1,6 +1,5 @@
 # Personal Log
 
-# Personal Log
 ## Wednesday (6/20- 6/26)
 
 ### Timesheet
