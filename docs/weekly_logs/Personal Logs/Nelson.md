@@ -1,3 +1,41 @@
+## Wednesday (22/6- 26/6)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/june26_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Start working on setting up CI/CD
+
+### Progress Update (since 6/18/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Start working on setting up CI/CD
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+This cycle I was a lot more busy than usual I am currently taking other classes in the semester of the summer so I had a final exams to study for. I was busy because my final exam was on Monday. I was still able to do a little bit of work but I intend to increase the pace and effiency of my work now!
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Gte CI/CD connected and working.
+  * Finishe adding functionality for Admin View
+  * Research the best more about computer vision and OMR
+
+
+
 ## Wednesday (19/6- 21/6)
 
 ### Timesheet
