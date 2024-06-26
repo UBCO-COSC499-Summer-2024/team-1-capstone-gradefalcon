@@ -1,6 +1,58 @@
 # Personal Log
 Ahmad Saleem Mirza
 
+## Wednesday (June 21 - 26)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/June21-26.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Create and manage exams
+  * #2: Display exams on examboard
+  * #3: OMR development
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Create and manage exams
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Display exams on examboard
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>OMR development
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>      
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+This cycle, I managed to finish the exam creation section of the project, with the instructor now able to create an exam for a selected course and manually create an exam answer sheet. These answers to the questions are saved to the database, so that when it comes time to grading student exams, the system only needs to look up the answers in the database, and not have to scan them from a marked sheet. Furthermore, the teacher can also view all created exams on the exam board.
+
+Now that all the organizational features of the project are nearing completion, next cycle's focus will be developing the OMR itself. I have spent time in the past familiarizing myself with the various relevant technologies, primarily YOLO and OpenCV, and hope to make good use of them in this upcoming cycle. To accelerate this developmental process, I have discovered several open source repositories of existing OMR models, which I hope form the basis of our own model, fine-tuned to our own needs.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * OMR development
 ## Friday (June 19 - 21)
 
 ### Timesheet
