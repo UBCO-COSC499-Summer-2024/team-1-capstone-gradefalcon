@@ -1,3 +1,4 @@
+// App.js
 import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
@@ -5,13 +6,10 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-
-import logo from "./assets/logo.png";
 import "./css/App.css";
-import "./css/style.css";
-import NavBar from "../src/components/NavBar";
+import "./css/style.css"; // Ensure this import is present
+import NavBar from "./components/NavBar"; // Corrected path
 import ProtectedRoute from "./ProtectedRoute";
-// Import pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./pages/NotFound";
 import InstructorSignup from "./pages/Instructor/Signup";
@@ -28,14 +26,10 @@ import NotificationPreferences from "./pages/Instructor/NotificationPreferences"
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
-
-//import student pages 
 import Dashboard_student from "./pages/Student/Dashboard_student";
 import AccountSettings_student from "./pages/Student/AccountSettings_student";
 import NotificationPreferences_student from "./pages/Student/NotificationPreferences_student";
 import GradeReport_student from "./pages/Student/GradeReport_student";
-
-
 
 // Layout component to conditionally render NavBar
 const Layout = ({ children }) => {
@@ -52,7 +46,6 @@ const Layout = ({ children }) => {
 };
 
 function App() {
-  const [message, setMessage] = useState("");
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
@@ -73,48 +66,20 @@ function App() {
           <Routes>
             <Route path="/" element={<InstructorSignup />} />
             <Route path="/login" element={<Login />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/adminDashboard"
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/userManagement"
-              element={
-                <ProtectedRoute>
-                  <UserManagement />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/adminDashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/userManagement" element={<ProtectedRoute><UserManagement /></ProtectedRoute>} />
             <Route path="/signup" element={<InstructorSignup />} />
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/classes" element={<Classes />} />
             <Route path="/new-class" element={<NewClass />} />
-            <Route
-              path="/ClassManagement/:class_id"
-              element={<ClassManagement />}
-            />
+            <Route path="/ClassManagement/:class_id" element={<ClassManagement />} />
             <Route path="/NewExam" element={<NewExam />} />
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
             <Route path="/ManualExamKey" element={<ManualExamKey />} />
-            <Route
-              path="/NotificationPreferences"
-              element={<NotificationPreferences />}
-            />
+            <Route path="/NotificationPreferences" element={<NotificationPreferences />} />
             <Route path="/UploadExamKey" element={<UploadExamKey />} />
-            {/* <Route path="/Schedule" element={<Schedule />} /> Schedule plugin is brocken ->will fix */}
             <Route path="/Dashboard_student" element={<ProtectedRoute><Dashboard_student /></ProtectedRoute>} />
             <Route path="/GradeReport_student" element={<GradeReport_student />} />
             <Route path="/AccountSettings_student" element={<AccountSettings_student />} />
@@ -126,4 +91,6 @@ function App() {
     </Router>
   );
 }
+
 export default App;
+

@@ -1,0 +1,23 @@
+/* DarkModeToggle.css */
+
+.dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .toggle-button {
+    background-color: #ffffff; /* Light mode button background color */
+    color: #000000; /* Light mode button text color */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .toggle-button.dark {
+    background-color: #333333; /* Dark mode button background color */
+    color: #ffffff; /* Dark mode button text color */
+  }
+  
