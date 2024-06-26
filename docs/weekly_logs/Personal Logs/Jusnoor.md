@@ -1,6 +1,75 @@
 
 # Personal Log
 
+## Wednesday (22/6 - 25/6)
+
+### Timesheet 
+
+clockify report 
+
+![Time6](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/aa582c86-b230-43d2-b5c4-b1fe5b4176de)
+
+
+
+
+### Current Tasks (Provide Details):
+- #1: Front End Testing of the student view 
+- #2: Data Visualization (Technological research is in progress , in order to get performance insights using the visualization tools)
+- #3: Enhancing the front end UI using Shad cn - installed some packages and some changes locally
+- #4: Dark mode feature 
+
+
+  
+### Progress Update (since 6/5/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Dark mode feature #111
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Testing front end student view pages #37
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Data Visualization #16 ( Startting off after some research on the same)
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I have taken up and implemented the dark mode fetaure for our system, while I was working on revamping the student view and the dashboard using shad cn. I made some progress on the same by installing the required packages and making the chnages locally to get an understanding. I was determined to complete the same but, got distracted and completed the dark mode feature instead. I was not able to give as much as I wanted during this cycle as I have a final this week, but I aim to complete some part of the shad cn enhancement feature to start off with the data visualization,gradually, after the next cycle.
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Testing for front end student view pages #37
+- Data Visualization #16 ( Startting off after some research on the same)
+- Enhancing the front end UI using Shad cn - to be complete by the next cycle
+
 
 ## Friday (19/6 - 21/6)
 
@@ -30,6 +99,14 @@ clockify report
         <td><strong>TASK/ISSUE #</strong>
         </td>
         <td><strong>STATUS</strong>
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Dark mode feature #111
+        </td>
+        <!-- Status -->
+        <td>In progress
         </td>
     </tr>
     <tr>
