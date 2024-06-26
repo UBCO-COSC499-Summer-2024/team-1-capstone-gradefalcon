@@ -1,4 +1,120 @@
 # Personal Log
+
+# Personal Log
+## Wednesday (6/20- 6/26)
+
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/1de260fc4922625806760703df42cffda4792371/docs/weekly_logs/Clockify/Omar/Time6.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Continued work on Auth0 Draft**
+
+    1. **Updated Account Settings and Account modification features to implement Auth0**
+
+    2. **Started implementation on the backend**
+
+      
+ 2. **Finalized Refactored File Structure and code for Maintainability on both the Frontend and Backend notably implementing the new exam functionality**
+
+      1. **Folder Structure Creation**:
+        - Established a clear and organized folder structure for the backend, with a focus on the exams functionality:
+          - `controllers/`: For business logic related to exams.
+          - `middleware/`: For middleware functions related to exams.
+          - `routes/`: For route handlers related to exams.
+          - `utils/`: For utility functions used by the exams functionality.
+
+      2. **Controllers**:
+        - Created `controllers/examController.js` to handle all exam-related business logic:
+          - **`saveQuestions`**: Saves solution questions and answers to the database.
+          - **`newExam`**: Handles the creation of a new exam record for a student.
+          - **`examBoard`**: Retrieves and displays classes and their associated exams for an instructor.
+
+      3. **Routes**:
+        - Created `routes/examRoutes.js` to define all endpoints related to exams:
+          - **`POST /saveQuestions`**: Endpoint to save questions and answers.
+          - **`POST /NewExam/:class_id`**: Endpoint to create a new exam for a class.
+          - **`POST /ExamBoard`**: Endpoint to display classes and their exams for an instructor.
+
+      4. **Middleware**:
+        - Updated `middleware/paramMiddleware.js` to handle class-related parameters, ensuring that `class_id` is correctly saved in the session.
+
+      5. **Database Utility**:
+        - Utilized `utils/db.js` for database connection pooling, ensuring efficient and reliable database interactions for exam-related queries.
+
+
+  3. **Researched and build new container for OMR**
+
+### Progress Update (since 20/6/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <td>#98 - Refactor Frontend Structure for Improved Maintainability 
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <td>#97 - Refactor Backend Structure for Improved Maintainability 
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+    </tr>
+        <tr>
+        <td>#61 - Create User Roles and Permissions, Auth0
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+        </tr>
+        <tr>
+        <td>#10 - User Story: Develop Computer Vision Model
+         </td>
+        <td>In Progress
+        </td>
+    </tr>
+
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+- **What Went Well:**
+  - Implemented new features within refactored code
+  - Implement Account modification using Auth0, refined draft
+  - Advanced on OMR and worked on containerizing code
+
+- **What Was Done:**
+  - Finalized Directory refactoring
+  - Fixed Bug with testing 
+  - Progressed on Auth0 draft
+  - Research on OMR implementaiton
+
+- **What Didn't Go Well:**
+  - Took a bunch of time to implement new features from a different branch into the new directory structure
+  - Still need to advance more on the Auth0 draft
+  - Still need to do more work on the OMR.
+  - I feel like I have too many things to juggle.
+
+- **Retrospective:**
+  - Started looking into the backend implementation for Auth0.
+  - Finalized Directory restructure.
+  - Advancing on OMR.
+
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **OMR:**
+   - Work on implementing features for exam creation and Optical Mark Recognition (OMR).
+
+2. **Role-Based Authentication:**
+   - Implement role-based authentication to manage different user types and work on implementation of Auth0 for session management and for the Backend.
+
 ## Friday (6/18- 6/20)
 
 ### Timesheet
