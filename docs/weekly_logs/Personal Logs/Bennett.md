@@ -1,5 +1,42 @@
 # Personal Log
 
+## Wednessday (6/21 - 6/26)
+
+## TimeSheet
+Clockify report
+N/A (explained in previous report) (0 hours)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Impliment Backend testing
+
+### Progress Update (since 6/21/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * I just finished my finals, am beginning the next task now
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Team asked me to develop backend tests and any eviroment that requires such
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+# Personal Log
+
 ## Friday (6/19 - 6/21)
 
 ## TimeSheet
