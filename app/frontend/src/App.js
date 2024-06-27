@@ -1,10 +1,13 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { Auth0Provider, withAuthenticationRequired } from "@auth0/auth0-react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Auth0Provider } from "@auth0/auth0-react";
 import NavBar from "../src/components/NavBar";
 import NotFound from "./components/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 import "./css/App.css";
+
 // Import pages
+// instructor pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import AccountSettings from "./pages/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
@@ -16,37 +19,22 @@ import ExamControls from "./pages/Instructor/ExamControls";
 import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
-//admin pages
+// admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
-//student pages 
+// student pages 
 import StudentDashboard from "./pages/Student/StudentDashboard";
 import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
 import StudentNotificationPreferences from "./pages/Student/StudentNotificationPreferences";
 import StudentGradeReport from "./pages/Student/StudentGradeReport";
 
-
-
 const Layout = ({ children }) => {
-  // const location = useLocation();
-  // const shouldDisplayNavBar =
-  //   location.pathname !== "/dashboard" &&
-  //   location.pathname !== "/adminDashboard" &&
-  //   location.pathname !== "/userManagement";
-
   return (
     <>
-      {
-      // shouldDisplayNavBar && 
-      <NavBar />}
+      <NavBar />
       {children}
     </>
   );
-};
-//Auth0
-const ProtectedRoute = ({ component }) => {
-  const Component = withAuthenticationRequired(component);
-  return <Component />;
 };
 
 function App() {
@@ -55,35 +43,35 @@ function App() {
       domain="dev-yqcwuih0t2m7u447.us.auth0.com"
       clientId="l6wTyOrnzVr4OzzGlfeYc4L74TvUVHfj"
       redirectUri={window.location.origin}
+      audience="https://gradefalcon.com/api"
     >
-    <Router>
-      <div className="App">
-        <Layout>
-          <Routes>
-          <Route path="/" element={<ProtectedRoute component={Dashboard} />} />
-          <Route path="/Dashboard" element={<ProtectedRoute component={Dashboard} />} />
-          <Route path="/AdminDashboard" element={<ProtectedRoute component={AdminDashboard} />} />
-          <Route path="/UserManagement" element={<ProtectedRoute component={UserManagement} />} />
-          <Route path="/AccountSettings" element={<ProtectedRoute component={AccountSettings} />} />
-          <Route path="/Classes" element={<ProtectedRoute component={Classes} />} />
-          <Route path="/New-Class" element={<ProtectedRoute component={NewClass} />} />
-          <Route path="/ClassManagement/:class_id" element={<ProtectedRoute component={ClassManagement} />} />
-          <Route path="/NewExam" element={<ProtectedRoute component={NewExam} />} />
-          <Route path="/Examboard" element={<ProtectedRoute component={Examboard} />} />
-          <Route path="/ExamControls" element={<ProtectedRoute component={ExamControls} />} />
-          <Route path="/ManualExamKey" element={<ProtectedRoute component={ManualExamKey} />} />
-          <Route path="/NotificationPreferences" element={<ProtectedRoute component={NotificationPreferences} />} />
-          <Route path="/UploadExamKey" element={<ProtectedRoute component={UploadExamKey} />} />
-          <Route path="/StudentDashboard" element={<ProtectedRoute component={StudentDashboard} />} />
-          <Route path="/StudentGradeReport" element={<ProtectedRoute component={StudentGradeReport} />} />
-          <Route path="/StudentAccountSettings" element={<ProtectedRoute component={StudentAccountSettings} />} />
-          <Route path="/StudentNotificationPreferences" element={<ProtectedRoute component={StudentNotificationPreferences} />} />
-          <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </div>
-    </Router>
-        
+      <Router>
+        <div className="App">
+          <Layout>
+            <Routes>
+              <Route path="/" element={<ProtectedRoute component={Dashboard} roles={["Instructor", "Admin", "Student"]} />} />
+              <Route path="/Dashboard" element={<ProtectedRoute component={Dashboard} roles={["Instructor", "Admin", "Student"]} />} />
+              <Route path="/AdminDashboard" element={<ProtectedRoute component={AdminDashboard} roles={["Admin"]} />} />
+              <Route path="/UserManagement" element={<ProtectedRoute component={UserManagement} roles={["Admin"]} />} />
+              <Route path="/AccountSettings" element={<ProtectedRoute component={AccountSettings} roles={["Instructor", "Admin", "Student"]} />} />
+              <Route path="/Classes" element={<ProtectedRoute component={Classes} roles={["Instructor"]} />} />
+              <Route path="/New-Class" element={<ProtectedRoute component={NewClass} roles={["Instructor"]} />} />
+              <Route path="/ClassManagement/:class_id" element={<ProtectedRoute component={ClassManagement} roles={["Instructor"]} />} />
+              <Route path="/NewExam" element={<ProtectedRoute component={NewExam} roles={["Instructor"]} />} />
+              <Route path="/Examboard" element={<ProtectedRoute component={Examboard} roles={["Instructor"]} />} />
+              <Route path="/ExamControls" element={<ProtectedRoute component={ExamControls} roles={["Instructor"]} />} />
+              <Route path="/ManualExamKey" element={<ProtectedRoute component={ManualExamKey} roles={["Instructor"]} />} />
+              <Route path="/NotificationPreferences" element={<ProtectedRoute component={NotificationPreferences} roles={["Instructor", "Admin", "Student"]} />} />
+              <Route path="/UploadExamKey" element={<ProtectedRoute component={UploadExamKey} roles={["Instructor"]} />} />
+              <Route path="/StudentDashboard" element={<ProtectedRoute component={StudentDashboard} roles={["Student"]} />} />
+              <Route path="/StudentGradeReport" element={<ProtectedRoute component={StudentGradeReport} roles={["Student"]} />} />
+              <Route path="/StudentAccountSettings" element={<ProtectedRoute component={StudentAccountSettings} roles={["Student"]} />} />
+              <Route path="/StudentNotificationPreferences" element={<ProtectedRoute component={StudentNotificationPreferences} roles={["Student"]} />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </div>
+      </Router>
     </Auth0Provider>
   );
 }
