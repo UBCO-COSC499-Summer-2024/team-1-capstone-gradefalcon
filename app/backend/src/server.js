@@ -8,6 +8,7 @@ const pool = require('./utils/db');
 const authRoutes = require('./routes/authRoutes');
 const classRoutes = require('./routes/classRoutes');
 const userRoutes = require('./routes/userRoutes');
+const examRoutes = require('./routes/examRoutes');
 
 const app = express();
 
@@ -34,12 +35,12 @@ app.use(
 
 app.use('/auth', authRoutes);
 app.use('/class', classRoutes);
+app.use('/exam', examRoutes);
 app.use('/users', userRoutes);
 
 app.get('/healthz', (req, res) => {
   res.send('I am happy and healthy\n');
 });
-
 
 // Session info route
 app.get("/session-info", (req, res) => {
