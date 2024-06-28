@@ -4,7 +4,7 @@
 
 ## TimeSheet
 Clockify report
-
+![Clockify report](../Clockify/06_26_2024-06_28_2024.pdf)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Impliment Backend testing
