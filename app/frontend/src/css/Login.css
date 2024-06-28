@@ -22,6 +22,9 @@ body {
   padding: 20px;
   text-align: center;
   width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .logo {
@@ -38,15 +41,9 @@ body {
   color: #333;
 }
 
-.email{
+.input-box {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-.password-input {
-  width: 100%;
+  max-width: 300px; 
   padding: 10px;
   margin: 10px 0;
   border: 1px solid #ccc;
@@ -55,8 +52,9 @@ body {
 
 .button {
   width: 100%;
+  max-width: 300px;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #28a745;
   color: white;
   border: none;
   border-radius: 5px;
@@ -66,29 +64,32 @@ body {
 }
 
 .button:hover {
-  background-color: #0056b3;
+  background-color: #218838;
 }
 
 .divider {
   display: flex;
   align-items: center;
+  width: 100%;
+  max-width: 300px; /* Ensure the divider doesn't get too wide */
   margin-bottom: 20px;
 }
 
 .rectangle {
-  flex-grow: 1;
+  flex: 1;
   height: 1px;
   background-color: #ccc;
 }
 
 .text-wrapper-3 {
   margin: 0 10px;
-  color: #aaa;
   font-size: 14px;
+  color: #aaa;
 }
 
 .google-button {
   width: 100%;
+  max-width: 300px; /* Ensure the button doesn't get too wide */
   padding: 10px;
   background-color: #fff;
   border: 1px solid #ccc;

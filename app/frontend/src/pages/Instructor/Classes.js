@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
-import "../../css/style.css";
+import { Link } from "react-router-dom";
+import "../../css/App.css";
 import "../../css/Classes.css";
-import ListClasses from "./ListClasses";
+import ListClasses from "../../components/ListClasses";
 
 const Classes = () => {
   return (
@@ -19,8 +19,13 @@ const Classes = () => {
             </section>
             <section className="new-class">
               <h3>Create a new class</h3>
-              <p>Import a CSV file containing the student names and their student IDs in your class.</p>
-              <Link to="/new-class" className="btn">Create Class</Link>
+              <p>
+                Import a CSV file containing the student names and their student
+                IDs in your class.
+              </p>
+              <Link to="/new-class" className="btn">
+                Create Class
+              </Link>
             </section>
           </div>
         </div>

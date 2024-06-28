@@ -1,9 +1,8 @@
-
 import React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import "../../css/style.css";
-import '../../css/ClassManagement.css';
+import "../../css/App.css";
+import "../../css/ClassManagement.css";
 
 // We need the following data:
 // - Student Name
@@ -20,7 +19,7 @@ const ClassManagement = () => {
     const fetchClassData = async () => {
       try {
         const response = await fetch(
-          `/api/classManagement/${params.class_id}`,
+          `/api/class/classManagement/${params.class_id}`,
           {
             method: "POST",
             headers: {
@@ -104,7 +103,7 @@ const ClassManagement = () => {
 
   return (
     <>
-    <div class="main-content">
+      <div class="main-content">
         <header>
           <h2>
             {/* Display the course ID and course name */}
@@ -115,7 +114,7 @@ const ClassManagement = () => {
           </h2>
         </header>
         <section class="class-management">
-          <a href="NewExam.html" class="new-exam-btn">
+          <a href="/NewExam" class="new-exam-btn">
             + New Exam
           </a>
           <h3>Grades</h3>
