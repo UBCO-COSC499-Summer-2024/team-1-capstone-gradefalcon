@@ -1,6 +1,59 @@
 # Personal Log
 Ahmad Saleem Mirza
 
+## Wednesday (June 26 - 28)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/June26-28.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: OMR development
+  * #2: Annotating sample dataset
+  * #1: Training YOLO model
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Annotating sample dataset
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Training YOLO model
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>OMR development
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>      
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I've started work on the OMR. Myself and Omar found a github repository of an existing OMR machine that has proven to be quite useful. However. a limitation with said omr is that certain precise parameters must be specified for it to correctly detect the bubbles. Though these parameters are pretty straightforward, it is tedious to adjust them for each different scan. To solve this issue, I have discovered YOLOv3's accuracy when it comes to labelling data: by detecting the regions of where the bubbles are on the sheet, we can use this detection to extract the necessary parameters for the existing OMR to work. To that end, this cycle I took several dozen pictures of the current UBC bubble sheet from different angles, annotated the regions of interest on all of them, and ran them through the YOLO model. As I only ran the model for a few epochs, it did not always have 100% accuracy in detecting the region, but I anticipate this will improve over time. 
+
+However, it is still not smooth sailing from here: another issue I've run into is the fact that the OMR only works if there is a border with the page, not if it just a scan of the page itself. Seeing as how when you scan a pdf it is borderless, I have to come up with a way to get the OMR to work without a border. Once that is done, we can move on to Dockerizing the OMR and integrating it into our system.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * OMR development
+
 ## Wednesday (June 21 - 26)
 
 ### Timesheet
