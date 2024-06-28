@@ -55,7 +55,7 @@ clockify report
 </table>
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-After completing the dark mode feature for the system, I started making changes to the student dashboard continuing from last cycle after learning from all the related documentation to revamp the look of the system using the shad cn components. Made the changes locally on my system to replace the styles and the components with shad cn but had some issues while installing the shad cn package and the related dependencies as it was not visible and running even though the package was installed. I aim to fix the same after the physics which wont take too long and start off with the data visualization tool to to be used for the system.
+After completing the dark mode feature for the system, I started making changes to the student dashboard continuing from last cycle after learning from all the related documentation to revamp the look of the system using the shad cn components. Made the changes locally on my system to replace the styles and the components with shad cn but had some issues while installing the shad cn package and the related dependencies as it was not visible and running even though the package was installed. I aim to fix the same after the physics which wont take too long and start off with the data visualization tool to to be used for the system. I tried to manage as much work as I could during the cycle along with the final exam prep stress, but I am motivated to make up for as much missed.
 
 ### Next Cycle Goals ( What to accomplish during the next cycle ):
 - Data Visualization #16 ( Startting off after some research on the same, to get perfromance insights on the student)
