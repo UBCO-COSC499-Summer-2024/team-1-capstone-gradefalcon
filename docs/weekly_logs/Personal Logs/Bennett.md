@@ -1,5 +1,51 @@
 # Personal Log
 
+## Wednessday (6/26 - 6/28)
+
+## TimeSheet
+Clockify report
+
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Impliment Backend testing
+  * #2: Fix frontend test errors for changes resulting from exam creation implimentation
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>2
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * Began aditional research on how to run backend testing, diverted attention to fix frontend tests that broke due to implimentation of exam creation, It was nessesary to change focus due so some the branch with the implimention of exam control could be merged.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Divert my focus back to to backend testing, planning on having either all tests for any backend features currently implimented to the dev branch completed.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+# Personal Log
+
 ## Wednessday (6/21 - 6/26)
 
 ## TimeSheet
