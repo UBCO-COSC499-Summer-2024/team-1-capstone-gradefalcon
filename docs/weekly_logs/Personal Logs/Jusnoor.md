@@ -1,6 +1,66 @@
 
 # Personal Log
 
+
+## Friday (26/6 - 28/6)
+
+### Timesheet 
+
+clockify report 
+
+![Time7](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/37bf406a-8811-4471-8cb8-514aea543419)
+
+
+
+
+### Current Tasks (Provide Details):
+- #1: Front End Testing of the student view 
+- #2: Data Visualization (Technological research is in progress , in order to get performance insights using the visualization tools):in order to visualize the student results after the exmas have been graded to know more about scope of improvement
+- #3: Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhnaced look altogether 
+
+
+  
+### Progress Update (since 6/5/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Testing front end student view pages #37
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Data Visualization #16 ( Startting off after some research on the same)
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn components 
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+After completing the dark mode feature for the system, I started making changes to the student dashboard continuing from last cycle after learning from all the related documentation to revamp the look of the system using the shad cn components. Made the changes locally on my system to replace the styles and the components with shad cn but had some issues while installing the shad cn package and the related dependencies as it was not visible and running even though the package was installed. I aim to fix the same after the physics which wont take too long and start off with the data visualization tool to to be used for the system.
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Data Visualization #16 ( Startting off after some research on the same, to get perfromance insights on the student)
+- Enhancing the front end UI using Shad cn - to be complete by the next cycle
+
 ## Wednesday (22/6 - 25/6)
 
 ### Timesheet 
@@ -66,8 +126,6 @@ clockify report
 I have taken up and implemented the dark mode fetaure for our system, while I was working on revamping the student view and the dashboard using shad cn. I made some progress on the same by installing the required packages and making the chnages locally to get an understanding. I was determined to complete the same but, got distracted and completed the dark mode feature instead. I was not able to give as much as I wanted during this cycle as I have a final this week, but I aim to complete some part of the shad cn enhancement feature to start off with the data visualization,gradually, after the next cycle.
 
 ### Next Cycle Goals ( What to accomplish during the next cycle ):
-- Testing for front end student view pages #37
-- Data Visualization #16 ( Startting off after some research on the same)
 - Enhancing the front end UI using Shad cn - to be complete by the next cycle
 
 
