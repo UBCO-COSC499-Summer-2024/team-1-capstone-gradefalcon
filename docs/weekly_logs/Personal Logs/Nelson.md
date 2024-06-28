@@ -1,3 +1,60 @@
+## Wednesday (26/6- 28/6)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/june28_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Setting up and Testing Drone
+  * #2: Setting up Remote Server for Drone
+  * #3: Researching/Setting up Cloud Provider
+
+### Progress Update (since 6/18/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Setting up and Testing Drone
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Setting up Remote Server for Drone
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Researching/Setting up Cloud Provider
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+In this cycle, I was able to regain momentum after a busy start to the week. My primary focus was on setting up Drone CI. Initially, I managed to configure it locally, but upon further consideration of the project's future and after reading feedback from other teams using Drone, I decided to conduct additional research to ensure we are implementing the best solution efficiently. I determined that setting up a remote server on a cloud provider for Drone would be more scalable and beneficial for our project. This aligns with our plan to use a cloud provider for managing exam PDF file storage. I have made significant progress in setting up this remote server during this cycle.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Set Up Remote server
+  * Set up Cloud Provider
+  * Set up Drone
+  * Finish adding functionality for Admin View
+  * Research the best more about computer vision and OMR
+
+
 ## Wednesday (22/6- 26/6)
 
 ### Timesheet
