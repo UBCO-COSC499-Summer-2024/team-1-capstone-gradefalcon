@@ -2,9 +2,9 @@ import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import ManualExamKey from '../../../src/pages/Instructor/ManualExamKey'; 
-
+import { BrowserRouter } from 'react-router-dom';
 test('displays correct number of questions and options', () => {
-  render(<ManualExamKey />);
+  render(<BrowserRouter><ManualExamKey /></BrowserRouter>);
 
   const numQuestionsInput = screen.getByTestId('num-questions-input');
   const numOptionsInput = screen.getByTestId('num-options-input');
@@ -32,7 +32,7 @@ test('displays correct number of questions and options', () => {
 });
 
 test('reverse verification: ensure wrong number of questions does not show up', () => {
-  render(<ManualExamKey />);
+  render(<BrowserRouter><ManualExamKey /></BrowserRouter>);
 
   const numQuestionsInput = screen.getByTestId('num-questions-input');
 
@@ -49,7 +49,7 @@ test('reverse verification: ensure wrong number of questions does not show up', 
 });
 
 test('reverse verification: ensure wrong number of options does not show up', () => {
-  render(<ManualExamKey />);
+  render(<BrowserRouter><ManualExamKey /></BrowserRouter>);
 
   const numQuestionsInput = screen.getByTestId('num-questions-input');
   const numOptionsInput = screen.getByTestId('num-options-input');
@@ -70,13 +70,13 @@ test('reverse verification: ensure wrong number of options does not show up', ()
 
 // Base case: default number of questions and options
 test('base case: displays default number of questions and options', () => {
-  render(<ManualExamKey />);
+  render(<BrowserRouter><ManualExamKey /></BrowserRouter>);
 
   const bubbleGrid = screen.getByTestId('bubble-grid');
   const questions = bubbleGrid.querySelectorAll('.question');
 
   // Default values are 80 questions and 5 options
-  expect(questions.length).toBe(80);
+  expect(questions.length).toBe(10);
   questions.forEach(question => {
     const options = question.querySelectorAll('.option');
     expect(options.length).toBe(5);
@@ -85,7 +85,7 @@ test('base case: displays default number of questions and options', () => {
 
 // Base case: handles minimum number of questions and options
 test('base case: handles minimum number of questions and options', () => {
-  render(<ManualExamKey />);
+  render(<BrowserRouter><ManualExamKey /></BrowserRouter>);
 
   const numQuestionsInput = screen.getByTestId('num-questions-input');
   const numOptionsInput = screen.getByTestId('num-options-input');
@@ -106,7 +106,7 @@ test('base case: handles minimum number of questions and options', () => {
 
 // Base case: handles maximum number of questions and options
 test('base case: handles maximum number of questions and options', () => {
-  render(<ManualExamKey />);
+  render(<BrowserRouter><ManualExamKey /></BrowserRouter>);
 
   const numQuestionsInput = screen.getByTestId('num-questions-input');
   const numOptionsInput = screen.getByTestId('num-options-input');

@@ -29,6 +29,7 @@ const UploadExamKey = () => {
   };
 
   return (
+    <>
       <div className="App">
         <div className="main-content">
           <header>
@@ -51,6 +52,7 @@ const UploadExamKey = () => {
           </section>
         </div>
       </div>
+      </>
   );
 };
 
