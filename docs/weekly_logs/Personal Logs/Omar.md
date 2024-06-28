@@ -1,5 +1,67 @@
 # Personal Log
+## Friday (6/26-6/28)
 
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/509febd4de212e73b6200e33065d7f5f9534c584/docs/weekly_logs/Clockify/Omar/Time7.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Auth0 Integration**
+
+    1. **Worked on backend API calls, setting up user roles using Auth0 extensions**
+    2. **Modified API calls to use JWT tokens from Auth0 instead of express sessions**
+    3. **Started looking into setting up sign-up functionality with Auth0**
+
+2. **Computer Vision Model for OMR**
+
+    1. **Continued research on existing frameworks using OpenCV**
+    2. **Implementation of YOLO for object detection**
+    3. **Worked on image labeling using RoboFlow**
+
+### Progress Update (since 6/26/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <td>#61 - Create User Roles and Permissions, Auth0
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <td>#10 - User Story: Develop Computer Vision Model
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+</table> 
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - Made significant progress on Auth0 backend integration
+  - Enhanced API security by switching to JWT tokens
+  - Continued advancement on the computer vision model and image labeling
+
+- **What Was Done:**
+  - Worked on Auth0 backend API calls and user roles
+  - Started setting up sign-up functionality with Auth0
+  - Researched and started implementing YOLO with OpenCV for the OMR project
+  - Worked on image labeling using RoboFlow
+
+- **What Didn't Go Well:**
+  - Auth0 has proven to be quite complicated with a lot of documentation and a lot of code restructuring required
+  - More progress needed on Auth0 draft
+  - Still need to advance further on the computer vision model
+
+- **Retrospective:**
+  - Backend implementation for Auth0 is progressing well
+  - Continued efforts on OMR with promising advancements
 ## Wednesday (6/20- 6/26)
 
 ### Timesheet
