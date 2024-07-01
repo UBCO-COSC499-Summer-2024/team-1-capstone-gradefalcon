@@ -20,6 +20,12 @@ const signup = async (req, res, next) => {
 // User login controller
 const login = async (req, res, next) => {
   const { email, password } = req.body;
+
+  // Validate input types
+  if (typeof email !== 'string' || typeof password !== 'string') {
+    return res.status(400).json({ message: "Invalid input types" }); 
+  }
+
   try {
     let result = await pool.query("SELECT * FROM instructor WHERE email = $1", [email]);
     let user = result.rows[0];
@@ -62,6 +68,7 @@ const login = async (req, res, next) => {
 
     res.status(401).json({ message: "Invalid credentials" });
   } catch (err) {
+    console.error('Error during login:', err); // Log the error
     next(err);
   }
 };
