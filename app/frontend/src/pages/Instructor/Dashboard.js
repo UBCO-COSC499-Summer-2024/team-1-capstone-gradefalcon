@@ -6,6 +6,15 @@ const Dashboard = () => {
   const [courses, setCourses] = useState([]);
   const [exams, setExams] = useState([]);
 
+  const colors = ["#E9D8FD", "#FEEBC8", "#BEE3F8", "#C6F6D5"];
+  let colorIndex = 0;
+
+  const getNextColor = () => {
+    const color = colors[colorIndex];
+    colorIndex = (colorIndex + 1) % colors.length;
+    return color;
+  };
+
   useEffect(() => {
     const fetchSessionInfo = async () => {
       try {
@@ -81,8 +90,9 @@ const Dashboard = () => {
         <section className="courses">
           <h3>Enrolled Courses</h3>
           {courses.map((course, index) => (
-            <div className="course-card" key={index} style={{ backgroundColor: "#E9D8FD" }}>
+            <div className="course-card" key={index} style={{ backgroundColor: getNextColor() }}>
               <h4>{course.course_name} - {course.course_id}</h4>
+              {/* Additional course details can be added here if available */}
             </div>
           ))}
         </section>
