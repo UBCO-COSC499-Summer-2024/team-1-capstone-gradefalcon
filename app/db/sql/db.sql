@@ -74,6 +74,7 @@ CREATE TABLE studentResults(
 	sheet_int serial primary key,
 	student_id int not null,
 	exam_id int not null,
+	chosen_answers text[],
 	grade int,
 	filepath text,
 	foreign key (exam_id) references exam(exam_id),
