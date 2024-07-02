@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../../css/App.css';
 import '../../css/UploadExam.css';
+import axios from 'axios'; // You need to install axios if you haven't already
 
-const UploadExamKey = () => {
+const UploadExams = () => {
   const [fileURL, setFileURL] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -28,16 +29,42 @@ const UploadExamKey = () => {
     fileInputRef.current.value = '';
   };
 
+  const handleFileUpload = async () => {
+    const file = fileInputRef.current.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await axios.post('/api/upload-exam', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.success) {
+        alert('File uploaded successfully');
+        // Redirect or update the state as needed
+      } else {
+        alert('File upload failed');
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Error uploading file');
+    }
+  };
+
   return (
     <>
       <div className="App">
         <div className="main-content">
           <header>
-            <h2>Answer Key</h2>
+            <h2>Upload Exams</h2>
           </header>
           <section className="upload-key">
             <button className="back-button" onClick={() => window.history.back()}>&larr;</button>
-            <h3>Upload the exam answer key as a PDF file.</h3>
+            <h3>Upload the exam with all student submissions as a PDF file.</h3>
             <div className="upload-area" style={{ display: fileURL ? 'none' : 'block' }}>
               <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} />
               <div className="drag-drop-area" onClick={() => fileInputRef.current.click()}>
@@ -45,15 +72,15 @@ const UploadExamKey = () => {
               </div>
             </div>
             <div className="pdf-display" style={{ display: fileURL ? 'block' : 'none' }}>
-             <iframe src={fileURL} title="PDF Preview"></iframe>
+              <iframe src={fileURL} title="PDF Preview"></iframe>
             </div>
             <button className="btn btn-import" onClick={resetUpload}>Import</button>
-            <a href="/ExamControls" className="btn-confirm">Confirm</a>
+            <button className="btn-confirm" onClick={handleFileUpload}>Confirm</button>
           </section>
         </div>
       </div>
-      </>
+    </>
   );
 };
 
-export default UploadExamKey;
+export default UploadExams;

@@ -19,6 +19,7 @@ import ExamControls from "./pages/Instructor/ExamControls";
 import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
+import UploadExams from "./pages/Instructor/UploadExams";
 //admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
@@ -75,8 +76,9 @@ function App() {
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
             <Route path="/ManualExamKey" element={<ManualExamKey />} />
-            <Route path="/NotificationPreferences" element={<NotificationPreferences />} />
             <Route path="/UploadExamKey" element={<UploadExamKey />} />
+            <Route path="/UploadExams" element={<UploadExams />} />
+            <Route path="/NotificationPreferences" element={<NotificationPreferences />} />
             <Route path="/StudentDashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
             <Route path="/StudentGradeReport" element={<StudentGradeReport />} />
             <Route path="/StudentAccountSettings" element={<StudentAccountSettings />} />

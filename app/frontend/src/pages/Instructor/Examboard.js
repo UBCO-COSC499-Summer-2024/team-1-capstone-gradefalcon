@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../css/App.css";
 import "../../css/Examboard.css";
+import { Link } from "react-router-dom";
 
 const ExamBoard = () => {
   const [classData, setClassData] = useState([]);
@@ -56,9 +57,14 @@ const ExamBoard = () => {
             {Object.entries(groupedExams).map(
               ([courseId, { course_name, class_id, exams }]) => (
                 <div key={courseId}>
-                  <h3>{courseId} {course_name}</h3>
-                  {exams.map((exam, index) => (
-                    <p key={index}>{exam}</p>
+                <h3>{courseId} {course_name}</h3>
+                {exams.map((exam, index) => (
+                  <div key={index} className="exam-item">
+                    <p>{exam}</p>
+                    <Link to="/UploadExams" className="grade-exam-btn">
+                      Grade Exam
+                    </Link>
+                  </div>
                   ))}
                   <a href={`./NewExam/${class_id}`} class="create-new-btn">
                     Create New
