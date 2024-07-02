@@ -1,0 +1,41 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: clone
+    image: alpine/git
+    commands:
+      - git clone https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon.git
+      - cd team-1-capstone-gradefalcon
+
+  - name: backend
+    image: docker:20
+    environment:
+      DOCKER_BUILDKIT: 1
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    commands:
+      - cd team-1-capstone-gradefalcon/app/backend
+      - docker-compose up --build -d db
+      - docker-compose up --build -d backend
+
+  - name: frontend
+    image: docker:20
+    environment:
+      DOCKER_BUILDKIT: 1
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    commands:
+      - cd team-1-capstone-gradefalcon/app/frontend
+      - docker-compose up --build -d frontend
+      - docker-compose exec frontend npm install
+      - docker-compose exec frontend npm run test
+      - docker-compose exec frontend npm run build
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
