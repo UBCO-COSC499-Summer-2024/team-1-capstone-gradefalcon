@@ -1,162 +1,85 @@
-import React, { useState, useEffect } from 'react';
-import '../../css/style.css';
+import React, { useState, useEffect, useCallback } from "react";
+import { useLocation, Link } from "react-router-dom";
+import '../../css/App.css';
+import "../../css/ManualExamKey.css";
 
-const ManualExamKey = () => {
-  const [numQuestions, setNumQuestions] = useState(80);
+const ManualExamKey = (props) => {
+  const location = useLocation();
+  const { examTitle, classID } = location.state || {};
+
+  let questions = [];
+
+  const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(5);
+  const [numMarks, setNumMarks] = useState(10);
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
-  useEffect(() => {
-    updateQuestions();
-  }, [numQuestions, numOptions]);
-
-  const toggleSelection = (event) => {
-    event.target.classList.toggle('selected');
+  const removeQuestion = (questionNumber, option) => {
+    questions = questions.filter(
+      (question) =>
+        question.question !== questionNumber || question.option !== option
+    );
+  };
+  const toggleSelection = (selection) => (event) => {
+    event.target.classList.toggle("selected");
+    if (!questions.includes(selection)) {
+      questions.push(selection);
+      console.log(`Added: ${selection.question} ${selection.option}`);
+    } else {
+      removeQuestion(selection.question, selection.option);
+      console.log(`Removed: ${selection.question} ${selection.option}`);
+    }
+    console.log(questions);
   };
 
-  const updateQuestions = () => {
-    const bubbleGrid = document.querySelector('.bubble-grid');
+  const updateQuestions = useCallback(() => {
+    const bubbleGrid = document.querySelector(".bubble-grid");
 
-    bubbleGrid.innerHTML = '';
+    bubbleGrid.innerHTML = "";
 
     for (let i = 1; i <= numQuestions; i++) {
-      const questionDiv = document.createElement('div');
-      questionDiv.className = 'question';
+      const questionDiv = document.createElement("div");
+      questionDiv.className = "question";
       questionDiv.innerHTML = `<span>${i})</span><div class="options"></div>`;
 
-      const optionsDiv = questionDiv.querySelector('.options');
+      const optionsDiv = questionDiv.querySelector(".options");
 
       for (let j = 0; j < numOptions; j++) {
-        const optionSpan = document.createElement('span');
-        optionSpan.className = 'option';
+        const optionSpan = document.createElement("span");
+        optionSpan.className = "option";
         optionSpan.innerText = String.fromCharCode(65 + j);
-        optionSpan.onclick = toggleSelection;
+        optionSpan.onclick = toggleSelection({
+          question: i,
+          option: optionSpan.innerText,
+        });
         optionsDiv.appendChild(optionSpan);
       }
 
       bubbleGrid.appendChild(questionDiv);
     }
-  };
+  }, [numQuestions, numOptions]);
+
+  useEffect(() => {
+    updateQuestions();
+  }, [numQuestions, numOptions, updateQuestions]);
 
   return (
     <>
-      <style>
-        {`
-          .new-exam {
-            background-color: white;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-          }
-
-          .new-exam h3 {
-            font-size: 20px;
-            font-weight: normal;
-            margin-bottom: 10px;
-          }
-
-          .new-exam p {
-            font-size: 14px;
-            margin-bottom: 20px;
-            color: #555;
-          }
-
-          .input-field {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-          }
-
-          .schedule-field {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          }
-
-          .schedule-field input {
-            width: 23%;
-          }
-
-          .btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-          }
-
-          .btn:hover {
-            background-color: #45a049;
-          }
-
-          form {
-            display: flex;
-            flex-direction: column;
-          }
-
-          .bubble-grid {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-          }
-
-          .question {
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-          }
-
-          .options {
-            margin-left: 10px;
-            flex: 1;
-          }
-
-          .option {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            margin: 0 5px;
-            border-radius: 50%;
-            border: 2px solid #333;
-            text-align: center;
-            line-height: 30px;
-            cursor: pointer;
-          }
-
-          .option.selected {
-            background-color: #4CAF50;
-            color: white;
-          }
-
-          .nested-window {
-            width: 100%;
-            height: 400px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            box-sizing: border-box;
-            margin-top: 20px;
-          }
-        `}
-      </style>
       <div className="App">
         <div className="main-content">
           <header>
             <h2>Create New Exam</h2>
+            <h2>{examTitle}</h2>
           </header>
           <section className="new-exam">
-            <button className="btn">Create</button>
-            <button className="btn">Configure</button>
-            <button className="btn">Publish</button>
+            <button
+              className="back-button"
+              onClick={() => window.history.back()}
+            >
+              {" "}
+              Back
+            </button>
+
             <h3>Questions</h3>
             <p>*The following details will be printed on the exam*</p>
             <form>
@@ -166,7 +89,9 @@ const ManualExamKey = () => {
                 id="num-questions"
                 className="input-field"
                 value={numQuestions}
-                onChange={(e) => setNumQuestions(parseInt(e.target.value))}
+                onChange={(e) =>
+                  setNumQuestions(Math.min(300, parseInt(e.target.value)))
+                }
                 min="1"
                 max="300"
                 data-testid="num-questions-input"
@@ -178,22 +103,46 @@ const ManualExamKey = () => {
                 id="num-options"
                 className="input-field"
                 value={numOptions}
-                onChange={(e) => setNumOptions(parseInt(e.target.value))}
+                onChange={(e) =>
+                  setNumOptions(Math.min(26, parseInt(e.target.value)))
+                }
                 min="1"
                 max="26"
                 data-testid="num-options-input"
+              />
+
+              <label htmlFor="num-marks">#Total marks:</label>
+              <input
+                type="number"
+                id="num-marks"
+                className="input-field"
+                value={numMarks}
+                onChange={(e) => setNumMarks(e.target.value)}
+                min="1"
+                data-testid="num-marks-input"
               />
 
               <div className="nested-window">
                 <div className="bubble-grid" data-testid="bubble-grid"></div>
               </div>
 
-              <a href="./ExamControls" className="btn">Next</a>
+              <Link
+                to="/ExamControls"
+                state={{
+                  classID: classID,
+                  examTitle: examTitle,
+                  questions: questions,
+                  numQuestions: numQuestions,
+                }}
+                className="btn"
+              >
+                Next
+              </Link>
             </form>
           </section>
         </div>
       </div>
-    </>
+      </>
   );
 };
 
