@@ -24,6 +24,8 @@ from src.utils.file import Paths, setup_dirs_for_paths, setup_outputs_for_templa
 from src.utils.image import ImageUtils
 from src.utils.interaction import InteractionUtils, Stats
 from src.utils.parsing import get_concatenated_response, open_config_with_defaults
+from src.utils.pdf import convert_pdf_to_images  # Import the PDF utility
+
 
 # Load processors
 STATS = Stats()
@@ -97,8 +99,8 @@ def process_dir(
     output_dir = Path(args["output_dir"], curr_dir.relative_to(root_dir))
     paths = Paths(output_dir)
 
-    # look for images in current dir to process
-    exts = ("*.[pP][nN][gG]", "*.[jJ][pP][gG]", "*.[jJ][pP][eE][gG]")
+    # look for images and PDFs in current dir to process
+    exts = ("*.[pP][nN][gG]", "*.[jJ][pP][gG]", "*.[jJ][pP][eE][gG]", "*.pdf")  # Include PDF extension
     omr_files = sorted([f for ext in exts for f in curr_dir.glob(ext)])
 
     # Exclude images (take union over all pre_processors)
@@ -126,7 +128,17 @@ def process_dir(
 
     omr_files = [f for f in omr_files if f not in excluded_files]
 
-    if omr_files:
+    # Handle PDF conversion before proceeding
+    pdf_files = [f for f in omr_files if f.suffix.lower() == '.pdf']
+    image_files = [f for f in omr_files if f.suffix.lower() != '.pdf']
+
+    if pdf_files:
+        for pdf_file in pdf_files:
+            output_folder = pdf_file.parent.joinpath("converted_images")
+            image_paths = convert_pdf_to_images(pdf_file, output_folder)
+            image_files.extend(image_paths)
+
+    if image_files:
         if not template:
             logger.error(
                 f"Found images, but no template in the directory tree \
@@ -142,7 +154,7 @@ def process_dir(
 
         print_config_summary(
             curr_dir,
-            omr_files,
+            image_files,
             template,
             tuning_config,
             local_config_path,
@@ -150,10 +162,10 @@ def process_dir(
             args,
         )
         if args["setLayout"]:
-            show_template_layouts(omr_files, template, tuning_config)
+            show_template_layouts(image_files, template, tuning_config)
         else:
             process_files(
-                omr_files,
+                image_files,
                 template,
                 tuning_config,
                 evaluation_config,
@@ -177,6 +189,7 @@ def process_dir(
             tuning_config,
             evaluation_config,
         )
+
 
 
 def show_template_layouts(omr_files, template, tuning_config):
@@ -207,6 +220,14 @@ def process_files(
     STATS.files_not_moved = 0
 
     for file_path in omr_files:
+        # Check if the file is a PDF and convert to images
+        if file_path.suffix.lower() == '.pdf':
+            output_folder = file_path.parent.joinpath("converted_images")
+            image_paths = convert_pdf_to_images(file_path, output_folder)
+            for image_path in image_paths:
+                process_image(image_path, template.pre_processors)
+            continue  # Skip the rest of the loop for PDF files
+
         files_counter += 1
         file_name = file_path.name
 
@@ -325,11 +346,19 @@ def process_files(
                     header=False,
                     index=False,
                 )
-            # else:
-            #     TODO:  Add appropriate record handling here
-            #     pass
 
     print_stats(start_time, files_counter, tuning_config)
+
+def process_image(image_path, preprocessors):
+    image = cv2.imread(image_path)
+
+    for preprocessor in preprocessors:
+        image = preprocessor.apply_filter(image, image_path)
+
+    processed_image_path = image_path.replace('.png', '_processed.png')
+    cv2.imwrite(processed_image_path, image)
+    print(f'Saved processed image to {processed_image_path}')
+
 
 
 def check_and_move(error_code, file_path, filepath2):
