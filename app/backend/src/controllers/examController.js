@@ -63,13 +63,13 @@ const getStandardAverageData = async (req, res, next) => {
   const instructorId = req.session.userId;
   try {
     const standardAverageData = await pool.query(`
-      SELECT e.exam_date AS "examDate", AVG(sr.grade) AS "averageScore"
+      SELECT e.exam_title AS "examTitle", AVG(sr.grade) AS "averageScore"
       FROM studentResults sr
       JOIN exam e ON sr.exam_id = e.exam_id
       JOIN classes c ON e.class_id = c.class_id
       WHERE c.instructor_id = $1
-      GROUP BY e.exam_date
-      ORDER BY e.exam_date
+      GROUP BY e.exam_title
+      ORDER BY e.exam_title
     `, [instructorId]);
 
     res.json(standardAverageData.rows);
@@ -99,4 +99,5 @@ const getPerformanceData = async (req, res, next) => {
 };
 
 module.exports = { saveQuestions, newExam, examBoard, getStandardAverageData, getPerformanceData };
+
 
