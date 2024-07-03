@@ -32,8 +32,16 @@
         ],
         "sigmaX": 0
       }
+    },
+    {
+      "name": "BorderPreprocessor",
+      "options": {
+        "border_size": 10,
+        "border_color": [255, 255, 255]
+      }
     }
   ],
+  
   "customLabels": {
     "Roll": [
       "stu",

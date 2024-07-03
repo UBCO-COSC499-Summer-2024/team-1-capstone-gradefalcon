@@ -76,6 +76,7 @@ TEMPLATE_SCHEMA = {
                             "GaussianBlur",
                             "Levels",
                             "MedianBlur",
+                            "BorderPreprocessor",
                         ],
                     },
                 },
@@ -179,6 +180,34 @@ TEMPLATE_SCHEMA = {
                             }
                         },
                     },
+                    {
+                        "if": {"properties": {"name": {"const": "BorderPreprocessor"}}},
+                        "then": {
+                            "properties": {
+                                "options": {
+                                    "type": "object",
+                                    "additionalProperties": False,
+                                    "properties": {
+                                        "border_size": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                        },
+                                        "border_color": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer",
+                                                "minimum": 0,
+                                                "maximum": 255
+                                            },
+                                            "minItems": 3,
+                                            "maxItems": 3
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                 ],
             },
         },
