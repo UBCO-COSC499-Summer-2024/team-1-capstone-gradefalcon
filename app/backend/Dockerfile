@@ -1,6 +1,5 @@
 # syntax=docker/dockerfile:1.4
 
-# if you're doing anything beyond your local machine, please pin this to a specific version at https://hub.docker.com/_/node/
 FROM node:lts AS development
 
 # set our node environment, either development or production
@@ -19,8 +18,10 @@ COPY package.json /code/package.json
 COPY package-lock.json /code/package-lock.json
 RUN npm ci
 
-# Install PostgreSQL client
-RUN apt-get update && apt-get install -y postgresql-client
+# Install PostgreSQL client and poppler-utils
+RUN apt-get update && \
+    apt-get install -y postgresql-client poppler-utils && \
+    apt-get clean
 
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK --interval=30s \
@@ -46,5 +47,6 @@ useradd -s /bin/bash -m vscode
 groupadd docker
 usermod -aG docker vscode
 EOF
+
 # install Docker tools (cli, buildx, compose)
 COPY --from=gloursdocker/docker / /
