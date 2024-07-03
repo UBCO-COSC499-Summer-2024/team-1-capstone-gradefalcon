@@ -6,4 +6,3 @@ numpy>=1.25.0
 pandas>=2.0.2
 rich>=13.4.2
 screeninfo>=0.8.1
-pdf2image>=1.17.0
