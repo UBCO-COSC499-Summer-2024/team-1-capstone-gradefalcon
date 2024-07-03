@@ -1,7 +1,69 @@
 # Personal Log
 Ahmad Saleem Mirza
 
-## Wednesday (June 26 - 28)
+## Wednesday (June 28 - July 3)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/June28-Jul3.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Configure OMR to scan existing templates
+  * #2: Amend database to store student attempts
+  * #3: Store solution key in OMR folder
+  * #4: Start OMR container once file written 
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Configure OMR to scan existing templates
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Amend database to store student attempts
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Store solution key in OMR folder
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr> 
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Start OMR container once file written 
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>      
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Afetr the previous cycle, I was able to utilize Roboflow and YOLO to derive the necessary parameters to scan and parse bubble sheets. However, at this point in the project we realized it may not be needed at all: since the client requested that the feature to mark existing templates be implemented first.
+
+To that end, I manually calculated the necessary parameters for scanning to work and made the OMR be able to scan the existing 100 and 200 MCQ sheets that are used currently in UBC. These results are formatted in a csv, which can then be easily written to the database. A challenge I am currently facing is getting the uploaded pdf file to be saved to a specific directory in the project file structure, after which it will then be scanned by the OMR. This is because of technicalities in how Express and React process files. I should have this resolved quickly and then easily be able to automatically run the OMR container and retrieve the results and write them to the database.  
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Create solution key from filled in bubble sheet
+
+## Friday (June 26 - 28)
 
 ### Timesheet
 Clockify report
