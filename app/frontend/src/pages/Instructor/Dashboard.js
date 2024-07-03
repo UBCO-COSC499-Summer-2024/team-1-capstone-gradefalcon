@@ -1,9 +1,14 @@
 // src/Instructor/Dashboard.js
 import "../../css/App.css";
 import React, { useEffect, useState } from "react";
+import StandardAverageChart from "./StandardAverageChart";
+import PerformanceBarChart from "./PerformanceBarChart";
 
 const Dashboard = () => {
   const [userName, setUserName] = useState("");
+  const [standardAverageData, setStandardAverageData] = useState([]);
+  const [performanceData, setPerformanceData] = useState([]);
+
   useEffect(() => {
     const fetchSessionInfo = async () => {
       try {
@@ -12,7 +17,7 @@ const Dashboard = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include", // This ensures cookies are included in the request
+          credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
@@ -25,7 +30,49 @@ const Dashboard = () => {
       }
     };
 
+    const fetchStandardAverageData = async () => {
+      try {
+        const response = await fetch("/api/standard-average-data", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setStandardAverageData(data);
+        } else {
+          console.error("Failed to fetch standard average data");
+        }
+      } catch (error) {
+        console.error("Error fetching standard average data:", error);
+      }
+    };
+
+    const fetchPerformanceData = async () => {
+      try {
+        const response = await fetch("/api/performance-data", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setPerformanceData(data);
+        } else {
+          console.error("Failed to fetch performance data");
+        }
+      } catch (error) {
+        console.error("Error fetching performance data:", error);
+      }
+    };
+
     fetchSessionInfo();
+    fetchStandardAverageData();
+    fetchPerformanceData();
   }, []);
 
   return (
@@ -105,12 +152,12 @@ const Dashboard = () => {
         <section className="charts">
           <h3>Performance Charts</h3>
           <div className="chart">
-            <h4>Title</h4>
-            {/* Chart content goes here */}
+            <h4>Standard Average Chart</h4>
+            <StandardAverageChart data={standardAverageData} />
           </div>
           <div className="chart">
-            <h4>Title</h4>
-            {/* Chart content goes here */}
+            <h4>Performance Bar Chart</h4>
+            <PerformanceBarChart data={performanceData} />
           </div>
         </section>
       </div>
