@@ -8,11 +8,13 @@ WORKDIR /app
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # Update the package repository and install required dependencies
+# Added poppler-utils for pdf2image
 RUN apt-get update -y && \
     apt-get install -y build-essential cmake unzip pkg-config \
     libjpeg-dev libpng-dev libtiff-dev \
     libavcodec-dev libavformat-dev libswscale-dev libv4l-dev \
     libatlas-base-dev gfortran && \
+    apt-get install -y poppler-utils && \ 
     apt-get clean && \
     apt-get -y autoremove
 
