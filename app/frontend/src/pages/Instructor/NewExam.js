@@ -49,7 +49,7 @@ const NewExam = () => {
               <label htmlFor="answer-key">Answer Key:</label>
               <div>
                 <a
-                  href="./UploadExamKey"
+                  href="/UploadExamKey"
                   className="btn"
                   data-testid="upload-answer-key-btn"
                 >
