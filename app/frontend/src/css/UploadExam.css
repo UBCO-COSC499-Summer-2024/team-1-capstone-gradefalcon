@@ -18,6 +18,7 @@
   }
   .upload-area {
     text-align: center;
+    border: none;
   }
   .drag-drop-area {
     width: 100%;
