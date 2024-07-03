@@ -36,9 +36,10 @@ const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   // Validate input types
-  if (typeof email !== 'string' || typeof password !== 'string') {
-    return res.status(400).json({ message: "Invalid input types" }); 
-  }
+  if (email == null || password == null || typeof email !== 'string' || typeof password !== 'string') {
+    return res.status(400).json({ message: "Missing/Invalid input types" }); 
+}
+
 
   try {
     let result = await pool.query("SELECT * FROM instructor WHERE email = $1", [email]);

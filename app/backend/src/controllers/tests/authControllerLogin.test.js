@@ -132,7 +132,7 @@ describe('AuthController Login', () => {
       } else {
         const data = await response.json();
         expect(response.status).toBe(400);
-        expect(data.message).toBe("Invalid input types");
+        expect(data.message).toBe("Missing/Invalid input types");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -158,7 +158,7 @@ describe('AuthController Login', () => {
       } else {
         const data = await response.json();
         expect(response.status).toBe(400);
-        expect(data.message).toBe("Invalid input types");
+        expect(data.message).toBe("Missing/Invalid input types");
       }
     } catch (error) {
       console.error("Error:", error);
