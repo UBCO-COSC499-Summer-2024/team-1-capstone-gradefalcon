@@ -1,4 +1,128 @@
 # Personal Log
+Here's the updated weekly log template incorporating the information from the issues list and your progress:
+
+## Friday (6/28-7/02)
+
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/b8d2f420a3980b8539ba8ff39dca16c96dc97e90/docs/weekly_logs/Clockify/Omar/Time8.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Containerization and OMRChecker Integration**
+    1. Added Dockerfile and modified docker-compose file.
+    2. Integrated OMRChecker as the OMR solution of choice.
+    3. Made necessary changes to ensure images without borders are processed correctly.
+2. **PDF to Image Conversion**
+    1. Implemented conversion from PDFs to images within the OMR module.
+    2. Added required dependencies in requirements.txt and Dockerfile.
+    3. Modified entry.py to process PDFs to images using pdf2images and handle paths correctly.
+3. **Front-End Development**
+    1. Created the Upload Exams page.
+    2. Made minor CSS changes to the navbar.
+    3. Updated ExamRoutes.js and modified ExamBoard to include the Grade Exam page.
+4. **Dashboard Updates**
+    1. Updated Dashboard.js to read from the database.
+    2. Displayed all classes and exams.
+    3. Implemented a cycle card color function using a color array.
+5. **Model Training and Image Labeling**
+    1. Labeled images and trained model using Roboflow.
+    2. Determined that OpenCV suffices for detecting question boxes on a page without additional model training.
+6. **Data Visualization Backend Functionality**
+    1. Assisted in fixing issues related to data visualization backend functionality.
+
+### Progress Update (since 6/28/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <td>#10 - User Story: Develop Computer Vision Model
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <tr>
+        <td>#135 - Convert PDF to images
+        </td>
+        <td>In Review
+        </td>
+    </tr>
+        <td>#126 - Create a docker container for the OMR
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <td>#132 - Add Borders to Image Preprocessing
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <td>#125 - Instructor Dashboard: Display classes
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <td>#124 - Instructor Dashboard: Display exams
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+</table> 
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - Successful integration of OMRChecker and containerization.
+  - Implemented Border integrategration within the OMR's preprocessing stage
+  - Efficient implementation of PDF to image conversion.
+  - Smooth updates to the Dashboard with accurate data display.
+
+- **What Was Done:**
+  - Added Dockerfile and modified docker-compose file.
+  - Integrated OMRChecker.
+  - Implemented PDF to image conversion.
+  - Implemented Image Preprocessing for Border implementation.
+  - Created Upload Exams page and updated relevant front-end components.
+  - Updated Dashboard to display classes and exams from the database.
+  - Labeled images and confirmed using Roboflow and YOLO for detecting question boxes (ended up not using it).
+
+- **What Didn't Go Well:**
+  - Minor issues with template schema adjustments and alignment.
+  - Initial errors with path handling in entry.py which required debugging.
+  - Minor issues with dependencies for the pdf to image conversion.
+  - Had to spend some time to get familiar with the open source code base for the OMR we're using.
+
+- **Retrospective:**
+  - This was probably one of my most productive weeks and I feel pretty accomplished to be honest I got a bunch of features to get over the line and me and Ahmed are making some good progress on the OMR.
+  - I am excited about the progress that was made this cycle and I look forward to implementing the OMR with the Backend and Frontend.
+  - Moving forward, we need to figure out :
+      - how to test the OMR, 
+      - connect the OMR to our backend
+      - handle big file uploads (we've been in discussion about that).
+      - use QR code for pages perhaps
+      - assign pages to corresponding students
+
+  ### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **OMR:**
+   - Work on creating standard bubble sheet using a UI to create json templates.
+
+2. **Connect OMR to Backend**
+
+3. **Handle Big File Uploads:**
+
+4. **Parse Student Information and Link it to the Corresponding Scan**
+
+5. **Get a Demo Working for the OMR with it integrated to the Backend and Frontend**
+
 ## Friday (6/26-6/28)
 
 ### Timesheet
@@ -62,6 +186,16 @@ Clockify report
 - **Retrospective:**
   - Backend implementation for Auth0 is progressing well
   - Continued efforts on OMR with promising advancements
+
+  ### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **OMR:**
+   - Work on implementing features for exam creation and Optical Mark Recognition (OMR).
+
+2. **Correct some features on the instructor Dashboard:**
+   - Implement role-based authentication to manage different user types.
+
+
 ## Wednesday (6/20- 6/26)
 
 ### Timesheet
