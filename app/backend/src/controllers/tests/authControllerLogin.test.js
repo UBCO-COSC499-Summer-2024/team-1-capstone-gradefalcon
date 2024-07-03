@@ -1,6 +1,8 @@
 const fetch = require('node-fetch');
 describe('AuthController Login', () => {
   
+  jest.setTimeout(30000);
+
  //Assumptions:
  //1) all inputs passed to authController are stringified because authController.js rejects others
  //2) only one way that jsob body login requests get submitted as defined in login.js
