@@ -1,6 +1,64 @@
 
 # Personal Log
 
+## Wednesday (29/6 - 2/7)
+
+### Timesheet 
+
+clockify report 
+
+![Time8](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/fe949799-abc5-4605-b96f-7f699fd7d38e)
+
+
+
+### Current Tasks (Provide Details):
+- #1: Front End Testing of the student view 
+- #2: Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhnaced look altogether
+- #3: Grade Report for students using charts
+
+
+  
+### Progress Update (since 29/6/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn components 
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Data Visualization #16 ( Starting off after some research on the same)
+        </td>
+        <!-- Status -->
+        <td>Completed 
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Grade Report for students using charts
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+After getting back on track after the missed work due to the final, I managed to complete the data visualization issue to make charts on the instructor dashboard to get performance insights and my PR for the same is under progress as I write and submit this log. Now , I will be taking over the grade report to be created for the students using charts for the courses enrolled. While I was working on revamping the dashboard, I ai to first complete the assigned issues and features that need to be completed for the MVP mini presentation.
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Data Visualization - creating grade report for students
+- Enhancing the front end UI using Shad cn - to be complete by the next cycle
+
 
 ## Friday (26/6 - 28/6)
 
@@ -20,7 +78,7 @@ clockify report
 
 
   
-### Progress Update (since 6/5/2024) 
+### Progress Update (since 26/6/2024) 
 <table>
    <tr>
         <td><strong>TASK/ISSUE #</strong>
@@ -80,7 +138,7 @@ clockify report
 
 
   
-### Progress Update (since 6/5/2024) 
+### Progress Update (since 22/6/2024) 
 <table>
    <tr>
         <td><strong>TASK/ISSUE #</strong>
@@ -151,7 +209,7 @@ clockify report
 
 
   
-### Progress Update (since 6/5/2024) 
+### Progress Update (since 19/6/2024) 
 <table>
    <tr>
         <td><strong>TASK/ISSUE #</strong>
@@ -219,7 +277,7 @@ clockify report
 
 
   
-### Progress Update (since 6/5/2024) 
+### Progress Update (since 15/6/2024) 
 <table>
    <tr>
         <td><strong>TASK/ISSUE #</strong>
@@ -277,7 +335,7 @@ clockify report
 
 
   
-### Progress Update (since 6/5/2024) 
+### Progress Update (since 12/6/2024) 
 <table>
    <tr>
         <td><strong>TASK/ISSUE #</strong>
@@ -331,7 +389,7 @@ clockify report
 
 
   
-### Progress Update (since 6/5/2024) 
+### Progress Update (since 7/6/2024) 
 <table>
     <tr>
         <td><strong>TASK/ISSUE #</strong>
