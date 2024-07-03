@@ -1,7 +1,7 @@
 import "../../css/App.css";
 import React, { useEffect, useState } from "react";
-import StandardAverageChart from "./StandardAverageChart";
-import PerformanceBarChart from "./PerformanceBarChart";
+import StandardAverageChart from "../../components/StandardAverageChart";
+import PerformanceBarChart from "../../components/PerformanceBarChart";
 
 const Dashboard = () => {
   const [userName, setUserName] = useState("");
