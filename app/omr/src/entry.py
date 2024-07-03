@@ -220,8 +220,6 @@ def process_files(
     STATS.files_not_moved = 0
 
     for file_path in omr_files:
-        file_path = Path(file_path)  # Ensure file_path is a Path object
-
         # Check if the file is a PDF and convert to images
         if file_path.suffix.lower() == '.pdf':
             output_folder = file_path.parent.joinpath("converted_images")
@@ -334,7 +332,7 @@ def process_files(
                 index=False,
             )
         else:
-            # multi-marked file
+            # multi_marked file
             logger.info(f"[{files_counter}] Found multi-marked file: '{file_id}'")
             new_file_path = outputs_namespace.paths.multi_marked_dir.joinpath(file_name)
             if check_and_move(
