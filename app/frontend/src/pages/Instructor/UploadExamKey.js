@@ -4,6 +4,7 @@ import "../../css/UploadExam.css";
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
+  const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -12,6 +13,7 @@ const UploadExamKey = () => {
       if (file && file.type === "application/pdf") {
         const fileURL = URL.createObjectURL(file);
         setFileURL(fileURL);
+        setFile(file);
       }
     };
 
@@ -28,43 +30,30 @@ const UploadExamKey = () => {
     fileInputRef.current.value = "";
   };
 
-  const uploadFileToBackend = async () => {
-    if (!fileURL) {
-      alert("No file selected");
-      return;
-    }
+  const sendToBackend = async () => {
+    if (!file) return;
 
-    // Assuming you have the file stored in state after selection
-    const fileInput = fileInputRef.current;
-    const file = fileInput.files[0];
-
-    // Create FormData and append the file
     const formData = new FormData();
-    formData.append("examKey", file); // 'file' is the key your backend expects
+    formData.append("examKey", file);
 
     try {
-      // Replace 'your-backend-endpoint' with the actual endpoint
-      const response = await fetch("saveExamKey", {
+      const response = await fetch("/api/exam/saveExamKey", {
         method: "POST",
         body: formData,
-        // Do not set content-type header for FormData
-        // The browser will set it with the proper boundary
       });
-
-      if (!response.ok) {
-        throw new Error("File upload failed");
+      console.log(response);
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        // Handle success, maybe redirect or show a success message
+        // navigate("/ExamControls");
+      } else {
+        console.error("Failed to save questions");
       }
-
-      const result = await response.json();
-      console.log("File uploaded successfully:", result);
-      // Handle success scenario (e.g., showing a success message)
     } catch (error) {
-      console.error("Error uploading file:", error);
-      // Handle error scenario (e.g., showing an error message)
+      console.error("Error:", error);
     }
   };
-
-  // Add this function call to an event handler, like an 'Upload' button click
 
   return (
     <>
@@ -77,9 +66,7 @@ const UploadExamKey = () => {
             <button
               className="back-button"
               onClick={() => window.history.back()}
-            >
-              &larr;
-            </button>
+            ></button>
             <h3>Upload the exam answer key as a PDF file.</h3>
             <div
               className="upload-area"
@@ -105,6 +92,10 @@ const UploadExamKey = () => {
             >
               <iframe src={fileURL} title="PDF Preview"></iframe>
             </div>
+            {/* This send button is for testing right now. Will need to make it so it redirects */}
+            <button className="btn btn-import" onClick={sendToBackend}>
+              Send
+            </button>
             <button className="btn btn-import" onClick={resetUpload}>
               Import
             </button>
