@@ -5,7 +5,7 @@ Here's the updated weekly log template incorporating the information from the is
 
 ### Timesheet
 Clockify report
-![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/b8d2f420a3980b8539ba8ff39dca16c96dc97e90/docs/weekly_logs/Clockify/Omar/Time8.png)
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/7174d979e38aeaffd31df34d55617581c24131c3/docs/weekly_logs/Clockify/Omar/Time9.png)
 
 ### Current Tasks (Provide sufficient detail)
 
