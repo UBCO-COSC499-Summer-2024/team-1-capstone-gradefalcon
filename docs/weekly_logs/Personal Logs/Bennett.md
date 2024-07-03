@@ -1,5 +1,52 @@
 # Personal Log
 
+## Wednessday (6/28 - 6/03)
+
+## TimeSheet
+Clockify report
+![alt text](../Clockify/Bennett/06_28_2024-07_03_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Impliment Backend testing
+  * #2: Create additional backend testing for new features
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>2
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * The login testing went well and was more straightforward (took too long), it also revealed that more backend verification of input is required for all features and will be something to watch out for in the future. What went really bad was efficiency, in the 34 hours this cycle I should have been able to complete all backend testing for all current features, all things considered thus cycle was a failure in terms of what I should have been able to accomplish. My unfamiliarity with the backend made testing incredible difficult to impliment and errors hard to decypher, the only good news is that all future backend tests should be written much much faster.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * By friday I wish for all currently implimented features to have fully flushed out and comprehensive frontend, backend and end to end testing with real database connections where applicable and some mocking where it will not comprimise the quality of the test 
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Personal Log
+
 ## Wednessday (6/26 - 6/28)
 
 ## TimeSheet
