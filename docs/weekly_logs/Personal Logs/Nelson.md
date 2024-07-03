@@ -1,3 +1,53 @@
+## Wednesday (29/6- 3/7)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/july3_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Configuring Drone CI on AWS Server
+  * #2: Setting up File Storage On AWS server
+  * #3: Creating Upload PDF to AWS Server
+
+### Progress Update (since 6/18/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Configuring Drone CI on AWS Server
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Setting up File Storage On AWS server
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Creating Upload PDF to AWS Server
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+This week, I made significant progress despite initial setbacks. I successfully set up and configured Drone CI on the AWS server, overcoming challenges with TCP, SSH, and other network settings that were blocking access. With these issues resolved, I am now waiting for access to the GitHub repository. Additionally, I began creating storage space on the AWS server for uploading the 200-page PDFs of exams and started writing the necessary code for this functionality. Overall I feel like I have started to pick up the pace again but I would like to do more still.
+
 ## Wednesday (26/6- 28/6)
 
 ### Timesheet
