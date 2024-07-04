@@ -48,7 +48,7 @@ const ConfirmExamKey = (props) => {
       <div className="App">
         <div className="main-content">
           <header>
-            <h2>Review CSV Data</h2>
+            <h2>Review Answer Key</h2>
             <h2>{examTitle}</h2>
           </header>
           <section className="review-csv">

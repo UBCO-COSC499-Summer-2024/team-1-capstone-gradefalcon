@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../../css/App.css";
 import "../../css/UploadExam.css";
+import { useNavigate } from "react-router-dom";
+
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleFileSelect = (event) => {
@@ -42,11 +45,18 @@ const UploadExamKey = () => {
         body: formData,
       });
       console.log(response);
+      const responseBody = await response.text(); // Get the response body as text
+      console.log('Response status:', response.status);
+      console.log('Response body:', responseBody);
+      
       if (response.ok) {
         const data = await response.json();
         console.log(data);
         // Handle success, maybe redirect or show a success message
-        // navigate("/ExamControls");
+
+        // Navigate to the review page after successful upload
+        console.log("Navigating to confirm-exam-key with state:", { examTitle: "Your Exam Title", classID: "Your Class ID" });
+        navigate("/ConfirmExamKey", { state: { examTitle: "Your Exam Title", classID: "Your Class ID" } });
       } else {
         console.error("Failed to save questions");
       }
@@ -93,15 +103,15 @@ const UploadExamKey = () => {
               <iframe src={fileURL} title="PDF Preview"></iframe>
             </div>
             {/* This send button is for testing right now. Will need to make it so it redirects */}
-            <button className="btn btn-import" onClick={sendToBackend}>
-              Send
+            <button className="btn-import" onClick={sendToBackend}>
+             Import
             </button>
-            <button className="btn btn-import" onClick={resetUpload}>
-              Import
+            <button className="btn-confirm" onClick={resetUpload}>
+              Reset
             </button>
-            <a href="/ExamControls" className="btn-confirm">
+            {/* <a href="/ExamControls" className="btn-confirm">
               Confirm
-            </a>
+            </a> */}
           </section>
         </div>
       </div>
