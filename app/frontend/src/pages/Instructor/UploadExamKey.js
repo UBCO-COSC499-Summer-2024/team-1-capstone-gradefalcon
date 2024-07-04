@@ -50,13 +50,12 @@ const UploadExamKey = () => {
       console.log('Response body:', responseBody);
       
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
+        // const data = await response.json();
+        // console.log(data);
         // Handle success, maybe redirect or show a success message
 
         // Navigate to the review page after successful upload
-        console.log("Navigating to confirm-exam-key with state:", { examTitle: "Your Exam Title", classID: "Your Class ID" });
-        navigate("/ConfirmExamKey", { state: { examTitle: "Your Exam Title", classID: "Your Class ID" } });
+        navigate("/ConfirmExamKey");
       } else {
         console.error("Failed to save questions");
       }
