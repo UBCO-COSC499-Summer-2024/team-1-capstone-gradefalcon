@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation} from "react-router
 import "./css/App.css";
 import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
-
+import Logout from "./pages/Logout";
 // Import pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
@@ -35,7 +35,7 @@ import StudentGradeReport from "./pages/Student/StudentGradeReport";
 const Layout = ({ children }) => {
   const location = useLocation();
   const shouldDisplayNavBar =
-  location.pathname !== "/" && location.pathname !== "/*" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement";
+  location.pathname !== "/" && location.pathname !== "/*" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement" && location.pathname !== "/Logout";
 
   return (
     <>{shouldDisplayNavBar && <NavBar />}{children}</>
@@ -68,6 +68,7 @@ function App() {
             <Route path="/AdminDashboard" element={<ProtectedRoute> <AdminDashboard /></ProtectedRoute>}/>
             <Route path="/UserManagement" element={<ProtectedRoute><UserManagement /></ProtectedRoute>}/>
             <Route path="/Signup" element={<Signup />} />
+            <Route path="/Logout" element={<Logout/>} />
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/Classes" element={<Classes />} />
             <Route path="/New-Class" element={<NewClass />} />
