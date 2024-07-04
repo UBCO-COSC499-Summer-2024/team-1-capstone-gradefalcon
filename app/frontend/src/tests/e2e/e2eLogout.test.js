@@ -24,7 +24,7 @@ describe('E2E Logout Test', () => {
         await page.click('button[aria-label=login]');
         await page.waitForNavigation();
 
-        expect(page.url()).toContain(expectedRoleUrl);
+        expect(page.url()).toContain("/Dashboard"); //dashboard is the next step after logging in as an instructor
     };
 
     const logout = async () => {
@@ -32,7 +32,7 @@ describe('E2E Logout Test', () => {
 
         await page.waitForTimeout(1000); // Wait for the timeout to navigate
 
-        expect(page.url()).toBe('http://localhost:3000/');
+        expect(page.url()).toBe('http://localhost:3000/'); 
     };
 
     it('should log out instructor user and redirect to login', async () => {
