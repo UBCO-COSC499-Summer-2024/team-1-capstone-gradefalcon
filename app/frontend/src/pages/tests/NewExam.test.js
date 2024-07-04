@@ -9,7 +9,7 @@ describe('NewExam Component', () => {
   test('upload answer key button takes you to the correct location', () => {
     render(<BrowserRouter><NewExam /></BrowserRouter>);
     const uploadAnswerKeyButton = screen.getByTestId('upload-answer-key-btn');
-    expect(uploadAnswerKeyButton).toHaveAttribute('href', './UploadExamKey');
+    expect(uploadAnswerKeyButton).toHaveAttribute('href', '/UploadExamKey');
   });
   test('manually select answers button takes you to the correct location', () => {
     render(<BrowserRouter><NewExam /></BrowserRouter>);
