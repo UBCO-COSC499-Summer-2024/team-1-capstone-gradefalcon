@@ -61,7 +61,7 @@ const ExamBoard = () => {
                 {exams.map((exam, index) => (
                   <div key={index} className="exam-item">
                     <p>{exam}</p>
-                    <Link to="/UploadExams" className="grade-exam-btn">
+                    <Link to="/UploadExamKey" className="grade-exam-btn">
                       Grade Exam
                     </Link>
                   </div>
