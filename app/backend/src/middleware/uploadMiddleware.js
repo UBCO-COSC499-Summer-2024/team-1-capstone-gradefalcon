@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 // Destination directory
-const destinationDir = path.join("/code/lmaooo");
+const destinationDir = path.join("/code/uploads");
 
 // Ensure the destination directory exists
 const ensureDirExists = (dirPath) => {
