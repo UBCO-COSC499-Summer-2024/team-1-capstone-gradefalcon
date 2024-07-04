@@ -4,7 +4,7 @@ import "./css/App.css";
 import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
 
-//instructor pages
+// Import pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
 import Signup from "./pages/Signup";
@@ -20,7 +20,6 @@ import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
-import ConfirmExamKey from "./pages/Instructor/ConfirmExamKey";
 //admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
@@ -78,7 +77,6 @@ function App() {
             <Route path="/ExamControls" element={<ExamControls />} />
             <Route path="/ManualExamKey" element={<ManualExamKey />} />
             <Route path="/UploadExamKey" element={<UploadExamKey />} />
-            <Route path="/ConfirmExamKey" element={<ConfirmExamKey />} />
             <Route path="/UploadExams" element={<UploadExams />} />
             <Route path="/NotificationPreferences" element={<NotificationPreferences />} />
             <Route path="/StudentDashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />

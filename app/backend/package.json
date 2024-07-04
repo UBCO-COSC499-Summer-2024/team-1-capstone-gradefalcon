@@ -9,14 +9,14 @@
     "start": "node src/index.js",
     "start-watch": "nodemon src/index.js --inspect=0.0.0.0:9229",
     "start-wait-debuger": "nodemon src/index.js --inspect-brk=0.0.0.0:9229",
-    "test": "npx jest --config=jest.backend.config.js",
-    "test-watch": "nodemon --exec \"npm test\""
+    "test": "cross-env NODE_ENV=test PORT=8081 mocha --timeout 10000 --exit --inspect=0.0.0.0:9230",
+    "test-watch": "nodemon --exec \"npm test\"",
+    "test-wait-debuger": "cross-env NODE_ENV=test PORT=8081 mocha --no-timeouts --exit --inspect-brk=0.0.0.0:9230"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "connect-pg-simple": "^9.0.1",
-    "csv-parser": "^3.0.0",
     "express": "^4.17.1",
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
@@ -24,13 +24,13 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.10.0",
-    "node-fetch": "^2.7.0",
     "pg": "^8.12.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "cross-env": "^7.0.2",
-    "jest": "^27.5.1",
-    "nodemon": "^2.0.4",
-    "supertest": "^6.3.4"
+    "mocha": "^9.2.2",
+    "nodemon": "^2.0.4"
   }
 }

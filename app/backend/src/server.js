@@ -8,7 +8,6 @@ const pool = require('./utils/db');
 const authRoutes = require('./routes/authRoutes');
 const classRoutes = require('./routes/classRoutes');
 const userRoutes = require('./routes/userRoutes');
-const csvRoutes = require('./routes/csvRoutes');
 const examRoutes = require('./routes/examRoutes');
 
 const app = express();
@@ -38,7 +37,6 @@ app.use('/auth', authRoutes);
 app.use('/class', classRoutes);
 app.use('/exam', examRoutes);
 app.use('/users', userRoutes);
-app.use('/csv', csvRoutes);
 
 app.get('/healthz', (req, res) => {
   res.send('I am happy and healthy\n');
