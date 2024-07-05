@@ -17,5 +17,6 @@ module.exports = {
       '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
       '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$': '<rootDir>/__mocks__/fileMock.js',
     },
+    preset: 'jest-playwright-preset',
+    testMatch: ['**/tests/e2e/**/*.test.js'],
   };
-  
