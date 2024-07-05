@@ -25,7 +25,7 @@ services:
       - ./backend/package.json:/code/package.json
       - ./backend/package-lock.json:/code/package-lock.json
       - back-notused:/opt/app/node_modules
-      - omr-volume:/code
+      - omr-volume:/code/omr
     networks:
       - public
       - private
