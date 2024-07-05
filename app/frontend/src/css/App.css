@@ -61,7 +61,7 @@ nav ul li a:hover {
     margin-left: 250px;
     flex-grow: 1;
     padding: 20px;
-    background-color: #EDF2F7;
+    /* background-color: #EDF2F7; */
     overflow-y: auto;
     box-sizing: border-box;
 }
