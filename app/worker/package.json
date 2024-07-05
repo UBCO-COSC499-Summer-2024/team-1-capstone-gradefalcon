@@ -1,13 +1,16 @@
 {
-    "name": "worker",
-    "version": "1.0.0",
-    "description": "Worker service for processing tasks",
-    "main": "worker.js",
-    "scripts": {
-      "start": "node worker.js"
-    },
-    "dependencies": {
-      "amqplib": "^0.8.0"
-    }
-  }
-  
+  "name": "worker",
+  "version": "1.0.0",
+  "description": "Worker service to process OMR jobs",
+  "main": "worker.js",
+  "scripts": {
+    "start": "node worker.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.8.0",
+    "child_process": "^1.0.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

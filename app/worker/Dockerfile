@@ -1,10 +1,15 @@
-FROM node:14
+FROM node:lts
 
+# Create app directory
 WORKDIR /app
 
+# Install app dependencies
 COPY package.json ./
+COPY package-lock.json ./
 RUN npm install
 
-COPY worker.js ./
+# Bundle app sourcecd
+COPY . .
 
-CMD ["node", "worker.js"]
+# Command to run the worker
+CMD [ "node", "worker.js" ]
