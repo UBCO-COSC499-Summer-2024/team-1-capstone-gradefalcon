@@ -31,7 +31,7 @@ const Dashboard = () => {
 
     const fetchStandardAverageData = async () => {
       try {
-        const response = await fetch("/api/standard-average-data", {
+        const response = await fetch("/api/exam/standard-average-data", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -52,7 +52,7 @@ const Dashboard = () => {
 
     const fetchPerformanceData = async () => {
       try {
-        const response = await fetch("/api/performance-data", {
+        const response = await fetch("/api/exam/performance-data", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
