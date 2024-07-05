@@ -90,12 +90,15 @@ const login = async (req, res, next) => {
 
 // User logout controller
 const logout = (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return res.status(500).json({ message: "Logout failed" });
+try{ 
+  req.session.destroy();
+}
+  catch (err){ //this error should only be thrown if database is down or crippled
+      console.error('Error destroying session:', err);
+      return res.status(500).json({ message: "Logout failed due to server error" });
     }
-    res.json({ message: "Logout successful" });
-  });
+    return res.json({ message: "Logout successful" }); //implicitly returns status 200
+
 };
 
 const validateEmail = (email) => {
