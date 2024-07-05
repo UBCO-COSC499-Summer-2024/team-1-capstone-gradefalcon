@@ -1,5 +1,65 @@
 # Personal Log
 
+## Friday (7/03 - 7/05)
+
+## TimeSheet
+Clockify report
+![alt text](../Clockify/Bennett/07_03_2024-07_05_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Fix navigation bar glitch 
+  * #2: Impliment logout function with frontend, backend and e2e testing
+  * #3: expand on existing testing for frontend and backend for friday MVP
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>2
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>3
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * the navigation bar was a pain to fix because in a series of merges done over the last two weeks the CSS was split into many files(after I spent over a day centralizing it), and plugins that allowed JS files to grab CSS without those CSS files being explicitly imported were added, this caused 3 HTML justifications to cause the navBar glitch like a 3 way OR gate, removed them and gave the non nav bar pages direct CSS centering within the JS/HTML.
+
+  * Logout function had a backend template which was only slightly altered, since anyone who visits the app has a session even if it is null or empty I changed the logout function to explicitly destroy it no matter what, this should only throw an error if the server goes down in the middle of a logout, in such a case the session is destroyed anyway, created frontend testing for navigation, backend to verify possible situations where the logout function could be called making sure the session is reset/destroyed every time, and end to end testing verifying a login->logout->login cycle by using the playwright plugin to create real windows to run through the test data. The admin/student UI were incomplete and under development by team members so i didnt set it up or test those users, but I am 99% sure that the logout is compadible with all user types due to them using the same session system.
+  
+  * At this time it is thrusday night and I will be expanding the testing a much as possible before the MVP presentiation for tommorow and that will be my focus over the weekend, all new features comming from team members will provide their own testing, aside from special circumstances and code reveiws, no one will generate original testing files for others features.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * an immeanse amount of testing and then the account settings feature where a user can alter their account details within reason
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Personal Log
+
 ## Wednessday (6/28 - 6/03)
 
 ## TimeSheet
