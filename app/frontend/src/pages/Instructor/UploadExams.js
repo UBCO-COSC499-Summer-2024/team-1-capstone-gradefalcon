@@ -122,7 +122,7 @@ const UploadExams = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('folder', ''); // Specify the folder
+    formData.append('folder', 'computerScience/instructor/instructor/TEST100/uploadExam'); // Specify the folder
 
     try {
       const response = await axios.post('/api/upload/uploadExam', formData, {
