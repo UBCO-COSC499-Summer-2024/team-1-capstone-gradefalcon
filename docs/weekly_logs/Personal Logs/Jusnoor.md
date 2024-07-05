@@ -1,6 +1,76 @@
 
 # Personal Log
 
+## Friday ( 2/7 - 4/7 )
+
+### Timesheet 
+
+clockify report 
+
+
+![Time9](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/3fc1b13b-079e-46d1-857f-4006da4fb905)
+
+
+
+### Current Tasks (Provide Details):
+- #1: Grade Report for students - Enhancing the front end to change the layout 
+- #2: Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhnaced look altogether.
+- #4: User story : Student Result Viewing Options
+- #3: Front end testing - for Student 
+
+
+  
+### Progress Update (since 29/6/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Grade Report for students - Frontend enhancement
+        </td>
+        <!-- Status -->
+        <td>Completed 
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Grade Report for students - Backend retrieval of data
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td> User story : Student Result Viewing Options
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn components 
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+As moving forward from the last cycle , I completed the PR for the data visualization user story after getting a quick fix help from Nelson as well, to display the graphs for the instructor to get better results for performance insights. I decided to then take up on changing the grade report layout for the student as decided by the team together. I did the front end changes for the same and made a PR to get the layout approved by the team memebers and then moving forward after approval I will be working on retrieving the desired data from the back end. Side by side working on revamping the dashboard as well.
+
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Grade Report for students - Backend retrieval of data
+- User story : Student Result Viewing Options
+- Enhancing the front end UI using Shad cn - to be complete by the next cycle
+
 ## Wednesday (29/6 - 2/7)
 
 ### Timesheet 
