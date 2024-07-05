@@ -1,6 +1,50 @@
 # Personal Log
 Ahmad Saleem Mirza
 
+## Friday (July 3 - July 5)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/July3-5.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Save file in shared folder so that OMR can access it
+  * #2: Start OMR when called
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Save file in shared folder so that OMR can access it
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Start OMR when called
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>     
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Since last cycle I have managed to save the uploaded PDF to a specific directory so it can then be used by the OMR. However, due to everything beng in Docker containers and having their own isolated file structures, though the file is accessible by both the frontend and the backend it is not accessible from the OMR container. Howver, Omar has successfully gotten the OMR to convert files from pdfs to images so the OMR does work, but it's just a matter of having it detect that the file is in fact present.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Save file in shared folder so that OMR can access it
+
+
 ## Wednesday (June 28 - July 3)
 
 ### Timesheet
