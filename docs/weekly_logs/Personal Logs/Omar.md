@@ -4,7 +4,7 @@
 
 ### Timesheet
 Clockify report
-![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/7174d979e38aeaffd31df34d55617581c24131c3/docs/weekly_logs/Clockify/Omar/Time9.png)
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/4d0fd12e6453dc98a896fbff251148fcef360e4a/docs/weekly_logs/Clockify/Time10.png)
 
 ### Current Tasks (Provide sufficient detail)
 
