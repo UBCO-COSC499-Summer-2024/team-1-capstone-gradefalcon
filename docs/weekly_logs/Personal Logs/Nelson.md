@@ -1,3 +1,56 @@
+## Wednesday (3/7- 5/7)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/July5_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Finsihed Configuring Drone CI after repo Request approved
+  * #2: Create S3 Bucket, Accesss Keys and Policy Permissions
+  * #3: Write code frontend and backend code for uploadExam and uploadExamKey
+
+### Progress Update (since 6/18/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Finsihed Configuring Drone CI after repo Request approved
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Create S3 Bucket, Accesss Keys and Policy Permissions
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Write code frontend and backend code for uploadExam and uploadExamKey
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+This phase of the cycle felt particularly long. I focused on creating an S3 Bucket on AWS to enable file and image uploads on a separate server. This process involved generating access keys for users, crafting user permission policies, and configuring these keys and policies to align with environment variables. As this was a new and complex task for me, it resulted in a long, sleepless night, but I successfully got everything working and configured.
+
+Additionally, I implemented security measures on the bucket to control access and retrieval of files, akin to role-based authentication, though not fully implemented. Beyond that, I managed to set up Drone CI. My next step is to share this configuration with the team and demonstrate how it works.
+
+
+
 ## Wednesday (29/6- 3/7)
 
 ### Timesheet
