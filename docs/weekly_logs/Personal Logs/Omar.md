@@ -1,7 +1,102 @@
 # Personal Log
-Here's the updated weekly log template incorporating the information from the issues list and your progress:
 
-## Friday (6/28-7/02)
+## Wednesday (7/02-7/04)
+
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/4d0fd12e6453dc98a896fbff251148fcef360e4a/docs/weekly_logs/Clockify/Time10.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Parse and Confirm CSV from OMR**
+    1. Worked on creating a frontend that interprets the results of the csv from the OMR
+    2. Worked on implementing Backend functionality to parse csv from the omr
+2. **Develop a script to run OMR container when file has been uploaded**
+    1. Started working on developing a script to run the OMR container using RabbitMQ and a worker container
+2. **Worked on presentation**
+### Progress Update (since 6/28/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <td>#10 - User Story: Develop Computer Vision Model
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+        <tr>
+        <td>#143 - Parse and Confirm CSV from OMR
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <td> #149 - Develop a script to run OMR container when file has been uploaded
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <tr>
+        <td>#135 - Convert PDF to images
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+        <td>#126 - Create a docker container for the OMR
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <td>#132 - Add Borders to Image Preprocessing
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+</table> 
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - Did some good progress on the implementation of RabbitMQ although it needs to be evaluated.
+  - I finished the slides for the presentation.
+  - Made some progress on reading csv output from omr and sending it to the backend.
+
+- **What Was Done:**
+ - Created worker container and implemented RabbitMQ.
+  - Finished the presentation
+  - Worked reading csv output from omr and sending it to the backend.
+  - Prepared presentation
+  - Updated frontend for the uploadexamkey page and added a confirmexamkey page.
+
+- **What Didn't Go Well:**
+  - I was very sick and this has affected my productivity this cycle.
+  - We had to do a lot of back and forth between team members to agree on the folder structure for AWS and there was a lot of repetition in our discussion about
+    our approach to sending files between our backend and omr.
+  - Minor issues with dependencies the worker container.
+  - Had to spend some time to get familiar RabbitMQ.
+
+- **Retrospective:**
+  - This was a difficult cycle as I was sick and I was hoping to get more done for the demo.
+  - I look forward to having the confirmExamKey page working.
+
+  ### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **OMR:**
+   - Work on creating standard bubble sheet using a UI to create json templates.
+   - Run the OMR container using the worker and RabbitMQ.
+   - Integrate AWS into our structure.
+
+3. **Handle Big File Uploads:**
+
+4. **Parse Student Information and Link it to the Corresponding Scan**
+
+## Wednesday (6/28-7/02)
 
 ### Timesheet
 Clockify report
