@@ -19,8 +19,8 @@ routes.post('/uploadExam', upload.single('file'), async (req, res) => {
     // Save the file URL to the database (assuming you have this function)
     const fileUrl = result.Location;
     console.log(`File uploaded successfully to S3. URL: ${fileUrl}`);
-    await saveFileUrlToDatabase(fileUrl, folder); // Implement this function based on your database setup
-    res.json({ success: true, data: result });
+    // await saveFileUrlToDatabase(fileUrl, folder); // Implement this function based on your database setup
+    // res.json({ success: true, data: result });
   } catch (error) {
     console.error('Error uploading file:', error); // Log the error to the console
     res.status(500).json({ success: false, error: error.message });

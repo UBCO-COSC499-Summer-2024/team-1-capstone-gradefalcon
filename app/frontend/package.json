@@ -9,6 +9,7 @@
     "axios": "^1.7.2",
     "jest-puppeteer": "^10.0.1",
     "papaparse": "^5.4.1",
+    "playwright": "^1.45.1",
     "puppeteer": "^22.12.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
