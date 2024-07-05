@@ -1,4 +1,4 @@
-.create-new-btn {
+.create-new-btn, .grade-exam-btn {
     display: inline-block;
     background-color: #4CAF50;
     color: white;
@@ -11,7 +11,7 @@
     margin-bottom: 20px;
 }
 
-.create-new-btn:hover {
+.create-new-btn:hover, .grade-exam-btn:hover {
     background-color: #45a049;
 }
 

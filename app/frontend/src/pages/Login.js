@@ -44,6 +44,13 @@ const Login = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="container">
+      <style>
+        {`
+          body {
+            justify-content: center;
+          }
+        `}
+      </style>
         <div className="form-box">
           <div>
             <img src={logo} alt="Logo" className="logo"/>
@@ -59,6 +66,7 @@ const Login = () => {
                 className="input-box"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                aria-label="email"
                 required
               />
             </div>
@@ -69,10 +77,11 @@ const Login = () => {
                 className="input-box"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                aria-label="password"
                 required
               />
             </div>
-            <button type="submit" className="button">
+            <button type="submit" className="button" aria-label="login">
               Login
             </button>
           </div>

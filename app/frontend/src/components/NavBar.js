@@ -1,6 +1,5 @@
-
 import React from 'react';
-
+import '../css/App.css';
 export default function NavBar() {
     return (
         <div className="sidebar">
@@ -13,11 +12,6 @@ export default function NavBar() {
                         'li',
                         null,
                         React.createElement('a', { href: '/Dashboard' }, 'Dashboard')
-                    )}
-                    {React.createElement(
-                        'li',
-                        null,
-                        React.createElement('a', { href: '/Schedule' }, 'Schedule')
                     )}
                     {React.createElement(
                         'li',
