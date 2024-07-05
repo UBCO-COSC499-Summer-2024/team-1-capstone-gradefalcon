@@ -7,8 +7,6 @@ const ExamControls = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { classID, examTitle, questions, numQuestions } = location.state || {};
-  console.log(questions);
-
   const handleConfirm = async (event) => {
     event.preventDefault();
     try {
