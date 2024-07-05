@@ -27,7 +27,6 @@ services:
       - ./backend/package.json:/code/package.json
       - ./backend/package-lock.json:/code/package-lock.json
       - back-notused:/opt/app/node_modules
-      - omr-volume:/code/omr
     networks:
       - public
       - private
@@ -59,7 +58,6 @@ services:
     volumes:
       - ./frontend/src:/code/src
       - /code/node_modules
-      - omr-volume:/app/omr
     networks:
       - public
     depends_on:
@@ -67,14 +65,12 @@ services:
 
   omr:
     build:
-      context: ./omr # Specifies the directory where your Dockerfile is located
+      context: ./omr  # Specifies the directory where your Dockerfile is located
     environment:
       - OMR_CHECKER_CONTAINER=True
     volumes:
-      - ./omr/inputs:/app/inputs # Maps the local ./omr/inputs directory to /app/inputs in the container
-      - ./omr/outputs:/app/outputs # Maps the local ./omr/outputs directory to /app/outputs in the container
-      - ./omr:/app/omr
-      - omr-volume:/app
+      - ./omr/inputs:/app/inputs  # Maps the local ./omr/inputs directory to /app/inputs in the container
+      - ./omr/outputs:/app/outputs  # Maps the local ./omr/outputs directory to /app/outputs in the container
     networks:
       - public
     depends_on:
@@ -87,4 +83,3 @@ networks:
 volumes:
   back-notused:
   db-data:
-  omr-volume:
