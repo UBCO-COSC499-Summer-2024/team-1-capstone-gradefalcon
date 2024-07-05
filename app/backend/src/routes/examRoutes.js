@@ -4,7 +4,8 @@ const {
   newExam,
   examBoard,
 } = require("../controllers/examController");
-const { upload, executeDockerCp } = require("../middleware/uploadMiddleware");
+const { upload } = require("../middleware/uploadMiddleware");
+const { sendToQueue } = require("../controllers/examController");
 
 const router = express.Router();
 
@@ -15,10 +16,9 @@ router.post("/ExamBoard", examBoard);
 router.post("/saveExamKey", upload.single("examKey"), function (req, res) {
   console.log(req.file);
   res.send("File uploaded successfully");
-  const sourcePath = `app-backend-1:/code/uploads/${req.file.originalname}`;
-  const destinationPath = "./app/omr";
-  executeDockerCp(sourcePath, destinationPath);
-  console.log("File moved to OMR folder");
+  const filePath = `/app/omr/${req.file.originalname}`;
+  sendToQueue(filePath);
+  console.log("File path sent to queue");
 });
 
 module.exports = router;

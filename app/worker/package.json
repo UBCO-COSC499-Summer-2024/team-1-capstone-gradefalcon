@@ -1,0 +1,13 @@
+{
+    "name": "worker",
+    "version": "1.0.0",
+    "description": "Worker service for processing tasks",
+    "main": "worker.js",
+    "scripts": {
+      "start": "node worker.js"
+    },
+    "dependencies": {
+      "amqplib": "^0.8.0"
+    }
+  }
+  

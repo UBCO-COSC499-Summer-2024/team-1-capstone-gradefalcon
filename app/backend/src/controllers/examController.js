@@ -58,13 +58,28 @@ const examBoard = async (req, res, next) => {
   }
 };
 
-const examKey = async (req, res, next) => {
-  console.log(req.file);
-  res.send("File uploaded successfully");
-  const sourcePath = `app-backend-1:/code/uploads/${req.file.originalname}`;
-  const destinationPath = "./app/omr";
-  executeDockerCp(sourcePath, destinationPath);
-  console.log("File moved to OMR folder");
+const amqp = require('amqplib/callback_api');
+
+const sendToQueue = (filePath) => {
+  amqp.connect('amqp://rabbitmq', function(error0, connection) {
+    if (error0) {
+      throw error0;
+    }
+    connection.createChannel(function(error1, channel) {
+      if (error1) {
+        throw error1;
+      }
+      const queue = 'omr_queue';
+      const msg = JSON.stringify({ filePath });
+
+      channel.assertQueue(queue, {
+        durable: false
+      });
+
+      channel.sendToQueue(queue, Buffer.from(msg));
+      console.log(" [x] Sent %s", msg);
+    });
+  });
 };
 
-module.exports = { saveQuestions, newExam, examBoard };
+module.exports = { saveQuestions, newExam, examBoard, sendToQueue };

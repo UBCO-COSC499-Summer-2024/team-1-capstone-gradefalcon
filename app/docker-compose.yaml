@@ -5,7 +5,6 @@ services:
     build:
       args:
         - NODE_ENV=development
-        # - PORT=5001
       context: backend
       target: development
     command: npm run start-watch
@@ -17,7 +16,6 @@ services:
       - NODE_ENV=development
       - JWT_SECRET=secret
       - DATABASE_PORT=5432
-      # - PORT=5001
     ports:
       - 80:80
       - 9229:9229
@@ -33,6 +31,7 @@ services:
       - private
     depends_on:
       - db
+      - rabbitmq
 
   db:
     container_name: db-postgres
@@ -67,18 +66,37 @@ services:
 
   omr:
     build:
-      context: ./omr # Specifies the directory where your Dockerfile is located
+      context: ./omr
     environment:
       - OMR_CHECKER_CONTAINER=True
     volumes:
-      - ./omr/inputs:/app/inputs # Maps the local ./omr/inputs directory to /app/inputs in the container
-      - ./omr/outputs:/app/outputs # Maps the local ./omr/outputs directory to /app/outputs in the container
+      - ./omr/inputs:/app/inputs
+      - ./omr/outputs:/app/outputs
       - ./omr/inputs:/app/omr
       - omr-volume:/app
     networks:
       - public
     depends_on:
       - db
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - public
+
+  worker:
+    build:
+      context: ./worker
+    command: node worker.js
+    volumes:
+      - ./worker:/app
+    networks:
+      - public
+    depends_on:
+      - rabbitmq
 
 networks:
   public:
