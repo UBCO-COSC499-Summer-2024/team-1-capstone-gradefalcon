@@ -1,37 +1,27 @@
 const amqp = require('amqplib/callback_api');
-const { exec } = require('child_process');
 
-amqp.connect('amqp://rabbitmq', function(error0, connection) {
-  if (error0) {
-    throw error0;
-  }
-  connection.createChannel(function(error1, channel) {
-    if (error1) {
-      throw error1;
+const RABBITMQ_HOST = process.env.RABBITMQ_HOST || 'rabbitmq';
+const RABBITMQ_PORT = process.env.RABBITMQ_PORT || 5672;
+const RABBITMQ_URL = `amqp://${RABBITMQ_HOST}:${RABBITMQ_PORT}`;
+
+amqp.connect(RABBITMQ_URL, function(error0, connection) {
+    if (error0) {
+        throw error0;
     }
-    const queue = 'omr_queue';
-
-    channel.assertQueue(queue, {
-      durable: false
-    });
-
-    console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
-
-    channel.consume(queue, function(msg) {
-      const { filePath } = JSON.parse(msg.content.toString());
-      console.log(" [x] Received %s", filePath);
-
-      const command = `docker-compose run --rm omr python3 main.py --setLayout --input ${filePath}`;
-      exec(command, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Error executing OMR container: ${error}`);
-          return;
+    connection.createChannel(function(error1, channel) {
+        if (error1) {
+            throw error1;
         }
-        console.log(`stdout: ${stdout}`);
-        if (stderr) console.error(`stderr: ${stderr}`);
-      });
-    }, {
-      noAck: true
+        const queue = 'task_queue';
+
+        channel.assertQueue(queue, {
+            durable: true
+        });
+        console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
+        channel.consume(queue, function(msg) {
+            console.log(" [x] Received %s", msg.content.toString());
+        }, {
+            noAck: true
+        });
     });
-  });
 });

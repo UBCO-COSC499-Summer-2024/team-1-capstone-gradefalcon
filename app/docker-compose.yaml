@@ -77,24 +77,37 @@ services:
       - public
     depends_on:
       - db
-
+      
   rabbitmq:
     image: rabbitmq:3-management
+    command: rabbitmq-server
     ports:
       - "15672:15672"
       - "5672:5672"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "5672"]
+      interval: 5s
+      timeout: 15s
+      retries: 5
     networks:
-      - public
+      - rabbitmq_network
 
   worker:
-    build:
-      context: worker
-    networks:
-      - public
+    build: ./worker
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASS=guest
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      - rabbitmq_network
 
 networks:
+  rabbitmq_network:
   public:
   private:
 
