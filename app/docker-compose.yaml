@@ -73,7 +73,7 @@ services:
     volumes:
       - ./omr/inputs:/app/inputs # Maps the local ./omr/inputs directory to /app/inputs in the container
       - ./omr/outputs:/app/outputs # Maps the local ./omr/outputs directory to /app/outputs in the container
-      - ./omr/inputs:/app/omr
+      - ./omr:/app/omr
       - omr-volume:/app
     networks:
       - public

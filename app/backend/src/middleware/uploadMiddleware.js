@@ -4,7 +4,7 @@ const path = require("path");
 const { exec } = require("child_process"); // Import exec
 
 // Destination directory
-const destinationDir = path.join("/code/uploads");
+const destinationDir = path.join("/code/omr/inputs/100mcq_questions");
 
 // Ensure the destination directory exists
 const ensureDirExists = (dirPath) => {
