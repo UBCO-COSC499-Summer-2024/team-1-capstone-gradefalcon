@@ -63,33 +63,15 @@ services:
     depends_on:
       - backend
 
-  omr:
+  flaskomr:
     build:
-      context: ./omr  # Specifies the directory where your Dockerfile is located
+      context: ./omr  # Use the omr directory as the build context
     environment:
-      - OMR_CHECKER_CONTAINER=True
-    volumes:
-      - ./omr/inputs:/app/inputs  # Maps the local ./omr/inputs directory to /app/inputs in the container
-      - ./omr/outputs:/app/outputs  # Maps the local ./omr/outputs directory to /app/outputs in the container
+      - FLASK_ENV=development
+    ports:
+      - 5000:5000
     networks:
       - public
-    depends_on:
-      - db
-
-  flaskomr:
-    container_name: flask
-    build:
-      context: flask
-      target: builder
-    # flask requires SIGINT to stop gracefully
-    # (default stop signal from Compose is SIGTERM)
-    ports:
-      - 9091:9091
-    stop_signal: SIGINT
-    environment:
-      - FLASK_SERVER_PORT=9091
-    volumes:
-      - ./flask:/src
     depends_on:
       - backend
 

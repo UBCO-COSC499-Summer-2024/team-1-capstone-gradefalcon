@@ -1,19 +1,25 @@
-# from flask import Flask, request, jsonify
-# import cv2
-# import torch
-# import numpy as np
+from flask import Flask, request, jsonify
+import os
+import subprocess
 
-# app = Flask(__name__)
+app = Flask(__name__)
 
-# # Load YOLO model (example with YOLOv5)
-# model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
+@app.route('/process-omr', methods=['POST'])
+def process_omr():
+    file = request.files['file']
+    file_path = os.path.join('/app/inputs', file.filename)
+    file.save(file_path)
 
-# @app.route('/detect', methods=['POST'])
-# def detect():
-#     file = request.files['image']
-#     img = cv2.imdecode(np.frombuffer(file.read(), np.uint8), cv2.IMREAD_COLOR)
-#     results = model(img)
-#     return jsonify(results.pandas().xyxy[0].to_dict(orient="records"))
+    # Call the main.py script to process the OMR
+    process = subprocess.run(
+        ["python3", "main.py", "--inputDir", "/app/inputs/", "--outputDir", "/app/outputs/"],
+        capture_output=True, text=True
+    )
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000)
+    if process.returncode != 0:
+        return jsonify({"error": process.stderr}), 500
+
+    return jsonify({"message": "Processing complete", "output": process.stdout})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=9091)
