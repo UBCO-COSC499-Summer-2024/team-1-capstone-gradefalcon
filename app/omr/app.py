@@ -4,6 +4,10 @@ import subprocess
 
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    return 'Hello world!'
+
 @app.route('/process-omr', methods=['POST'])
 def process_omr():
     file = request.files['file']
@@ -21,5 +25,7 @@ def process_omr():
 
     return jsonify({"message": "Processing complete", "output": process.stdout})
 
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9091)
+    app.run(host='0.0.0.0', port=5000)

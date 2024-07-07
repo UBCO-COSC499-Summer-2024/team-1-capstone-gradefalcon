@@ -70,6 +70,8 @@ services:
       - FLASK_ENV=development
     ports:
       - 5000:5000
+    volumes:
+      - ./omr:/app
     networks:
       - public
     depends_on:
