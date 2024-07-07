@@ -1,31 +1,35 @@
 from flask import Flask, request, jsonify
-import os
 import subprocess
+import os
+import logging
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return 'Hello world!'
-
-@app.route('/process-omr', methods=['POST'])
+@app.route('/process', methods=['POST'])
 def process_omr():
-    file = request.files['file']
-    file_path = os.path.join('/app/inputs', file.filename)
-    file.save(file_path)
+    data = request.get_json()
+    file_path = data.get('filePath')
+    
+    if not file_path:
+        return jsonify({"error": "filePath is required"}), 400
 
-    # Call the main.py script to process the OMR
-    process = subprocess.run(
-        ["python3", "main.py", "--inputDir", "/app/inputs/", "--outputDir", "/app/outputs/"],
-        capture_output=True, text=True
-    )
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        return jsonify({"error": f"File not found: {file_path}"}), 404
 
-    if process.returncode != 0:
-        return jsonify({"error": process.stderr}), 500
-
-    return jsonify({"message": "Processing complete", "output": process.stdout})
-
-
+    try:
+        # Run the OMR processing script
+        result = subprocess.run(
+            ["python3", "main.py"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return jsonify({"output": result.stdout}), 200
+    except subprocess.CalledProcessError as e:
+        return jsonify({"error": str(e), "stderr": e.stderr}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
