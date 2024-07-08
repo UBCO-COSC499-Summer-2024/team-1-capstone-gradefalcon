@@ -5,6 +5,8 @@ const {
   examBoard,
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
+const fs = require('fs');
+const path = require('path');
 
 const router = express.Router();
 
@@ -15,7 +17,14 @@ router.post("/ExamBoard", examBoard);
 router.post("/saveExamKey", upload.single("examKey"), async function (req, res) {
   console.log(req.file);
   const filePath = `/code/omr/inputs`;
+  const templatePath = path.join(__dirname, '../assets/template.json'); // Adjust the path as necessary
+  const destinationTemplatePath = path.join(filePath, 'template.json');
+
   try {
+    // Copy template.json to the shared volume
+    fs.copyFileSync(templatePath, destinationTemplatePath);
+    console.log('Template.json copied successfully');
+
     const response = await fetch("http://flaskomr:5000/process", {
       method: "POST",
       headers: {

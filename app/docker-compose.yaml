@@ -73,7 +73,7 @@ services:
       - 5000:5000
     volumes:
       - omr-inputs:/code/omr/inputs
-      - omr-outputs:/app/outputs
+      - omr-outputs:/code/omr/outputs
     networks:
       - app-network
     # depends_on:

@@ -4,32 +4,39 @@ import os
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return "Flask OMR Service is running"
+
 @app.route('/process', methods=['POST'])
 def process_omr():
-    data = request.json
-    file_path = data['filePath']
+    input_dir = "code/omr/inputs"
+    out_dir = "code/omr/outputs"
     
-    # Extract the directory from the file path
-    input_dir = os.path.dirname(file_path)
-    
+    # Log the current directory structure for debugging
+    for root, dirs, files in os.walk("/code/omr"):
+        app.logger.info(f"Root: {root}, Dirs: {dirs}, Files: {files}")
+
     try:
         # Run the OMR processing script
         result = subprocess.run(
-            ["python3", "main.py", "--inputDir", input_dir, "--outputDir", "/app/outputs"],
+            ["python3", "main.py", "--inputDir", input_dir, "--outputDir", out_dir],
             capture_output=True,
             text=True,
             check=True
         )
 
-        # Check the output for any relevant information
-        output = result.stdout
-        errors = result.stderr
+        # Log the stdout and stderr for debugging
+        app.logger.info(f"OMR Script Output: {result.stdout}")
+        app.logger.info(f"OMR Script Errors: {result.stderr}")
 
-        return jsonify({"output": output, "errors": errors})
+        return jsonify({"output": result.stdout}), 200
 
     except subprocess.CalledProcessError as e:
+        app.logger.error(f"OMR Script CalledProcessError: {e}")
         return jsonify({"error": str(e), "output": e.stdout, "errors": e.stderr}), 500
     except Exception as e:
+        app.logger.error(f"OMR Script Exception: {e}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
