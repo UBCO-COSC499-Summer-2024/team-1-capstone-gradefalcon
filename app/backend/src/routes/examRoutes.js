@@ -12,36 +12,31 @@ router.post("/saveQuestions", saveQuestions);
 router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
 
-router.post(
-  "/saveExamKey",
-  upload.single("examKey"),
-  async function (req, res) {
-    console.log(req.file);
-    console.log(req.body.examTitle);
-    console.log(req.body.classID);
-    try {
-      const response = await fetch("http://flaskomr:5000/process", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          filePath: `/code/omr/inputs/${req.file.originalname}`,
-        }),
-      });
+router.post("/saveExamKey", upload.single("examKey"), async function (req, res) {
+  console.log(req.file);
+  const filePath = `/code/omr/inputs`;
+  try {
+    const response = await fetch("http://flaskomr:5000/process", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ filePath }),
+    });
 
-      if (!response.ok) {
-        throw new Error(`Error processing OMR: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log(result);
-      res.send("File uploaded and OMR processing completed successfully");
-    } catch (error) {
-      console.error("Error processing OMR:", error);
-      res.status(500).send("File uploaded but OMR processing failed");
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Error processing OMR: ${response.statusText} - ${errorText}`);
     }
+
+    const data = await response.json();
+    console.log("OMR Processed: ", data);
+    res.send("File uploaded and processed successfully");
+
+  } catch (error) {
+    console.error("Error processing OMR: ", error);
+    res.status(500).send(`Error processing OMR: ${error.message}`);
   }
-);
+});
 
 module.exports = router;
