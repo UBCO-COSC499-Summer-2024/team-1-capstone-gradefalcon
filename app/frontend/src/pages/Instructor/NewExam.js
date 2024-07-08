@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import '../../css/App.css';
+import "../../css/App.css";
 import "../../css/NewExam.css";
 
 const NewExam = () => {
@@ -48,13 +48,14 @@ const NewExam = () => {
 
               <label htmlFor="answer-key">Answer Key:</label>
               <div>
-                <a
-                  href="/UploadExamKey"
+                <Link
+                  to={isFormValid() ? "/UploadExamKey" : "#"}
+                  state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
                   className="btn"
                   data-testid="upload-answer-key-btn"
                 >
                   Upload Answer Key
-                </a>
+                </Link>
                 <Link
                   to={isFormValid() ? "/ManualExamKey" : "#"}
                   state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
@@ -68,7 +69,7 @@ const NewExam = () => {
           </section>
         </div>
       </div>
-          </>
+    </>
   );
 };
 

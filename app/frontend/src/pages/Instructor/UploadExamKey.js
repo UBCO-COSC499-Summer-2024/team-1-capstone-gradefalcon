@@ -1,14 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../../css/App.css";
 import "../../css/UploadExam.css";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { examTitle, classID } = location.state || {};
 
   useEffect(() => {
     const handleFileSelect = (event) => {
@@ -38,6 +39,8 @@ const UploadExamKey = () => {
 
     const formData = new FormData();
     formData.append("examKey", file);
+    formData.append("examTitle", examTitle);
+    formData.append("classID", classID);
 
     try {
       const response = await fetch("/api/exam/saveExamKey", {
@@ -46,9 +49,9 @@ const UploadExamKey = () => {
       });
       console.log(response);
       const responseBody = await response.text(); // Get the response body as text
-      console.log('Response status:', response.status);
-      console.log('Response body:', responseBody);
-      
+      console.log("Response status:", response.status);
+      console.log("Response body:", responseBody);
+
       if (response.ok) {
         // const data = await response.json();
         // console.log(data);
@@ -77,6 +80,7 @@ const UploadExamKey = () => {
               onClick={() => window.history.back()}
             ></button>
             <h3>Upload the exam answer key as a PDF file.</h3>
+            <h2>{examTitle}</h2>
             <div
               className="upload-area"
               style={{ display: fileURL ? "none" : "block" }}
@@ -103,7 +107,7 @@ const UploadExamKey = () => {
             </div>
             {/* This send button is for testing right now. Will need to make it so it redirects */}
             <button className="btn-import" onClick={sendToBackend}>
-             Import
+              Import
             </button>
             <button className="btn-confirm" onClick={resetUpload}>
               Reset
