@@ -1,9 +1,26 @@
 // src/Instructor/Dashboard.js
 import "../../css/App.css";
 import React, { useEffect, useState } from "react";
+import StandardAverageChart from "../../components/StandardAverageChart";
+import PerformanceBarChart from "../../components/PerformanceBarChart";
 
 const Dashboard = () => {
   const [userName, setUserName] = useState("");
+  const [courses, setCourses] = useState([]);
+  const [exams, setExams] = useState([]);
+  const [standardAverageData, setStandardAverageData] = useState([]);
+  const [performanceData, setPerformanceData] = useState([]);
+
+
+  const colors = ["#E9D8FD", "#FEEBC8", "#BEE3F8", "#C6F6D5"];
+  let colorIndex = 0;
+
+  const getNextColor = () => {
+    const color = colors[colorIndex];
+    colorIndex = (colorIndex + 1) % colors.length;
+    return color;
+  };
+
   useEffect(() => {
     const fetchSessionInfo = async () => {
       try {
@@ -25,7 +42,95 @@ const Dashboard = () => {
       }
     };
 
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("/api/class/classes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setCourses(data);
+        } else {
+          console.error("Failed to fetch courses");
+        }
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    const fetchExams = async () => {
+      try {
+        const response = await fetch("/api/exam/ExamBoard", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setExams(data.classes);
+        } else {
+          console.error("Failed to fetch exams");
+        }
+      } catch (error) {
+        console.error("Error fetching exams:", error);
+      }
+    };
+
+    const fetchStandardAverageData = async () => {
+      try {
+        const response = await fetch("/api/exam/standard-average-data", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Standard Average Data:", data); // Log the fetched data
+          setStandardAverageData(data);
+        } else {
+          console.error("Failed to fetch standard average data");
+        }
+      } catch (error) {
+        console.error("Error fetching standard average data:", error);
+      }
+    };
+
+    const fetchPerformanceData = async () => {
+      try {
+        const response = await fetch("/api/exam/performance-data", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Performance Data:", data); // Log the fetched data
+          setPerformanceData(data);
+        } else {
+          console.error("Failed to fetch performance data");
+        }
+      } catch (error) {
+        console.error("Error fetching performance data:", error);
+      }
+    };
+
+
+
     fetchSessionInfo();
+    fetchCourses();
+    fetchExams();
+    fetchStandardAverageData();
+    fetchPerformanceData();
   }, []);
 
   return (
@@ -104,13 +209,15 @@ const Dashboard = () => {
         </section>
         <section className="charts">
           <h3>Performance Charts</h3>
-          <div className="chart">
-            <h4>Title</h4>
-            {/* Chart content goes here */}
-          </div>
-          <div className="chart">
-            <h4>Title</h4>
-            {/* Chart content goes here */}
+          <div className="charts-container">
+            <div className="chart">
+              <h4>Standard Average Chart</h4>
+              <StandardAverageChart data={standardAverageData} />
+            </div>
+            <div className="chart">
+              <h4>Performance Bar Chart</h4>
+              <PerformanceBarChart data={performanceData} />
+            </div>
           </div>
         </section>
       </div>

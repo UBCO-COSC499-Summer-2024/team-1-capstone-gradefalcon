@@ -68,3 +68,44 @@ const examKey = async (req, res, next) => {
 };
 
 module.exports = { saveQuestions, newExam, examBoard };
+// New function to get standard average data
+const getStandardAverageData = async (req, res, next) => {
+  const instructorId = req.session.userId;
+  try {
+    const standardAverageData = await pool.query(`
+      SELECT e.exam_title AS "examTitle", AVG(sr.grade) AS "averageScore"
+      FROM studentResults sr
+      JOIN exam e ON sr.exam_id = e.exam_id
+      JOIN classes c ON e.class_id = c.class_id
+      WHERE c.instructor_id = $1
+      GROUP BY e.exam_title
+      ORDER BY e.exam_title
+    `, [instructorId]);
+
+    res.json(standardAverageData.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// New function to get performance data
+const getPerformanceData = async (req, res, next) => {
+  const instructorId = req.session.userId;
+  try {
+    const performanceData = await pool.query(`
+      SELECT c.course_name AS "courseName", AVG(sr.grade) AS "averageScore"
+      FROM studentResults sr
+      JOIN exam e ON sr.exam_id = e.exam_id
+      JOIN classes c ON e.class_id = c.class_id
+      WHERE c.instructor_id = $1
+      GROUP BY c.course_name
+      ORDER BY c.course_name
+    `, [instructorId]);
+
+    res.json(performanceData.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { saveQuestions, newExam, examBoard, getStandardAverageData, getPerformanceData  };

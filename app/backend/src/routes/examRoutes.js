@@ -13,6 +13,8 @@ const router = express.Router();
 router.post("/saveQuestions", saveQuestions);
 router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
+router.get('/standard-average-data', getStandardAverageData);
+router.get('/performance-data', getPerformanceData);
 
 router.post("/saveExamKey", upload.single("examKey"), async function (req, res) {
   console.log(req.file);
