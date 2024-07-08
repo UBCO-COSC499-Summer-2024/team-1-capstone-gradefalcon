@@ -8,13 +8,15 @@ app = Flask(__name__)
 def home():
     return "Flask OMR Service is running"
 
+
 @app.route('/process', methods=['POST'])
 def process_omr():
-    input_dir = "code/omr/inputs"
-    out_dir = "code/omr/outputs"
+    print(app.root_path)
+    input_dir = "./inputs"
+    out_dir = "./outputs"
     
     # Log the current directory structure for debugging
-    for root, dirs, files in os.walk("/code/omr"):
+    for root, dirs, files in os.walk("/omr"):
         app.logger.info(f"Root: {root}, Dirs: {dirs}, Files: {files}")
 
     try:
