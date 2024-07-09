@@ -23,7 +23,7 @@ const ConfirmExamKey = (props) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   const sampleQuestionsAndAnswers = {
-    1: "A",
+    1: "D",
     2: "B",
     3: "C",
     4: "D",
@@ -41,7 +41,7 @@ const ConfirmExamKey = (props) => {
           setFields(getFilledQs(data));
           setNumQuestions(getQuestionCount(getFilledQs(data)));
           console.log(getFilledQs(data));
-          // clickAnswersForQuestions(Object.entries(getFilledQs(data)));
+          toggleQuestionAnswer(1, "E"); // bug fix, still selects the correct option
           clickAnswersForQuestions(getFilledQs(data));
         },
         header: true, // Set to true if your data has column headers
