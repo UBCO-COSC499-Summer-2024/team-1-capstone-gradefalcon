@@ -6,10 +6,12 @@
     "@testing-library/jest-dom": "6.4.6",
     "@testing-library/react": "16.0.0",
     "@testing-library/user-event": "14.5.2",
+    "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "jest-puppeteer": "^10.0.1",
     "papaparse": "^5.4.1",
     "playwright": "^1.45.1",
+    "postcss": "^8.4.39",
     "puppeteer": "^22.12.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -53,6 +55,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
     "jest-fetch-mock": "^3.0.3",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "tailwindcss": "^3.4.4"
   }
 }
