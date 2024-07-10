@@ -6,6 +6,7 @@ import ListClasses from "../../components/ListClasses";
 
 const Classes = () => {
   return (
+    <>
     <div className="App">
       <div className="main-content">
         <header>
@@ -27,6 +28,7 @@ const Classes = () => {
         </section>
       </div>
     </div>
+    </>
   );
 };
 
