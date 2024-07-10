@@ -18,29 +18,8 @@ router.post("/ExamBoard", examBoard);
 router.get("/standard-average-data", getStandardAverageData);
 router.get("/performance-data", getPerformanceData);
 
-//copy Json
-const copyTemplateJson = async () => {
-  const templatePath = path.join(__dirname, "../assets/template.json");
-  const destinationPath = path.join("/code/omr/inputs/template.json");
-
-  try {
-    await fs.promises.copyFile(templatePath, destinationPath);
-    console.log("Template.json copied successfully");
-  } catch (error) {
-    console.error("Error copying template.json: ", error);
-    throw new Error(`Error copying template.json: ${error.message}`);
-  }
-};
-
   
 router.post("/saveExamKey", upload.single("examKey"), async function (req, res) {
-  try {
-    await copyTemplateJson();
-    res.status(200).send("JSON template copied successfully");
-  } catch (error) {
-    res.status(500).send(`Error copying JSON template: ${error.message}`);
-  }
-
     try {
 
       const response = await fetch("http://flaskomr:5000/process", {

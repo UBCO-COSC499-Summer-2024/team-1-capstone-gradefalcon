@@ -43,21 +43,20 @@ const UploadExamKey = () => {
     formData.append("classID", classID);
 
     try {
-      const response = await fetch("/api/exam/saveExamKey", {
+      
+      // upload the exam key
+      const saveResponse = await fetch("/api/exam/saveExamKey", {
         method: "POST",
         body: formData,
       });
-      console.log(response);
-      const responseBody = await response.text(); // Get the response body as text
-      console.log("Response status:", response.status);
+
+      console.log(saveResponse);
+      const responseBody = await saveResponse.text(); // Get the response body as text
+      console.log("Response status:", saveResponse.status);
       console.log("Response body:", responseBody);
 
-      if (response.ok) {
-        // const data = await response.json();
-        // console.log(data);
+      if (saveResponse.ok) {
         // Handle success, maybe redirect or show a success message
-
-        // Navigate to the review page after successful upload
         navigate("/ConfirmExamKey");
       } else {
         console.error("Failed to save questions");
@@ -65,7 +64,8 @@ const UploadExamKey = () => {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
+
+};
 
   return (
     <>
