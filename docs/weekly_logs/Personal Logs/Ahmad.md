@@ -1,6 +1,58 @@
 # Personal Log
 Ahmad Saleem Mirza
 
+## Friday (July 5 - 10)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/July5-10.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Using OMR to scan uploaded solution key
+  * #2: Allowing the teacher to confirm the solution
+  * #3: Saving answers to database
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Calling OMR to scan uploaded solution key
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Allowing the teacher to confirm the solution
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Saving answers to database
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>     
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Our OMR successfully scans the page and returns a csv file as a result that contains all the selected MCQ options. However, there is a still a bug causing an Internal Server Error 500 with our proxy server. Both myself and Omar have tried getting this to work but to no avail, and to that end will be consulting either Dr. Fazackerley or a TA about it. In the meanwhile, I began and have nearly finished the next part of the solution uploading pipeline. I have created a fully functional setup for reading the csv result file and using that to automatically determine both the number of questions and which answers have been selected. We then use these parameters to fill in a bubble grid which serves as visual verification for the instructor to check whether the answers are correct. The answers are subsequently saved to the database. The only thing left in this process is automatically grabbing the scanned csv file, which I am halfway through.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Calling the OMR to scan the uploaded key and then automatically grabbing the generated solution key csv file
+
 ## Friday (July 3 - July 5)
 
 ### Timesheet
