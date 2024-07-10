@@ -92,7 +92,7 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("Standard Average Data:", data); // Log the fetched data
+          //console.log("Standard Average Data:", data); // Log for debugging
           setStandardAverageData(data);
         } else {
           console.error("Failed to fetch standard average data");
@@ -113,7 +113,7 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("Performance Data:", data); // Log the fetched data
+          //console.log("Performance Data:", data); // Log for debugging
           setPerformanceData(data);
         } else {
           console.error("Failed to fetch performance data");
