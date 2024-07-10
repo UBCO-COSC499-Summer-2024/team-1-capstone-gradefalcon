@@ -1,7 +1,7 @@
 
 # Personal Log
 
-## Friday ( 6/7 - 9/7 )
+## Wednesday ( 6/7 - 9/7 )
 
 ### Timesheet 
 
