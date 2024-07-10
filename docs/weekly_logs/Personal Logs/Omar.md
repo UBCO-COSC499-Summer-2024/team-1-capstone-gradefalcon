@@ -1,6 +1,88 @@
 # Personal Log
+## Wednesday (7/04-7/09)
 
-## Wednesday (7/02-7/04)
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/74c7bdaa38ccc39d052e1e2d40e5b6309a3d5c0a/docs/weekly_logs/Clockify/Omar/Time11.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Parse and Confirm CSV from OMR**
+    1. Worked on sending files to shared volume and then sending the output back to a shared volume to which the backend has access
+2. **Integrate Flask Service to Trigger OMR Processing on File Upload**
+    1. Worked on setting up Flask app and running our OMR script when the shared volume receives the pdf file
+    2. Modified the shared volume, added json to be sent alongside pdf.
+
+3. **Refactor UI Using shadcn UI Components**
+    1. Set up the frontend to use shadcn UI components.
+    2. made new installations and added tailwin css.
+### Progress Update (since 6/28/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <td>#10 - User Story: Develop Computer Vision Model
+        </td>
+        <td>Complete
+        </td>
+    </tr>
+        <tr>
+        <td>#143 - Parse and Confirm CSV from OMR
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <td> #161- Integrate Flask Service to Trigger OMR Processing on File Upload
+        </td>
+        <td>In Review
+        </td>
+    </tr>
+    <tr>
+        <tr>
+        <td>#80-Refactor UI Using shadcn UI Components
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+</table> 
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - The flask API call works and the shared volume is being accessed by both containers
+
+- **What Was Done:**
+ - Flask app is functional
+  - Shared volumes are functional
+  - Json file send alongside pdf
+  - Set up shadcn dependencies and necessary libraries to use components.
+
+- **What Didn't Go Well:**
+  - Debugging the shared volumes took too much time.
+  - We're having a proxy error on our frontend container which I could not solve.
+  - We have to give up on the idea of using AWS.
+  - Setting up shadcn dependencies took longer than expected.
+- **Retrospective:**
+  - The flask app is working properly and as expected withtout the need to restart the container, we found a good solution to our initial problem from last week.
+
+  ### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **Parse and Confirm CSV from OMR**
+   - Work on creating standard bubble sheet using a UI to create json templates.
+   - Work in the confirmexamkey page.
+   - Work on parsing file names and storing them.
+
+2. **Handle Big File Uploads:**
+
+3. **Parse Student Information and Link it to the Corresponding Scan**
+
+
+## Friday (7/02-7/04)
 
 ### Timesheet
 Clockify report
