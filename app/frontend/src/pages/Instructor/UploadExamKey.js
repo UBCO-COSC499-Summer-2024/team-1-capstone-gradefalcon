@@ -51,12 +51,10 @@ const UploadExamKey = () => {
       const responseBody = await response.text(); // Get the response body as text
       console.log("Response status:", response.status);
       console.log("Response body:", responseBody);
-
       if (response.ok) {
         // const data = await response.json();
         // console.log(data);
         // Handle success, maybe redirect or show a success message
-
         // Navigate to the review page after successful upload
         navigate("/ConfirmExamKey");
       } else {

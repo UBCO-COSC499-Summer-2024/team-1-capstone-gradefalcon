@@ -9,6 +9,7 @@ const {
 const { upload } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
 const path = require("path");
+const csv = require("csv-parser");
 
 const router = express.Router();
 
@@ -17,6 +18,18 @@ router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
 router.get("/standard-average-data", getStandardAverageData);
 router.get("/performance-data", getPerformanceData);
+
+router.get("/download-csv", async function (req, res) {
+  // need to modify this to make the path dynamic
+  const filePath = path.join(__dirname, "../../omr/outputs/test.csv");
+
+  fs.createReadStream(filePath)
+    .pipe(csv())
+    .on("data", (data) => {
+      console.log(data);
+      res.json({ csv_file: data });
+    });
+});
 
 router.post(
   "/saveExamKey",

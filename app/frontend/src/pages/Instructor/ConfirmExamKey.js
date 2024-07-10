@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Papa from "papaparse";
 import { useLocation, Link } from "react-router-dom";
 import "../../css/App.css";
 import "../../css/ManualExamKey.css";
-
-const allowedExtensions = ["csv"];
 
 const ConfirmExamKey = (props) => {
   const location = useLocation();
@@ -20,33 +17,26 @@ const ConfirmExamKey = (props) => {
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(5);
   const [numMarks, setNumMarks] = useState(10);
-  const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const sampleQuestionsAndAnswers = {
-    1: "D",
-    2: "B",
-    3: "C",
-    4: "D",
-    5: "E",
-  };
+  const downloadCsv = async () => {
+    const response = await fetch("/api/exam/download-csv", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+    console.log(response);
 
-    if (file) {
-      Papa.parse(file, {
-        complete: (result) => {
-          let data = result.data[0];
-          console.log("Parsed Result:", data);
-          setFields(getFilledQs(data));
-          setNumQuestions(getQuestionCount(getFilledQs(data)));
-          console.log(getFilledQs(data));
-          toggleQuestionAnswer(1, "E"); // bug fix, still selects the correct option
-          clickAnswersForQuestions(getFilledQs(data));
-        },
-        header: true, // Set to true if your data has column headers
-      });
-    }
+    const data = await response.json();
+    const dataCsv = data.csv_file;
+    console.log(dataCsv);
+    setFields(getFilledQs(dataCsv));
+    setNumQuestions(getQuestionCount(getFilledQs(dataCsv)));
+    console.log(getFilledQs(dataCsv));
+    toggleQuestionAnswer(1, "E"); // bug fix, still selects the correct option
+    clickAnswersForQuestions(getFilledQs(dataCsv));
   };
 
   function clickAnswersForQuestions(questionsAndAnswers) {
@@ -157,6 +147,10 @@ const ConfirmExamKey = (props) => {
     updateQuestions();
   }, [numQuestions, numOptions, updateQuestions]);
 
+  useEffect(() => {
+    downloadCsv();
+  }, []);
+
   return (
     <>
       <div className="App">
@@ -175,7 +169,7 @@ const ConfirmExamKey = (props) => {
 
             <h3>Questions</h3>
             <p>*The following details will be printed on the exam*</p>
-
+            {/* <button onClick={downloadCsv}>Download CSV</button> */}
             <form>
               <label htmlFor="num-questions">#Questions:</label>
               <input
@@ -215,8 +209,6 @@ const ConfirmExamKey = (props) => {
                 min="1"
                 data-testid="num-marks-input"
               />
-
-              <input type="file" accept=".csv" onChange={handleFileChange} />
 
               <div className="nested-window">
                 <div className="bubble-grid" data-testid="bubble-grid"></div>
