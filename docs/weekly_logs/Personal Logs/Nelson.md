@@ -1,3 +1,54 @@
+## Wednesday (6/7- 10/7)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/july10_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Implementing RBAC Passports
+  * #2: Writing Account seetting plus test
+  * #3: More implementation of AWS File Upload and Download plus tests
+
+### Progress Update (since 6/7/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Implementing RBAC Passports
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Writing Account seetting plus test
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>More implementation of AWS File Upload and Download plus tests
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+This phase of the cycle was productive despite external challenges. I made significant progress on the tasks assigned to me, including implementing RBAC Passports, developing the account settings feature with corresponding tests, and enhancing AWS file upload and download functionality with thorough testing. The motivation from the recent MVP presentation contributed to a high level of productivity and quality of work. However, unforeseen personal circumstances impacted the number of hours I could dedicate to work. Despite this, I managed to maintain focus and continued to push forward with critical tasks. Moving forward, I plan to complete the current tasks, share progress with the team, continue thorough testing and refinement, and ensure comprehensive documentation. Encouraging more collaboration within the team will be essential to handle unexpected challenges effectively.
+
+
 ## Wednesday (3/7- 5/7)
 
 ### Timesheet
