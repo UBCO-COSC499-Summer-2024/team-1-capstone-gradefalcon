@@ -1,6 +1,72 @@
 
 # Personal Log
 
+## Wednesday ( 6/7 - 9/7 )
+
+### Timesheet 
+
+clockify report 
+
+
+![Time10](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/assets/77403231/3681ec3a-3b4b-4d9a-8542-e663800d4dee)
+
+
+
+### Current Tasks (Provide Details):
+- #1: Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhnaced look altogether.
+- #2: testing - for data visualisation.
+- #3: Student Grade Report - with testing 
+- #4: User story : Student Result Viewing Options
+
+
+
+  
+### Progress Update (since 29/6/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Testing - for data visualisation
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn components 
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>Student Grade Report - with testing 
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+For this cycle as I completed the Data Visualisation for the instructor , I took up on writing tests for the same both frontend and backend. I made sure it passes all the existing tests and the new tests do not break or fail any of the existing tests. Moving forward , I worked on the student grade report , which retrieved data from the backend as well since till the last cycle it was only the UI changes for the same. I stopped working further on the student grade report as we first wanted to get started with revamping the application using shad cn, so I took up on the task of revamping the same. For the next cycle, I will try to be working on revamping extensively and writing the related tests for the same and make an effort to simulataneously work on the grade report as well. Coming to the task of revamping the UI, with the help of Omar, we got the set up ready with the necessary installations for the same and I started off by working on the Instructor Dashboard components.
+
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Grade Report for students - with testing
+- Revamping the front end UI using Shad cn - to be complete by the next cycle
+
+
+
+
+
 ## Friday ( 2/7 - 4/7 )
 
 ### Timesheet 
@@ -15,8 +81,8 @@ clockify report
 ### Current Tasks (Provide Details):
 - #1: Grade Report for students - Enhancing the front end to change the layout 
 - #2: Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhnaced look altogether.
-- #4: User story : Student Result Viewing Options
-- #3: Front end testing - for Student 
+- #3: User story : Student Result Viewing Options
+- #4: testing - for data visualisation 
 
 
   
@@ -55,6 +121,14 @@ clockify report
    <tr>
         <!-- Task/Issue # -->
         <td>Enhancing the front end UI using Shad cn components 
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>testing - for data visualisation 
         </td>
         <!-- Status -->
         <td>In progress
