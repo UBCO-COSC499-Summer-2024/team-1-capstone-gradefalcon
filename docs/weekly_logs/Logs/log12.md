@@ -118,11 +118,11 @@
 
 | Team Member | Logged Hours |
 | ----------- | ------------ |
-| Omar Ankit  | 10.9     |
-| Ahmad Mirza | 14       |
+| Omar Ankit  | 14.6     |
+| Ahmad Mirza | 17       |
 | Nelson Ngumo| 10       |
-| Jusnoor Kaur| 7.9      |
-| Bennett Witt| 16       |
+| Jusnoor Kaur| 12.4     |
+| Bennett Witt| 21       |
 
 - ![docs/weekly logs/Clockify/[Time Tracking Image]](../Clockify/Time12.png)
 
