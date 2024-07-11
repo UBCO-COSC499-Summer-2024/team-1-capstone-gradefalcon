@@ -34,6 +34,19 @@ const UploadExamKey = () => {
     fileInputRef.current.value = "";
   };
 
+  const copyTemplate = async () => {
+    try {
+      const response = await fetch("/api/exam/copyCSV", {
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await response.text();
+      console.log(data);
+    } catch (error) {
+      console.error("Failed! ", error);
+    }
+  };
+
   const sendToBackend = async () => {
     if (!file) return;
 
@@ -43,26 +56,47 @@ const UploadExamKey = () => {
     formData.append("classID", classID);
 
     try {
-      const response = await fetch("/api/exam/saveExamKey", {
-        method: "POST",
-        body: formData,
-      });
-      console.log(response);
-      const responseBody = await response.text(); // Get the response body as text
-      console.log("Response status:", response.status);
-      console.log("Response body:", responseBody);
-      if (response.ok) {
-        // const data = await response.json();
-        // console.log(data);
-        // Handle success, maybe redirect or show a success message
-        // Navigate to the review page after successful upload
-        navigate("/ConfirmExamKey");
-      } else {
-        console.error("Failed to save questions");
-      }
+      const responses = await Promise.all([
+        await fetch("/api/exam/saveExamKey", {
+          method: "POST",
+          body: formData,
+        }),
+        await fetch("/api/exam/copyTemplate", {
+          method: "POST",
+          credentials: "include",
+        }),
+      ]);
+
+      const dataSaveExamKey = responses[0].json();
+      const dataCopyTemplate = responses[1].json();
+
+      console.log("Data from saveExamKey:", dataSaveExamKey);
+      console.log("Data from copyCSV:", dataCopyTemplate);
     } catch (error) {
       console.error("Error:", error);
     }
+    // try {
+    //   const response = await fetch("/api/exam/saveExamKey", {
+    //     method: "POST",
+    //     body: formData,
+    //   });
+    //   console.log(response);
+    //   const responseBody = await response.text(); // Get the response body as text
+    //   console.log("Response status:", response.status);
+    //   console.log("Response body:", responseBody);
+    //   if (response.ok) {
+    //     // copyTemplate();
+    //     // const data = await response.json();
+    //     // console.log(data);
+    //     // Handle success, maybe redirect or show a success message
+    //     // Navigate to the review page after successful upload
+    //     navigate("/ConfirmExamKey");
+    //   } else {
+    //     console.error("Failed to save questions");
+    //   }
+    // } catch (error) {
+    //   console.error("Error:", error);
+    // }
   };
 
   return (
@@ -110,6 +144,7 @@ const UploadExamKey = () => {
             <button className="btn-confirm" onClick={resetUpload}>
               Reset
             </button>
+            {/* <button onClick={copyTemplate}>Copy template</button> */}
             {/* <a href="/ExamControls" className="btn-confirm">
               Confirm
             </a> */}
