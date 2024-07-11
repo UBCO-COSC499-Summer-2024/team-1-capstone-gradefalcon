@@ -39,7 +39,8 @@ const Layout = ({ children }) => {
   location.pathname !== "/" && location.pathname !== "/*" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement" && location.pathname !== "/Logout";
 
   return (
-    <>{shouldDisplayNavBar && <NavBar />}{children}</>
+    // {shouldDisplayNavBar && <NavBar />}
+    <>{children}</>
   );
 };
 
