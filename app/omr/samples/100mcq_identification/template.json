@@ -1,0 +1,36 @@
+{
+    "pageDimensions": [ 900, 1220 ],
+    "bubbleDimensions": [ 27, 27 ],
+    "customLabels": {},
+    "fieldBlocks": {
+    "StudentID": {
+      "fieldType": "QTYPE_ID",
+      "origin": [ 325, 135 ],
+      "fieldLabels": ["roll1..8"],
+      "bubblesGap": 25,
+      "labelsGap": 26
+    },
+      "FirstName": {
+        "fieldType": "QTYPE_NAME",
+        "origin": [ 135, 410 ],
+        "fieldLabels": ["fn1..10"],
+        "bubblesGap": 24,
+        "labelsGap": 29
+      },
+      "LastName": {
+        "fieldType": "QTYPE_NAME",
+        "origin": [ 135, 785 ],
+        "fieldLabels": ["ln1..10"],
+        "bubblesGap": 24,
+        "labelsGap": 29
+      }
+    },
+    "preProcessors": [
+      {
+        "name": "CropPage",
+        "options": {
+          "morphKernel": [ 10, 10 ]
+        }
+      }
+    ]
+}

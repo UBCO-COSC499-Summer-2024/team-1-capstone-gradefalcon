@@ -35,13 +35,12 @@ services:
       - private
     depends_on:
       - db
+
   db:
-    # Using postgres
     container_name: db-postgres
     ports:
       - 5433:5432
     hostname: db
-    # 127.0.0.1
     environment:
       - POSTGRES_DB=root
       - POSTGRES_USER=root
@@ -66,9 +65,24 @@ services:
       - public
     depends_on:
       - backend
+
+  omr:
+    build:
+      context: ./omr  # Specifies the directory where your Dockerfile is located
+    environment:
+      - OMR_CHECKER_CONTAINER=True
+    volumes:
+      - ./omr/inputs:/app/inputs  # Maps the local ./omr/inputs directory to /app/inputs in the container
+      - ./omr/outputs:/app/outputs  # Maps the local ./omr/outputs directory to /app/outputs in the container
+    networks:
+      - public
+    depends_on:
+      - db
+
 networks:
   public:
   private:
+
 volumes:
   back-notused:
   db-data:
