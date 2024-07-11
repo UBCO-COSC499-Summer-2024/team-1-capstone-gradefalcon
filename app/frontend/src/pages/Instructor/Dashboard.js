@@ -2,6 +2,24 @@ import "../../css/App.css";
 import React, { useEffect, useState } from "react";
 import StandardAverageChart from "../../components/StandardAverageChart";
 import PerformanceBarChart from "../../components/PerformanceBarChart";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
 
 const Dashboard = () => {
   const [userName, setUserName] = useState("");
@@ -9,7 +27,6 @@ const Dashboard = () => {
   const [exams, setExams] = useState([]);
   const [standardAverageData, setStandardAverageData] = useState([]);
   const [performanceData, setPerformanceData] = useState([]);
-
 
   const colors = ["#E9D8FD", "#FEEBC8", "#BEE3F8", "#C6F6D5"];
   let colorIndex = 0;
@@ -25,10 +42,8 @@ const Dashboard = () => {
       try {
         const response = await fetch("/api/session-info", {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // This ensures cookies are included in the request
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
@@ -45,9 +60,7 @@ const Dashboard = () => {
       try {
         const response = await fetch("/api/class/classes", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
         if (response.ok) {
@@ -65,9 +78,7 @@ const Dashboard = () => {
       try {
         const response = await fetch("/api/exam/ExamBoard", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
         if (response.ok) {
@@ -85,9 +96,7 @@ const Dashboard = () => {
       try {
         const response = await fetch("/api/exam/standard-average-data", {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
         if (response.ok) {
@@ -106,9 +115,7 @@ const Dashboard = () => {
       try {
         const response = await fetch("/api/exam/performance-data", {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
         if (response.ok) {
@@ -123,8 +130,6 @@ const Dashboard = () => {
       }
     };
 
-
-
     fetchSessionInfo();
     fetchCourses();
     fetchExams();
@@ -136,47 +141,47 @@ const Dashboard = () => {
     <div className="App">
       <div className="main-content">
         <header>
-          <h2>Welcome, {userName ? userName : "Guest"}!</h2>
+          <h2 className="text-2xl">Welcome, {userName ? userName : "Guest"}!</h2>
         </header>
         <section className="courses">
-          <h3>Enrolled Courses</h3>
+          <h3 className="text-xl mb-4">Enrolled Courses</h3>
           {courses.map((course, index) => (
-            <div className="course-card" key={index} style={{ backgroundColor: getNextColor() }}>
-              <h4>{course.course_name} - {course.course_id}</h4>
+            <Card key={index} className="mb-4" style={{ backgroundColor: getNextColor() }}>
+              <h4 className="text-lg">{course.course_name} - {course.course_id}</h4>
               {/* Additional course details can be added here if available */}
-            </div>
+            </Card>
           ))}
         </section>
         <section className="exam-board">
-          <h3>Exam Board</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Exam Name</th>
-                <th>Course</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
+          <h3 className="text-xl mb-4">Exam Board</h3>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableCell>Exam Name</TableCell>
+                <TableCell>Course</TableCell>
+                <TableCell>Status</TableCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {exams.map((exam, index) => (
-                <tr key={index}>
-                  <td>{exam.exam_title}</td>
-                  <td>{exam.course_id}</td>
-                  <td className="status completed">Completed</td>
-                </tr>
+                <TableRow key={index}>
+                  <TableCell>{exam.exam_title}</TableCell>
+                  <TableCell>{exam.course_id}</TableCell>
+                  <TableCell className="status completed">Completed</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </section>
         <section className="charts">
-          <h3>Performance Charts</h3>
-          <div className="charts-container">
-            <div className="chart">
-              <h4>Standard Average Chart</h4>
+          <h3 className="text-xl mb-4">Performance Charts</h3>
+          <div className="charts-container flex justify-between gap-4">
+            <div className="chart flex-1 bg-white p-4 rounded shadow">
+              <h4 className="text-lg mb-2">Standard Average Chart</h4>
               <StandardAverageChart data={standardAverageData} />
             </div>
-            <div className="chart">
-              <h4>Performance Bar Chart</h4>
+            <div className="chart flex-1 bg-white p-4 rounded shadow">
+              <h4 className="text-lg mb-2">Performance Bar Chart</h4>
               <PerformanceBarChart data={performanceData} />
             </div>
           </div>
