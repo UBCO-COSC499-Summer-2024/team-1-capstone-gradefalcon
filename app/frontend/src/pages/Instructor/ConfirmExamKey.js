@@ -5,11 +5,11 @@ import "../../css/ManualExamKey.css";
 
 const ConfirmExamKey = (props) => {
   const location = useLocation();
-  // const { examTitle, classID } = location.state || {};
+  const { examTitle, classID } = location.state || {};
   // test data
-  const examTitle = "Test Exam";
-  const classID = 1;
-
+  // const examTitle = "Test Exam";
+  // const classID = 1;
+  console.log(examTitle, classID);
   const [fields, setFields] = useState({});
 
   let questions = [];
@@ -19,7 +19,7 @@ const ConfirmExamKey = (props) => {
   const [numMarks, setNumMarks] = useState(10);
 
   const downloadCsv = async () => {
-    const response = await fetch("/api/exam/download-csv", {
+    const response = await fetch("/api/exam/getResults", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,6 @@ const ConfirmExamKey = (props) => {
     });
 
     console.log(response);
-
     const data = await response.json();
     const dataCsv = data.csv_file;
     console.log(dataCsv);

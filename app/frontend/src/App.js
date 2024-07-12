@@ -26,6 +26,7 @@ import ConfirmExamKey from "./pages/Instructor/ConfirmExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
+import OMRProcessing from "./pages/Instructor/OMRProcessing";
 //admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
@@ -119,6 +120,7 @@ function App() {
             <Route path="/UploadExamKey" element={<UploadExamKey />} />
             <Route path="/ConfirmExamKey" element={<ConfirmExamKey />} />
             <Route path="/UploadExams" element={<UploadExams />} />
+            <Route path="/OMRProcessing" element={<OMRProcessing />} />
             <Route
               path="/NotificationPreferences"
               element={<NotificationPreferences />}

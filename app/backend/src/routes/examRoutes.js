@@ -19,9 +19,12 @@ router.post("/ExamBoard", examBoard);
 router.get("/standard-average-data", getStandardAverageData);
 router.get("/performance-data", getPerformanceData);
 
-router.get("/download-csv", async function (req, res) {
+router.get("/getResults", async function (req, res) {
   // need to modify this to make the path dynamic
-  const filePath = path.join(__dirname, "../../omr/outputs/test.csv");
+  const filePath = path.join(
+    __dirname,
+    "../../omr/outputs/Results/Results.csv"
+  );
 
   fs.createReadStream(filePath)
     .pipe(csv())
@@ -84,6 +87,26 @@ router.post("/copyTemplate", async function (req, res) {
   } catch (error) {}
 
   res.send(JSON.stringify("File copied successfully"));
+});
+
+router.post("/callOMR", async function (req, res) {
+  console.log("callOMR");
+  try {
+    const response = await fetch("http://flaskomr:5000/process", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("OMR Response: ", response);
+  } catch (error) {
+    console.error("Error calling OMR: ", error);
+  }
+});
+
+router.post("/test", async function (req, res) {
+  console.log("test called");
+  res.send(JSON.stringify("Test route called successfully"));
 });
 
 module.exports = router;
