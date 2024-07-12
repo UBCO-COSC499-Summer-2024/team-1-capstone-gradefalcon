@@ -61,7 +61,7 @@ const signup = async (req, res, next) => {
 
     res.status(201).json({ token });
   } catch (err) {
-    console.error('Error during signup:', err); // Detailed error logging
+   // console.error('Error during signup:', err); // Detailed error logging
     next(err);
   }
 };
