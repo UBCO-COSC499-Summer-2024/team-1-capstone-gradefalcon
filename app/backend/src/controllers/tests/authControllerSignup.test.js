@@ -1,7 +1,7 @@
 const request = require('supertest');
 const express = require('express');
 const bodyParser = require('body-parser');
-const { signup, login } = require('../authController');
+const { signup } = require('../authController');
 const pool = require('../../utils/db');
 
 jest.mock('../../utils/db');
@@ -9,7 +9,6 @@ jest.mock('../../utils/db');
 const app = express();
 app.use(bodyParser.json());
 app.post('/api/auth/signup', signup);
-app.post('/api/auth/login', login);
 
 const testEmail = 'test@example.com';
 const testPassword = 'Password123!';
@@ -103,27 +102,40 @@ describe('AuthController Integration Tests', () => {
       expect(pool.query).toHaveBeenCalledTimes(1);
       expect(pool.query).toHaveBeenCalledWith("SELECT * FROM student WHERE email = $1", [testEmail]);
     });
-  });
 
-  describe('Verifies User is in Database After Signup Tests', () => {
-    test('should verify user exists in the database after signup', async () => {
-      pool.query.mockResolvedValueOnce({ rows: [] }) // No existing user
-               .mockResolvedValueOnce({ rows: [] }) // No user before signup
-               .mockResolvedValueOnce({ rows: [{ student_id: 1 }] }) // New user created
-               .mockResolvedValueOnce({ rows: [{ email: testEmail, name: testName }] }); // Verify insertion
-  
-      // Verify the user does not exist before signup
-      const preSignupCheck = await pool.query("SELECT email, name FROM student WHERE email = $1", [testEmail]);
-      expect(preSignupCheck.rows).toEqual([]);
-  
-      // Sign up the user
-      await request(app)
+    // Test for missing all fields
+    test('should return 400 if all fields are missing', async () => {
+      const response = await request(app)
         .post('/api/auth/signup')
-        .send(validSignupPayload);
-  
-      // Verify the user is in the database
-      const verifyUser = await pool.query("SELECT email, name FROM student WHERE email = $1", [testEmail]);
-      expect(verifyUser.rows).toEqual([{ email: testEmail, name: testName }]);
+        .send({});
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe('Invalid/missing input types');
+      expect(pool.query).not.toHaveBeenCalled();
+    });
+
+    // Test for invalid field types
+    test('should return 400 if field types are invalid', async () => {
+      const response = await request(app)
+        .post('/api/auth/signup')
+        .send({ email: 123, password: true, name: {} });
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe('Invalid/missing input types');
+      expect(pool.query).not.toHaveBeenCalled();
+    });
+
+    // Test for excessive input length
+    test('should return 400 if input lengths are excessive', async () => {
+      const longEmail = 'a'.repeat(256) + '@example.com';
+      const longName = 'a'.repeat(256);
+      const response = await request(app)
+        .post('/api/auth/signup')
+        .send({ email: longEmail, password: testPassword, name: longName });
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe('Input length exceeds limit');
+      expect(pool.query).not.toHaveBeenCalled();
     });
   });
-});  
+});
