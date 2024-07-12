@@ -1,7 +1,51 @@
 # Personal Log
 Ahmad Saleem Mirza
 
-## Friday (July 5 - 10)
+## Friday (July 10 - 12)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/July10-12.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Using OMR to scan uploaded solution key
+  * #2: Allowing the teacher to confirm the solution
+  * #3: Saving answers to database
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Calling OMR to scan uploaded solution key
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Allowing the teacher to confirm the solution
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>   
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Instructors can now see their what options they've selected on the confirm exam key page. I spent most of my today trying to debug why calling the OMR always resulted in an Internal 500 Server Error. Many attempts at debugging revealed that it had to do with the copyfile function in NodeJS that we were calling to send the template. The solution I have reached with regards to this is to call the OMR on a separate page, since the copy file function works, but no calls made after it work. Resolving this will then allow me to begin testing of this entire process.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Calling the OMR to scan the uploaded key and testing the entire upload exam solution key cycle
+
+
+## Wednesday (July 5 - 10)
 
 ### Timesheet
 Clockify report
