@@ -1,4 +1,92 @@
 # Personal Log
+## Friday (7/09-7/11)
+
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/74c7bdaa38ccc39d052e1e2d40e5b6309a3d5c0a/docs/weekly_logs/Clockify/Omar/Time11.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Integrate Flask Service to Trigger OMR Processing on File Upload**
+    1. Worked on debugging Proxy error due to JSON Copy API call.
+    2. used manual command to copy to shared volume isntead, will need to automate the process.
+2. **Refactor UI Using shadcn UI Components**
+    1. Set up the frontend to use shadcn UI components.
+    2. made new installations and added tailwin css.
+    3. Installed components.
+    4. Fixed cross dependency error in module installation using babel
+    5. Set up Babel config file.
+    6. Made a demo to work off from for future design revamping.
+
+3. **Labeling images to create a YOLO model**
+    1. I plan on creating a YOLO model to automatically generate JSON templates based on the instructors exam sheet.
+
+### Progress Update (since 6/28/2024)
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+
+        <tr>
+        <td>#143 - Parse and Confirm CSV from OMR
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <td> #161- Integrate Flask Service to Trigger OMR Processing on File Upload
+        </td>
+        <td>In Review
+        </td>
+    </tr>
+    <tr>
+        <tr>
+        <td>#80-Refactor UI Using shadcn UI Components
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+        <tr>
+        <tr>
+        <td>#17-User Story: Custom Bubble Sheet Support
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+</table> 
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - Shadcn is now properly functional and all dependencies should be present, there should not be problems with installation and the import of jsx to js files shouldn't be a problem thanks to babel
+
+- **What Was Done:**
+ - Flask app is functional
+  - Shadcn now can be properly integrated, no dependencies or set needed.
+
+- **What Didn't Go Well:**
+  - Debugging for both the features I worked on took most of my time, I ran into road blocks and didn't do enough progress.
+
+- **Retrospective:**
+  - I am looking forward to revamping the UI.
+
+  ### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **Parse and Confirm CSV from OMR**
+   - Work on creating standard bubble sheet using a UI to create json templates.
+   - Work in the confirmexamkey page.
+   - Work on parsing file names and storing them.
+
+2. **Handle Big File Uploads:**
+
+3. **Parse Student Information and Link it to the Corresponding Scan**
+
+4. **Refactor UI Using shadcn UI Components**
+
+
 ## Wednesday (7/04-7/09)
 
 ### Timesheet
