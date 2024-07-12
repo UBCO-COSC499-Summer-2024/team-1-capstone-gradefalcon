@@ -19,4 +19,14 @@ module.exports = {
     },
     preset: 'jest-playwright-preset',
     testMatch: ['**/tests/e2e/**/*.test.js'],
+    testEnvironmentOptions: {
+      // only string values is supported??
+      beforeParse (window) {
+       console.log('------------------------------------------  log ')
+        window.document.childNodes.length === 0;
+        window.alert = (msg) => { console.log(msg); };
+        window.matchMedia = () => ({});
+        window.scrollTo = () => { };
+      }
+    }, 
   };
