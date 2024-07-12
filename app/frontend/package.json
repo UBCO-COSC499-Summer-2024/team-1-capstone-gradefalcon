@@ -3,20 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-<<<<<<< HEAD
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
-=======
-    "@radix-ui/react-avatar": "^1.1.0",
-    "@radix-ui/react-dialog": "^1.1.1",
-    "@radix-ui/react-dropdown-menu": "^2.1.1",
-    "@radix-ui/react-slot": "^1.1.0",
->>>>>>> bb7daaf37623eafa4fc1f14c6ddb6d31016f7f3b
     "@testing-library/jest-dom": "6.4.6",
+    "@testing-library/react": "16.0.0",
     "@testing-library/user-event": "14.5.2",
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
@@ -29,8 +23,8 @@
     "postcss": "^8.4.39",
     "postcss-import": "^16.1.0",
     "puppeteer": "^22.12.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-papaparse": "^4.4.0",
     "react-router-dom": "^6.23.1",
     "recharts": "^2.12.7",
@@ -39,7 +33,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "babel src --out-dir dist",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -59,14 +53,13 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.24.8",
+    "@babel/core": "^7.24.7",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@babel/plugin-transform-react-jsx": "^7.24.7",
-    "@babel/preset-env": "^7.24.8",
+    "@babel/preset-env": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
     "@playwright/test": "^1.45.1",
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^16.0.0",
+    "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
     "@types/node": "^20.14.9",
     "babel-jest": "^29.7.0",
