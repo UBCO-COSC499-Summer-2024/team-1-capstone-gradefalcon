@@ -1,7 +1,67 @@
 
 # Personal Log
 
-## Wednesday ( 6/7 - 9/7 )
+
+## Wednesday ( 9/7 - 11/7 )
+
+### Timesheet 
+
+clockify report 
+
+
+![Time11](https://github.com/user-attachments/assets/4e477ded-f255-4d89-ab77-32346c5241f7)
+
+
+
+
+### Current Tasks (Provide Details):
+- #1: Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhnaced look altogether.
+- #3: Student Grade Report - with testing 
+- #4: User story : Student Result Viewing Options
+
+
+
+  
+### Progress Update (since 9/7/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn components 
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>Student Grade Report testing 
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+After the last cycle, I took up on starting working on revamping the Dashboard using shad cn first as we were facing some issues with the installations and the related depenedencies. There are still some issues in the installations here and there for shad cn and their related components that needs to be fixed and is cauisng a little hindrance in the revamp procedure. I completed the front end test for the student grade report created in the last cycle. The backend test for the same took a back seat since the shad cn installation and error fixing took a major amount of time. We aim to get the errors for the same fixed first , and then moving ahead to hopefully go through a smooth revamp process.
+
+
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Revamping the front end UI using Shad cn - to be complete by the next cycle
+- Grade Report for students - with testing
+
+
+
+
+
+## Wednesday ( 5/7 - 9/7 )
 
 ### Timesheet 
 
@@ -21,7 +81,7 @@ clockify report
 
 
   
-### Progress Update (since 29/6/2024) 
+### Progress Update (since 5/7/2024) 
 <table>
    <tr>
         <td><strong>TASK/ISSUE #</strong>
@@ -86,7 +146,7 @@ clockify report
 
 
   
-### Progress Update (since 29/6/2024) 
+### Progress Update (since 2/7/2024) 
 <table>
    <tr>
         <td><strong>TASK/ISSUE #</strong>
