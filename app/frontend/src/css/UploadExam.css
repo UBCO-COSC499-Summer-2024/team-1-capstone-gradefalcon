@@ -49,7 +49,7 @@
   }
   .btn-confirm {
     background-color: #ccc;
-    color: white;
+    color: black;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -58,18 +58,6 @@
   }
   .btn-confirm:hover {
     background-color: #bbb;
-  }
-  .btn-import {
-    background-color:  #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 5px;
-  }
-  .btn-import:hover {
-    background-color: #45a049;
   }
   .pdf-display {
     width: 100%;

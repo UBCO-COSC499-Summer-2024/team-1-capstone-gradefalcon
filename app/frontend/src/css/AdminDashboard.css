@@ -47,7 +47,7 @@ body {
     height: 100vh;
     margin-left: 250px;
     padding: 20px;
-    /* background-color: #EDF2F7; */
+    background-color: #EDF2F7;
     overflow-y: auto;
     box-sizing: border-box;
   }
