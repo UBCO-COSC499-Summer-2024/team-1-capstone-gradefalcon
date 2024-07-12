@@ -14,7 +14,7 @@ const StandardAverageChart = ({ data }) => {
       <YAxis />
       <Tooltip />
       <Legend />
-      <Line type="monotone" dataKey="averageScore" stroke="#8884d8" activeDot={{ r: 8 }} />
+      <Line type="monotone" dataKey="averageScore" stroke="#45a049" activeDot={{ r: 8 }} /> {/* Changed to green color */}
     </LineChart>
   );
 };

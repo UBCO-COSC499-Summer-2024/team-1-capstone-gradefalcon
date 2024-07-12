@@ -14,7 +14,7 @@ const PerformanceBarChart = ({ data }) => {
       <YAxis />
       <Tooltip />
       <Legend />
-      <Bar dataKey="averageScore" fill="#82ca9d" />
+      <Bar dataKey="averageScore" fill="#45a049" /> {/* Changed to green color */}
     </BarChart>
   );
 };

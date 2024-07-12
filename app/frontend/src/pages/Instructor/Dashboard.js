@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../components/ui/card"
+} from "../../components/ui/card";
 import {
   Table,
   TableBody,
@@ -18,8 +18,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../components/ui/table"
-
+} from "../../components/ui/table";
 
 const Dashboard = () => {
   const [userName, setUserName] = useState("");
@@ -147,7 +146,9 @@ const Dashboard = () => {
           <h3 className="text-xl mb-4">Enrolled Courses</h3>
           {courses.map((course, index) => (
             <Card key={index} className="mb-4" style={{ backgroundColor: getNextColor() }}>
-              <h4 className="text-lg">{course.course_name} - {course.course_id}</h4>
+              <CardHeader>
+                <CardTitle className="text-lg">{course.course_name} - {course.course_id}</CardTitle>
+              </CardHeader>
               {/* Additional course details can be added here if available */}
             </Card>
           ))}
