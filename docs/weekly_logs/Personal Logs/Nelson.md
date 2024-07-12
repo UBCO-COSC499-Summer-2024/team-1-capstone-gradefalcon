@@ -1,3 +1,55 @@
+## Wednesday (10/7- 12/7)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/july12_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Implementing RBAC Passports
+  * #2: Writing Account seetting plus test
+  * #3: More implementation of AWS File Upload and Download plus tests
+
+### Progress Update (since 6/7/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Implementing RBAC Passports
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Writing Account seetting plus test
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>More implementation of AWS File Upload and Download plus tests
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+This cycle has undoubtedly been the most challenging yet, marked by unforeseen external challenges that significantly impacted my productivity. Despite these difficulties, I focused on ensuring the file upload process is complete and thoroughly tested. I also attempted to develop the account settings feature for the student view and continued working on the admin view, but didn't make as much progress as I had hoped. Additionally, I tried to use role-based authentication to implement passports but didn't make much headway due to the unforeseen challenges. The obstacles I faced made it hard to maintain my usual productivity levels, and I found myself isolating due to these challenges, which is not conducive to effective teamwork. Moving forward, I recognize the importance of better communication and collaboration with my team. I plan to complete the remaining tasks, share progress updates, and commit my work regularly to foster a more collaborative environment. This experience has underscored the importance of resilience, adaptability, and team support in overcoming obstacles.
+
+
+
 ## Wednesday (6/7- 10/7)
 
 ### Timesheet
