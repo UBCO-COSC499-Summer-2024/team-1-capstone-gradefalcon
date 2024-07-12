@@ -1,5 +1,67 @@
 # Personal Log
 
+## Friday (7/09 - 7/11)
+
+## TimeSheet
+Clockify report
+![alt text](../Clockify/Bennett/07_10_2024-07_11_2024.pdf) 
+10.5 hours
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Additional Frontend testing
+  * #2: Additional Backend testing
+  * #3: Additional e2e testing
+
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>2
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>3
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * most initial new frontend tests failing prompted alot of refactoring that increased tollerance for user error, many of these errors actually threw runtime errors so those were good additions, this slowed progress on my actual tasks, but they are things that would absolutly need to be fized at some point before project completion. For example before I changed it, uploading an exam was buged such that it accepted any file and would do real backend calls that would create a new exam with the false data, additonal protections will be needed in the backend as well in case someone uses inspect element on the page.
+
+  * Staring on additional backend testing and refactoring the tests to mocking rather than real database calls, I am going to move the real database calls to the end to end testing , it seemed more appropriate and would allow easier debugging if any issues arose. I added alot of good input verification/validation was added to the authController file and moving the tests to mocking was smooth (many were already using mocking). I researched some additional protections for the backend like brute force protection and limits on log in attempts to protect the database, I added a bit of it as a template but commented out the code.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * continue adding additional backend testing and refactor for security where nessesary
+  * the new backend tests will be matched up to their frontend pages/tests to impliment some end to end testing.
+  * MABEY double back to some frontend testing for others features if they seemed to miss any.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Personal Log
+
 ## Friday (7/05 - 7/09)
 
 ## TimeSheet
