@@ -5,6 +5,7 @@ import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
 import Logout from "./pages/Logout";
 // Import pages
+import Component from "./pages/Instructor/Component";
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
 import Signup from "./pages/Signup";
@@ -38,7 +39,8 @@ const Layout = ({ children }) => {
   location.pathname !== "/" && location.pathname !== "/*" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement" && location.pathname !== "/Logout";
 
   return (
-    <>{shouldDisplayNavBar && <NavBar />}{children}</>
+    // {shouldDisplayNavBar && <NavBar />}
+    <>{children}</>
   );
 };
 
@@ -65,6 +67,7 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/Dashboard"element={ <ProtectedRoute> <Dashboard /></ProtectedRoute>}/>
+            <Route path="/Component" element={<Component />} />
             <Route path="/AdminDashboard" element={<ProtectedRoute> <AdminDashboard /></ProtectedRoute>}/>
             <Route path="/UserManagement" element={<ProtectedRoute><UserManagement /></ProtectedRoute>}/>
             <Route path="/Signup" element={<Signup />} />
