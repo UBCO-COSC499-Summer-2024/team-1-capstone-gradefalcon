@@ -4,6 +4,8 @@ import os
 
 app = Flask(__name__)
 
+#To run the demo please run "docker cp src/assets/template.json  app-backend-1:/code/omr/inputs/template.json". We are currently working to automate the process.
+
 @app.route('/')
 def home():
     return "Flask OMR Service is running"
