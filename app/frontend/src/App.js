@@ -3,12 +3,16 @@ import { BrowserRouter as Router, Routes, Route, useLocation} from "react-router
 import "./css/App.css";
 import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
-import Logout from "./pages/Logout";
+import { LogtoProvider } from '@logto/react';
+import { logtoConfig } from './logtoConfig';
 // Import pages
+import Home from "./pages/Home"; 
+import Callback from './pages/Callback';
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Logout from "./pages/Logout";
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
@@ -28,7 +32,6 @@ import StudentDashboard from "./pages/Student/StudentDashboard";
 import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
 import StudentNotificationPreferences from "./pages/Student/StudentNotificationPreferences";
 import StudentGradeReport from "./pages/Student/StudentGradeReport";
-
 
 
 // Layout component to conditionally render NavBar
@@ -58,11 +61,14 @@ function App() {
   }, []);
 
   return (
+    <LogtoProvider config={logtoConfig}>
     <Router>
       <div className="App">
         <Layout>
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/Home" element={<Home />} /> 
+            <Route path="/callback" element={<Callback />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/Dashboard"element={ <ProtectedRoute> <Dashboard /></ProtectedRoute>}/>
             <Route path="/AdminDashboard" element={<ProtectedRoute> <AdminDashboard /></ProtectedRoute>}/>
@@ -91,6 +97,7 @@ function App() {
         </Layout>
       </div>
     </Router>
+    </LogtoProvider>
   );
 }
 export default App;
