@@ -5,9 +5,10 @@ import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
 import Logout from "./pages/Logout";
 // Import pages
+
+// instructor pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
-import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
@@ -67,7 +68,6 @@ function App() {
             <Route path="/Dashboard"element={ <ProtectedRoute> <Dashboard /></ProtectedRoute>}/>
             <Route path="/AdminDashboard" element={<ProtectedRoute> <AdminDashboard /></ProtectedRoute>}/>
             <Route path="/UserManagement" element={<ProtectedRoute><UserManagement /></ProtectedRoute>}/>
-            <Route path="/Signup" element={<Signup />} />
             <Route path="/Logout" element={<Logout/>} />
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/Classes" element={<Classes />} />
