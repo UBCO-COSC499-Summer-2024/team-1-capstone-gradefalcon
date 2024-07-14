@@ -8,8 +8,8 @@ router.post('/classManagement/:class_id', displayClassManagement);
 router.post('/import-class', importClass);
 
 router.param('class_id', (req, res, next, class_id) => {
-  req.session.class_id = class_id;
-  req.session.save();
+  req.class_id = class_id;
+  req.save();
   next();
 });
 

@@ -3,7 +3,7 @@ const pool = require('../utils/db');
 // Display classes
 const displayClasses = async (req, res, next) => {
   try {
-    const instructorId = req.session.userId; // Get the instructor ID from the session
+    const instructorId = req.userId; // Get the instructor ID from the session
     const result = await pool.query("SELECT * FROM classes WHERE instructor_id = $1", [instructorId]);
     res.json(result.rows); // Send the list of classes as JSON
   } catch (err) {
@@ -14,7 +14,7 @@ const displayClasses = async (req, res, next) => {
 // Display students enrolled, exam grades too
 const displayClassManagement = async (req, res, next) => {
   try {
-    const class_id = req.session.class_id;
+    const class_id = req.class_id;
     const result = await pool.query("SELECT student_id, name FROM enrollment JOIN student USING (student_id) WHERE class_id = $1", [class_id]);
     const classData = result.rows;
 
@@ -46,7 +46,7 @@ const displayClassManagement = async (req, res, next) => {
 // Import class
 const importClass = async (req, res) => {
   const { students, courseName, courseId } = req.body;
-  const instructorId = req.session.userId; // Retrieve instructor ID from session
+  const instructorId = req.userId; // Retrieve instructor ID from session
 
   if (!instructorId) {
     return res.status(403).json({ message: "Unauthorized" });

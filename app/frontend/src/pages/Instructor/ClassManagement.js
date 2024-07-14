@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useLogto } from '@logto/react';
 import "../../css/App.css";
 import "../../css/ClassManagement.css";
 
@@ -8,36 +9,37 @@ const ClassManagement = () => {
   const params = useParams();
   const [classData, setClassData] = useState({ courseDetails: {} });
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
+  const { isAuthenticated, getAccessToken } = useLogto();
 
   useEffect(() => {
     const fetchClassData = async () => {
-      try {
-        const response = await fetch(
-          `/api/class/classManagement/${params.class_id}`,
-          {
+      if (isAuthenticated) {
+        const accessToken = await getAccessToken('http://localhost:3000/api/class/classManagement');
+        try {
+          const response = await fetch(`http://localhost:3000/api/class/classManagement/${params.class_id}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${accessToken}`,
             },
-            credentials: "include",
+          });
+          if (response.ok) {
+            const data = await response.json();
+            setClassData(data);
+          } else {
+            setError("Failed to fetch class data");
           }
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setClassData(data);
-        } else {
-          setError("Failed to fetch class data");
+        } catch (error) {
+          setError("Error fetching class data");
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        setError("Error fetching class data");
-      } finally {
-        setLoading(false); // Set loading to false once fetch is complete
       }
     };
 
     fetchClassData();
-  }, [params.class_id]);
+  }, [params.class_id, isAuthenticated, getAccessToken]);
 
   const maxExams = classData.studentInfo
     ? classData.studentInfo.reduce(

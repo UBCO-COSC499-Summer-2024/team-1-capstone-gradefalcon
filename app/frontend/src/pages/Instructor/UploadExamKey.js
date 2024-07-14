@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "../../css/App.css";
 import "../../css/UploadExam.css";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useLogto } from '@logto/react';
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
@@ -10,6 +11,7 @@ const UploadExamKey = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { examTitle, classID } = location.state || {};
+  const { isAuthenticated, getAccessToken } = useLogto();
 
   useEffect(() => {
     const handleFileSelect = (event) => {
@@ -35,28 +37,24 @@ const UploadExamKey = () => {
   };
 
   const sendToBackend = async () => {
-    if (!file) return;
+    if (!file || !isAuthenticated) return;
 
+    const accessToken = await getAccessToken('http://localhost:3000/api/exam/saveExamKey');
     const formData = new FormData();
     formData.append("examKey", file);
     formData.append("examTitle", examTitle);
     formData.append("classID", classID);
 
     try {
-      
-      // upload the exam key
-      const saveResponse = await fetch("/api/exam/saveExamKey", {
+      const saveResponse = await fetch("http://localhost:3000/api/exam/saveExamKey", {
         method: "POST",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+        },
         body: formData,
       });
 
-      console.log(saveResponse);
-      const responseBody = await saveResponse.text(); // Get the response body as text
-      console.log("Response status:", saveResponse.status);
-      console.log("Response body:", responseBody);
-
       if (saveResponse.ok) {
-        // Handle success, maybe redirect or show a success message
         navigate("/ConfirmExamKey");
       } else {
         console.error("Failed to save questions");
@@ -64,8 +62,7 @@ const UploadExamKey = () => {
     } catch (error) {
       console.error("Error:", error);
     }
-
-};
+  };
 
   return (
     <>
@@ -105,16 +102,12 @@ const UploadExamKey = () => {
             >
               <iframe src={fileURL} title="PDF Preview"></iframe>
             </div>
-            {/* This send button is for testing right now. Will need to make it so it redirects */}
             <button className="btn-import" onClick={sendToBackend}>
               Import
             </button>
             <button className="btn-confirm" onClick={resetUpload}>
               Reset
             </button>
-            {/* <a href="/ExamControls" className="btn-confirm">
-              Confirm
-            </a> */}
           </section>
         </div>
       </div>

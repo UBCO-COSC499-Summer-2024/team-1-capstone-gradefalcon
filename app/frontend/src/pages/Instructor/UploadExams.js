@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../../css/App.css';
 import '../../css/UploadExam.css';
+import { useLogto } from '@logto/react';
 import axios from 'axios'; // You need to install axios if you haven't already
 
 const UploadExams = () => {
   const [fileURL, setFileURL] = useState(null);
   const fileInputRef = useRef(null);
+  const { isAuthenticated, getAccessToken } = useLogto();
 
   useEffect(() => {
     const handleFileSelect = (event) => {
@@ -30,6 +32,9 @@ const UploadExams = () => {
   };
 
   const handleFileUpload = async () => {
+    if (!isAuthenticated) return;
+
+    const accessToken = await getAccessToken('http://localhost:3000/api/upload-exam');
     const file = fileInputRef.current.files[0];
     if (!file) return;
 
@@ -37,9 +42,10 @@ const UploadExams = () => {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('/api/upload-exam', formData, {
+      const response = await axios.post('http://localhost:3000/api/upload-exam', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${accessToken}`,
         },
       });
 

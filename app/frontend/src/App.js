@@ -5,14 +5,11 @@ import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
 import { LogtoProvider } from '@logto/react';
 import { logtoConfig } from './logtoConfig';
-// Import pages
+// Instructor pages
 import Home from "./pages/Home"; 
 import Callback from './pages/Callback';
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
-import Logout from "./pages/Logout";
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
@@ -24,10 +21,10 @@ import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
-//admin pages
+//Admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
-//student pages 
+//Student pages 
 import StudentDashboard from "./pages/Student/StudentDashboard";
 import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
 import StudentNotificationPreferences from "./pages/Student/StudentNotificationPreferences";
@@ -38,7 +35,7 @@ import StudentGradeReport from "./pages/Student/StudentGradeReport";
 const Layout = ({ children }) => {
   const location = useLocation();
   const shouldDisplayNavBar =
-  location.pathname !== "/" && location.pathname !== "/*" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement" && location.pathname !== "/Logout";
+  location.pathname !== "/";
 
   return (
     <>{shouldDisplayNavBar && <NavBar />}{children}</>
@@ -50,14 +47,14 @@ function App() {
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    fetch("/api/session-info")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.userName) {
-          setUserName(data.userName);
-        }
-      })
-      .catch(console.error);
+    // fetch("/api/session-info")
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     if (data.userName) {
+    //       setUserName(data.userName);
+    //     }
+    //   })
+    //   .catch(console.error);
   }, []);
 
   return (

@@ -2,37 +2,40 @@ import React, { useEffect, useState } from "react";
 import "../../css/App.css";
 import "../../css/Examboard.css";
 import { Link } from 'react-router-dom';
+import { useLogto } from '@logto/react';
 
 const ExamBoard = () => {
   const [classData, setClassData] = useState([]);
   const [error, setError] = useState(null);
+  const { isAuthenticated, getAccessToken } = useLogto();
 
   useEffect(() => {
     const fetchClassData = async () => {
-      try {
-        const response = await fetch(`/api/exam/ExamBoard`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setClassData(data); // Set the class data state with the fetched data
-        } else {
-          setError("Failed to fetch class data");
+      if (isAuthenticated) {
+        const accessToken = await getAccessToken('http://localhost:3000/api/exam/ExamBoard');
+        try {
+          const response = await fetch("http://localhost:3000/api/exam/ExamBoard", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${accessToken}`,
+            },
+          });
+          if (response.ok) {
+            const data = await response.json();
+            setClassData(data); // Set the class data state with the fetched data
+          } else {
+            setError("Failed to fetch class data");
+          }
+        } catch (error) {
+          setError("Error fetching class data: " + error.message);
         }
-      } catch (error) {
-        setError("Error fetching class data: " + error.message);
       }
     };
 
     fetchClassData();
-  }, []);
+  }, [isAuthenticated, getAccessToken]);
 
-  // Transform classData.classes into a structure that groups exams by course_id
-  // Check if classData.classes is null and provide a fallback empty array
   const groupedExams = (classData.classes || []).reduce((acc, current) => {
     const { course_id, course_name, exam_title, class_id } = current;
     if (!acc[course_id]) {

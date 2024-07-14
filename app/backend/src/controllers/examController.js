@@ -45,7 +45,7 @@ const newExam = async (req, res, next) => {
 
 // Display classes and their exams
 const examBoard = async (req, res, next) => {
-  const instructorId = req.session.userId;
+  const instructorId = req.userId;
   try {
     const classes = await pool.query(
       "SELECT exam_id, classes.class_id, exam_title, course_id, course_name FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
@@ -70,7 +70,7 @@ const examKey = async (req, res, next) => {
 module.exports = { saveQuestions, newExam, examBoard };
 // New function to get standard average data
 const getStandardAverageData = async (req, res, next) => {
-  const instructorId = req.session.userId;
+  const instructorId = req.userId;
   try {
     const standardAverageData = await pool.query(`
       SELECT e.exam_title AS "examTitle", AVG(sr.grade) AS "averageScore"
@@ -90,7 +90,7 @@ const getStandardAverageData = async (req, res, next) => {
 
 // New function to get performance data
 const getPerformanceData = async (req, res, next) => {
-  const instructorId = req.session.userId;
+  const instructorId = req.userId;
   try {
     const performanceData = await pool.query(`
       SELECT c.course_name AS "courseName", AVG(sr.grade) AS "averageScore"
