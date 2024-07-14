@@ -105,6 +105,7 @@ router.post("/callOMR", async function (req, res) {
       },
     });
     console.log("OMR Response: ", response);
+    res.send(JSON.stringify("OMR called successfully in /callOMR"));
   } catch (error) {
     console.error("Error calling OMR: ", error);
   }

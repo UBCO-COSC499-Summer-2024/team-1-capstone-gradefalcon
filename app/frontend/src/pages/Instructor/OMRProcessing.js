@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useReducer } from "react";
 import { useLocation, Link } from "react-router-dom";
 import "../../css/App.css";
 
@@ -12,9 +12,20 @@ const OMRProcessing = (props) => {
       method: "POST",
       credentials: "include",
     });
+    const data = await response.json();
     console.log("response", response);
+    console.log("data", data);
     console.log("finished");
   };
+
+  useEffect(() => {
+    // Timer stops the ECONREFUSED error
+    const timer = setTimeout(() => {
+      runOMR();
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
