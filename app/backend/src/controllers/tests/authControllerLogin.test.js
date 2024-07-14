@@ -1,253 +1,170 @@
-const fetch = require('node-fetch');
-describe('AuthController Login', () => {
-  
-  jest.setTimeout(30000);
+const request = require('supertest');
+const express = require('express');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const { login } = require('../authController');
+const pool = require('../../utils/db');
 
- //Assumptions:
- //1) all inputs passed to authController are stringified because authController.js rejects others
- //2) only one way that jsob body login requests get submitted as defined in login.js
+jest.mock('../../utils/db');
+
+const app = express();
+app.use(bodyParser.json());
+
+// Mock session middleware
+app.use(session({
+  secret: 'testsecret',
+  resave: false,
+  saveUninitialized: true,
+}));
+
+app.post('/api/auth/login', login);
+
+describe('AuthController Login Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('Successful login as Instructor', async () => {
-    try {
-      const email = 'instructor@ubc.ca';
-      const password = 'instructor';
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include',
-      });
+    pool.query.mockResolvedValueOnce({ rows: [{ instructor_id: 1, email: 'instructor@ubc.ca', password: 'instructor', name: 'Instructor' }] });
 
-      if (response.ok) {
-        const data = await response.json();
-        expect(data.role).toBe('instructor');
-        expect(data.message).toBe("Login successful");
-      } else {
-        console.error("Login failed");
-        expect(true).toBe(false); // test fail clause due to incorrect info
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      expect(true).toBe(false); // test fail clause due to database error
-    }
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'instructor@ubc.ca', password: 'instructor' });
+
+    expect(response.status).toBe(200);
+    expect(response.body.role).toBe('instructor');
+    expect(response.body.message).toBe("Login successful");
+    expect(pool.query).toHaveBeenCalledWith("SELECT * FROM instructor WHERE email = $1", ['instructor@ubc.ca']);
   });
 
   test('Successful login as Student', async () => {
-    try {
-      const email = 'student@ubc.ca';
-      const password = 'student';
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include',
-      });
+    pool.query.mockResolvedValueOnce({ rows: [] });
+    pool.query.mockResolvedValueOnce({ rows: [{ student_id: 2, email: 'student@ubc.ca', password: 'student', name: 'Student' }] });
 
-      if (response.ok) {
-        const data = await response.json();
-        expect(data.role).toBe('student');
-        expect(data.message).toBe("Login successful");
-      } else {
-        console.error("Login failed");
-        expect(true).toBe(false); // test fail clause due to incorrect info
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      expect(true).toBe(false); // test fail clause due to database error
-    }
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'student@ubc.ca', password: 'student' });
+
+    expect(response.status).toBe(200);
+    expect(response.body.role).toBe('student');
+    expect(response.body.message).toBe("Login successful");
+    expect(pool.query).toHaveBeenCalledWith("SELECT * FROM student WHERE email = $1", ['student@ubc.ca']);
   });
 
   test('Successful login as Admin', async () => {
-    try {
-      const email = 'admin@ubc.ca';
-      const password = 'admin';
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include',
-      });
+    pool.query.mockResolvedValueOnce({ rows: [] });
+    pool.query.mockResolvedValueOnce({ rows: [] });
+    pool.query.mockResolvedValueOnce({ rows: [{ admin_id: 3, email: 'admin@ubc.ca', password: 'admin', name: 'Admin' }] });
 
-      if (response.ok) {
-        const data = await response.json();
-        expect(data.role).toBe('admin');
-        expect(data.message).toBe("Login successful");
-      } else {
-        console.error("Login failed");
-        expect(true).toBe(false); // test fail clause due to incorrect info
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      expect(true).toBe(false); // test fail clause due to database error
-    }
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'admin@ubc.ca', password: 'admin' });
+
+    expect(response.status).toBe(200);
+    expect(response.body.role).toBe('admin');
+    expect(response.body.message).toBe("Login successful");
+    expect(pool.query).toHaveBeenCalledWith("SELECT * FROM admins WHERE email = $1", ['admin@ubc.ca']);
   });
 
   test('Invalid login credentials', async () => {
-    try {
-      const email = 'invalid@ubc.ca';
-      const password = 'wrongpassword';
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include',
-      });
+    pool.query.mockResolvedValueOnce({ rows: [] });
+    pool.query.mockResolvedValueOnce({ rows: [] });
+    pool.query.mockResolvedValueOnce({ rows: [] });
 
-      if (response.ok) {
-        console.error("Login succeeded unexpectedly");
-        expect(true).toBe(false); // test fail clause due to unexpected success
-      } else {
-        const data = await response.json();
-        expect(response.status).toBe(401);
-        expect(data.message).toBe("Invalid credentials");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      expect(true).toBe(false); // test fail clause due to database error
-    }
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'invalid@ubc.ca', password: 'wrongpassword' });
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("Invalid credentials");
   });
 
   test('Missing email field', async () => {
-    try {
-      const password = 'student';
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ password }),
-        credentials: 'include',
-      });
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ password: 'student' });
 
-      if (response.ok) {
-        console.error("Login succeeded unexpectedly");
-        expect(true).toBe(false); // test fail clause due to unexpected success
-      } else {
-        const data = await response.json();
-        expect(response.status).toBe(400);
-        expect(data.message).toBe("Missing/Invalid input types");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      expect(true).toBe(false); // test fail clause due to database error
-    }
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("Missing/Invalid input types");
   });
 
   test('Missing password field', async () => {
-    try {
-      const email = 'student@ubc.ca';
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-        credentials: 'include',
-      });
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'student@ubc.ca' });
 
-      if (response.ok) {
-        console.error("Login succeeded unexpectedly");
-        expect(true).toBe(false); // test fail clause due to unexpected success
-      } else {
-        const data = await response.json();
-        expect(response.status).toBe(400);
-        expect(data.message).toBe("Missing/Invalid input types");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      expect(true).toBe(false); // test fail clause due to unintended database error
-    }
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("Missing/Invalid input types");
   });
 
   test('Empty email and password fields', async () => {
-    try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: '', password: '' }),
-        credentials: 'include',
-      });
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: '', password: '' });
 
-      if (response.ok) {
-        console.error("Login succeeded unexpectedly");
-        expect(true).toBe(false); // test fail clause due to unexpected success
-      } else {
-        const data = await response.json();
-        expect(response.status).toBe(401);
-        expect(data.message).toBe("Invalid credentials");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      expect(true).toBe(false); // test fail clause due to unintended database error
-    }
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("Missing/Invalid input types");
   });
 
   test('SQL Injection attempt', async () => {
-    try {
-      const email = 'admin@ubc.ca';
-      const password = "' OR '1'='1";
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include',
-      });
+    pool.query.mockResolvedValueOnce({ rows: [] });
+    pool.query.mockResolvedValueOnce({ rows: [] });
+    pool.query.mockResolvedValueOnce({ rows: [] });
 
-      if (response.ok) {
-        console.error("Login succeeded unexpectedly");
-        expect(true).toBe(false); // test fail clause due to unexpected success
-      } else {
-        const data = await response.json();
-        expect(response.status).toBe(401);
-        expect(data.message).toBe("Invalid credentials");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      expect(true).toBe(false); // test fail clause due to no database error
-    }
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'admin@ubc.ca', password: "' OR '1'='1" });
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("Invalid credentials");
   });
 
-test('Login attempt with incorrect variable types', async () => { 
-  const email = 12345; // Incorrect type: should be a string
-  const password = true; // Incorrect type: should be a string
+  test('Login attempt with incorrect variable types', async () => {
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 12345, password: true });
 
-  try {
-    const response = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: { email, password }, // Incorrect JSON form otherwise stringified body will work
-      credentials: 'include',
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("Missing/Invalid input types");
+  });
+
+  /*
+  // Uncomment these tests when rate limiting and hashing are implemented
+
+  test('Rate limiting triggered', async () => {
+    const req = {
+      body: { email: 'student@ubc.ca', password: 'student' },
+    };
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    // Simulate rate limiting
+    const loginLimiter = jest.fn((req, res, next) => {
+      res.status(429).json({ message: "Too many login attempts from this IP, please try again after 15 minutes" });
     });
 
-    // Check if the response is not OK
-    if (!response.ok) {
-      // Try to parse the response JSON to handle the error message
-      const data = await response.json();
-    } else {
-      console.error("Login succeeded unexpectedly");
-      expect(true).toBe(false); // Test fail clause due to unexpected success
-    }
-  } catch (error) {
-    // Handle the FetchError specifically
-    if (error.name === 'FetchError' && error.message.includes("Unexpected token")) {
-      expect(error.message).toContain("Unexpected token '<'"); //we expect the json body to be rejected
-    } else {
-      // Rethrow the error if it's not the expected one
-      throw error;
-    }
-  }
-});
+    await loginLimiter(req, res, () => {});
+
+    expect(res.status).toHaveBeenCalledWith(429);
+    expect(res.json).toHaveBeenCalledWith({ message: "Too many login attempts from this IP, please try again after 15 minutes" });
+  });
+
+  test('Successful login with hashed password', async () => {
+    const req = {
+      body: { email: 'student@ubc.ca', password: 'student' },
+      session: { save: jest.fn((cb) => cb()) }
+    };
+    const res = { json: jest.fn() };
+    const hashedPassword = await bcrypt.hash('student', 10);
+    pool.query.mockResolvedValueOnce({ rows: [{ student_id: 2, email: 'student@ubc.ca', password: hashedPassword, name: 'Student' }] });
+    bcrypt.compare.mockResolvedValueOnce(true);
+
+    await login(req, res);
+
+    expect(req.session.userId).toBe(2);
+    expect(req.session.userName).toBe('Student');
+    expect(req.session.role).toBe('student');
+    expect(res.json).toHaveBeenCalledWith({ message: "Login successful", role: 'student' });
+  });
+  */
+
 });

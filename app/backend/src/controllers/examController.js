@@ -1,4 +1,4 @@
-const pool = require('../utils/db');
+const pool = require("../utils/db");
 
 // Save solution questions and answers
 const saveQuestions = async (req, res, next) => {
@@ -58,6 +58,16 @@ const examBoard = async (req, res, next) => {
   }
 };
 
+const examKey = async (req, res, next) => {
+  console.log(req.file);
+  res.send("File uploaded successfully");
+  const sourcePath = `app-backend-1:/code/uploads/${req.file.originalname}`;
+  const destinationPath = "./app/omr";
+  executeDockerCp(sourcePath, destinationPath);
+  console.log("File moved to OMR folder");
+};
+
+module.exports = { saveQuestions, newExam, examBoard };
 // New function to get standard average data
 const getStandardAverageData = async (req, res, next) => {
   const instructorId = req.session.userId;
