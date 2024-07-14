@@ -82,12 +82,12 @@ const ConfirmExamKey = (props) => {
     event.target.classList.toggle("selected");
     if (!questions.includes(selection)) {
       questions.push(selection);
-      console.log(`Added: ${selection.question} ${selection.option}`);
+      // console.log(`Added: ${selection.question} ${selection.option}`);
     } else {
       removeQuestion(selection.question, selection.option);
-      console.log(`Removed: ${selection.question} ${selection.option}`);
+      // console.log(`Removed: ${selection.question} ${selection.option}`);
     }
-    console.log(questions);
+    // console.log(questions);
   };
 
   function toggleQuestionAnswer(questionNumber, answer) {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback, useReducer } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import "../../css/App.css";
 
 const OMRProcessing = (props) => {
   const location = useLocation();
   const { examTitle, classID } = location.state || {};
+  const navigate = useNavigate();
 
   const runOMR = async () => {
     console.log("Running OMR");
@@ -16,6 +17,12 @@ const OMRProcessing = (props) => {
     console.log("response", response);
     console.log("data", data);
     console.log("finished");
+    navigate("/ConfirmExamKey", {
+      state: {
+        examTitle: examTitle,
+        classID: classID,
+      },
+    });
   };
 
   useEffect(() => {
