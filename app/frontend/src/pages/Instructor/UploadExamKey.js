@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../../css/App.css";
 import "../../css/UploadExam.css";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
@@ -9,6 +9,7 @@ const UploadExamKey = () => {
   const fileInputRef = useRef(null);
   const location = useLocation();
   const { examTitle, classID } = location.state || {};
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleFileSelect = (event) => {
@@ -58,6 +59,13 @@ const UploadExamKey = () => {
 
       console.log("Data from saveExamKey:", dataSaveExamKey);
       console.log("Data from copyCSV:", dataCopyTemplate);
+
+      navigate("/OMRProcessing", {
+        state: {
+          examTitle: examTitle,
+          classID: classID,
+        },
+      });
     } catch (error) {
       console.error("Error:", error);
     }
@@ -101,7 +109,7 @@ const UploadExamKey = () => {
             >
               <iframe src={fileURL} title="PDF Preview"></iframe>
             </div>
-            <Link
+            {/* <Link
               to="/OMRProcessing"
               state={{
                 examTitle: examTitle,
@@ -110,7 +118,10 @@ const UploadExamKey = () => {
               className="btn-import"
             >
               <span onClick={sendToBackend}>Import</span>
-            </Link>
+            </Link> */}
+            <button className="btn-import" onClick={sendToBackend}>
+              Import
+            </button>
             <button className="btn-confirm" onClick={resetUpload}>
               Reset
             </button>

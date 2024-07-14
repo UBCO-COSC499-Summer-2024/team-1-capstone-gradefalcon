@@ -6,7 +6,7 @@ const OMRProcessing = (props) => {
   const location = useLocation();
   const { examTitle, classID } = location.state || {};
 
-  const runTheOMR = async () => {
+  const runOMR = async () => {
     console.log("Running OMR");
     const response = await fetch("/api/exam/callOMR", {
       method: "POST",
@@ -23,7 +23,7 @@ const OMRProcessing = (props) => {
           <header>
             <h2>Scanning file</h2>
           </header>
-          <button className="btn-confirm" onClick={runTheOMR}>
+          <button className="btn-confirm" onClick={runOMR}>
             Run omr
           </button>
           <Link
