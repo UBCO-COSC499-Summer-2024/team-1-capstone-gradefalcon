@@ -6,10 +6,6 @@ import "../../css/ManualExamKey.css";
 const ConfirmExamKey = (props) => {
   const location = useLocation();
   const { examTitle, classID } = location.state || {};
-  // test data
-  // const examTitle = "Test Exam";
-  // const classID = 1;
-  console.log(examTitle, classID);
   const [fields, setFields] = useState({});
 
   let questions = [];
@@ -19,23 +15,27 @@ const ConfirmExamKey = (props) => {
   const [numMarks, setNumMarks] = useState(10);
 
   const downloadCsv = async () => {
-    const response = await fetch("/api/exam/getResults", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+    try {
+      const response = await fetch("/api/exam/getResults", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
 
-    console.log(response);
-    const data = await response.json();
-    const dataCsv = data.csv_file;
-    console.log(dataCsv);
-    setFields(getFilledQs(dataCsv));
-    setNumQuestions(getQuestionCount(getFilledQs(dataCsv)));
-    console.log(getFilledQs(dataCsv));
-    toggleQuestionAnswer(1, "E"); // bug fix, still selects the correct option
-    clickAnswersForQuestions(getFilledQs(dataCsv));
+      console.log("Response from getResults", response);
+      const data = await response.json();
+      const dataCsv = data.csv_file[0];
+      console.log(dataCsv);
+      setFields(getFilledQs(dataCsv));
+      setNumQuestions(getQuestionCount(getFilledQs(dataCsv)));
+      console.log(getFilledQs(dataCsv));
+      toggleQuestionAnswer(1, "E"); // bug fix, still selects the correct option
+      clickAnswersForQuestions(getFilledQs(dataCsv));
+    } catch (error) {
+      console.error("Error downloading CSV: ", error);
+    }
   };
 
   function clickAnswersForQuestions(questionsAndAnswers) {

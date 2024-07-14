@@ -20,17 +20,23 @@ router.get("/standard-average-data", getStandardAverageData);
 router.get("/performance-data", getPerformanceData);
 
 router.get("/getResults", async function (req, res) {
-  // need to modify this to make the path dynamic
   const filePath = path.join(
     __dirname,
     "../../omr/outputs/Results/Results.csv"
   );
+  const results = []; // Array to hold all rows of data
 
   fs.createReadStream(filePath)
     .pipe(csv())
-    .on("data", (data) => {
-      console.log(data);
-      res.json({ csv_file: data });
+    .on("data", (data) => results.push(data)) // Push each row of data into the results array
+    .on("end", () => {
+      // Once file reading is done, send the entire results array as a response
+      res.json({ csv_file: results });
+    })
+    .on("error", (error) => {
+      // Handle any errors during file reading
+      console.error("Error reading CSV file:", error);
+      res.status(500).send("Error reading CSV file");
     });
 });
 
