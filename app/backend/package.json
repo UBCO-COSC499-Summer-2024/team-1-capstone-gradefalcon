@@ -13,6 +13,7 @@
     "test-watch": "nodemon --exec \"npm test\""
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.614.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "connect-pg-simple": "^9.0.1",
@@ -21,6 +22,7 @@
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "mysql2": "^3.10.0",
     "node-fetch": "^2.7.0",
     "pg": "^8.12.0"

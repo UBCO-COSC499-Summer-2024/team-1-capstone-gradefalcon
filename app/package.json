@@ -7,6 +7,8 @@
     "test": "npm run test:backend && npm run test:frontend"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.614.0",
+    "axios": "^1.7.2",
     "dotenv": "^16.4.5"
   }
 }

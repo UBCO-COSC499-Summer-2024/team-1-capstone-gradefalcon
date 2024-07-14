@@ -1,12 +1,37 @@
 import React, { useEffect, useState } from "react";
 import "../../css/App.css";
 import "../../css/Examboard.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ExamBoard = () => {
   const [classData, setClassData] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [userID, setUserID] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchSessionInfo = async () => {
+      try {
+        const response = await fetch("/api/session-info", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUserName(data.userName);
+          setUserID(data.userId);
+        } else {
+          console.error("Failed to fetch session info");
+        }
+      } catch (error) {
+        console.error("Error fetching session info:", error);
+      }
+    };
+
     const fetchClassData = async () => {
       try {
         const response = await fetch(`/api/exam/ExamBoard`, {
@@ -18,7 +43,7 @@ const ExamBoard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          setClassData(data); // Set the class data state with the fetched data
+          setClassData(data);
           console.log(data);
         } else {
           console.error("Failed to fetch class data");
@@ -28,13 +53,12 @@ const ExamBoard = () => {
       }
     };
 
+    fetchSessionInfo();
     fetchClassData();
   }, []);
 
-  // Transform classData.classes into a structure that groups exams by course_id
-  // Check if classData.classes is null and provide a fallback empty array
   const groupedExams = (classData.classes || []).reduce((acc, current) => {
-    const { course_id, course_name, exam_title, class_id } = current;
+    const { course_id, course_name, exam_title, class_id, exam_id } = current;
     if (!acc[course_id]) {
       acc[course_id] = {
         course_name,
@@ -42,7 +66,7 @@ const ExamBoard = () => {
         exams: [],
       };
     }
-    acc[course_id].exams.push(exam_title);
+    acc[course_id].exams.push({ exam_title, exam_id });
     return acc;
   }, {});
 
@@ -57,18 +81,38 @@ const ExamBoard = () => {
             {Object.entries(groupedExams).map(
               ([courseId, { course_name, class_id, exams }]) => (
                 <div key={courseId}>
-                <h3>{courseId} {course_name}</h3>
-                {exams.map((exam, index) => (
-                  <div key={index} className="exam-item">
-                    <p>{exam}</p>
-                    <Link to="/UploadExams" className="grade-exam-btn">
-                      Grade Exam
-                    </Link>
-                  </div>
+                  <h3>{courseId} {course_name}</h3>
+                  {exams.map((exam, index) => (
+                    <div key={index} className="exam-item">
+                      <p>{exam.exam_title}</p>
+                      <button 
+                        onClick={() => navigate("/UploadExams", {
+                          state: {
+                            className: course_name,
+                            userName: userName,
+                            userID: userID,
+                            examTitle: exam.exam_title,
+                            examID: exam.exam_id
+                          }
+                        })}
+                        className="grade-exam-btn"
+                      >
+                        Grade Exam
+                      </button>
+                    </div>
                   ))}
-                  <a href={`./NewExam/${class_id}`} class="create-new-btn">
+                  <button 
+                    onClick={() => navigate(`/NewExam/${class_id}`, {
+                      state: {
+                        className: course_name,
+                        userName: userName,
+                        userID: userID,
+                      }
+                    })}
+                    className="create-new-btn"
+                  >
                     Create New
-                  </a>
+                  </button>
                 </div>
               )
             )}

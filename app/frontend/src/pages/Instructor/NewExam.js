@@ -1,15 +1,20 @@
-import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import '../../css/App.css';
 import "../../css/NewExam.css";
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userID, setUserID] = useState("");
+  const [className, setClassName] = useState("");
   const params = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const class_id = params.class_id;
+
   const handleInputChange = (event) => {
     const value = event.target.value;
-    // blocks chars that could cause error (i.e " ')
     const sanitizedValue = value.replace(/[^a-zA-Z0-9\s.,!?-]/g, "");
     setExamTitle(sanitizedValue);
   };
@@ -17,6 +22,21 @@ const NewExam = () => {
   const isFormValid = () => {
     return examTitle.trim() !== ""; // Simple validation check
   };
+
+  const handleUploadClick = (e) => {
+    if (!isFormValid()) {
+      e.preventDefault();
+      alert('Please enter an exam title before uploading the answer key.');
+    }
+  };
+
+  useEffect(() => {
+    if (location.state) {
+      setUserName(location.state.userName);
+      setUserID(location.state.userID);
+      setClassName(location.state.className);
+    }
+  }, [location.state]);
 
   return (
     <>
@@ -48,13 +68,15 @@ const NewExam = () => {
 
               <label htmlFor="answer-key">Answer Key:</label>
               <div>
-                <a
-                  href="/UploadExamKey"
+                <Link
+                  to={isFormValid() ? "/UploadExamKey" : "#"}
+                  state={{ examTitle: examTitle, userID: userID, userName: userName, className: className }} // Pass examTitle as state
                   className="btn"
                   data-testid="upload-answer-key-btn"
+                  onClick={handleUploadClick}
                 >
                   Upload Answer Key
-                </a>
+                </Link>
                 <Link
                   to={isFormValid() ? "/ManualExamKey" : "#"}
                   state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
@@ -68,7 +90,7 @@ const NewExam = () => {
           </section>
         </div>
       </div>
-          </>
+    </>
   );
 };
 
