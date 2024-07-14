@@ -21,6 +21,7 @@ import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
+import DataTable from "./pages/Instructor/DataTable";
 //admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
@@ -65,6 +66,7 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/DataTable" element={<DataTable />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/Dashboard"element={ <ProtectedRoute> <Dashboard /></ProtectedRoute>}/>
             <Route path="/Component" element={<Component />} />

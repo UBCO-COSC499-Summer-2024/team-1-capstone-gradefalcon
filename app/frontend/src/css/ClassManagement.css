@@ -24,7 +24,7 @@
     background-color: #45a049;
 }
 
-table {
+/* table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
@@ -40,7 +40,7 @@ tbody td {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     text-align: center;
-}
+} */
 
 .export-btn {
     background-color: #4CAF50;

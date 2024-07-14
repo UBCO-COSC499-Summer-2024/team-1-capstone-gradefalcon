@@ -5,15 +5,14 @@ html, body {
   display: flex;
   flex-direction: column;
 }
-
+/* 
 header {
  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  position: fixed; /* If you want the header to stay at the top when scrolling */
-}
+  position: fixed; /* If you want the header to stay at the top when scrolling } */
 
 
 code {

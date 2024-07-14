@@ -24,7 +24,7 @@
     margin-top: 20px;
   }
   
-  table {
+  /* table {
     width: 100%;
     border-collapse: collapse;
   }
@@ -36,7 +36,7 @@
   
   th {
     background-color: #f2f2f2;
-  }
+  } */
   
   .csv-preview {
     margin-top: 20px;
