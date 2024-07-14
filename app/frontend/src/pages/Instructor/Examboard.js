@@ -1,33 +1,92 @@
-import React from 'react';
-import '../../css/App.css';
-import '../../css/Examboard.css';
+import React, { useEffect, useState } from "react";
+import "../../css/App.css";
+import "../../css/Examboard.css";
+import { Link } from 'react-router-dom';
 
-const Examboard = () => {
+const ExamBoard = () => {
+  const [classData, setClassData] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchClassData = async () => {
+      try {
+        const response = await fetch(`/api/exam/ExamBoard`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setClassData(data); // Set the class data state with the fetched data
+        } else {
+          setError("Failed to fetch class data");
+        }
+      } catch (error) {
+        setError("Error fetching class data: " + error.message);
+      }
+    };
+
+    fetchClassData();
+  }, []);
+
+  // Transform classData.classes into a structure that groups exams by course_id
+  // Check if classData.classes is null and provide a fallback empty array
+  const groupedExams = (classData.classes || []).reduce((acc, current) => {
+    const { course_id, course_name, exam_title, class_id } = current;
+    if (!acc[course_id]) {
+      acc[course_id] = {
+        course_name,
+        class_id,
+        exams: [],
+      };
+    }
+    acc[course_id].exams.push(exam_title);
+    return acc;
+  }, {});
+
+  if (error) {
+    return <div data-testid="error-message">{error}</div>;
+  }
+
+  if ((classData.classes || []).length === 0) {
+    return <div data-testid="no-exams">No exams available</div>;
+  }
+
   return (
-    <div className="App">
-    <div class="main-content">
-        <header>
-            <h2>Exam Board</h2>
-        </header>
-        <section class="exam-list">
-            <h3>Graphic Fundamentals:</h3>
-            <p>Graphic Fundamentals Final Exam #Q: 80 31-12-2024 13:00-16:00 Saved</p>
-            <a href="./NewExam" class="create-new-btn">Create New</a>
-            <h3>Advanced Web Design:</h3>
-            <p>Advanced Web Design Midterm #1 #Q: 30 10-10-2024 11:30 - 13:00 Graded</p>
-            <p>Advanced Web Design Final Exam #Q: 80 30-12-2024 8:00 - 10:00 Published</p>
-            <a href="./NewExam" class="create-new-btn">Create New</a>
-            <h3>3D Animation Techniques:</h3>
-            <a href="./NewExam" class="create-new-btn">Create New</a>
-            <h3>User Experience Research:</h3>
-            <p>User Experience Research Midterm #1 #Q: 25 01-05-2024 8:00 - 9:00 Graded</p>
-            <p>UER In-Class Quiz #1 #Q: 10 12-05-2024 8:00 - 8:15 Graded</p>
-            <p>User Experience Research Midterm #2 #Q: 30 01-06-2024 8:00 - 9:00 Saved</p>
-            <a href="./NewExam" class="create-new-btn">Create New</a>
-        </section>
-    </div>
-    </div>
-    );
+    <>
+      <div className="App">
+        <div className="main-content">
+          <header>
+            <h2 data-testid="header">Exam Board</h2>
+          </header>
+          <section className="exam-list" data-testid="exam-list">
+            {Object.entries(groupedExams).map(
+              ([courseId, { course_name, class_id, exams }]) => (
+                <div key={courseId} data-testid={`course-${courseId}`}>
+                  <h3 data-testid={`course-header-${courseId}`}>
+                    {courseId} {course_name}
+                  </h3>
+                  {exams.map((exam, index) => (
+                    <div key={index} className="exam-item" data-testid={`exam-${index}-${courseId}`}>
+                      <p>{exam}</p>
+                      <Link to="/UploadExams" className="grade-exam-btn" data-testid={`grade-btn-${index}-${courseId}`}>
+                        Grade Exam
+                      </Link>
+                    </div>
+                  ))}
+                  <a href={`./NewExam/${class_id}`} className="create-new-btn" data-testid={`create-new-${courseId}`}>
+                    Create New
+                  </a>
+                </div>
+              )
+            )}
+          </section>
+        </div>
+      </div>
+    </>
+  );
 };
 
-export default Examboard;
+export default ExamBoard;
