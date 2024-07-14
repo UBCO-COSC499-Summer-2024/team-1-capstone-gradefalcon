@@ -1,67 +1,40 @@
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-  @import './Tailwind.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import './Tailwind.css';
 
-  @layer base {
-    :root {
-      --background: 0 0% 100%;
-      --foreground: 240 10% 3.9%;
-      --card: 0 0% 100%;
-      --card-foreground: 240 10% 3.9%;
-      --popover: 0 0% 100%;
-      --popover-foreground: 240 10% 3.9%;
-      --primary: 142 86% 28%;
-      --primary-foreground: 356 29% 98%;
-      --secondary: 240 4.8% 95.9%;
-      --secondary-foreground: 240 5.9% 10%;
-      --muted: 240 4.8% 95.9%;
-      --muted-foreground: 240 3.8% 45%;
-      --accent: 240 4.8% 95.9%;
-      --accent-foreground: 240 5.9% 10%;
-      --destructive: 0 72% 51%;
-      --destructive-foreground: 0 0% 98%;
-      --border: 240 5.9% 90%;
-      --input: 240 5.9% 90%;
-      --ring: 142 86% 28%;
-      --radius: 0.5rem;
-    }
-  }
-  
-  @layer base {
-    * {
-      @apply border-border;
-    }
-  
-    body {
-      @apply bg-background text-foreground font-body;
-    }
-  
-    h1, h2, h3, h4, h5, h6 {
-      @apply font-heading;
-    }
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --primary: 142 86% 28%;
+    --primary-foreground: 356 29% 98%;
+    --muted-foreground: 240 3.8% 45%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 142 86% 28%;
+    --radius: 0.5rem;
+    --light-green: #E6FFE6;
+    --gradient-start: #e0f7fa;
+    --gradient-end: #e6ffe6;
   }
 
+  * {
+    @apply border-border;
+  }
 
-  /* Navbar/shared elements CSS */
+  body {
+    @apply bg-background text-foreground font-body;
+  }
 
-body {
-  margin: 0;
-  display: flex;
-  height: 100vh;
-  overflow-x: hidden;
-  /* Prevent horizontal scrolling */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
 }
 
-h1, h2, h3, h4, p {
-  margin: 0;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
+/* Sidebar styles */
 .sidebar {
   width: 250px;
   height: 100%;
@@ -73,13 +46,14 @@ a {
   box-sizing: border-box;
   position: fixed;
   z-index: 1;
+  left: 0;
 }
 
 .logo {
   text-align: left;
   margin-bottom: 20px;
-  font-size: 24px; /* Increased font size */
-  font-weight: bold; /* Made the text bold */
+  font-size: 24px;
+  font-weight: bold;
 }
 
 nav ul {
@@ -102,16 +76,17 @@ nav ul li a:hover {
   background-color: #2D3748;
 }
 
+/* Main content styles */
 .main-content {
   height: 100vh;
-  margin-left: 250px; /* Adjusted to be positioned next to the sidebar */
+  margin-left: 250px;
   flex-grow: 1;
   padding: 20px;
   background-color: #EDF2F7;
   overflow-y: auto;
   box-sizing: border-box;
-  position: relative; /* Ensure it doesn't go behind the sidebar */
-  z-index: 0; /* Ensure it's below the sidebar */
+  position: relative;
+  z-index: 0;
 }
 
 header {
@@ -127,14 +102,7 @@ section {
   margin-bottom: 20px;
 }
 
-/* Dashboard shared CSS */
-
-section h3 {
-  margin-bottom: 10px;
-  font-size: 20px;
-  font-weight: normal;
-}
-
+/* Course card styles */
 .course-card, .assignment-card {
   background-color: white;
   border-radius: 5px;
@@ -170,38 +138,7 @@ section h3 {
   background-color: #F7FAFC;
 }
 
-.course-card:nth-child(1) {
-  background-color: #E9D8FD;
-}
-
-.course-card:nth-child(2) {
-  background-color: #FEEBC8;
-}
-
-.course-card:nth-child(3) {
-  background-color: #BEE3F8;
-}
-
-.course-card:nth-child(4) {
-  background-color: #C6F6D5;
-}
-
-.assignment-card h4 {
-  font-size: 16px;
-}
-
-.assignment-card p {
-  font-size: 12px;
-}
-
-.assignment-card:not(.completed) {
-  border-left: 5px solid #E53E3E;
-}
-
-.assignment-card.completed {
-  border-left: 5px solid #45a049;
-}
-
+/* Exam board styles */
 .exam-board {
   width: 100%;
   background-color: white;
@@ -222,33 +159,16 @@ section h3 {
   color: white;
 }
 
-.status.upcoming {
-  background-color: #ED8936;
-  color: white;
-}
-
-.status.not-submitted {
-  background-color: #E53E3E;
-  color: white;
-}
-
-.status.in-progress {
-  background-color: #ECC
-}
-
-/* Updated CSS for charts container */
+/* Charts container styles */
 .charts-container {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  /* Adjust the gap between the charts if needed */
 }
 
 .chart {
   flex: 1;
-  /* Ensure the charts take equal space */
   max-width: 48%;
-  /* Ensure the charts fit within the container */
   background-color: white;
   border-radius: 5px;
   padding: 15px;
@@ -274,256 +194,3 @@ section h3 {
   font-size: 16px;
 }
 
-/* AccountSettings shared CSS */
-
-/* Card styling */
-.account-settings .card {
-  background-color: #e6f5e9; /* Light green background */
-  border-radius: 5px;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-  margin-bottom: 20px;
-}
-
-.account-settings .card-header {
-  margin-bottom: 20px;
-}
-
-.account-settings .card-title {
-  font-size: 24px;
-  color: #45a049; /* Green color */
-}
-
-.account-settings .card-content {
-  margin-bottom: 20px;
-}
-
-.account-settings .card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Green theme styles */
-.text-green-700 {
-  color: #45a049;
-}
-
-.save-changes-btn {
-  background-color: #45a049;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.save-changes-btn:hover {
-  background-color: #45a049;
-}
-
-.delete-account-btn {
-  background-color: #E53E3E;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.delete-account-btn:hover {
-  background-color: #C53030;
-}
-
-/* schedule shared CSS */
-
-.calendar {
-  background-color: white;
-  border-radius: 5px;
-  padding: 15px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-}
-
-#calendar {
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-/* notification preferences shared CSS */
-
-.notification-preferences {
-  background-color: white;
-  border-radius: 5px;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-  width: 350px;
-}
-
-.notification-preferences form {
-  display: flex;
-  flex-direction: column;
-}
-
-.notification-preferences .control-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.notification-preferences .control-item span {
-  flex-grow: 1;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 30px;
-  height: 17px;
-  margin-left: 5px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 17px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 13px;
-  width: 13px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #45a049;
-}
-
-input:checked + .slider:before {
-  transform: translateX(13px);
-}
-
-.btn {
-  background-color: #45a049;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-}
-
-.btn:hover {
-  background-color: #45a049;
-}
-
-.save-changes-btn {
-  align-self: flex-start;
-}
-
-.toast {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: #333;
-  color: #fff;
-  padding: 16px;
-  border-radius: 4px;
-  z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-width: 250px;
-}
-
-.toast.success {
-  background-color: #4caf50;
-}
-
-.toast.error {
-  background-color: #f44336;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* grade report shared CSS */
-
-.chart {
-  background-color: white;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-}
-
-.chart h3 {
-  font-size: 20px;
-  font-weight: normal;
-  margin-bottom: 10px;
-}
-
-.placeholder {
-  width: 100%;
-  height: 200px;
-  background-color: #f2f2f2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #555;
-  font-size: 16px;
-}
-
-/* Updated CSS for charts container */
-
-.charts-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  /* Adjust the gap between the charts if needed */
-}
-
-.chart {
-  flex: 1;
-  /* Ensure the charts take equal space */
-  max-width: 48%;
-  /* Ensure the charts fit within the container */
-  background-color: white;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-}

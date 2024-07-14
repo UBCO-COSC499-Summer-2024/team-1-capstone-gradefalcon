@@ -1,509 +1,316 @@
-import { Link } from "react-router-dom";
-import { Sheet, SheetTrigger, SheetContent } from "../../components/ui/sheet";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import {
+  Home,
+  Package as PackageIcon,
+  Users,
+  LineChart,
+  Settings,
+  ArrowUpRight,
+  BookOpen,
+  CheckCircle,
+  ChevronDown,
+} from "lucide-react";
 import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "../../components/ui/dropdown-menu";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "../../components/ui/dropdown-menu";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "../../components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
-import { Badge } from "../../components/ui/badge";
-import { Avatar, AvatarImage, AvatarFallback } from "../../components/ui/avatar";
+import StandardAverageChart from "../../components/StandardAverageChart";
+import PerformanceBarChart from "../../components/PerformanceBarChart";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "../../components/ui/alert-dialog";
 
 export default function Component() {
+  const [userName, setUserName] = useState("");
+  const [courses, setCourses] = useState([]);
+  const [exams, setExams] = useState([]);
+  const [standardAverageData, setStandardAverageData] = useState([]);
+  const [performanceData, setPerformanceData] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSessionInfo = async () => {
+      try {
+        const response = await fetch("/api/session-info", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUserName(data.userName);
+        } else {
+          console.error("Failed to fetch session info");
+        }
+      } catch (error) {
+        console.error("Error fetching session info:", error);
+      }
+    };
+
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("/api/class/classes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setCourses(data);
+        } else {
+          console.error("Failed to fetch courses");
+        }
+      } catch (error) {
+        console.error("Error fetching courses");
+      }
+    };
+
+    const fetchExams = async () => {
+      try {
+        const response = await fetch("/api/exam/ExamBoard", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setExams(data.classes);
+        } else {
+          console.error("Failed to fetch exams");
+        }
+      } catch (error) {
+        console.error("Error fetching exams");
+      }
+    };
+
+    const fetchStandardAverageData = async () => {
+      try {
+        const response = await fetch("/api/exam/standard-average-data", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setStandardAverageData(data);
+        } else {
+          console.error("Failed to fetch standard average data");
+        }
+      } catch (error) {
+        console.error("Error fetching standard average data:", error);
+      }
+    };
+
+    const fetchPerformanceData = async () => {
+      try {
+        const response = await fetch("/api/exam/performance-data", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setPerformanceData(data);
+        } else {
+          console.error("Failed to fetch performance data");
+        }
+      } catch (error) {
+        console.error("Error fetching performance data");
+      }
+    };
+
+    fetchSessionInfo();
+    fetchCourses();
+    fetchExams();
+    fetchStandardAverageData();
+    fetchPerformanceData();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        navigate("/");
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-        <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-          <Link to="#" className="flex items-center gap-2 text-lg font-semibold md:text-base">
-            <Package2Icon className="h-6 w-6" />
-            <span className="sr-only">Acme Inc</span>
+    <div className="flex min-h-screen">
+      <aside className="w-64 bg-primary text-primary-foreground flex flex-col p-4 fixed h-full">
+        <div className="flex items-center mb-8">
+          <PackageIcon className="h-6 w-6" />
+          <span className="text-lg font-semibold ml-2">GradeFalcon</span>
+        </div>
+        <nav className="flex flex-col gap-4">
+          <Link to="/Dashboard" className="text-primary-foreground hover:bg-primary-foreground hover:text-primary p-2 rounded flex items-center">
+            <Home className="mr-2" /> Dashboard
           </Link>
-          <Link to="#" className="text-foreground transition-colors hover:text-foreground">
-            Dashboard
+          <Link to="/Examboard" className="text-primary-foreground hover:bg-primary-foreground hover:text-primary p-2 rounded flex items-center">
+            <BookOpen className="mr-2" /> Exam Board
           </Link>
-          <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-            Orders
+          <Link to="/GradeReport" className="text-primary-foreground hover:bg-primary-foreground hover:text-primary p-2 rounded flex items-center">
+            <LineChart className="mr-2" /> Grade Report
           </Link>
-          <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-            Products
-          </Link>
-          <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-            Customers
-          </Link>
-          <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-            Analytics
+          <Link to="/Classes" className="text-primary-foreground hover:bg-primary-foreground hover:text-primary p-2 rounded flex items-center">
+            <Users className="mr-2" /> Classes
           </Link>
         </nav>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="shrink-0 md:hidden">
-              <MenuIcon className="h-5 w-5" />
-              <span className="sr-only">Toggle navigation menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left">
-            <nav className="grid gap-6 text-lg font-medium">
-              <Link to="#" className="flex items-center gap-2 text-lg font-semibold">
-                <Package2Icon className="h-6 w-6" />
-                <span className="sr-only">Acme Inc</span>
-              </Link>
-              <Link to="#" className="hover:text-foreground">
-                Dashboard
-              </Link>
-              <Link to="#" className="text-muted-foreground hover:text-foreground">
-                Orders
-              </Link>
-              <Link to="#" className="text-muted-foreground hover:text-foreground">
-                Products
-              </Link>
-              <Link to="#" className="text-muted-foreground hover:text-foreground">
-                Customers
-              </Link>
-              <Link to="#" className="text-muted-foreground hover:text-foreground">
-                Analytics
-              </Link>
-            </nav>
-          </SheetContent>
-        </Sheet>
-        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <form className="ml-auto flex-1 sm:flex-initial">
-            <div className="relative">
-              <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search products..."
-                className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-              />
-            </div>
-          </form>
+        <div className="mt-auto flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUserIcon className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
+              <div className="flex items-center gap-2 cursor-pointer">
+                <Settings className="h-6 w-6" />
+                <span>My Account</span>
+              </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/AccountSettings">Account Settings</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/NotificationPreferences">Notification Preferences</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <DropdownMenuItem asChild>
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to logout?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Go Back</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleLogout}>OK</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </header>
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-          <Card x-chunk="dashboard-01-chunk-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-              <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$45,231.89</div>
-              <p className="text-xs text-muted-foreground">+20.1% from last month</p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-1">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Subscriptions</CardTitle>
-              <UsersIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+2350</div>
-              <p className="text-xs text-muted-foreground">+180.1% from last month</p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-2">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Sales</CardTitle>
-              <CreditCardIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+12,234</div>
-              <p className="text-xs text-muted-foreground">+19% from last month</p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-3">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Now</CardTitle>
-              <ActivityIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+573</div>
-              <p className="text-xs text-muted-foreground">+201 since last hour</p>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-          <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-            <CardHeader className="flex flex-row items-center">
-              <div className="grid gap-2">
-                <CardTitle>Transactions</CardTitle>
-                <CardDescription>Recent transactions from your store.</CardDescription>
-              </div>
-              <Button asChild size="sm" className="ml-auto gap-1">
-                <Link to="#">
-                  View All
-                  <ArrowUpRightIcon className="h-4 w-4" />
-                </Link>
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Customer</TableHead>
-                    <TableHead className="hidden xl:table-column">Type</TableHead>
-                    <TableHead className="hidden xl:table-column">Status</TableHead>
-                    <TableHead className="hidden xl:table-column">Date</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Liam Johnson</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">liam../..example.com</div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">Sale</TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">2023-06-23</TableCell>
-                    <TableCell className="text-right">$250.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Olivia Smith</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">olivia../..example.com</div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">Refund</TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Declined
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">2023-06-24</TableCell>
-                    <TableCell className="text-right">$150.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Noah Williams</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">noah../..example.com</div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">Subscription</TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">2023-06-25</TableCell>
-                    <TableCell className="text-right">$350.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Emma Brown</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">emma../..example.com</div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">Sale</TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">2023-06-26</TableCell>
-                    <TableCell className="text-right">$450.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Liam Johnson</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">liam../..example.com</div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">Sale</TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">2023-06-27</TableCell>
-                    <TableCell className="text-right">$550.00</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-5">
-            <CardHeader>
-              <CardTitle>Recent Sales</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-8">
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>OM</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">Olivia Martin</p>
-                  <p className="text-sm text-muted-foreground">olivia.martin../..email.com</p>
+      </aside>
+      <div className="flex-1 ml-64 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
+        <main className="flex flex-col gap-4">
+          <div>
+            <h1 className="text-2xl font-bold mb-4">👋 Welcome, Instructor!</h1>
+            <h2 className="text-xl font-semibold mb-4"><BookOpen className="inline mr-2" /> Your Courses</h2>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {courses.map((course, index) => (
+                <Card key={index} className="p-4 border rounded-lg shadow-md flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-4">
+                    <CardTitle className="text-lg font-semibold">{course.course_name}</CardTitle>
+                    <PackageIcon className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="text-2xl font-bold">{course.course_id}</div>
+                    <Button className="mt-4">Create New Exam</Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+          <div className="grid gap-4">
+            <Card className="bg-white border rounded shadow">
+              <CardHeader className="flex flex-row items-center">
+                <div className="grid gap-2">
+                  <CardTitle className="uppercase">Exam Board</CardTitle>
+                  <CardDescription>Recent exams from your classes.</CardDescription>
                 </div>
-                <div className="ml-auto font-medium">+$1,999.00</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>JL</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">Jackson Lee</p>
-                  <p className="text-sm text-muted-foreground">jackson.lee../..email.com</p>
-                </div>
-                <div className="ml-auto font-medium">+$39.00</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>IN</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">Isabella Nguyen</p>
-                  <p className="text-sm text-muted-foreground">isabella.nguyen../..email.com</p>
-                </div>
-                <div className="ml-auto font-medium">+$299.00</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>WK</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">William Kim</p>
-                  <p className="text-sm text-muted-foreground">will../..email.com</p>
-                </div>
-                <div className="ml-auto font-medium">+$99.00</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <Avatar className="hidden h-9 w-9 sm:flex">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>SD</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <p className="text-sm font-medium leading-none">Sofia Davis</p>
-                  <p className="text-sm text-muted-foreground">sofia.davis../..email.com</p>
-                </div>
-                <div className="ml-auto font-medium">+$39.00</div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
+                <Button asChild size="sm" className="ml-auto gap-1">
+                  <Link to="#">
+                    View All
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <Table className="bg-white border rounded shadow">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-black text-center"><span>Exam Name <ChevronDown className="inline-block" /></span></TableHead>
+                      <TableHead className="text-black text-center"><span>Course <ChevronDown className="inline-block" /></span></TableHead>
+                      <TableHead className="text-black text-center"><span>Status <ChevronDown className="inline-block" /></span></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {exams.map((exam, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="text-center">{exam.exam_title}</TableCell>
+                        <TableCell className="text-center">{exam.course_id}</TableCell>
+                        <TableCell className="text-center status">
+                          <CheckCircle className="inline-block text-green-500 mr-1" />
+                          Completed
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+            <div className="grid gap-4 md:grid-cols-2">
+              <Card className="bg-white border rounded shadow">
+                <CardHeader>
+                  <CardTitle>Standard Average Chart</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <StandardAverageChart data={standardAverageData} className="w-full" />
+                </CardContent>
+              </Card>
+              <Card className="bg-white border rounded shadow">
+                <CardHeader>
+                  <CardTitle>Performance Bar Chart</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <PerformanceBarChart data={performanceData} className="w-full" />
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
 
-function ActivityIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
-    </svg>
-  );
-}
 
-function ArrowUpRightIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M7 7h10v10" />
-      <path d="M7 17 17 7" />
-    </svg>
-  );
-}
 
-function CircleUserIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <circle cx="12" cy="10" r="3" />
-      <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
-    </svg>
-  );
-}
 
-function CreditCardIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="20" height="14" x="2" y="5" rx="2" />
-      <line x1="2" x2="22" y1="10" y2="10" />
-    </svg>
-  );
-}
-
-function DollarSignIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="12" x2="12" y1="2" y2="22" />
-      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-    </svg>
-  );
-}
-
-function MenuIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="18" y2="18" />
-    </svg>
-  );
-}
-
-function Package2Icon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
-      <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9" />
-      <path d="M12 3v6" />
-    </svg>
-  );
-}
-
-function SearchIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
-  );
-}
-
-function UsersIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </svg>
-  );
-}
-
-function XIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
-  );
-}
