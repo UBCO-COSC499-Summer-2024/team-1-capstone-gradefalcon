@@ -10,6 +10,13 @@ test('renders Dashboard link', () => {
     expect(linkElement.closest('a')).toHaveAttribute('href', '/Dashboard');
 });
 
+test('renders Schedule link', () => {
+    render(React.createElement(NavBar));
+    const linkElement = screen.getByText(/Schedule/i);
+    expect(linkElement).toBeInTheDocument();
+    expect(linkElement.closest('a')).toHaveAttribute('href', '/Schedule');
+});
+
 test('renders Exam Board link', () => {
     render(React.createElement(NavBar));
     const linkElement = screen.getByText(/Exam Board/i);

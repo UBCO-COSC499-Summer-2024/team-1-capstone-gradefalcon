@@ -27,19 +27,18 @@ services:
       - ./backend/package.json:/code/package.json
       - ./backend/package-lock.json:/code/package-lock.json
       - back-notused:/opt/app/node_modules
-      - omr-inputs:/code/omr/inputs
-      - omr-outputs:/code/omr/outputs
     networks:
-      - app-network
+      - public
+      - private
     depends_on:
       - db
-      - flaskomr
-
   db:
+    # Using postgres
     container_name: db-postgres
     ports:
       - 5433:5432
     hostname: db
+    # 127.0.0.1
     environment:
       - POSTGRES_DB=root
       - POSTGRES_USER=root
@@ -48,7 +47,8 @@ services:
     volumes:
       - ./db/sql:/docker-entrypoint-initdb.d
     networks:
-      - app-network
+      - public
+      - private
 
   frontend:
     build:
@@ -60,31 +60,12 @@ services:
       - ./frontend/src:/code/src
       - /code/node_modules
     networks:
-      - app-network
+      - public
     depends_on:
       - backend
-
-  flaskomr:
-    build:
-      context: ./omr # Use the omr directory as the build context
-    environment:
-      - FLASK_ENV=development
-    ports:
-      - 5000:5000
-    volumes:
-      - ./omr:/app
-      - omr-inputs:/app/inputs
-      - omr-outputs:/app/outputs
-    networks:
-      - app-network
-    # depends_on:
-    #   - backend
-
 networks:
-  app-network:
-
+  public:
+  private:
 volumes:
   back-notused:
   db-data:
-  omr-inputs:
-  omr-outputs:

@@ -41,8 +41,7 @@ CREATE TABLE student (
 
 CREATE TABLE exam (
 	exam_id serial primary key,
-	class_id int not null,
-	exam_title text, 
+	class_id int not null, 
 	total_questions int,
 	total_marks int,
 	mean double precision,
@@ -75,7 +74,6 @@ CREATE TABLE studentResults(
 	sheet_int serial primary key,
 	student_id int not null,
 	exam_id int not null,
-	chosen_answers text[],
 	grade int,
 	filepath text,
 	foreign key (exam_id) references exam(exam_id),
@@ -134,9 +132,9 @@ INSERT INTO classes (instructor_id, course_id, course_name) VALUES
  	(1, 'TEST100', 'Database Test'),
 	(1, 'TEST200', 'Database Test 2');
 
-INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES
- 	(1,'Midterm', 50, 50),
- 	(1, 'Final', 5, 100);
+INSERT INTO exam (class_id, total_questions, total_marks) VALUES
+ 	(1, 50, 50),
+ 	(1, 5, 100);
 
 INSERT INTO solution (exam_id) VALUES
 	(1),

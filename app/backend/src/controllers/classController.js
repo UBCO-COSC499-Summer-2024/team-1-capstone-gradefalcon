@@ -18,25 +18,19 @@ const displayClassManagement = async (req, res, next) => {
     const result = await pool.query("SELECT student_id, name FROM enrollment JOIN student USING (student_id) WHERE class_id = $1", [class_id]);
     const classData = result.rows;
 
-
-    // Get the exam_id and grade
-    // This will only be displayed if the student has taken the exam
-
     const examResults = classData.map(student =>
       pool.query("SELECT exam_id, grade FROM studentResults WHERE student_id = $1", [student.student_id])
       .then(result => ({
         student_id: student.student_id,
         name: student.name,
-        exams: result.rows,  // This will be an array of exam results
+        exams: result.rows,
       }))
     );
 
-     // Wait for all promises to resolve
     const combinedResults = await Promise.all(examResults);
-     // Now let's get the course code and course name given class_id
     const courseQuery = await pool.query("SELECT course_id, course_name FROM classes WHERE class_id = $1", [class_id]);
     const courseDetails = courseQuery.rows;
-    // Combine the students info and course details
+
     res.json({ studentInfo: combinedResults, courseDetails });
   } catch (error) {
     next(error);

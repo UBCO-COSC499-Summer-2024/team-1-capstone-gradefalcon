@@ -12,8 +12,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-papaparse": "^4.4.0",
-    "react-router-dom": "^6.23.1",
-    "recharts": "^2.12.7"
+    "react-router-dom": "^6.23.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -41,16 +40,14 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
-    "@playwright/test": "^1.45.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
-    "@types/node": "^20.14.9",
     "babel-jest": "^29.7.0",
     "http-proxy-middleware": "^2.0.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
     "jest-fetch-mock": "^3.0.3",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.0"
   }
 }

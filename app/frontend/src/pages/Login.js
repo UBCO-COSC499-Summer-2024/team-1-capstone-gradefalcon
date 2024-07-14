@@ -7,48 +7,6 @@ const Login = () => {
   const { loginWithRedirect } = useAuth0();
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="container">
-      <style>
-        {`
-          body {
-            justify-content: center;
-          }
-        `}
-      </style>
-        <div className="form-box">
-          <div>
-            <img src={logo} alt="Logo" className="logo"/>
-          </div>
-          <div className="content">
-            <div className="copy">
-              <div className="text-wrapper">Log in to your account</div>
-            </div>
-            <div>
-              <label>Email</label>
-              <input
-                type="email"
-                className="input-box"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                aria-label="email"
-                required
-              />
-            </div>
-            <div>
-              <label>Password</label>
-              <input
-                type="password"
-                className="input-box"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                aria-label="password"
-                required
-              />
-            </div>
-            <button type="submit" className="button" aria-label="login">
-              Login
-            </button>
     <div className="container">
       <div className="form-box">
         <div>
