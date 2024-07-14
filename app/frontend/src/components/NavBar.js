@@ -48,5 +48,3 @@ export default function NavBar() {
         </div>
   );
 };
-
-export default NavBar;

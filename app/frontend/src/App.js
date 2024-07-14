@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import NavBar from "../src/components/NavBar";
 import NotFound from "./components/NotFound";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "../src/components/ProtectedRoute";
 import "./css/App.css";
 
 // Import pages
@@ -58,7 +58,7 @@ function App() {
               <Route path="/New-Class" element={<ProtectedRoute component={NewClass} roles={["Instructor"]} />} />
               <Route path="/ClassManagement/:class_id" element={<ProtectedRoute component={ClassManagement} roles={["Instructor"]} />} />
               <Route path="/NewExam" element={<ProtectedRoute component={NewExam} roles={["Instructor"]} />} />
-              <Route path="/Examboard" element={<ProtectedRoute component={Examboard} roles={["Instructor"]} />} />
+              <Route path="/Examboard" element={<ProtectedRoute component={ExamBoard} roles={["Instructor"]} />} />
               <Route path="/ExamControls" element={<ProtectedRoute component={ExamControls} roles={["Instructor"]} />} />
               <Route path="/ManualExamKey" element={<ProtectedRoute component={ManualExamKey} roles={["Instructor"]} />} />
               <Route path="/NotificationPreferences" element={<ProtectedRoute component={NotificationPreferences} roles={["Instructor", "Admin", "Student"]} />} />
