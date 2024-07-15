@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation} from "react-router
 import "./css/App.css";
 import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
-
+import Logout from "./pages/Logout";
 // Import pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
@@ -19,6 +19,7 @@ import ExamControls from "./pages/Instructor/ExamControls";
 import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
+import UploadExams from "./pages/Instructor/UploadExams";
 //admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
@@ -34,7 +35,7 @@ import StudentGradeReport from "./pages/Student/StudentGradeReport";
 const Layout = ({ children }) => {
   const location = useLocation();
   const shouldDisplayNavBar =
-  location.pathname !== "/" && location.pathname !== "/*" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement";
+  location.pathname !== "/" && location.pathname !== "/*" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement" && location.pathname !== "/Logout";
 
   return (
     <>{shouldDisplayNavBar && <NavBar />}{children}</>
@@ -67,6 +68,7 @@ function App() {
             <Route path="/AdminDashboard" element={<ProtectedRoute> <AdminDashboard /></ProtectedRoute>}/>
             <Route path="/UserManagement" element={<ProtectedRoute><UserManagement /></ProtectedRoute>}/>
             <Route path="/Signup" element={<Signup />} />
+            <Route path="/Logout" element={<Logout/>} />
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/Classes" element={<Classes />} />
             <Route path="/New-Class" element={<NewClass />} />
@@ -75,8 +77,9 @@ function App() {
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
             <Route path="/ManualExamKey" element={<ManualExamKey />} />
-            <Route path="/NotificationPreferences" element={<NotificationPreferences />} />
             <Route path="/UploadExamKey" element={<UploadExamKey />} />
+            <Route path="/UploadExams" element={<UploadExams />} />
+            <Route path="/NotificationPreferences" element={<NotificationPreferences />} />
             <Route path="/StudentDashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
             <Route path="/StudentGradeReport" element={<StudentGradeReport />} />
             <Route path="/StudentAccountSettings" element={<StudentAccountSettings />} />

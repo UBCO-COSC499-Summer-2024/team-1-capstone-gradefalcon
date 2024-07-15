@@ -88,6 +88,13 @@ export const Signup = () => {
 
   return (
     <div className="instructor-signup">
+      <style>
+        {`
+          body {
+            justify-content: center;
+          }
+        `}
+      </style>
       <div className="div">
         <div className="text-wrapper">App</div>
         <img src={logo} alt="Logo" className="logo"/>

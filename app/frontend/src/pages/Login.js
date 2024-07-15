@@ -44,6 +44,13 @@ const Login = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="container">
+      <style>
+        {`
+          body {
+            justify-content: center;
+          }
+        `}
+      </style>
         <div className="form-box">
           <div>
             <img src={logo} alt="Logo" className="logo"/>

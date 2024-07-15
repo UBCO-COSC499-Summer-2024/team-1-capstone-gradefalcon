@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../../css/App.css";
 import "../../css/Examboard.css";
+import { Link } from 'react-router-dom';
 
 const ExamBoard = () => {
   const [classData, setClassData] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchClassData = async () => {
@@ -18,12 +20,11 @@ const ExamBoard = () => {
         if (response.ok) {
           const data = await response.json();
           setClassData(data); // Set the class data state with the fetched data
-          console.log(data);
         } else {
-          console.error("Failed to fetch class data");
+          setError("Failed to fetch class data");
         }
       } catch (error) {
-        console.error("Error fetching class data:", error);
+        setError("Error fetching class data: " + error.message);
       }
     };
 
@@ -45,22 +46,37 @@ const ExamBoard = () => {
     return acc;
   }, {});
 
+  if (error) {
+    return <div data-testid="error-message">{error}</div>;
+  }
+
+  if ((classData.classes || []).length === 0) {
+    return <div data-testid="no-exams">No exams available</div>;
+  }
+
   return (
     <>
       <div className="App">
         <div className="main-content">
           <header>
-            <h2>Exam Board</h2>
+            <h2 data-testid="header">Exam Board</h2>
           </header>
-          <section className="exam-list">
+          <section className="exam-list" data-testid="exam-list">
             {Object.entries(groupedExams).map(
               ([courseId, { course_name, class_id, exams }]) => (
-                <div key={courseId}>
-                  <h3>{courseId} {course_name}</h3>
+                <div key={courseId} data-testid={`course-${courseId}`}>
+                  <h3 data-testid={`course-header-${courseId}`}>
+                    {courseId} {course_name}
+                  </h3>
                   {exams.map((exam, index) => (
-                    <p key={index}>{exam}</p>
+                    <div key={index} className="exam-item" data-testid={`exam-${index}-${courseId}`}>
+                      <p>{exam}</p>
+                      <Link to="/UploadExams" className="grade-exam-btn" data-testid={`grade-btn-${index}-${courseId}`}>
+                        Grade Exam
+                      </Link>
+                    </div>
                   ))}
-                  <a href={`./NewExam/${class_id}`} class="create-new-btn">
+                  <a href={`./NewExam/${class_id}`} className="create-new-btn" data-testid={`create-new-${courseId}`}>
                     Create New
                   </a>
                 </div>
