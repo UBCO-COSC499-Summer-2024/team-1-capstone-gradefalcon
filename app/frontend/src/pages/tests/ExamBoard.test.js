@@ -12,40 +12,50 @@ beforeEach(() => {
 });
 
 test('renders ExamBoard component with fetched data', async () => {
-  // Mock fetch response with data
-  fetch.mockResolvedValueOnce({
-    ok: true,
-    json: async () => ({
-      classes: [
-        {
-          course_id: 'TEST100',
-          course_name: 'Database Test',
-          exam_title: 'Midterm',
-          class_id: '1',
-        },
-        {
-          course_id: 'TEST100',
-          course_name: 'Database Test',
-          exam_title: 'Final',
-          class_id: '1',
-        },
-        {
-          course_id: 'TEST200',
-          course_name: 'Database Test 2',
-          exam_title: 'Midterm',
-          class_id: '2',
-        },
-      ],
-    }),
-  });
+  // Mock fetch response for session info
+  fetch
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        userName: 'testUser',
+        userId: 'testID',
+      }),
+    })
+    // Mock fetch response for class data
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        classes: [
+          {
+            course_id: 'TEST100',
+            course_name: 'Database Test',
+            exam_title: 'Midterm',
+            class_id: '1',
+            exam_id: '1'
+          },
+          {
+            course_id: 'TEST100',
+            course_name: 'Database Test',
+            exam_title: 'Final',
+            class_id: '1',
+            exam_id: '2'
+          },
+          {
+            course_id: 'TEST200',
+            course_name: 'Database Test 2',
+            exam_title: 'Midterm',
+            class_id: '2',
+            exam_id: '3'
+          },
+        ],
+      }),
+    });
 
   render(
     <MemoryRouter>
       <ExamBoard />
     </MemoryRouter>
   );
-
- 
 
   // Ensure the list of classes and exams is displayed
   await waitFor(() => {
@@ -61,13 +71,22 @@ test('renders ExamBoard component with fetched data', async () => {
 });
 
 test('displays message when no exams are available', async () => {
-  // Mock fetch response with no data
-  fetch.mockResolvedValueOnce({
-    ok: true,
-    json: async () => ({
-      classes: [],
-    }),
-  });
+  // Mock fetch response for session info
+  fetch
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        userName: 'testUser',
+        userId: 'testID',
+      }),
+    })
+    // Mock fetch response with no data
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        classes: [],
+      }),
+    });
 
   render(
     <MemoryRouter>
@@ -82,10 +101,19 @@ test('displays message when no exams are available', async () => {
 });
 
 test('handles fetch failure and displays error message', async () => {
-  // Mock fetch to fail
-  fetch.mockResolvedValueOnce({
-    ok: false,
-  });
+  // Mock fetch response for session info
+  fetch
+    .mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        userName: 'testUser',
+        userId: 'testID',
+      }),
+    })
+    // Mock fetch to fail
+    .mockResolvedValueOnce({
+      ok: false,
+    });
 
   render(
     <MemoryRouter>
@@ -96,6 +124,6 @@ test('handles fetch failure and displays error message', async () => {
   // Ensure the error message is displayed
   await waitFor(() => {
     expect(screen.getByTestId('error-message')).toBeInTheDocument();
-    expect(screen.getByTestId('error-message')).toHaveTextContent(`Error fetching class data: Cannot read properties of undefined (reading 'ok')`);
+    expect(screen.getByTestId('error-message')).toHaveTextContent("Failed to fetch class data");
   });
 });

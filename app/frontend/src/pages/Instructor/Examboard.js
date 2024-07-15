@@ -43,7 +43,6 @@ const ExamBoard = () => {
         if (response.ok) {
           const data = await response.json();
           setClassData(data);
-          console.log(data);
         } else {
           setError("Failed to fetch class data");
         }
@@ -57,7 +56,7 @@ const ExamBoard = () => {
   }, []);
 
   const groupedExams = (classData.classes || []).reduce((acc, current) => {
-    const { course_id, course_name, exam_title, class_id, exam_id } = current;
+    const { course_id, course_name, exam_title, class_id, exam_id } = current || {};
     if (!acc[course_id]) {
       acc[course_id] = {
         course_name,
