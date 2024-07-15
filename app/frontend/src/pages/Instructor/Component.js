@@ -234,19 +234,39 @@ export default function Component() {
         <main className="flex flex-col gap-4">
           <div>
             <h1 className="text-3xl font-bold mb-4"> Dashboard </h1>
-            <h2 className="text-lg font-semibold md:text-2xl mb-6"><BookOpen className="inline mr-2" /> Your Courses</h2>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-6">
-              {courses.map((course, index) => (
-                <Card key={index} className="p-4 border rounded-lg -md flex flex-col justify-between">
-                  <div className="flex items-center justify-between mb-4">
-                    <CardDescription>{course.course_name}</CardDescription>
-                    <Bookmark className="h-6 w-6 text-muted-foreground" />
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="text-2xl font-bold">{course.course_id}</div>
-                  </div>
-                </Card>
-              ))}
+            <div className="grid gap-4 lg:grid-cols-2">
+            <Card className="bg-white border rounded">
+              <CardHeader className="flex justify-between px-6 py-4">
+                <div>
+                  <CardTitle className="mb-2">Your Courses</CardTitle>
+                  <CardDescription>Your enrolled courses.</CardDescription>
+                </div>
+                <Button asChild size="sm" className="ml-auto gap-1">
+                  <Link to="/ClassManagement">
+                    Manage Courses
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6">
+                  {courses.map((course, index) => (
+                    <Card key={index} className="p-4 border rounded-lg flex flex-col justify-between shadow-md">
+                      <div className="flex items-center justify-between mb-4">
+                        <CardDescription>{course.course_name}</CardDescription>
+                        <Bookmark className="h-6 w-6 text-muted-foreground" />
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="text-2xl font-bold">{course.course_id}</div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+              </Card>
+
+  
+
             </div>
           </div>
           <div className="grid gap-4">
