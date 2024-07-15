@@ -13,6 +13,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -232,61 +233,65 @@ export default function Component() {
       <div className="flex-1 ml-64 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
         <main className="flex flex-col gap-4">
           <div>
-            <h1 className="text-2xl font-bold mb-4">👋 Welcome {userName} </h1>
-            <h2 className="text-lg font-semibold md:text-2xl"><BookOpen className="inline mr-2" /> Your Courses</h2>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <h1 className="text-3xl font-bold mb-4"> Dashboard </h1>
+            <h2 className="text-lg font-semibold md:text-2xl mb-6"><BookOpen className="inline mr-2" /> Your Courses</h2>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-6">
               {courses.map((course, index) => (
                 <Card key={index} className="p-4 border rounded-lg -md flex flex-col justify-between">
                   <div className="flex items-center justify-between mb-4">
-                    <CardTitle className="text-lg font-semibold">{course.course_name}</CardTitle>
+                    <CardDescription>{course.course_name}</CardDescription>
                     <Bookmark className="h-6 w-6 text-muted-foreground" />
                   </div>
                   <div className="flex flex-col items-center">
                     <div className="text-2xl font-bold">{course.course_id}</div>
-                    <Button className="mt-4">Create New Exam</Button>
                   </div>
                 </Card>
               ))}
             </div>
           </div>
           <div className="grid gap-4">
-            <Card className="bg-white border rounded ">
-              <CardHeader className="flex flex-row items-center">
-                <div className="grid gap-2">
-                  <CardTitle className="uppercase">Exam Board</CardTitle>
-                  <CardDescription>Recent exams from your classes.</CardDescription>
-                </div>
-                <Button asChild size="sm" className="ml-auto gap-1">
-                  <Link to="#">
-                    View All
-                    <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <Table className="bg-white border rounded ">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="text-black text-center"><span>Exam Name <ChevronDown className="inline-block" /></span></TableHead>
-                      <TableHead className="text-black text-center"><span>Course <ChevronDown className="inline-block" /></span></TableHead>
-                      <TableHead className="text-black text-center"><span>Status <ChevronDown className="inline-block" /></span></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {exams.map((exam, index) => (
-                      <TableRow key={index}>
-                        <TableCell className="text-center">{exam.exam_title}</TableCell>
-                        <TableCell className="text-center">{exam.course_id}</TableCell>
-                        <TableCell className="text-center status">
-                          <CheckCircle className="inline-block text-green-500 mr-1" />
-                          Completed
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+          <Card className="bg-white border rounded">
+      <CardHeader className="flex justify-between px-6 py-4">
+        <div>
+        <CardTitle className="mb-2">Exam Board</CardTitle>
+          <CardDescription>Recent exams from your classes.</CardDescription>
+        </div>
+        <Button asChild size="sm" className="ml-auto gap-1">
+          <Link to="/Examboard">
+           Manage Exams
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Exam Name</TableHead>
+              <TableHead className="hidden sm:table-cell">Course</TableHead>
+              <TableHead className="hidden sm:table-cell">Status</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {exams.map((exam, index) => (
+              <TableRow key={index} className={index}>
+                <TableCell>
+                  <div className="font-medium">{exam.exam_title}</div>
+                  <div className="hidden text-sm text-muted-foreground md:inline">{exam.course_id}</div>
+                </TableCell>
+                <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
+                <TableCell className="hidden sm:table-cell">
+                  <Badge className="text-xs secondary">
+                    Completed
+                  </Badge>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+
             <div className="grid gap-4 md:grid-cols-2">
               <Card className="bg-white border rounded ">
                 <CardHeader>
