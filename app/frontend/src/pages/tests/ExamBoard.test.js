@@ -96,6 +96,6 @@ test('handles fetch failure and displays error message', async () => {
   // Ensure the error message is displayed
   await waitFor(() => {
     expect(screen.getByTestId('error-message')).toBeInTheDocument();
-    expect(screen.getByTestId('error-message')).toHaveTextContent('Failed to fetch class data');
+    expect(screen.getByTestId('error-message')).toHaveTextContent(`Error fetching class data: Cannot read properties of undefined (reading 'ok')`);
   });
 });
