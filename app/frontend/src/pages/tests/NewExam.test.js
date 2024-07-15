@@ -8,6 +8,8 @@ import { BrowserRouter } from 'react-router-dom';
 describe('NewExam Component', () => {
   test('upload answer key button takes you to the correct location', () => {
     render(<BrowserRouter><NewExam /></BrowserRouter>);
+    const examTitleInput = screen.getByTestId('exam-title-input');
+    fireEvent.change(examTitleInput, { target: { value: 'Dummy input' } });
     const uploadAnswerKeyButton = screen.getByTestId('upload-answer-key-btn');
     expect(uploadAnswerKeyButton).toHaveAttribute('href', '/UploadExamKey');
   });
