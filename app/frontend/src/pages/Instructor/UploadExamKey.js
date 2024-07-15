@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../../css/App.css';
-import '../../css/UploadExam.css';
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);

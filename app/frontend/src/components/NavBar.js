@@ -1,50 +1,33 @@
 import React from 'react';
 import '../css/App.css';
+import { Link, useNavigate } from "react-router-dom";
+import { ClipboardCheck, Home, BookOpen, LineChart, Users, Settings } from "lucide-react";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "../components/ui/dropdown-menu";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from "../components/ui/alert-dialog";
+
 export default function NavBar() {
+
+    const navigate = useNavigate();
+    const handleLogout = async () => {
+        try {
+          const response = await fetch("/api/auth/logout", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          if (response.ok) {
+            navigate("/");
+          } else {
+            console.error("Logout failed");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+
     return (
-        <div className="sidebar">
-            <div className="logo">
-                <h1>GradeFalcon</h1>
-            </div>
-            <nav>
-                <ul>
-                    {React.createElement(
-                        'li',
-                        null,
-                        React.createElement('a', { href: '/Dashboard' }, 'Dashboard')
-                    )}
-                    {React.createElement(
-                        'li',
-                        null,
-                        React.createElement('a', { href: '/Examboard' }, 'Exam Board')
-                    )}
-                    {React.createElement(
-                        'li',
-                        null,
-                        React.createElement('a', { href: '/GradeReport' }, 'Grade Report')
-                    )}
-                    {React.createElement(
-                        'li',
-                        null,
-                        React.createElement('a', { href: '/Classes' }, 'Classes')
-                    )}
-                    {React.createElement(
-                        'li',
-                        null,
-                        React.createElement('a', { href: '/AccountSettings' }, 'Account Settings')
-                    )}
-                    {React.createElement(
-                        'li',
-                        null,
-                        React.createElement('a', { href: '/NotificationPreferences' }, 'Notification Preferences')
-                    )}
-                    {React.createElement(
-                        'li',
-                        null,
-                        React.createElement('a', { href: '/Logout' }, 'Logout')
-                    )}
-                </ul>
-            </nav>
-        </div>
-  );
-    }
+ <div>
+    </div>
+    );
+  };

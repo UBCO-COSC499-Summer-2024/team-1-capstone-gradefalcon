@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import '../../css/App.css';
-import "../../css/NewExam.css";
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");

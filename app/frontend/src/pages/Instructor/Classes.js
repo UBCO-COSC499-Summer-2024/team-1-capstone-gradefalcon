@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../../css/App.css";
-import "../../css/Classes.css";
 import ListClasses from "../../components/ListClasses";
 
 const Classes = () => {

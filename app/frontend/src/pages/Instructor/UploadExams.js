@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../../css/App.css';
-import '../../css/UploadExam.css';
 import axios from 'axios'; // You need to install axios if you haven't already
 
 const UploadExams = () => {

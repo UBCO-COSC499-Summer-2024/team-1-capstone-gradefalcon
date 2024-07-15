@@ -2,7 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   Home,
-  Package as PackageIcon,
+  Bookmark,
+  ClipboardCheck,
   Users,
   LineChart,
   Settings,
@@ -170,7 +171,7 @@ export default function Component() {
     <div className="flex min-h-screen">
       <aside className="w-64 bg-primary text-primary-foreground flex flex-col p-4 fixed h-full">
         <div className="flex items-center mb-8">
-          <PackageIcon className="h-6 w-6" />
+          <ClipboardCheck className="h-6 w-6" />
           <span className="text-lg font-semibold ml-2">GradeFalcon</span>
         </div>
         <nav className="flex flex-col gap-4">
@@ -231,14 +232,14 @@ export default function Component() {
       <div className="flex-1 ml-64 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
         <main className="flex flex-col gap-4">
           <div>
-            <h1 className="text-2xl font-bold mb-4">👋 Welcome, Instructor!</h1>
-            <h2 className="text-xl font-semibold mb-4"><BookOpen className="inline mr-2" /> Your Courses</h2>
+            <h1 className="text-2xl font-bold mb-4">👋 Welcome {userName} </h1>
+            <h2 className="text-lg font-semibold md:text-2xl"><BookOpen className="inline mr-2" /> Your Courses</h2>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               {courses.map((course, index) => (
-                <Card key={index} className="p-4 border rounded-lg shadow-md flex flex-col justify-between">
+                <Card key={index} className="p-4 border rounded-lg -md flex flex-col justify-between">
                   <div className="flex items-center justify-between mb-4">
                     <CardTitle className="text-lg font-semibold">{course.course_name}</CardTitle>
-                    <PackageIcon className="h-6 w-6 text-muted-foreground" />
+                    <Bookmark className="h-6 w-6 text-muted-foreground" />
                   </div>
                   <div className="flex flex-col items-center">
                     <div className="text-2xl font-bold">{course.course_id}</div>
@@ -249,7 +250,7 @@ export default function Component() {
             </div>
           </div>
           <div className="grid gap-4">
-            <Card className="bg-white border rounded shadow">
+            <Card className="bg-white border rounded ">
               <CardHeader className="flex flex-row items-center">
                 <div className="grid gap-2">
                   <CardTitle className="uppercase">Exam Board</CardTitle>
@@ -263,7 +264,7 @@ export default function Component() {
                 </Button>
               </CardHeader>
               <CardContent>
-                <Table className="bg-white border rounded shadow">
+                <Table className="bg-white border rounded ">
                   <TableHeader>
                     <TableRow>
                       <TableHead className="text-black text-center"><span>Exam Name <ChevronDown className="inline-block" /></span></TableHead>
@@ -287,7 +288,7 @@ export default function Component() {
               </CardContent>
             </Card>
             <div className="grid gap-4 md:grid-cols-2">
-              <Card className="bg-white border rounded shadow">
+              <Card className="bg-white border rounded ">
                 <CardHeader>
                   <CardTitle>Standard Average Chart</CardTitle>
                 </CardHeader>
@@ -295,7 +296,7 @@ export default function Component() {
                   <StandardAverageChart data={standardAverageData} className="w-full" />
                 </CardContent>
               </Card>
-              <Card className="bg-white border rounded shadow">
+              <Card className="bg-white border rounded ">
                 <CardHeader>
                   <CardTitle>Performance Bar Chart</CardTitle>
                 </CardHeader>

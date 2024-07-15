@@ -1,6 +1,5 @@
 import React from 'react';
 import '../../css/App.css';
-import '../../css/NotificationPreferences.css';
 
 const NotificationPreferences = () => {
   const handleSubmit = (event) => {

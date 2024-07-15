@@ -1,4 +1,4 @@
-html, body {
+ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -13,8 +13,7 @@ header {
   align-items: center;
   justify-content: center;
   position: fixed; /* If you want the header to stay at the top when scrolling */
-}
-
+ } 
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

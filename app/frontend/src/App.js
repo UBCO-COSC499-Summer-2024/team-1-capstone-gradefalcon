@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation} from "react-router-dom";
 import "./css/App.css";
-import NavBar from "../src/components/NavBar";
+import Layout from '../src/components/Layout';
 import ProtectedRoute from "./ProtectedRoute";
 import Logout from "./pages/Logout";
 // Import pages
@@ -30,19 +30,6 @@ import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
 import StudentNotificationPreferences from "./pages/Student/StudentNotificationPreferences";
 import StudentGradeReport from "./pages/Student/StudentGradeReport";
 
-
-
-// Layout component to conditionally render NavBar
-const Layout = ({ children }) => {
-  const location = useLocation();
-  const shouldDisplayNavBar =
-  location.pathname !== "/" && location.pathname !== "/*" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement" && location.pathname !== "/Logout";
-
-  return (
-    // {shouldDisplayNavBar && <NavBar />}
-    <>{children}</>
-  );
-};
 
 function App() {
   const [message, setMessage] = useState("");
