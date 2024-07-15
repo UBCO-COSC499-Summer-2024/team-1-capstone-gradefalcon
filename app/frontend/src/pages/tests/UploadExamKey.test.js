@@ -85,7 +85,7 @@ describe("UploadExamKey Component", () => {
     expect(uploadArea).toHaveStyle("display: block");
   });
 
-  it("should call saveExamKey and copyTemplate APIs on file upload", async () => {
+  test("should call saveExamKey and copyTemplate APIs on file upload", async () => {
     const { getByTestId } = render(
       <BrowserRouter>
         <UploadExamKey />
@@ -110,5 +110,11 @@ describe("UploadExamKey Component", () => {
         expect.anything()
       );
     });
+
+    const receivedFormData = fetchMock.mock.calls[0][1].body;
+    expect(receivedFormData).toBeInstanceOf(FormData);
+    const file2 = receivedFormData.get("examKey"); // Adjust 'file' to the actual key you're expecting
+    expect(file2).toBeDefined();
+    expect(file2.name).toEqual("test.pdf");
   });
 });
