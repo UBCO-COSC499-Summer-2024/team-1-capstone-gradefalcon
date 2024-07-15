@@ -41,19 +41,6 @@ const OMRProcessing = (props) => {
           <header>
             <h2>Scanning file</h2>
           </header>
-          <button className="btn-confirm" onClick={runOMR}>
-            Run omr
-          </button>
-          <Link
-            to="/ConfirmExamKey"
-            state={{
-              examTitle: examTitle,
-              classID: classID,
-            }}
-            className="btn-import"
-          >
-            Confirm Exam Key
-          </Link>
         </div>
       </div>
     </>

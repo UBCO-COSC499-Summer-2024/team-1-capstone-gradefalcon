@@ -113,8 +113,8 @@ describe("UploadExamKey Component", () => {
 
     const receivedFormData = fetchMock.mock.calls[0][1].body;
     expect(receivedFormData).toBeInstanceOf(FormData);
-    const file2 = receivedFormData.get("examKey"); // Adjust 'file' to the actual key you're expecting
-    expect(file2).toBeDefined();
-    expect(file2.name).toEqual("test.pdf");
+    const receivedFile = receivedFormData.get("examKey"); // Adjust 'file' to the actual key you're expecting
+    expect(receivedFile).toBeDefined();
+    expect(receivedFile.name).toEqual("test.pdf");
   });
 });
