@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import '../../css/App.css';
 import '../../css/UploadExam.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios'; // Use ES6 import
 
 const UploadExams = () => {
   const [fileURL, setFileURL] = useState(null);
@@ -54,15 +53,16 @@ const UploadExams = () => {
     console.log("Sending file upload request with form data:", formData);
 
     try {
-      const response = await axios.post('/api/upload/uploadExam', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      const response = await fetch('/api/upload/uploadExam', {
+        method: 'POST',
+        body: formData,
       });
 
-      console.log("Upload response:", response);
+      const data = await response.json();
 
-      if (response.data.success) {
+      console.log("Upload response:", data);
+
+      if (data.success) {
         alert('File uploaded successfully');
         console.log("File was uploaded successfully!");
       } else {
@@ -84,7 +84,7 @@ const UploadExams = () => {
           <button className="back-button" onClick={() => navigate(-1)}>&larr;</button>
           <h3>Upload the exam with all student submissions as a PDF file.</h3>
           <div className="upload-area" style={{ display: fileURL ? 'none' : 'block' }}>
-            <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} />
+            <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} aria-label="Click to browse or drag and drop your files" />
             <div className="drag-drop-area" onClick={() => fileInputRef.current.click()}>
               <p>Click to browse or drag and drop your files</p>
             </div>

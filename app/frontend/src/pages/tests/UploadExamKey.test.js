@@ -15,6 +15,12 @@ jest.mock('react-router-dom', () => ({
 
 beforeEach(() => {
   fetchMock.resetMocks();
+  global.URL.createObjectURL = jest.fn(() => 'mockedURL');
+  global.alert = jest.fn();
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
 });
 
 describe('UploadExamKey Component', () => {
@@ -35,10 +41,10 @@ describe('UploadExamKey Component', () => {
       </BrowserRouter>
     );
 
-    const fileInput = screen.getByText(/Click to browse or drag and drop your files/i).closest('div');
+    const fileInput = screen.getByTestId('file-input');
     const file = new File(['dummy content'], 'Exam (2).pdf', { type: 'application/pdf' });
 
-    fireEvent.change(fileInput.querySelector('file-input'), { target: { files: [file] } });
+    fireEvent.change(fileInput, { target: { files: [file] } });
 
     expect(screen.getByTitle(/PDF Preview/i)).toBeInTheDocument();
   });
@@ -52,10 +58,10 @@ describe('UploadExamKey Component', () => {
       </BrowserRouter>
     );
 
-    const fileInput = screen.getByText(/Click to browse or drag and drop your files/i).closest('div');
+    const fileInput = screen.getByTestId('file-input');
     const file = new File(['dummy content'], 'Exam (2).pdf', { type: 'application/pdf' });
 
-    fireEvent.change(fileInput.querySelector('file-input'), { target: { files: [file] } });
+    fireEvent.change(fileInput, { target: { files: [file] } });
     fireEvent.click(screen.getByText(/Confirm/i));
 
     await waitFor(() => {

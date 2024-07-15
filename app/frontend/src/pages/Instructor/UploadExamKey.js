@@ -89,6 +89,7 @@ const UploadExamKey = () => {
                 hidden
                 accept="application/pdf"
                 ref={fileInputRef}
+                data-testid="file-input"
               />
               <div
                 className="drag-drop-area"
