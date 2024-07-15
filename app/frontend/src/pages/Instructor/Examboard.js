@@ -82,13 +82,13 @@ const ExamBoard = () => {
       <div className="App">
         <div className="main-content">
           <header>
-            <h2 data-testid="header">Exam Board</h2>
+            <h2 data-testid="headers">Exam Board</h2>
           </header>
           <section className="exam-list" data-testid="exam-list">
             {Object.entries(groupedExams).map(
               ([courseId, { course_name, class_id, exams }]) => (
                 <div key={courseId} data-testid={`course-${courseId}`}>
-                  <h3 data-testid={`course-header-${courseId}`}>
+                  <h3 data-testid={`course-header-${courseId}`} id="pleaseDon't">
                     {courseId} {course_name}
                   </h3>
                   {exams.map((exam, index) => (

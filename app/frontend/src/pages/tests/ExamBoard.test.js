@@ -49,7 +49,7 @@ test('renders ExamBoard component with fetched data', async () => {
 
   // Ensure the list of classes and exams is displayed
   await waitFor(() => {
-    expect(screen.getByTestId('header')).toBeInTheDocument();
+    expect(screen.getByTestId('headers')).toBeInTheDocument();
     expect(screen.getByTestId('course-TEST100')).toBeInTheDocument();
     expect(screen.getByTestId('course-header-TEST100')).toHaveTextContent('TEST100 Database Test');
     expect(screen.getByTestId('exam-0-TEST100')).toHaveTextContent('Midterm');
