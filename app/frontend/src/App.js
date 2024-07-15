@@ -4,6 +4,7 @@ import "./css/App.css";
 import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
 import Logout from "./pages/Logout";
+import { Auth0Provider } from "@auth0/auth0-react";
 // Import pages
 
 // instructor pages
@@ -59,6 +60,11 @@ function App() {
   }, []);
 
   return (
+    <Auth0Provider
+    domain="dev-1wzrc3nphnk4w01y.ca.auth0.com"
+    clientId="zUtm0FsUWaknfcSxpx3cyhFHNjIuVpoI"
+    redirectUri={window.location.origin}
+  >
     <Router>
       <div className="App">
         <Layout>
@@ -91,6 +97,7 @@ function App() {
         </Layout>
       </div>
     </Router>
+    </Auth0Provider>
   );
 }
 export default App;
