@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/App.css';
+import LogoutButton from './LogoutButton';
 export default function NavBar() {
     return (
         <div className="sidebar">
@@ -38,11 +39,11 @@ export default function NavBar() {
                         null,
                         React.createElement('a', { href: '/NotificationPreferences' }, 'Notification Preferences')
                     )}
-                    {React.createElement(
-                        'li',
-                        null,
-                        React.createElement('a', { href: '/Logout' }, 'Logout')
-                    )}
+
+                    <LogoutButton>
+                        Log Out
+                    </LogoutButton>
+
                 </ul>
             </nav>
         </div>

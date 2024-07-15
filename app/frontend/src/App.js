@@ -3,10 +3,8 @@ import { BrowserRouter as Router, Routes, Route, useLocation} from "react-router
 import "./css/App.css";
 import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
-import Logout from "./pages/Logout";
 import { Auth0Provider } from "@auth0/auth0-react";
 // Import pages
-
 // instructor pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
@@ -22,9 +20,6 @@ import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
-//admin pages
-import AdminDashboard from "./pages/Administator/AdminDashboard";
-import UserManagement from "./pages/Administator/UserManagment";
 //student pages 
 import StudentDashboard from "./pages/Student/StudentDashboard";
 import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
@@ -37,7 +32,7 @@ import StudentGradeReport from "./pages/Student/StudentGradeReport";
 const Layout = ({ children }) => {
   const location = useLocation();
   const shouldDisplayNavBar =
-  location.pathname !== "/" && location.pathname !== "/*" && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" && location.pathname !== "/userManagement" && location.pathname !== "/Logout";
+   location.pathname !== "/login";
 
   return (
     <>{shouldDisplayNavBar && <NavBar />}{children}</>
@@ -69,12 +64,9 @@ function App() {
       <div className="App">
         <Layout>
           <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/Login" element={<Login />} />
-            <Route path="/Dashboard"element={ <ProtectedRoute> <Dashboard /></ProtectedRoute>}/>
-            <Route path="/AdminDashboard" element={<ProtectedRoute> <AdminDashboard /></ProtectedRoute>}/>
-            <Route path="/UserManagement" element={<ProtectedRoute><UserManagement /></ProtectedRoute>}/>
-            <Route path="/Logout" element={<Logout/>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/Dashboard"element={  <Dashboard />}/>
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/Classes" element={<Classes />} />
             <Route path="/New-Class" element={<NewClass />} />
@@ -90,7 +82,6 @@ function App() {
             <Route path="/StudentGradeReport" element={<StudentGradeReport />} />
             <Route path="/StudentAccountSettings" element={<StudentAccountSettings />} />
             <Route path="/StudentNotificationPreferences" element={<StudentNotificationPreferences />} />
-            {/* <Route path="/Schedule" element={<Schedule />} /> Schedule plugin is brocken ->will fix */}
             <Route path="*" element={<NotFound />} />
 
           </Routes>
