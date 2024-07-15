@@ -92,6 +92,7 @@ const UploadExamKey = () => {
               <input
                 type="file"
                 id="file-input"
+                data-testid="file-input"
                 hidden
                 accept="application/pdf"
                 ref={fileInputRef}
