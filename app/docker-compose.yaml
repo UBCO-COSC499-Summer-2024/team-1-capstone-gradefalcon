@@ -30,11 +30,13 @@ services:
       - ./backend/package.json:/code/package.json
       - ./backend/package-lock.json:/code/package-lock.json
       - back-notused:/opt/app/node_modules
+      - omr-inputs:/code/omr/inputs
+      - omr-outputs:/code/omr/outputs
     networks:
-      - public
-      - private
+      - app-network
     depends_on:
       - db
+      - flaskomr
 
   db:
     container_name: db-postgres
@@ -49,8 +51,7 @@ services:
     volumes:
       - ./db/sql:/docker-entrypoint-initdb.d
     networks:
-      - public
-      - private
+      - app-network
 
   frontend:
     build:
@@ -62,27 +63,31 @@ services:
       - ./frontend/src:/code/src
       - /code/node_modules
     networks:
-      - public
+      - app-network
     depends_on:
       - backend
 
-  omr:
+  flaskomr:
     build:
-      context: ./omr  # Specifies the directory where your Dockerfile is located
+      context: ./omr # Use the omr directory as the build context
     environment:
-      - OMR_CHECKER_CONTAINER=True
+      - FLASK_ENV=development
+    ports:
+      - 5000:5000
     volumes:
-      - ./omr/inputs:/app/inputs  # Maps the local ./omr/inputs directory to /app/inputs in the container
-      - ./omr/outputs:/app/outputs  # Maps the local ./omr/outputs directory to /app/outputs in the container
+      - ./omr:/app
+      - omr-inputs:/app/inputs
+      - omr-outputs:/app/outputs
     networks:
-      - public
-    depends_on:
-      - db
+      - app-network
+    # depends_on:
+    #   - backend
 
 networks:
-  public:
-  private:
+  app-network:
 
 volumes:
   back-notused:
   db-data:
+  omr-inputs:
+  omr-outputs:

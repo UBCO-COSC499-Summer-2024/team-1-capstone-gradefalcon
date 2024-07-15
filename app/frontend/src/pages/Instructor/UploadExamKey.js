@@ -5,6 +5,7 @@ import '../../css/UploadExam.css';
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
+  const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const location = useLocation();
   const { examTitle, className, userName, userID } = location.state || {};
@@ -15,20 +16,21 @@ const UploadExamKey = () => {
       if (file && file.type === "application/pdf") {
         const fileURL = URL.createObjectURL(file);
         setFileURL(fileURL);
+        setFile(file);
       }
     };
 
     const fileInput = fileInputRef.current;
-    fileInput.addEventListener('change', handleFileSelect);
+    fileInput.addEventListener("change", handleFileSelect);
 
     return () => {
-      fileInput.removeEventListener('change', handleFileSelect);
+      fileInput.removeEventListener("change", handleFileSelect);
     };
   }, []);
 
   const resetUpload = () => {
     setFileURL(null);
-    fileInputRef.current.value = '';
+    fileInputRef.current.value = "";
   };
 
   const sendToBackend = async () => {
@@ -71,11 +73,27 @@ const UploadExamKey = () => {
             <h2>Answer Key</h2>
           </header>
           <section className="upload-key">
-            <button className="back-button" onClick={() => window.history.back()}>&larr;</button>
+            <button
+              className="back-button"
+              onClick={() => window.history.back()}
+            ></button>
             <h3>Upload the exam answer key as a PDF file.</h3>
-            <div className="upload-area" style={{ display: fileURL ? 'none' : 'block' }}>
-              <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} />
-              <div className="drag-drop-area" onClick={() => fileInputRef.current.click()}>
+            <h2>{examTitle}</h2>
+            <div
+              className="upload-area"
+              style={{ display: fileURL ? "none" : "block" }}
+            >
+              <input
+                type="file"
+                id="file-input"
+                hidden
+                accept="application/pdf"
+                ref={fileInputRef}
+              />
+              <div
+                className="drag-drop-area"
+                onClick={() => fileInputRef.current.click()}
+              >
                 <p>Click to browse or drag and drop your files</p>
               </div>
             </div>

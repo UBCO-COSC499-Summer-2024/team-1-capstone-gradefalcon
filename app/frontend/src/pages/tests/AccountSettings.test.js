@@ -4,7 +4,7 @@ import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import AccountSettings from '../Instructor/AccountSettings';
 
-test('renders Account Settings component correctly', () => {
+test('renders Account Settings component', () => {
   const { getByTestId } = render(<AccountSettings />);
   expect(getByTestId('header')).toBeInTheDocument();
   expect(getByTestId('username-input')).toBeInTheDocument();
@@ -16,6 +16,7 @@ test('renders Account Settings component correctly', () => {
 test('prevents SQL injection in username input', () => {
   const { getByTestId } = render(<AccountSettings />);
   const usernameInput = getByTestId('username-input');
+
   fireEvent.change(usernameInput, { target: { value: "String() Break \"Attempt;" } }); //attempt to enter string breaking input simulating SQL injection
                                                                                        //SQL injection will be prevented in the handling anyway, its just an extra layer
   expect(usernameInput.value).toBe('String Break Attempt');
