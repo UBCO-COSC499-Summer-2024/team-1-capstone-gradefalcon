@@ -45,37 +45,6 @@ router.post(
   upload.single("examKey"),
   async function (req, res) {
     console.log(req.file);
-    // const filePath = `/code/omr/inputs`;
-    // const templatePath = path.join(__dirname, "../assets/template.json"); // Adjust the path as necessary
-    // const destinationTemplatePath = path.join(filePath, "template.json");
-
-    // try {
-    //   // Copy template.json to the shared volume
-    //   fs.copyFileSync(templatePath, destinationTemplatePath);
-    //   console.log("Template.json copied successfully");
-
-    // const response = await fetch("http://flaskomr:5000/process", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ filePath }),
-    // });
-    // console.log("OMR Response: ", response);
-    // if (!response.ok) {
-    //   const errorText = await response.text();
-    //   throw new Error(
-    //     `Error processing OMR: ${response.statusText} - ${errorText}`
-    //   );
-    // }
-
-    // const data = await response.json();
-    // console.log("OMR Processed: ", data);
-    // res.send("File uploaded and processed successfully");
-    // } catch (error) {
-    //   console.error("Error processing OMR: ", error);
-    //   res.status(500).send(`Error processing OMR: ${error.message}`);
-    // }
     res.send(JSON.stringify("File uploaded successfully"));
   }
 );

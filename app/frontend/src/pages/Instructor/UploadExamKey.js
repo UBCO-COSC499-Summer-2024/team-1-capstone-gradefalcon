@@ -109,16 +109,6 @@ const UploadExamKey = () => {
             >
               <iframe src={fileURL} title="PDF Preview"></iframe>
             </div>
-            {/* <Link
-              to="/OMRProcessing"
-              state={{
-                examTitle: examTitle,
-                classID: classID,
-              }}
-              className="btn-import"
-            >
-              <span onClick={sendToBackend}>Import</span>
-            </Link> */}
             <button className="btn-import" onClick={sendToBackend}>
               Import
             </button>
