@@ -88,7 +88,7 @@ const ExamBoard = () => {
             {Object.entries(groupedExams).map(
               ([courseId, { course_name, class_id, exams }]) => (
                 <div key={courseId} data-testid={`course-${courseId}`}>
-                  <h3 data-testid={`course-header-${courseId}`} id="pleaseDon't">
+                  <h3 data-testid={`course-header-${courseId}`}>
                     {courseId} {course_name}
                   </h3>
                   {exams.map((exam, index) => (
