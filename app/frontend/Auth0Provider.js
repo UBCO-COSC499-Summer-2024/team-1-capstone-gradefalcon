@@ -6,13 +6,15 @@ import App from './App';
 const root = createRoot(document.getElementById('root'));
 
 root.render(
-<Auth0Provider
+  <Auth0Provider
     domain="dev-1wzrc3nphnk4w01y.ca.auth0.com"
     clientId="zUtm0FsUWaknfcSxpx3cyhFHNjIuVpoI"
     authorizationParams={{
-      redirect_uri: window.location.origin
+      redirect_uri: window.location.origin,
+      audience: "https://dev-1wzrc3nphnk4w01y.ca.auth0.com/api/v2/",
+      scope: "read:current_user update:current_user_metadata"
     }}
   >
     <App />
-  </Auth0Provider>,
+  </Auth0Provider>
 );

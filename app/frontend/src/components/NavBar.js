@@ -39,11 +39,9 @@ export default function NavBar() {
                         null,
                         React.createElement('a', { href: '/NotificationPreferences' }, 'Notification Preferences')
                     )}
-
-                    <LogoutButton>
-                        Log Out
-                    </LogoutButton>
-
+                    <li>
+                        <LogoutButton></LogoutButton>
+                    </li>
                 </ul>
             </nav>
         </div>
