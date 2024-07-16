@@ -22,6 +22,13 @@ def process_omr():
         app.logger.info(f"Root: {root}, Dirs: {dirs}, Files: {files}")
 
     try:
+          # Run the PDF conversion script
+        subprocess.run(
+            ["python3", "./src/utils/pdf.py"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
         # Run the OMR processing script
         result = subprocess.run(
             ["python3", "main.py", "--inputDir", input_dir, "--outputDir", out_dir],
