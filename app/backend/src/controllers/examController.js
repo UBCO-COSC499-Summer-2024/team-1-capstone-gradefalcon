@@ -108,4 +108,30 @@ const getPerformanceData = async (req, res, next) => {
   }
 };
 
-module.exports = { saveQuestions, newExam, examBoard, getStandardAverageData, getPerformanceData  };
+
+const getStudentGrades = async (req, res, next) => {
+  const { studentId } = req.params;
+  const { classId } = req.query; // Get the classId from the query parameters
+
+  try {
+    const result = await pool.query(`
+      SELECT e.exam_title AS title, 
+             CASE 
+               WHEN sr.grade IS NULL THEN 'missing' 
+               ELSE 'submitted' 
+             END AS status, 
+             COALESCE(sr.grade, 0) AS score, 
+             e.total_marks AS total
+      FROM exam e
+      LEFT JOIN studentResults sr ON e.exam_id = sr.exam_id AND sr.student_id = $1
+      WHERE e.class_id = $2
+    `, [studentId, classId]);
+
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+module.exports = { saveQuestions, newExam, examBoard, getStandardAverageData, getPerformanceData, getStudentGrades };
+
+
