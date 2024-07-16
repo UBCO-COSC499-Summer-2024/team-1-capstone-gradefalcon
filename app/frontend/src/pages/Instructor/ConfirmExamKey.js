@@ -27,7 +27,7 @@ const ConfirmExamKey = (props) => {
       console.log("Response from getResults", response);
       const data = await response.json();
       const dataCsv = data.csv_file[0];
-      console.log(dataCsv);
+      console.log("dataCSV", dataCsv);
       setFields(getFilledQs(dataCsv));
       setNumQuestions(getQuestionCount(getFilledQs(dataCsv)));
       console.log(getFilledQs(dataCsv));
