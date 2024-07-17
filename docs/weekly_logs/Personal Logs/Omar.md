@@ -1,4 +1,115 @@
 # Personal Log
+## Wednesday (7/11-7/116)
+
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/0dcdc995cb773ce6115f735b5e192af6ef623a0e/docs/weekly_logs/Clockify/Omar/Time12.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Implement Refactored Code and Implement Color-Coded Grading**
+    1. Worked on implementing a different iteration of our OMR code
+    2. Reworked image conversion.
+    3. Reworked BorderPreprocessing
+    4. Configured Grading with coloured ouput to display graded exam.
+
+2. **Refactor UI Using shadcn UI Components**
+    1. Worked on refactoring the dashboard
+    2. Implemented cards, modified icons and modified the table.
+    3. Removed unwanted css that was causing conflict.
+
+3. **Labeling images to create a YOLO model**
+    1. Labeled Images for YOLO model for later use.
+
+
+4. **Revamp Sign-In and Sign-Up, Logout to Use Auth0**
+    1. Setup Auth0, did research on implementation in the frontend, backend and database. The frontend will pass a jwt token to the backend to protect API calls and use Role Based Access to restrict API calls. The Database will be refactored to use a central userID table, the jwt token will contain the userID which would be passed to the Database to query data.
+    2. Worked on the implemention of Auth0 and refactoring code to implement authentication, Sign in and Logout on the frotend.
+    2. Delegated to Bennett and instructed on how to approach the task.
+
+### Progress Update (since 7/11/2024)
+
+
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+        </tr>
+        <tr>
+        <td> #181-Grading Exams and Displaying Results on Frontend
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    </tr>
+            <tr>
+        <td>#80-Refactor UI Using shadcn UI Components
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+        <tr>
+        <tr>
+        <td>#17-User Story: Custom Bubble Sheet Support
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    </tr>
+        <tr>
+        <td> #77-Revamp Sign-In and Sign-Up to Use Auth0
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+     <tr>
+        <td> #188-Implement Refactored Code and Implement Color-Coded Grading
+        </td>
+        <td>In review
+        </td>
+    </tr>
+        <tr>
+        <td>#143 - Parse and Confirm CSV from OMR
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <td> #161- Integrate Flask Service to Trigger OMR Processing on File Upload
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+</table> 
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - We have a new Dashboard.
+  - Grading with color coding is now functional.
+  - Auth0 is finally underway.
+
+- **What Was Done:**
+  - New Dashboard
+  - Implemented Colored grading of exam page and refactored code with border preprocessing and conversion to images.
+
+- **What Didn't Go Well:**
+  - There was a lot of refactoring and debugging to be done. We are revamping features and improving already existing features and we need to make a bit more progress on the rest of the application.
+
+- **Retrospective:**
+  - Things are underway and I can see light at the end of the tunnel, things are starting to come together a bit better now.
+
+  ### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **Finalize: Grading Exams and Displaying Results on Frontend**.
+
+2. **Get at least 3 to 4 more pages refactored using Shadcn**
+
+
 ## Friday (7/09-7/11)
 
 ### Timesheet
