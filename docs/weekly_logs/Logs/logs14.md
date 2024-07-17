@@ -83,7 +83,8 @@
 
 ## Test Report / Testing Status:
 
-N/A
+- ![docs/weekly logs/Tests/[Tests]](../Tests/BackendTestJul17.jpg)
+- ![docs/weekly logs/Tests/[Tests]](../Tests/FrontendTestJul17.jpg)
 
 ## Overview:
 
