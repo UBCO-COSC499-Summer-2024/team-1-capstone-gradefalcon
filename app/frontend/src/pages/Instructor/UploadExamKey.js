@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
-import "../../css/App.css";
-import "../../css/UploadExam.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useRef, useEffect } from 'react';
+import '../../css/App.css';
+import '../../css/UploadExam.css';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
@@ -9,9 +9,11 @@ const UploadExamKey = () => {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const { examTitle, classID } = location.state || {};
+  const { className, userName, userID, examTitle, examID, courseID, classID } = location.state || {};
 
   useEffect(() => {
+    console.log("Received state:", { className, userName, userID, examTitle, examID, courseID, classID });
+
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
       if (file && file.type === "application/pdf") {
@@ -22,103 +24,99 @@ const UploadExamKey = () => {
     };
 
     const fileInput = fileInputRef.current;
-    fileInput.addEventListener("change", handleFileSelect);
+    fileInput.addEventListener('change', handleFileSelect);
 
     return () => {
-      fileInput.removeEventListener("change", handleFileSelect);
+      fileInput.removeEventListener('change', handleFileSelect);
     };
   }, []);
 
   const resetUpload = () => {
     setFileURL(null);
-    fileInputRef.current.value = "";
+    fileInputRef.current.value = '';
   };
 
   const sendToBackend = async () => {
-    if (!file) return;
+    if (!file) {
+      alert("Please select a file first.");
+      return;
+    }
+
+    console.log("Sending file upload request with form data:", {
+      file,
+      folder: `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`,
+      fileName: file.name,
+      examID,
+      examTitle,
+      classID
+    });
 
     const formData = new FormData();
-    formData.append("examKey", file);
-    formData.append("examTitle", examTitle);
-    formData.append("classID", classID);
+    formData.append('file', file);
+    formData.append('folder', `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`);
+    formData.append('fileName', file.name);
+    formData.append('examID', examID);
+    formData.append('examTitle', examTitle);
+    formData.append('classID', classID);
 
     try {
-      
-      // upload the exam key
-      const saveResponse = await fetch("/api/exam/saveExamKey", {
-        method: "POST",
+      const response = await fetch('/api/upload/uploadExamKey', {
+        method: 'POST',
         body: formData,
       });
 
-      console.log(saveResponse);
-      const responseBody = await saveResponse.text(); // Get the response body as text
-      console.log("Response status:", saveResponse.status);
-      console.log("Response body:", responseBody);
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Error: ${response.status} - ${errorMessage}`);
+      }
 
-      if (saveResponse.ok) {
-        // Handle success, maybe redirect or show a success message
-        navigate("/ConfirmExamKey");
+      const data = await response.json();
+      console.log('File uploaded successfully', data);
+      alert('File uploaded successfully');
+
+      // Call the /copyTemplate endpoint
+      const templateResponse = await fetch('/api/exam/copyTemplate', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      if (templateResponse.ok) {
+        console.log('Template copied successfully');
+        alert('Template copied successfully');
+        navigate('/OMRProcessing', { state: { examTitle, classID } });
       } else {
-        console.error("Failed to save questions");
+        console.error('Failed to copy template');
+        alert('Failed to copy template');
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error uploading file:', error);
+      alert('Error uploading file');
     }
-
-};
+  };
 
   return (
-    <>
-      <div className="App">
-        <div className="main-content">
-          <header>
-            <h2>Answer Key</h2>
-          </header>
-          <section className="upload-key">
-            <button
-              className="back-button"
-              onClick={() => window.history.back()}
-            ></button>
-            <h3>Upload the exam answer key as a PDF file.</h3>
-            <h2>{examTitle}</h2>
-            <div
-              className="upload-area"
-              style={{ display: fileURL ? "none" : "block" }}
-            >
-              <input
-                type="file"
-                id="file-input"
-                hidden
-                accept="application/pdf"
-                ref={fileInputRef}
-              />
-              <div
-                className="drag-drop-area"
-                onClick={() => fileInputRef.current.click()}
-              >
-                <p>Click to browse or drag and drop your files</p>
-              </div>
+    <div className="App">
+      <div className="main-content">
+        <header>
+          <h2>Answer Key</h2>
+        </header>
+        <section className="upload-key">
+          <button className="back-button" onClick={() => navigate(-1)}>&larr;</button>
+          <h3>Upload the exam answer key as a PDF file.</h3>
+          <div className="upload-area" style={{ display: fileURL ? 'none' : 'block' }}>
+            <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} data-testid="file-input" />
+            <div className="drag-drop-area" onClick={() => fileInputRef.current.click()}>
+              <p>Click to browse or drag and drop your files</p>
             </div>
-            <div
-              className="pdf-display"
-              style={{ display: fileURL ? "block" : "none" }}
-            >
-              <iframe src={fileURL} title="PDF Preview"></iframe>
-            </div>
-            {/* This send button is for testing right now. Will need to make it so it redirects */}
-            <button className="btn-import" onClick={sendToBackend}>
-              Import
-            </button>
-            <button className="btn-confirm" onClick={resetUpload}>
-              Reset
-            </button>
-            {/* <a href="/ExamControls" className="btn-confirm">
-              Confirm
-            </a> */}
-          </section>
-        </div>
+          </div>
+          <div className="pdf-display" style={{ display: fileURL ? 'block' : 'none' }}>
+            <iframe src={fileURL} title="PDF Preview"></iframe>
+          </div>
+          <button className="btn btn-import" onClick={resetUpload}>Reset</button>
+          <button className="btn-confirm" onClick={sendToBackend}>Confirm</button>
+        </section>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -18,6 +18,9 @@ services:
       - JWT_SECRET=secret
       - DATABASE_PORT=5432
       # - PORT=5001
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
     ports:
       - 80:80
       - 9229:9229
