@@ -1,5 +1,105 @@
 # Personal Log
 
+## Tuesday (7/11 - 7/16)
+
+## TimeSheet
+Clockify report
+![alt text](../Clockify/Bennett/07_12_2024-07_16_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: RBAC rework with Auth0
+
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * While implimenting a secondary service seems foolish at this point in the project, it came to light that our api calls system was quite outdated and vaulnerable to anyone being able to call them even if their permissions got denied, and our role based access was never properly implimented. Learning how to integrate Auth0 has been tricky and inneficient at first, but things are speeding up and our API calls should be entirly invisible and inaccessable to roles that shouldnt have acess, It will also allow for more admin funcationality aswell as overriding controls from the Auth0 dashbaord. 
+
+  
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Have Auth0 RBAC working for all existing API calls and it tested in frontend, backend and e2e.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Personal Log
+
+## Friday (7/05 - 7/09)
+
+## TimeSheet
+Clockify report
+![alt text](../Clockify/Bennett/07_05_2024-07_09_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Additional Frontend testing
+  * #2: Additional Backend testing
+  * #3: Additional e2e testing
+
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>2
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>3
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * While writting tests for features i didnt write became difficult when i beleived their code needed refactoring, this is due to the JS language being new to me on this project and my lack of understanding of the code because i didnt write it. Although the refactoring would have been nessesary down the road so the inneficiency allowed other group members to avoid backtracking taking away focus on additonal features.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * I MIGHT NOT GET THIS ALL DONE, BUT ITS ALL STUFF I NEED TO GET DONE SOONER THAN LATER
+  * getting 85-100% coverage for via creating remaining frontend tests (for currently implimented pages/code)
+  * getting 85-100% coverage for via creating remaining backend tests (for currently implimented pages/code)
+  * creating more end to end testing files completed
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Personal Log
+
 ## Friday (7/09 - 7/11)
 
 ## TimeSheet
