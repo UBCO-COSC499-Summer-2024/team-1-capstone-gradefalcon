@@ -8,10 +8,10 @@ const UploadExams = () => {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const { className, userName, userID, examTitle, examID } = location.state || {};
+  const { className, userName, userID, examTitle, examID, courseID, classID } = location.state || {};
 
   useEffect(() => {
-    console.log("Received state:", { className, userName, userID, examTitle, examID });
+    console.log("Received state:", { className, userName, userID, examTitle, examID, courseID, classID });
 
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
@@ -36,13 +36,13 @@ const UploadExams = () => {
 
   const handleFileUpload = async () => {
     const file = fileInputRef.current.files[0];
-    if (!file || !className || !userName || !userID || !examTitle || !examID) {
+    if (!file || !className || !userName || !userID || !examTitle || !examID || !courseID || !classID) {
       console.error("Missing required information for file upload.");
       return;
     }
 
     const fileName = `${file.name}`;
-    const folderPath = `${className}/Instructors/${userName}_(${userID})/${examTitle}/UploadExam`;
+    const folderPath = `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/UploadExam`;
 
     const formData = new FormData();
     formData.append('file', file);
@@ -84,7 +84,7 @@ const UploadExams = () => {
           <button className="back-button" onClick={() => navigate(-1)}>&larr;</button>
           <h3>Upload the exam with all student submissions as a PDF file.</h3>
           <div className="upload-area" style={{ display: fileURL ? 'none' : 'block' }}>
-            <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} aria-label="Click to browse or drag and drop your files" />
+            <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} data-testid="file-input" />
             <div className="drag-drop-area" onClick={() => fileInputRef.current.click()}>
               <p>Click to browse or drag and drop your files</p>
             </div>

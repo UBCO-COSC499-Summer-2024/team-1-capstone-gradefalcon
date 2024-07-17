@@ -8,7 +8,7 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => jest.fn(),
   useLocation: () => ({
-    state: { className: 'Test Class', userName: 'Test User', userID: '1', examTitle: 'Test Exam', examID: '123' }
+    state: { className: 'Test Class', userName: 'Test User', userID: '1', examTitle: 'Test Exam', examID: '123', courseID: '456', classID: '789' }
   })
 }));
 
@@ -36,7 +36,7 @@ describe('UploadExams Component', () => {
       </BrowserRouter>
     );
 
-    const fileInput = screen.getByLabelText(/Click to browse or drag and drop your files/i).closest('input');
+    const fileInput = screen.getByTestId('file-input');
     const file = new File(['dummy content'], 'Exam (2).pdf', { type: 'application/pdf' });
 
     fireEvent.change(fileInput, { target: { files: [file] } });
@@ -58,7 +58,7 @@ describe('UploadExams Component', () => {
       </BrowserRouter>
     );
 
-    const fileInput = screen.getByLabelText(/Click to browse or drag and drop your files/i).closest('input');
+    const fileInput = screen.getByTestId('file-input');
     const file = new File(['dummy content'], 'Exam (2).pdf', { type: 'application/pdf' });
 
     fireEvent.change(fileInput, { target: { files: [file] } });

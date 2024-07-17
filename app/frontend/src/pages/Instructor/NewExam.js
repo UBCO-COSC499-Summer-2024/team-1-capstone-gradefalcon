@@ -8,6 +8,7 @@ const NewExam = () => {
   const [userName, setUserName] = useState("");
   const [userID, setUserID] = useState("");
   const [className, setClassName] = useState("");
+  const [courseId, setCourseId] = useState("");
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,6 +36,7 @@ const NewExam = () => {
       setUserName(location.state.userName);
       setUserID(location.state.userID);
       setClassName(location.state.className);
+      setCourseId(location.state.courseID);  // Set courseID from state
     }
   }, [location.state]);
 
@@ -70,7 +72,7 @@ const NewExam = () => {
               <div>
                 <Link
                   to={isFormValid() ? "/UploadExamKey" : "#"}
-                  state={{ examTitle: examTitle, userID: userID, userName: userName, className: className }} // Pass examTitle as state
+                  state={{ examTitle: examTitle, userID: userID, userName: userName, className: className, classID: class_id, courseID: courseId }} // Pass examTitle as state
                   className="btn"
                   data-testid="upload-answer-key-btn"
                   onClick={handleUploadClick}

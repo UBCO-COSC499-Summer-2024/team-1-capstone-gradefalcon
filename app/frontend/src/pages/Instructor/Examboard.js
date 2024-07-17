@@ -100,7 +100,8 @@ const ExamBoard = () => {
                           userName: userName,
                           userID: userID,
                           examTitle: exam.exam_title,
-                          examID: exam.exam_id
+                          examID: exam.exam_id,
+                          courseID: courseId,  // Pass courseID here
                         }}
                         className="grade-exam-btn"
                         data-testid={`grade-btn-${index}-${courseId}`}
@@ -115,6 +116,7 @@ const ExamBoard = () => {
                       className: course_name,
                       userName: userName,
                       userID: userID,
+                      courseID: courseId  // Pass courseID here
                     }}
                     className="create-new-btn"
                     data-testid={`create-new-${courseId}`}
