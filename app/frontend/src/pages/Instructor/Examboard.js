@@ -1,13 +1,36 @@
 import React, { useEffect, useState } from "react";
 import "../../css/App.css";
 import "../../css/Examboard.css";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const ExamBoard = () => {
   const [classData, setClassData] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [userID, setUserID] = useState("");
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const fetchSessionInfo = async () => {
+      try {
+        const response = await fetch("/api/session-info", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUserName(data.userName);
+          setUserID(data.userId);
+        } else {
+          console.error("Failed to fetch session info");
+        }
+      } catch (error) {
+        console.error("Error fetching session info:", error);
+      }
+    };
+
     const fetchClassData = async () => {
       try {
         const response = await fetch(`/api/exam/ExamBoard`, {
@@ -19,7 +42,7 @@ const ExamBoard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          setClassData(data); // Set the class data state with the fetched data
+          setClassData(data);
         } else {
           setError("Failed to fetch class data");
         }
@@ -28,13 +51,12 @@ const ExamBoard = () => {
       }
     };
 
+    fetchSessionInfo();
     fetchClassData();
   }, []);
 
-  // Transform classData.classes into a structure that groups exams by course_id
-  // Check if classData.classes is null and provide a fallback empty array
   const groupedExams = (classData.classes || []).reduce((acc, current) => {
-    const { course_id, course_name, exam_title, class_id } = current;
+    const { course_id, course_name, exam_title, class_id, exam_id } = current || {};
     if (!acc[course_id]) {
       acc[course_id] = {
         course_name,
@@ -42,7 +64,7 @@ const ExamBoard = () => {
         exams: [],
       };
     }
-    acc[course_id].exams.push(exam_title);
+    acc[course_id].exams.push({ exam_title, exam_id });
     return acc;
   }, {});
 
@@ -70,15 +92,38 @@ const ExamBoard = () => {
                   </h3>
                   {exams.map((exam, index) => (
                     <div key={index} className="exam-item" data-testid={`exam-${index}-${courseId}`}>
-                      <p>{exam}</p>
-                      <Link to="/UploadExams" className="grade-exam-btn" data-testid={`grade-btn-${index}-${courseId}`}>
+                      <p>{exam.exam_title}</p>
+                      <Link 
+                        to="/UploadExams"
+                        state={{
+                          className: course_name,
+                          userName: userName,
+                          userID: userID,
+                          examTitle: exam.exam_title,
+                          examID: exam.exam_id,
+                          courseID: courseId,
+                          classID: class_id  // Pass courseID here
+                        }}
+                        className="grade-exam-btn"
+                        data-testid={`grade-btn-${index}-${courseId}`}
+                      >
                         Grade Exam
                       </Link>
                     </div>
                   ))}
-                  <a href={`./NewExam/${class_id}`} className="create-new-btn" data-testid={`create-new-${courseId}`}>
+                  <Link 
+                    to={`/NewExam/${class_id}`}
+                    state={{
+                      className: course_name,
+                      userName: userName,
+                      userID: userID,
+                      courseID: courseId  // Pass courseID here
+                    }}
+                    className="create-new-btn"
+                    data-testid={`create-new-${courseId}`}
+                  >
                     Create New
-                  </a>
+                  </Link>
                 </div>
               )
             )}
