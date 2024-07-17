@@ -5,6 +5,7 @@ const {
   examBoard,
   getStandardAverageData,
   getPerformanceData,
+  getStudentGrades
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
@@ -17,6 +18,7 @@ router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
 router.get("/standard-average-data", getStandardAverageData);
 router.get("/performance-data", getPerformanceData);
+router.get('/grades/:studentId', getStudentGrades);
 
   
 router.post("/saveExamKey", upload.single("examKey"), async function (req, res) {
