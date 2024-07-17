@@ -11,6 +11,25 @@ const displayClasses = async (req, res, next) => {
   }
 };
 
+// Get Specific Class Name
+const getClassNameById = async (req, res, next) => {
+  try {
+    const { classId } = req.params; // Get the class ID from the request parameters
+
+    const result = await pool.query(
+      "SELECT course_name FROM classes WHERE class_id = $1",
+      [classId]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Class not found" });
+    }
+
+    res.json({ course_name: result.rows[0].course_name }); // Send the class name as JSON
+  } catch (err) {
+    next(err);
+  }
+};
 // Display students enrolled, exam grades too
 const displayClassManagement = async (req, res, next) => {
   try {
@@ -85,4 +104,4 @@ const importClass = async (req, res) => {
   }
 };
 
-module.exports = { displayClasses, displayClassManagement, importClass };
+module.exports = { displayClasses, displayClassManagement, importClass, getClassNameById };

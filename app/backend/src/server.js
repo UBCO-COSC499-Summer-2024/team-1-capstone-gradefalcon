@@ -10,6 +10,8 @@ const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
 const classRoutes = require('./routes/classRoutes');
 // const userRoutes = require('./routes/userRoutes');
 const examRoutes = require('./routes/examRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
+const courseRoutes = require('./routes/courseRoutes'); 
 
 const app = express();
 
@@ -64,15 +66,20 @@ app.get('/api/private-scoped', checkJwt, checkScopes, function(req, res) {
 
 // Your existing routes
 // app.use('/auth', authRoutes);
-app.use('/class', checkJwt, classRoutes); // Protecting existing routes with Auth0
-app.use('/exam', checkJwt, examRoutes);   // Protecting existing routes with Auth0
+// app.use('/class', checkJwt, classRoutes); // Protecting existing routes with Auth0
+// app.use('/exam', checkJwt, examRoutes);   // Protecting existing routes with Auth0
 // app.use('/users', checkJwt, userRoutes); // Uncomment if userRoutes is used
+app.use('/auth', authRoutes);
+app.use('/class', classRoutes);
+app.use('/exam', examRoutes);
+app.use('/users', userRoutes);
+app.use('/upload', uploadRoutes);
+app.use('/courses', courseRoutes); 
 
 app.get('/healthz', (req, res) => {
   res.send('I am happy and healthy\n');
 });
 
-// Session info route
 app.get("/session-info", (req, res) => {
   res.json({
     userId: req.session.userId,
