@@ -3,27 +3,23 @@ const {
   saveQuestions,
   newExam,
   examBoard,
-  getStandardAverageData,
-  getPerformanceData,
+  getAverageperExam,
+  getAverageperCourse,
   getStudentGrades
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
-const fs = require("fs");
-const path = require("path");
 
 const router = express.Router();
 
 router.post("/saveQuestions", saveQuestions);
 router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
-router.get("/standard-average-data", getStandardAverageData);
-router.get("/performance-data", getPerformanceData);
+router.get("/average-per-exam", getAverageperExam);
+router.get("/average-per-course", getAverageperCourse); // Updated route
 router.get('/grades/:studentId', getStudentGrades);
 
-  
 router.post("/saveExamKey", upload.single("examKey"), async function (req, res) {
     try {
-
       const response = await fetch("http://flaskomr:5000/process", {
         method: "POST",
         headers: {
