@@ -1,8 +1,66 @@
 
 # Personal Log
 
+## Wednesday ( 12/7 - 16/7 )
 
-## Wednesday ( 9/7 - 11/7 )
+### Timesheet 
+
+clockify report 
+
+![Time12](https://github.com/user-attachments/assets/90ccc3d8-4130-4492-a742-95711afdf942)
+
+
+
+
+### Current Tasks (Provide Details):
+- #1: Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhnaced look altogether.
+- #3: Student Grade Report - with testing 
+
+
+  
+### Progress Update (since 12/7/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Student Grade Report testing 
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn 
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>Debugging graphs logic - Instructor Dashboard
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Moving forward from the last cycle, we succesfully completed the process of revamping the Dashboard partially. There are some changes here and there which now wont be taking long duration of time for the Dashboard as the major components have been changed by myself and Omar. The main time was consumed in changing each and every individual components and the addition of the icons as well. I have successfully completed the testing for the Student Grade Report feature. For the upcoming cycle, I will be completing the dashboard using shad cn and also all the other pages for our application along with the related testing to make sure it passes the newly created as well as the existing tests. I have to also look up the graphs logic in order to put in values in our database for one more course so that the graphs are rendered for both the courses as per our requirements and show the correct data.
+
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Revamping the front end UI using Shad cn 
+- Debugging graphs logic - Instructor Dashboard
+
+## Friday ( 9/7 - 11/7 )
 
 ### Timesheet 
 
@@ -54,7 +112,7 @@ After the last cycle, I took up on starting working on revamping the Dashboard u
 
 
 ### Next Cycle Goals ( What to accomplish during the next cycle ):
-- Revamping the front end UI using Shad cn - to be complete by the next cycle
+- Revamping the front end UI using Shad cn 
 - Grade Report for students - with testing
 
 
