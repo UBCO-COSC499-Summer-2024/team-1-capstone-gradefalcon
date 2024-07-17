@@ -5,7 +5,7 @@ const {
   examBoard,
   getStandardAverageData,
   getPerformanceData,
-  getStudentGrades
+  getStudentGrades,
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
@@ -19,7 +19,7 @@ router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
 router.get("/standard-average-data", getStandardAverageData);
 router.get("/performance-data", getPerformanceData);
-router.get('/grades/:studentId', getStudentGrades);
+router.get("/grades/:studentId", getStudentGrades);
 
 router.get("/getResults", async function (req, res) {
   const filePath = path.join(
@@ -42,14 +42,10 @@ router.get("/getResults", async function (req, res) {
     });
 });
 
-router.post(
-  "/saveExamKey",
-  upload.single("examKey"),
-  async function (req, res) {
-    console.log(req.file);
-    res.send(JSON.stringify("File uploaded successfully"));
-  }
-);
+router.post("/saveExamKey", upload.single("file"), async function (req, res) {
+  console.log(req.file);
+  res.send(JSON.stringify("File uploaded successfully"));
+});
 
 router.post("/copyTemplate", async function (req, res) {
   console.log("copyTemplate");
