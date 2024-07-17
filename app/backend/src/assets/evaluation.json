@@ -1,0 +1,155 @@
+{
+  "source_type": "custom",
+  "options": {
+    "questions_in_order": [
+      "q1..100"
+    ],
+    "answers_in_order": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ]
+  },
+  "outputs_configuration": {
+    "should_explain_scoring": true,
+    "draw_score": {
+      "enabled": true,
+      "position": [
+        600,
+        150
+      ],
+      "size": 1.5
+    },
+    "draw_answers_summary": {
+      "enabled": true,
+      "position": [
+        300,
+        70
+      ],
+      "size": 1.0
+    },
+    "draw_question_verdicts": {
+      "enabled": true,
+      "verdict_colors": {
+        "correct": "#00ff00",
+        "neutral": "#000000",
+        "incorrect": "#ff0000"
+      },
+      "verdict_symbol_colors": {
+        "positive": "#000000",
+        "neutral": "#000000",
+        "negative": "#000000"
+      },
+      "draw_answer_groups": {
+        "enabled": true
+      }
+    },
+    "draw_detected_bubble_texts": {
+      "enabled": false
+    }
+  },
+  "marking_schemes": {
+    "DEFAULT": {
+      "correct": "1",
+      "incorrect": "0",
+      "unmarked": "0"
+    }
+  }
+}
