@@ -1,4 +1,3 @@
-// NewExam.test.js
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
@@ -11,7 +10,8 @@ describe('NewExam Component', () => {
     const examTitleInput = screen.getByTestId('exam-title-input');
     fireEvent.change(examTitleInput, { target: { value: 'Dummy input' } });
     const uploadAnswerKeyButton = screen.getByTestId('upload-answer-key-btn');
-    expect(uploadAnswerKeyButton).toHaveAttribute('href', '/UploadExamKey');
+    fireEvent.click(uploadAnswerKeyButton); // simulate the click event
+    expect(uploadAnswerKeyButton.closest('a')).toHaveAttribute('href', '/UploadExamKey');
   });
 
   test('manually select answers button takes you to the correct location', () => {
@@ -19,7 +19,7 @@ describe('NewExam Component', () => {
     const examTitleInput = screen.getByTestId('exam-title-input');
     fireEvent.change(examTitleInput, { target: { value: 'Dummy input' } });
     const manualAnswerKeyButton = screen.getByTestId('manual-answer-key-btn');
-    expect(manualAnswerKeyButton).toHaveAttribute('href', expect.stringMatching(/^\/ManualExamKey/));
+    expect(manualAnswerKeyButton.closest('a')).toHaveAttribute('href', expect.stringMatching(/^\/ManualExamKey/));
   });
 
   test('exam title input prevents SQL injection characters', () => {
