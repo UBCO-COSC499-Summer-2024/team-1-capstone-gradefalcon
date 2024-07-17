@@ -6,9 +6,9 @@ const bodyParser = require('body-parser');
 const pool = require('./utils/db');
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
 
-// const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes');
 const classRoutes = require('./routes/classRoutes');
-// const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoutes');
 const examRoutes = require('./routes/examRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const courseRoutes = require('./routes/courseRoutes'); 
