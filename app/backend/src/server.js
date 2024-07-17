@@ -10,6 +10,7 @@ const classRoutes = require('./routes/classRoutes');
 const userRoutes = require('./routes/userRoutes');
 const examRoutes = require('./routes/examRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const courseRoutes = require('./routes/courseRoutes'); 
 
 const app = express();
 
@@ -39,19 +40,18 @@ app.use('/class', classRoutes);
 app.use('/exam', examRoutes);
 app.use('/users', userRoutes);
 app.use('/upload', uploadRoutes);
+app.use('/courses', courseRoutes); 
 
 app.get('/healthz', (req, res) => {
   res.send('I am happy and healthy\n');
 });
 
-// Session info route
 app.get("/session-info", (req, res) => {
   res.json({
     userId: req.session.userId,
     userName: req.session.userName,
   });
 });
-
 
 const PORT = process.env.PORT || 80;
 console.log(`Starting server on port ${PORT}`);
