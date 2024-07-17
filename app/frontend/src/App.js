@@ -6,7 +6,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import { Auth0Provider } from "@auth0/auth0-react";
 // Import components
 import Profile from "./components/Profile";
-//import pages
+// import pages
 // instructor pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
@@ -22,7 +22,7 @@ import ManualExamKey from "./pages/Instructor/ManualExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
-//student pages
+// student pages
 import StudentDashboard from "./pages/Student/StudentDashboard";
 import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
 import StudentNotificationPreferences from "./pages/Student/StudentNotificationPreferences";
@@ -65,15 +65,14 @@ function App() {
 
   return (
     <Auth0Provider
-      domain="dev-1wzrc3nphnk4w01y.ca.auth0.com"
-      clientId="zUtm0FsUWaknfcSxpx3cyhFHNjIuVpoI"
+      domain={process.env.REACT_APP_AUTH0_DOMAIN}
+      clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
       redirectUri={window.location.origin}
     >
       <Router>
         <div className="App">
           <Layout>
             <Routes>
-
               <Route path="/Login" element={<Login />} />
               <Route path="/" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
               <Route path="/Profile" element={<Profile />} />
