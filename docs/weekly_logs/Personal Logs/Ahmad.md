@@ -1,6 +1,52 @@
 # Personal Log
 Ahmad Saleem Mirza
 
+## Friday (July 12 - 17)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/July12-17.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Using OMR to scan uploaded solution key
+  * #2: Allowing the teacher to confirm the solution
+  * #3: Saving answers to database
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Calling OMR to scan uploaded solution key
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Testing for the OMR
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>   
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I have completed testing for the entire process of teachers uploading the exam solution key and saving the selected answers to the database. The OMR itself has also already been thoroughly tested. Though last cycle I managed to solve the issue of making too many calls to the backend by making an intermediary processing page whilst the OMR scans the page, I encountered the same error, which I eventually resolved using an interrupt statement that now gives an unnoticeable gap between the different API calls. 
+
+The concepts and code used here are similar to what we will be using later on when scanning and marking the students' answer sheets. So the remaining couple of features should be both quicker and easier to implement.
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Implementing a proper directory naming convention for the bulk upload of files on the already existing AWS server. This will ensure that the backend knows where to store and retrieve various files to display depending on the user that is accessing them. So a student will only be able to view their own exams and not that of others, etc.
+
+
+
 ## Friday (July 10 - 12)
 
 ### Timesheet
