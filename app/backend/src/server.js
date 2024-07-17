@@ -9,6 +9,7 @@ const authRoutes = require('./routes/authRoutes');
 const classRoutes = require('./routes/classRoutes');
 const userRoutes = require('./routes/userRoutes');
 const examRoutes = require('./routes/examRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 const courseRoutes = require('./routes/courseRoutes'); 
 
 const app = express();
@@ -38,6 +39,7 @@ app.use('/auth', authRoutes);
 app.use('/class', classRoutes);
 app.use('/exam', examRoutes);
 app.use('/users', userRoutes);
+app.use('/upload', uploadRoutes);
 app.use('/courses', courseRoutes); 
 
 app.get('/healthz', (req, res) => {
