@@ -89,6 +89,7 @@ Instructors can now see their what options they've selected on the confirm exam 
 
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
   * Calling the OMR to scan the uploaded key and testing the entire upload exam solution key cycle
+  * Implement functionality to manage and process bulk uploads of scanned PDFs, seperating each page of the pdf and (assigning it to students), named, and stored in folders based on student IDs. Ensure the system can handle large uploads efficiently.
 
 
 ## Wednesday (July 5 - 10)

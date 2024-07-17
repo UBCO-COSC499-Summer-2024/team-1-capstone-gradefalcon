@@ -6,7 +6,7 @@ Clockify report
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Implementing Auth0 to connect to DB and API calls
-  * #2: Writing Account seetting plus test
+  * #2: Writing Account settings plus test
   * #3: More implementation of AWS File Upload plus tests
   * #4: Integrating Ahmads Flask/OMR code to AWS code to mitigate conflict changes
 
