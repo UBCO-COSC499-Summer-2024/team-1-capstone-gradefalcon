@@ -1,11 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
-import '../../css/App.css';
-import '../../css/UploadExam.css';
-import axios from 'axios'; // You need to install axios if you haven't already
+import React, { useState, useRef, useEffect } from "react";
+import "../../css/App.css";
+import "../../css/UploadExam.css";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const UploadExams = () => {
+const UploadExam = () => {
   const [fileURL, setFileURL] = useState(null);
+  const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
+  const location = useLocation();
+  const { examID } = location.state || {};
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleFileSelect = (event) => {
@@ -13,45 +17,41 @@ const UploadExams = () => {
       if (file && file.type === "application/pdf") {
         const fileURL = URL.createObjectURL(file);
         setFileURL(fileURL);
+        setFile(file);
       }
     };
 
     const fileInput = fileInputRef.current;
-    fileInput.addEventListener('change', handleFileSelect);
+    fileInput.addEventListener("change", handleFileSelect);
 
     return () => {
-      fileInput.removeEventListener('change', handleFileSelect);
+      fileInput.removeEventListener("change", handleFileSelect);
     };
   }, []);
 
   const resetUpload = () => {
     setFileURL(null);
-    fileInputRef.current.value = '';
+    fileInputRef.current.value = "";
   };
 
-  const handleFileUpload = async () => {
-    const file = fileInputRef.current.files[0];
+  const sendToBackend = async () => {
     if (!file) return;
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("examPages", file);
+    formData.append("examID", examID);
 
     try {
-      const response = await axios.post('/api/upload-exam', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      await fetch("/api/exam/UploadExam", {
+        method: "POST",
+        body: formData,
       });
 
-      if (response.data.success) {
-        alert('File uploaded successfully');
-        // Redirect or update the state as needed
-      } else {
-        alert('File upload failed');
-      }
+      navigate("/OMRProcessing", {
+        state: { examID },
+      });
     } catch (error) {
-      console.error('Error uploading file:', error);
-      alert('Error uploading file');
+      console.error("Error:", error);
     }
   };
 
@@ -60,22 +60,45 @@ const UploadExams = () => {
       <div className="App">
         <div className="main-content">
           <header>
-            <h2>Upload Exams</h2>
+            <h2>Upload Exam Pages</h2>
           </header>
           <section className="upload-key">
-            <button className="back-button" onClick={() => window.history.back()}>&larr;</button>
-            <h3>Upload the exam with all student submissions as a PDF file.</h3>
-            <div className="upload-area" style={{ display: fileURL ? 'none' : 'block' }}>
-              <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} />
-              <div className="drag-drop-area" onClick={() => fileInputRef.current.click()}>
+            <button
+              className="back-button"
+              onClick={() => window.history.back()}
+            ></button>
+            <h3>Upload the exam pages as a PDF file.</h3>
+            <div
+              className="upload-area"
+              style={{ display: fileURL ? "none" : "block" }}
+            >
+              <input
+                type="file"
+                id="file-input"
+                data-testid="file-input"
+                hidden
+                accept="application/pdf"
+                ref={fileInputRef}
+              />
+              <div
+                className="drag-drop-area"
+                onClick={() => fileInputRef.current.click()}
+              >
                 <p>Click to browse or drag and drop your files</p>
               </div>
             </div>
-            <div className="pdf-display" style={{ display: fileURL ? 'block' : 'none' }}>
+            <div
+              className="pdf-display"
+              style={{ display: fileURL ? "block" : "none" }}
+            >
               <iframe src={fileURL} title="PDF Preview"></iframe>
             </div>
-            <button className="btn btn-import" onClick={resetUpload}>Import</button>
-            <button className="btn-confirm" onClick={handleFileUpload}>Confirm</button>
+            <button className="btn-import" onClick={sendToBackend}>
+              Import
+            </button>
+            <button className="btn-confirm" onClick={resetUpload}>
+              Reset
+            </button>
           </section>
         </div>
       </div>
@@ -83,4 +106,4 @@ const UploadExams = () => {
   );
 };
 
-export default UploadExams;
+export default UploadExam;

@@ -80,6 +80,73 @@ router.post("/callOMR", async function (req, res) {
   }
 });
 
+router.post("/UploadExam", upload.single("examPages"), async function (req, res) {
+  const { examID } = req.body;
+
+  try {
+    // Get answer key from the database
+    const answerKey = await getAnswerKeyForExam(examID); // Implement this function in your controller
+
+    // Create evaluation.json
+    const evaluationJson = {
+      source_type: "custom",
+      options: {
+        questions_in_order: Array.from({ length: 100 }, (_, i) => `q${i + 1}`),
+        answers_in_order: answerKey,
+      },
+      outputs_configuration: {
+        should_explain_scoring: true,
+        draw_score: {
+          enabled: true,
+          position: [600, 1100],
+          size: 1.5,
+        },
+        draw_answers_summary: {
+          enabled: true,
+          position: [300, 1200],
+          size: 1.0,
+        },
+        draw_question_verdicts: {
+          enabled: true,
+          verdict_colors: {
+            correct: "#00ff00",
+            neutral: "#000000",
+            incorrect: "#ff0000",
+          },
+          verdict_symbol_colors: {
+            positive: "#000000",
+            neutral: "#000000",
+            negative: "#000000",
+          },
+          draw_answer_groups: {
+            enabled: true,
+          },
+        },
+        draw_detected_bubble_texts: {
+          enabled: false,
+        },
+      },
+      marking_schemes: {
+        DEFAULT: {
+          correct: "1",
+          incorrect: "0",
+          unmarked: "0",
+        },
+      },
+    };
+
+    const evaluationFilePath = path.join(destinationDir, "evaluation.json");
+    fs.writeFileSync(evaluationFilePath, JSON.stringify(evaluationJson, null, 2));
+
+    res.send("Files uploaded and copied successfully");
+  } catch (error) {
+    console.error("Error in /UploadExam:", error);
+    res.status(500).send("Error processing exam pages");
+  }
+});
+
+
+
 router.post("/test", async function (req, res) {
   console.log("test called");
   res.send(JSON.stringify("Test route called successfully"));

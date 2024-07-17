@@ -104,10 +104,32 @@ const getPerformanceData = async (req, res, next) => {
   }
 };
 
+const getAnswerKeyForExam = async (examID) => {
+  try {
+    const solution = await db.Solution.findOne({ where: { exam_id: examID } });
+    if (!solution) throw new Error("Solution not found");
+
+    // Assuming the answers are stored in the format {1:A, 2:B, ...}
+    const answersArray = solution.answers; // This should be a JSON array
+
+    // Extract the answers in order
+    const answersInOrder = [];
+    for (let i = 0; i < answersArray.length; i++) {
+      answersInOrder.push(answersArray[i]);
+    }
+
+    return answersInOrder;
+  } catch (error) {
+    console.error("Error getting answer key for exam:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   saveQuestions,
   newExam,
   examBoard,
   getStandardAverageData,
   getPerformanceData,
+  getAnswerKeyForExam
 };

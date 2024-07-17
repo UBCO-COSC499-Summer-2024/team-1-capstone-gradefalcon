@@ -24,7 +24,7 @@ def process_omr():
     try:
           # Run the PDF conversion script
         subprocess.run(
-            ["python3", "./src/utils/pdf.py"],
+            ["python3", "pdf_to_images.py"],
             capture_output=True,
             text=True,
             check=True

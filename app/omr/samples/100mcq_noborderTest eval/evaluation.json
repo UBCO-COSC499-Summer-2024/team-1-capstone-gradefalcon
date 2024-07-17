@@ -112,16 +112,14 @@
     "draw_score": {
       "enabled": true,
       "position": [
-        600,
-        150
+        600, 1100
       ],
       "size": 1.5
     },
     "draw_answers_summary": {
       "enabled": true,
       "position": [
-        300,
-        70
+        300, 1200
       ],
       "size": 1.0
     },
