@@ -1,4 +1,4 @@
-# GradeFalcon Documentation
+# AWS Documentation FOR GRADEFALCON
 
 ## Overview
 GradeFalcon is a web-based Optical Mark Recognition (OMR) system designed to streamline the grading of exams. The system utilizes AWS for file storage, Docker for containerization, and Drone CI for continuous integration and deployment. This documentation provides an in-depth guide for developers and users, detailing every aspect of the application from setup to deployment, and explains how each component interacts within the system.
