@@ -57,7 +57,8 @@ Moving forward from the last cycle, we succesfully completed the process of reva
 
 
 ### Next Cycle Goals ( What to accomplish during the next cycle ):
-- Revamping the front end UI using Shad cn 
+- Revamping the front end UI using Shad cn
+- Finalize Debugging graphs logic - Instructor Dashboard
 
 ## Friday ( 9/7 - 11/7 )
 
