@@ -8,7 +8,7 @@ const UploadExam = () => {
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const location = useLocation();
-  const { examID} = location.state || {};
+  const { examID, examTitle} = location.state || {};
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,6 +40,7 @@ const UploadExam = () => {
     const formData = new FormData();
     formData.append("examPages", file);
     formData.append("examID", examID);
+    formData.append("examTitle", examTitle);
 
     try {
       const responses = await Promise.all([
@@ -61,7 +62,9 @@ const UploadExam = () => {
 
       navigate("/OMRProcessing", {
         state: {
-          examID: examID
+          examID: examID,
+          examTitle: examTitle,
+
         },
       });
     } catch (error) {

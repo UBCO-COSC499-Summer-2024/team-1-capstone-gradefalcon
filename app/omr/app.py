@@ -31,6 +31,11 @@ def process_omr():
             text=True,
             check=True
         )
+
+          # Log contents of input directory before processing
+        app.logger.info(f"Contents of input directory before processing: {os.listdir(input_dir)}")
+        
+
         # Run the OMR processing script
         result = subprocess.run(
             ["python3", "main.py", "--inputDir", input_dir, "--outputDir", out_dir],
@@ -55,9 +60,10 @@ def process_omr():
                 app.logger.error(f'Failed to delete {file_path}. Reason: {e}')
 
         return jsonify({"output": result.stdout}), 200
-
+    
     except subprocess.CalledProcessError as e:
         app.logger.error(f"OMR Script CalledProcessError: {e}")
+        app.logger.error(f"OMR Script stderr: {e.stderr}")
         return jsonify({"error": str(e), "output": e.stdout, "errors": e.stderr}), 500
     except Exception as e:
         app.logger.error(f"OMR Script Exception: {e}")

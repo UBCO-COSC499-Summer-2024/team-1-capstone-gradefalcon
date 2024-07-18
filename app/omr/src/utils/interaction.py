@@ -2,21 +2,32 @@ from dataclasses import dataclass
 
 import cv2
 from matplotlib import pyplot
-from screeninfo import get_monitors
+from screeninfo import get_monitors, ScreenInfoError
 
 from src.utils.image import ImageUtils
 from src.utils.logger import logger
 
-monitor_window = get_monitors()[0]
-
+try:
+    monitors = get_monitors()
+    monitor_window = monitors[0] if monitors else None
+except ScreenInfoError as e:
+    # Handle the error gracefully in headless environments
+    monitor_window = None
+    print(f"ScreenInfoError: {e}")
 
 @dataclass
 class ImageMetrics:
-    # TODO: fix window metrics doesn't account for the doc/taskbar on macos
-    window_width, window_height = monitor_window.width, monitor_window.height
-    # for positioning image windows
-    window_x, window_y = 0, 0
+    # Set default values for window width and height
+    window_width: int = 1920
+    window_height: int = 1080
+    window_x: int = 0
+    window_y: int = 0
     reset_pos = [0, 0]
+
+    def __post_init__(self):
+        if monitor_window is not None:
+            self.window_width = monitor_window.width
+            self.window_height = monitor_window.height
 
 
 class InteractionUtils:

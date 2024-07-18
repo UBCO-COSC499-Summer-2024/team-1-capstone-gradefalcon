@@ -89,9 +89,9 @@ def setup_outputs_for_template(paths, template):
     ] + template.output_columns
     ns.OUTPUT_SET = []
     ns.files_obj = {}
-    TIME_NOW_HRS = strftime("%I%p", localtime())
+    # TIME_NOW_HRS = strftime("%I%p", localtime())
     ns.filesMap = {
-        "Results": os.path.join(paths.results_dir, f"Results_{TIME_NOW_HRS}.csv"),
+        "Results": os.path.join(paths.results_dir, f"Results.csv"),
         "MultiMarked": os.path.join(paths.manual_dir, "MultiMarkedFiles.csv"),
         "Errors": os.path.join(paths.manual_dir, "ErrorFiles.csv"),
     }

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Toast from "../../components/Toast";
-import "../../css/App.css";
+import Toast from "./Toast";
+import "../css/App.css";
 
-const OMRProcessingForUpload = (props) => {
+const OMRProcessing = (props) => {
   const location = useLocation();
   const [toast, setToast] = useState(null);
-  const { examID} = location.state || {};
+  const { examTitle, classID } = location.state || {};
   const navigate = useNavigate();
 
   const runOMR = async () => {
@@ -22,9 +22,10 @@ const OMRProcessingForUpload = (props) => {
       console.log("finished");
       setToast({ message: "Sheet successfully added!", type: "success" });
       setTimeout(() => {
-        navigate("/ReviewExams", {
+        navigate("/ConfirmExamKey", {
           state: {
-            examID: examID,
+            examTitle: examTitle,
+            classID: classID,
           },
         });
       }, 2000);
@@ -71,11 +72,11 @@ const OMRProcessingForUpload = (props) => {
           <header>
             <h2>Scanning file</h2>
           </header>
-          <div className="loader"></div>
+          <div class="loader"></div>
         </div>
       </div>
     </>
   );
 };
 
-export default OMRProcessingForUpload;
+export default OMRProcessing;
