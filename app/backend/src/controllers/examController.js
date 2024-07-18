@@ -104,17 +104,22 @@ const getPerformanceData = async (req, res, next) => {
   }
 };
 
-const getAnswerKeyForExam = async (examID) => {
+
+const getAnswerKeyForExam = async (exam_id) => {
+  console.log("getAnswerKeyForExam called with exam_id:", exam_id); // Log the exam_id
+  if (!Number.isInteger(exam_id)) {
+    throw new Error("Invalid exam_id");
+  }
+
   try {
     const solutionResult = await pool.query(
       "SELECT answers FROM solution WHERE exam_id = $1",
-      [examID]
+      [exam_id]
     );
     if (solutionResult.rows.length === 0) {
       throw new Error("Solution not found");
     }
 
-    // Assuming the answers are stored in the format {1:A, 2:B, ...}
     const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
 
     // Extract the answers in order
@@ -129,6 +134,7 @@ const getAnswerKeyForExam = async (examID) => {
     throw error;
   }
 };
+
 
 module.exports = {
   saveQuestions,

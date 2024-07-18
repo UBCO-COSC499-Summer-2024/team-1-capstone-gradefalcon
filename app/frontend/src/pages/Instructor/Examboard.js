@@ -31,10 +31,10 @@ const ExamBoard = () => {
     fetchClassData();
   }, []);
 
-  // Transform classData.classes into a structure that groups exams by course_id
+ // Transform classData.classes into a structure that groups exams by course_id
   // Check if classData.classes is null and provide a fallback empty array
   const groupedExams = (classData.classes || []).reduce((acc, current) => {
-    const { course_id, course_name, exam_title, class_id } = current;
+    const { course_id, course_name, exam_title, class_id, exam_id } = current;
     if (!acc[course_id]) {
       acc[course_id] = {
         course_name,
@@ -42,7 +42,7 @@ const ExamBoard = () => {
         exams: [],
       };
     }
-    acc[course_id].exams.push(exam_title);
+    acc[course_id].exams.push({ exam_title, exam_id });
     return acc;
   }, {});
 
@@ -69,9 +69,12 @@ const ExamBoard = () => {
                     {courseId} {course_name}
                   </h3>
                   {exams.map((exam, index) => (
-                    <div key={index} className="exam-item" data-testid={`exam-${index}-${courseId}`}>
-                      <p>{exam}</p>
-                      <Link to="/UploadExams" className="grade-exam-btn" data-testid={`grade-btn-${index}-${courseId}`}>
+                      <div key={index} className="exam-item" data-testid={`exam-${index}-${courseId}`}>
+                      <p>{exam.exam_title}</p>
+                      <Link 
+                        to={`/UploadExams/${exam.exam_id}`} 
+                        className="grade-exam-btn" 
+                        data-testid={`grade-btn-${index}-${exam.exam_id}`}>
                         Grade Exam
                       </Link>
                     </div>

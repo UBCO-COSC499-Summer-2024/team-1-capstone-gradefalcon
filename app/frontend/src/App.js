@@ -115,7 +115,7 @@ function App() {
             <Route path="/ManualExamKey" element={<ManualExamKey />} />
             <Route path="/UploadExamKey" element={<UploadExamKey />} />
             <Route path="/ConfirmExamKey" element={<ConfirmExamKey />} />
-            <Route path="/UploadExams" element={<UploadExams />} />
+            <Route path="/UploadExams/:exam_id" element={<UploadExams />} />
             <Route path="/OMRProcessing" element={<OMRProcessing />} />
             <Route path="/OMRProcessingUpload" element={<OMRProcessingUpload />} /> {/* Add the new route */}
             <Route path="/ReviewExams" element={<ReviewExams />} />

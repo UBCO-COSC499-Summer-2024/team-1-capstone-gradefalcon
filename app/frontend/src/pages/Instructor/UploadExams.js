@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../../css/App.css";
 import "../../css/UploadExam.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useParams, Link, useNavigate } from "react-router-dom";
 
 const UploadExam = () => {
+  const { exam_id } = useParams(); // Retrieve exam_id from URL parameters
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
-  const location = useLocation();
-  const { examID, examTitle} = location.state || {};
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,8 +38,7 @@ const UploadExam = () => {
 
     const formData = new FormData();
     formData.append("examPages", file);
-    formData.append("examID", examID);
-    formData.append("examTitle", examTitle);
+    formData.append("exam_id", exam_id); // Include exam_id in the form data
 
     try {
       const responses = await Promise.all([
@@ -57,33 +55,30 @@ const UploadExam = () => {
       const dataUploadExam = await responses[0].json();
       const dataCopyTemplate = await responses[1].json();
 
-      console.log("Data from dataUploadExam:", dataUploadExam);
+      console.log("Data from UploadExam:", dataUploadExam);
       console.log("Data from copyTemplate:", dataCopyTemplate);
 
-      navigate("/OMRProcessing", {
-        state: {
-          examID: examID,
-          examTitle: examTitle,
-
-        },
+      navigate("/OMRProcessingUpload", {
+        state: { exam_id },
       });
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
   return (
     <>
       <div className="App">
         <div className="main-content">
           <header>
-            <h2>Upload Exam Pages</h2>
+            <h2>Upload Exam</h2>
           </header>
           <section className="upload-key">
             <button
               className="back-button"
               onClick={() => window.history.back()}
             ></button>
-            <h3>Upload the exam pages as a PDF file.</h3>
+            <h3>Upload the exam as a PDF file.</h3>
             <div
               className="upload-area"
               style={{ display: fileURL ? "none" : "block" }}

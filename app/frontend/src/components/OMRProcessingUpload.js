@@ -3,10 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Toast from "./Toast";
 import "../css/App.css";
 
-const OMRProcessingUpload = (props) => {
+const OMRProcessingUpload = () => {
   const location = useLocation();
   const [toast, setToast] = useState(null);
-  const { examID, examTitle} = location.state || {};
+  const { exam_id } = location.state || {};
   const navigate = useNavigate();
 
   const runOMR = async () => {
@@ -23,10 +23,7 @@ const OMRProcessingUpload = (props) => {
       setToast({ message: "Sheet successfully added!", type: "success" });
       setTimeout(() => {
         navigate("/ReviewExams", {
-          state: {
-            examID: examID,
-            examTitle: examTitle,
-          },
+          state: { exam_id },
         });
       }, 2000);
     } catch (error) {
@@ -45,37 +42,35 @@ const OMRProcessingUpload = (props) => {
   }, []);
 
   return (
-    <>
-      <div className="App">
-        <div className="main-content">
-          <style>
-            {`
-                .App .main-content {
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  justify-content: center;
-                  height: 100vh; /* Adjust as needed */
-                }
-              `}
-          </style>
-          {toast && (
-            <>
-              <Toast
-                message={toast.message}
-                type={toast.type}
-                onClose={() => setToast(null)}
-              />
-              <style>{`.circle-loader { display: none; }`}</style>
-            </>
-          )}
-          <header>
-            <h2>Scanning file</h2>
-          </header>
-          <div className="loader"></div>
-        </div>
+    <div className="App">
+      <div className="main-content">
+        <style>
+          {`
+            .App .main-content {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              height: 100vh; /* Adjust as needed */
+            }
+          `}
+        </style>
+        {toast && (
+          <>
+            <Toast
+              message={toast.message}
+              type={toast.type}
+              onClose={() => setToast(null)}
+            />
+            <style>{`.circle-loader { display: none; }`}</style>
+          </>
+        )}
+        <header>
+          <h2>Scanning file</h2>
+        </header>
+        <div className="loader"></div>
       </div>
-    </>
+    </div>
   );
 };
 
