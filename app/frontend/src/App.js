@@ -27,6 +27,8 @@ import NotificationPreferences from "./pages/Instructor/NotificationPreferences"
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
 import OMRProcessing from "./pages/Instructor/OMRProcessing";
+import OMRProcessingForUpload from "./pages/OMRProcessingForUpload"; // Import the new component
+import ReviewExams from "./pages/ReviewExams";
 //admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
@@ -109,10 +111,7 @@ function App() {
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/Classes" element={<Classes />} />
             <Route path="/New-Class" element={<NewClass />} />
-            <Route
-              path="/ClassManagement/:class_id"
-              element={<ClassManagement />}
-            />
+            <Route path="/ClassManagement/:class_id" element={<ClassManagement />}/>
             <Route path="/NewExam/:class_id" element={<NewExam />} />
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
@@ -121,6 +120,8 @@ function App() {
             <Route path="/ConfirmExamKey" element={<ConfirmExamKey />} />
             <Route path="/UploadExams" element={<UploadExams />} />
             <Route path="/OMRProcessing" element={<OMRProcessing />} />
+            <Route path="/OMRProcessingForUpload" element={<OMRProcessingForUpload />} /> {/* Add the new route */}
+            <Route path="/ReviewExams" element={<ReviewExams />} />
             <Route
               path="/NotificationPreferences"
               element={<NotificationPreferences />}

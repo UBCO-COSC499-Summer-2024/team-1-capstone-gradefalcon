@@ -8,7 +8,7 @@ const UploadExam = () => {
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const location = useLocation();
-  const { examID } = location.state || {};
+  const { examID} = location.state || {};
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,19 +42,32 @@ const UploadExam = () => {
     formData.append("examID", examID);
 
     try {
-      await fetch("/api/exam/UploadExam", {
-        method: "POST",
-        body: formData,
-      });
+      const responses = await Promise.all([
+        fetch("/api/exam/UploadExam", {
+          method: "POST",
+          body: formData,
+        }),
+        fetch("/api/exam/copyTemplate", {
+          method: "POST",
+          credentials: "include",
+        }),
+      ]);
+
+      const dataUploadExam = await responses[0].json();
+      const dataCopyTemplate = await responses[1].json();
+
+      console.log("Data from saveExamKey:", dataUploadExam);
+      console.log("Data from copyTemplate:", dataCopyTemplate);
 
       navigate("/OMRProcessing", {
-        state: { examID },
+        state: {
+          examID: examID
+        },
       });
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
   return (
     <>
       <div className="App">
