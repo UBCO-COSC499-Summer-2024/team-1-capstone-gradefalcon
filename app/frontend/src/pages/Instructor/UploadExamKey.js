@@ -1,18 +1,27 @@
-import React, { useState, useRef, useEffect } from 'react';
-import '../../css/App.css';
-import '../../css/UploadExam.css';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from "react";
+import "../../css/App.css";
+import "../../css/UploadExam.css";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
-  const navigate = useNavigate();
   const location = useLocation();
-  const { className, userName, userID, examTitle, examID, courseID, classID } = location.state || {};
+  const { className, userName, userID, examTitle, examID, courseID, classID } =
+    location.state || {};
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Received state:", { className, userName, userID, examTitle, examID, courseID, classID });
+    console.log("Received state:", {
+      className,
+      userName,
+      userID,
+      examTitle,
+      examID,
+      courseID,
+      classID,
+    });
 
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
@@ -24,16 +33,16 @@ const UploadExamKey = () => {
     };
 
     const fileInput = fileInputRef.current;
-    fileInput.addEventListener('change', handleFileSelect);
+    fileInput.addEventListener("change", handleFileSelect);
 
     return () => {
-      fileInput.removeEventListener('change', handleFileSelect);
+      fileInput.removeEventListener("change", handleFileSelect);
     };
   }, []);
 
   const resetUpload = () => {
     setFileURL(null);
-    fileInputRef.current.value = '';
+    fileInputRef.current.value = "";
   };
 
   const sendToBackend = async () => {
@@ -48,75 +57,99 @@ const UploadExamKey = () => {
       fileName: file.name,
       examID,
       examTitle,
-      classID
+      classID,
     });
 
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('folder', `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`);
-    formData.append('fileName', file.name);
-    formData.append('examID', examID);
-    formData.append('examTitle', examTitle);
-    formData.append('classID', classID);
+    formData.append("file", file);
+    formData.append(
+      "folder",
+      `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`
+    );
+    formData.append("fileName", file.name);
+    formData.append("examID", examID);
+    formData.append("examTitle", examTitle);
+    formData.append("classID", classID);
 
     try {
-      const response = await fetch('/api/upload/uploadExamKey', {
-        method: 'POST',
-        body: formData,
+      const responses = await Promise.all([
+        await fetch("/api/exam/saveExamKey", {
+          method: "POST",
+          body: formData,
+        }),
+        await fetch("/api/exam/copyTemplate", {
+          method: "POST",
+          credentials: "include",
+        }),
+      ]);
+
+      const dataSaveExamKey = responses[0].json();
+      const dataCopyTemplate = responses[1].json();
+
+      console.log("Data from saveExamKey:", dataSaveExamKey);
+      console.log("Data from copyCSV:", dataCopyTemplate);
+
+      navigate("/OMRProcessing", {
+        state: {
+          examTitle: examTitle,
+          classID: classID,
+        },
       });
-
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Error: ${response.status} - ${errorMessage}`);
-      }
-
-      const data = await response.json();
-      console.log('File uploaded successfully', data);
-      alert('File uploaded successfully');
-
-      // Call the /copyTemplate endpoint
-      const templateResponse = await fetch('/api/exam/copyTemplate', {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      if (templateResponse.ok) {
-        console.log('Template copied successfully');
-        alert('Template copied successfully');
-        navigate('/OMRProcessing', { state: { examTitle, classID } });
-      } else {
-        console.error('Failed to copy template');
-        alert('Failed to copy template');
-      }
     } catch (error) {
-      console.error('Error uploading file:', error);
-      alert('Error uploading file');
+      console.error("Error uploading file:", error);
+      alert("Error uploading file");
     }
   };
 
   return (
-    <div className="App">
-      <div className="main-content">
-        <header>
-          <h2>Answer Key</h2>
-        </header>
-        <section className="upload-key">
-          <button className="back-button" onClick={() => navigate(-1)}>&larr;</button>
-          <h3>Upload the exam answer key as a PDF file.</h3>
-          <div className="upload-area" style={{ display: fileURL ? 'none' : 'block' }}>
-            <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} data-testid="file-input" />
-            <div className="drag-drop-area" onClick={() => fileInputRef.current.click()}>
-              <p>Click to browse or drag and drop your files</p>
+    <>
+      <div className="App">
+        <div className="main-content">
+          <header>
+            <h2>Answer Key</h2>
+          </header>
+          <section className="upload-key">
+            <button
+              className="back-button"
+              onClick={() => window.history.back()}
+            ></button>
+            <h3>Upload the exam answer key as a PDF file.</h3>
+            <h2>{examTitle}</h2>
+            <div
+              className="upload-area"
+              style={{ display: fileURL ? "none" : "block" }}
+            >
+              <input
+                type="file"
+                id="file-input"
+                data-testid="file-input"
+                hidden
+                accept="application/pdf"
+                ref={fileInputRef}
+              />
+              <div
+                className="drag-drop-area"
+                onClick={() => fileInputRef.current.click()}
+              >
+                <p>Click to browse or drag and drop your files</p>
+              </div>
             </div>
-          </div>
-          <div className="pdf-display" style={{ display: fileURL ? 'block' : 'none' }}>
-            <iframe src={fileURL} title="PDF Preview"></iframe>
-          </div>
-          <button className="btn btn-import" onClick={resetUpload}>Reset</button>
-          <button className="btn-confirm" onClick={sendToBackend}>Confirm</button>
-        </section>
+            <div
+              className="pdf-display"
+              style={{ display: fileURL ? "block" : "none" }}
+            >
+              <iframe src={fileURL} title="PDF Preview"></iframe>
+            </div>
+            <button className="btn-import" onClick={sendToBackend}>
+              Import
+            </button>
+            <button className="btn-confirm" onClick={resetUpload}>
+              Reset
+            </button>
+          </section>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
