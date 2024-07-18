@@ -106,11 +106,16 @@ const getPerformanceData = async (req, res, next) => {
 
 const getAnswerKeyForExam = async (examID) => {
   try {
-    const solution = await db.Solution.findOne({ where: { exam_id: examID } });
-    if (!solution) throw new Error("Solution not found");
+    const solutionResult = await pool.query(
+      "SELECT answers FROM solution WHERE exam_id = $1",
+      [examID]
+    );
+    if (solutionResult.rows.length === 0) {
+      throw new Error("Solution not found");
+    }
 
     // Assuming the answers are stored in the format {1:A, 2:B, ...}
-    const answersArray = solution.answers; // This should be a JSON array
+    const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
 
     // Extract the answers in order
     const answersInOrder = [];

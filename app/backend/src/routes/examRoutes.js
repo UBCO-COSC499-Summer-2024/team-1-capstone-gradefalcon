@@ -5,6 +5,7 @@ const {
   examBoard,
   getStandardAverageData,
   getPerformanceData,
+  getAnswerKeyForExam
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
@@ -18,6 +19,7 @@ router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
 router.get("/standard-average-data", getStandardAverageData);
 router.get("/performance-data", getPerformanceData);
+router.get("/answerKey",getAnswerKeyForExam);
 
 router.get("/getResults", async function (req, res) {
   const filePath = path.join(
@@ -33,11 +35,33 @@ router.get("/getResults", async function (req, res) {
       // Once file reading is done, send the entire results array as a response
       res.json({ csv_file: results });
     })
+
     .on("error", (error) => {
       // Handle any errors during file reading
       console.error("Error reading CSV file:", error);
       res.status(500).send("Error reading CSV file");
     });
+
+  // Clear the output folder
+  const outputDir = path.join(__dirname, "../../omr/outputs/Results");
+  fs.readdir(outputDir, (err, files) => {
+    if (err) {
+      console.error("Error reading output directory:", err);
+      return;
+    }
+
+    files.forEach((file) => {
+      const fileToDelete = path.join(outputDir, file);
+      fs.unlink(fileToDelete, (err) => {
+        if (err) {
+          console.error("Error deleting file:", fileToDelete, err);
+        } else {
+          console.log("Deleted file:", fileToDelete);
+        }
+      });
+    });
+});
+
 });
 
 router.post(

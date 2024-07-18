@@ -57,7 +57,7 @@ const UploadExam = () => {
       const dataUploadExam = await responses[0].json();
       const dataCopyTemplate = await responses[1].json();
 
-      console.log("Data from saveExamKey:", dataUploadExam);
+      console.log("Data from dataUploadExam:", dataUploadExam);
       console.log("Data from copyTemplate:", dataCopyTemplate);
 
       navigate("/OMRProcessing", {
