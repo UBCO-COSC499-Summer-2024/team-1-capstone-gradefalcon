@@ -53,19 +53,19 @@ const UploadExam = () => {
           },
           body: JSON.stringify({ exam_id }),
         }),
-        // fetch("/api/exam/copyTemplate", {
-        //   method: "POST",
-        //   credentials: "include",
-        // }),
+        fetch("/api/exam/copyTemplate", {
+          method: "POST",
+          credentials: "include",
+        }),
       ]);
   
       const dataUploadExam = await responses[0].json();
       const dataGenerateEvaluation = await responses[1].json();
-      // const dataCopyTemplate = await responses[2].json();
+      const dataCopyTemplate = await responses[2].json();
   
       console.log("Data from UploadExam:", dataUploadExam);
       console.log("Data from GenerateEvaluation:", dataGenerateEvaluation);
-      // console.log("Data from copyTemplate:", dataCopyTemplate);
+      console.log("Data from copyTemplate:", dataCopyTemplate);
       
       navigate("/OMRProcessingUpload", {
         state: { exam_id },
