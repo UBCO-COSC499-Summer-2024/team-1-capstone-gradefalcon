@@ -36,7 +36,7 @@ const OMRProcessingUpload = () => {
     // Timer stops the ECONREFUSED error
     const timer = setTimeout(() => {
       runOMR();
-    }, 1000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
