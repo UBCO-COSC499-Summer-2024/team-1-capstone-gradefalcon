@@ -1,5 +1,46 @@
 # Personal Log
 
+## Thursday (7/17 - 7/18)
+
+## TimeSheet
+Clockify report
+![alt text](../Clockify/Bennett/07_17_2024-07_18_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: RBAC+API rework with Auth0
+
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * Progress was made with automatic actions realtive to user actions on the AUTH0 side of things, and and API call protections relative to user permissions was "figured out" but has not been implimented on a large scale, While much information made it sound like AUTH0 would be easy to impliment into our existing app, turns out its best implimented on all stages of development (namely early and durring database connection). While progress is slow, we are being carefull to look ahead as we impliment the AUTH0 so it doesnt hinder the user experience, yet has seamless security within our application, it will turn out very well
+
+  
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Have Auth0 RBAC working for all existing API calls and it tested in frontend, backend and e2e. (Same as last time)
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+# Personal Log
+
 ## Tuesday (7/11 - 7/16)
 
 ## TimeSheet
