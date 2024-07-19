@@ -55,10 +55,7 @@ router.get("/getResults", async function (req, res) {
     });
 });
 
-router.post(
-  "/saveExamKey",
-  upload.single("examKey"),
-  async function (req, res) {
+router.post( "/saveExamKey",upload.single("examKey"), async function (req, res) {
     console.log(req.file);
     res.send(JSON.stringify("File uploaded successfully"));
   }
@@ -99,14 +96,31 @@ router.post("/UploadExam", upload.single("examPages"), async function (req, res)
   const { exam_id } = req.body;
 
   try {
+    // Here, we only handle the file upload
+    res.json({ message: "File uploaded successfully", exam_id });
+  } catch (error) {
+    console.error("Error in /UploadExam:", error);
+    res.status(500).send("Error uploading exam pages");
+  }
+});
+
+router.post("/GenerateEvaluation", async function (req, res) {
+  const { exam_id } = req.body;
+
+  try {
+    // Validate exam_id
+    if (!exam_id) {
+      return res.status(400).send("Missing exam_id");
+    }
+
     // Get answer key from the database
-    const answerKey = await getAnswerKeyForExam(exam_id); // Implement this function in your controller
+    const answerKey = await getAnswerKeyForExam(exam_id);
 
     // Create evaluation.json
     const evaluationJson = {
       source_type: "custom",
       options: {
-        questions_in_order: Array.from({ length: 100 }, (_, i) => `q${i + 1}`),
+        questions_in_order: Array.from({ length: 6 }, (_, i) => `q${i + 1}`),
         answers_in_order: answerKey,
       },
       outputs_configuration: {
@@ -150,17 +164,16 @@ router.post("/UploadExam", upload.single("examPages"), async function (req, res)
       },
     };
 
+    const destinationDir = `/code/omr/inputs`;
     const evaluationFilePath = path.join(destinationDir, "evaluation.json");
     fs.writeFileSync(evaluationFilePath, JSON.stringify(evaluationJson, null, 2));
 
-    res.send("Files uploaded and copied successfully");
+    res.json({ message: "evaluation.json created successfully" });
   } catch (error) {
-    console.error("Error in /UploadExam:", error);
-    res.status(500).send("Error processing exam pages");
+    console.error("Error in /GenerateEvaluation:", error);
+    res.status(500).send("Error generating evaluation file");
   }
 });
-
-
 
 router.post("/test", async function (req, res) {
   console.log("test called");

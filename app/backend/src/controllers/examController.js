@@ -106,16 +106,12 @@ const getPerformanceData = async (req, res, next) => {
 
 
 const getAnswerKeyForExam = async (exam_id) => {
-  console.log("getAnswerKeyForExam called with exam_id:", exam_id); // Log the exam_id
-  if (!Number.isInteger(exam_id)) {
-    throw new Error("Invalid exam_id");
-  }
-
   try {
     const solutionResult = await pool.query(
       "SELECT answers FROM solution WHERE exam_id = $1",
       [exam_id]
     );
+
     if (solutionResult.rows.length === 0) {
       throw new Error("Solution not found");
     }
@@ -123,10 +119,7 @@ const getAnswerKeyForExam = async (exam_id) => {
     const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
 
     // Extract the answers in order
-    const answersInOrder = [];
-    for (let i = 0; i < answersArray.length; i++) {
-      answersInOrder.push(answersArray[i]);
-    }
+    const answersInOrder = answersArray.map(answer => answer.split(':')[1]);
 
     return answersInOrder;
   } catch (error) {
@@ -134,7 +127,6 @@ const getAnswerKeyForExam = async (exam_id) => {
     throw error;
   }
 };
-
 
 module.exports = {
   saveQuestions,

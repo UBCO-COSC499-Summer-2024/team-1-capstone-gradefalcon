@@ -35,36 +35,47 @@ const UploadExam = () => {
 
   const sendToBackend = async () => {
     if (!file) return;
-
+  
     const formData = new FormData();
     formData.append("examPages", file);
     formData.append("exam_id", exam_id); // Include exam_id in the form data
-
+  
     try {
       const responses = await Promise.all([
         fetch("/api/exam/UploadExam", {
           method: "POST",
           body: formData,
         }),
-        fetch("/api/exam/copyTemplate", {
+        fetch("/api/exam/GenerateEvaluation", {
           method: "POST",
-          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ exam_id }),
         }),
+        // fetch("/api/exam/copyTemplate", {
+        //   method: "POST",
+        //   credentials: "include",
+        // }),
       ]);
-
+  
       const dataUploadExam = await responses[0].json();
-      const dataCopyTemplate = await responses[1].json();
-
+      const dataGenerateEvaluation = await responses[1].json();
+      // const dataCopyTemplate = await responses[2].json();
+  
       console.log("Data from UploadExam:", dataUploadExam);
-      console.log("Data from copyTemplate:", dataCopyTemplate);
-
+      console.log("Data from GenerateEvaluation:", dataGenerateEvaluation);
+      // console.log("Data from copyTemplate:", dataCopyTemplate);
+      
       navigate("/OMRProcessingUpload", {
         state: { exam_id },
       });
+
     } catch (error) {
       console.error("Error:", error);
     }
   };
+  
 
   return (
     <>

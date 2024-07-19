@@ -23,10 +23,17 @@ const ExamControls = () => {
         }),
       });
       console.log(response);
+      
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        // Handle success, maybe redirect or show a success message
+        const contentType = response.headers.get("Content-Type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          const data = await response.json();
+          console.log(data);
+          // Handle success, maybe redirect or show a success message
+        } else {
+          // Handle non-JSON response
+          console.log("Response was not JSON");
+        }
       } else {
         // Handle error, maybe show an error message
         console.error("Failed to save questions");
