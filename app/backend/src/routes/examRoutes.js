@@ -175,6 +175,12 @@ router.post("/GenerateEvaluation", async function (req, res) {
   }
 });
 
+router.get('/fetchImage', async function (req, res) {
+  const imagePath = path.join(__dirname, '../../omr/outputs/CheckedOMRs/colored/StudentAnswers_page_1.png');
+  
+  // Send the image file
+  res.sendFile(imagePath);
+});
 router.post("/test", async function (req, res) {
   console.log("test called");
   res.send(JSON.stringify("Test route called successfully"));

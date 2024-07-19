@@ -3,59 +3,41 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/App.css";
 
 const ReviewExams = () => {
-  const location = useLocation();
-  const { examID, examTitle } = location.state || {};
-  const [students, setStudents] = useState([]);
-  const navigate = useNavigate();
+  const [imageSrc, setImageSrc] = useState('');
 
   useEffect(() => {
-    // const fetchScores = async () => {
-    //   try {
-    //     const response = await fetch(`/api/exam/scores?examID=${examID}`, {
-    //       method: "GET",
-    //       credentials: "include",
-    //     });
-    //     const data = await response.json();
-    //     setStudents(data);
-    //   } catch (error) {
-    //     console.error("Error fetching scores:", error);
-    //   }
-    // };
+    const fetchImage = async () => {
+      try {
+        const response = await fetch('/api/exam/fetchImage');
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        setImageSrc(url);
+      } catch (error) {
+        console.error('Error fetching the image:', error);
+      }
+    };
 
-    // fetchScores();
-  }, [examID]);
-
-  const viewGradedExam = (studentId) => {
-    navigate(`/GradedExam`, {
-      state: {
-        studentId: studentId,
-        examID: examID,
-      },
-    });
-  };
+    fetchImage();
+  }, []);
 
   return (
-    <>
-      <div className="App">
-        <div className="main-content">
-          <header>
-            <h2>{examTitle} - Exam Scores</h2>
-          </header>
-          <section className="exam-scores">
-            <ul>
-              {students.map((student) => (
-                <li key={student.id}>
-                  <span>{student.name}: {student.score}</span>
-                  <button onClick={() => viewGradedExam(student.id)}>
-                    View Submission
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
-      </div>
-    </>
+    <div style={{ textAlign: 'center', margin: '2px 0' }}>
+      <h1>Graded Exam</h1>
+      {imageSrc ? (
+        <img 
+          src={imageSrc} 
+          alt="Student Answers" 
+          style={{ 
+            maxWidth: '50%', 
+            height: 'auto', 
+            display: 'block', 
+            marginLeft: 'auto' /* Aligns the image to the right */
+          }} 
+        />
+      ) : (
+        <p>Loading image...</p>
+      )}
+    </div>
   );
 };
 
