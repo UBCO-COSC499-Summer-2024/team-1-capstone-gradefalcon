@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, Link } from "react-router-dom";
 import "../../css/App.css";
-import "../../css/ManualExamKey.css";
+// import "../../css/ManualExamKey.css";
 
 const ConfirmExamKey = (props) => {
   const location = useLocation();
