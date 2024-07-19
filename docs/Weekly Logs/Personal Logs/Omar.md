@@ -1,4 +1,89 @@
 # Personal Log
+
+## Wednesday (7/16-7/19)
+
+### Timesheet
+Clockify report
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/39a260aaa218e01ca0005f988830fd221617f075/docs/weekly_logs/Clockify/Omar/Time13.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Grading Exams and Displaying Results on Frontend**
+    1. Worked on sending exam to the omr, sending evaluation.json and getting examKey based on examID to write them to evaluation.json to grade exams.
+    2. Create new API calls and modified the UploadExam page to receive examid.
+    2. Display graded exam image on the frontend.
+
+2. **Refactor UI Using shadcn UI Components**
+    1. Helped fix merge conflicts and implementing the changes made using shadcn to be up to date with development.
+
+3. **Implement Refactored Code and Implement Color-Coded Grading**
+    1. Fixed some issues with border preprocessing and added script to delete the content of input after running the flask application.
+
+### Progress Update (since 7/16/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+        </tr>
+        <tr>
+        <td> #181-Grading Exams and Displaying Results on Frontend
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    </tr>
+            <tr>
+        <td>#80-Refactor UI Using shadcn UI Components
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+        <tr>
+        <tr>
+        <td>#17-User Story: Custom Bubble Sheet Support
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    </tr>
+     <tr>
+        <td> #188-Implement Refactored Code and Implement Color-Coded Grading
+        </td>
+        <td>Completed
+        </td>
+    <tr>
+</table> 
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - We have a demo for our grade exam features.
+  - The new look of the UI is much cleaner with Shadcn.
+
+- **What Was Done:**
+  - Made Grade Exam pipeline functional.
+  - Create New Uplaod Exam page
+  - Added backend logic to get answerkey and write in evaluation.json and send to the omr container.
+
+- **What Didn't Go Well:**
+  - Getting the frontend, backend and omr all to work together took for this task took a lot of time and we are still facing proxy errors.
+
+- **Retrospective:**
+  - We have a nice demo to display on friday.
+
+  ### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **Scale solution for multiple students**.
+
+2. **Help finish the UI for Shadcn**
+
+3. **Optimize exam upload pipeline and display status update while exams are being graded**
+
+
+
 ## Wednesday (7/11-7/116)
 
 ### Timesheet
