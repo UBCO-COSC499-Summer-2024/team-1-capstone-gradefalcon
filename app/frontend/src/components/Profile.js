@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Profile = () => {
-  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently, loginWithPopup } = useAuth0();
   const [userMetadata, setUserMetadata] = useState(null);
 
   useEffect(() => {
     const getUserMetadata = async () => {
-      const domain = "{yourDomain}";
+      const domain = 'dev-1wzrc3nphnk4w01y.ca.auth0.com';
 
       try {
         const accessToken = await getAccessTokenSilently({
           authorizationParams: {
             audience: `https://${domain}/api/v2/`,
             scope: "read:current_user",
+            prompt: "consent"
           },
         });
 
@@ -28,12 +29,23 @@ const Profile = () => {
         const { user_metadata } = await metadataResponse.json();
         setUserMetadata(user_metadata);
       } catch (e) {
-        console.log(e.message);
+        if (e.error === 'consent_required' || e.error === 'login_required') {
+          // Prompt user to login and consent again
+          await loginWithPopup({
+            authorizationParams: {
+              audience: `https://${domain}/api/v2/`,
+              scope: "read:current_user",
+            },
+          });
+          getUserMetadata(); // Retry after login
+        } else {
+          console.error(e.message);
+        }
       }
     };
 
     getUserMetadata();
-  }, [getAccessTokenSilently, user?.sub]);
+  }, [getAccessTokenSilently, loginWithPopup, user?.sub]);
 
   return (
     isAuthenticated && (
