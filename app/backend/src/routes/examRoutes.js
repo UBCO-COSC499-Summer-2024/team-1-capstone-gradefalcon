@@ -139,7 +139,7 @@ router.post("/GenerateEvaluation", async function (req, res) {
           enabled: true,
           verdict_colors: {
             correct: "#00ff00",
-            neutral: "#000000",
+            neutral: "#ff0000",
             incorrect: "#ff0000",
           },
           verdict_symbol_colors: {
