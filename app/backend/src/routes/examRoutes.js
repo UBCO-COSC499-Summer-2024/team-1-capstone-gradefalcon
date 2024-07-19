@@ -42,14 +42,10 @@ router.get("/getResults", async function (req, res) {
     });
 });
 
-router.post(
-  "/saveExamKey",
-  upload.single("examKey"),
-  async function (req, res) {
-    console.log(req.file);
-    res.send(JSON.stringify("File uploaded successfully"));
-  }
-);
+router.post("/saveExamKey", upload.single("file"), async function (req, res) {
+  console.log(req.file);
+  res.send(JSON.stringify("File uploaded successfully"));
+});
 
 router.post("/copyTemplate", async function (req, res) {
   console.log("copyTemplate");

@@ -225,6 +225,7 @@ button:hover {
   cursor: pointer;
 }
 
+
 /* New styles for charts */
 .charts-container {
   display: flex;
@@ -234,4 +235,3 @@ button:hover {
 .chart {
   flex: 1;
 }
-
