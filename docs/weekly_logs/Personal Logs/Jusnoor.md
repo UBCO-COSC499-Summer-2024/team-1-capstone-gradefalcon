@@ -1,6 +1,62 @@
 
 # Personal Log
 
+## Friday ( 16/7 - 19/7 )
+
+### Timesheet 
+
+clockify report 
+
+
+![Time13](https://github.com/user-attachments/assets/a21a3a71-5536-497d-aa76-da8fb8ddbe96)
+
+
+
+
+### Current Tasks (Provide Details):
+- #1: Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhnaced look altogether.
+- #2: Debugging the logic for graphs
+
+
+
+  
+### Progress Update (since 16/7/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Debugging graphs logic - Instructor Dashboard
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+  
+   <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn 
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I successfully completed the logic for the graphs visible on the Instructor dashboard for data visualization. Now they correctly display the resukts and the graph as required and needed. After being partially done with the revamp of the Dahsboard , I managed to create an interactive sidebar which was a great UI addition to our application. The instructor pages have been edited and revamped here and there but there are soe changes needed. The process of revamping would take a little long as we are giving it a complete new look. I will also be editing/writing new tests if needed in order to get everything tested after while the process of revamp goes on. The plan of the next cycle is to mainly go over the instructior pages to make some final changes as needed so that the Student pages can be succesfully revamoed in the following cycle.
+
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Revamping the front end completely UI using Shad cn 
+- Editing/Creating new front end tests if needed after during the process of revamping
+
+
+
 ## Wednesday ( 12/7 - 16/7 )
 
 ### Timesheet 
