@@ -27,7 +27,7 @@ const UploadExams = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Received state:", { className, userName, userID, examTitle, examID, courseID, classID });
+    // console.log("Received state:", { userName, userID, examTitle, examID, courseID, classID });
 
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
@@ -60,11 +60,11 @@ const UploadExams = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('folder', folderPath);
-    formData.append('fileName', fileName);
-    formData.append('examID', examID);
+    // formData.append('folder', folderPath);
+    // formData.append('fileName', fileName);
+    // formData.append('examID', examID);
 
-    console.log("Sending file upload request with form data:", formData);
+    // console.log("Sending file upload request with form data:", formData);
 
     try {
       const response = await fetch('/api/upload/uploadExam', {

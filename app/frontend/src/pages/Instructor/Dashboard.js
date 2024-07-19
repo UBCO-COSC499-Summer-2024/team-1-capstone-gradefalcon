@@ -1,37 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import {
-  Home,
-  Bookmark,
-  ClipboardCheck,
-  Users,
-  LineChart,
-  Settings,
-  ArrowUpRight,
-  BookOpen,
-  CheckCircle,
-  ChevronDown,
+import {Home, Bookmark, ClipboardCheck,  Users, LineChart, Settings, ArrowUpRight, BookOpen, CheckCircle, ChevronDown,
 } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
-} from "../../components/ui/dropdown-menu";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from "../../components/ui/card";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem,} from "../../components/ui/dropdown-menu";
+import { Card, CardHeader,CardTitle, CardContent,CardDescription } from "../../components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import AverageperExamChart from "../../components/AverageperExamChart";
-import AverageperCourseChart from "../../components/AverageperCourseChart"; // Updated import
+import AverageperCourseChart from "../../components/AverageperCourseChart";
 
 
 export default function Dashboard() {
@@ -39,7 +16,7 @@ export default function Dashboard() {
   const [courses, setCourses] = useState([]);
   const [exams, setExams] = useState([]);
   const [standardAverageData, setStandardAverageData] = useState([]);
-  const [averageCourseData, setAverageCourseData] = useState([]); 
+  const [averageperCourseData, setAverageCourseData] = useState([]); 
   const navigate = useNavigate();
 
 
@@ -291,7 +268,7 @@ export default function Dashboard() {
                   <CardTitle>Standard Average Chart</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <StandardAverageChart data={standardAverageData} className="w-full" />
+                  <AverageperExamChart data={standardAverageData} className="w-full" />
                 </CardContent>
               </Card>
               <Card className="bg-white border rounded">
@@ -299,7 +276,7 @@ export default function Dashboard() {
                   <CardTitle>Performance Bar Chart</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <PerformanceBarChart data={performanceData} className="w-full" />
+                  <AverageperCourseChart data={averageperCourseData} className="w-full" />
                 </CardContent>
               </Card>
             </div>

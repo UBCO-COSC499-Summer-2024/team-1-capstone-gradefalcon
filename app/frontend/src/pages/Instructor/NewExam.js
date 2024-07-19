@@ -1,25 +1,11 @@
-import React, { useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import '../../css/App.css';
-import {
-  Home,
-  Bookmark,
-  ClipboardCheck,
-  Users,
-  LineChart,
-  Settings,
-  BookOpen
-} from "lucide-react";
+import { Home, Bookmark, ClipboardCheck, Users, LineChart, Settings, BookOpen} from "lucide-react";
 import { Button } from "../../components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuItem
-} from "../../components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "../../components/ui/dropdown-menu";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
+
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");

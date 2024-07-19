@@ -76,7 +76,7 @@ const ExamBoard = () => {
   }, []);
 
   const groupedExams = (classData.classes || []).reduce((acc, current) => {
-    const { course_id, course_name, exam_title, class_id, exam_id } = current || {};
+    const { course_id, course_name, exam_title, class_id} = current || {};
     if (!acc[course_id]) {
       acc[course_id] = {
         course_name,
@@ -84,7 +84,7 @@ const ExamBoard = () => {
         exams: [],
       };
     }
-    acc[course_id].exams.push({ exam_title, exam_id });
+    acc[course_id].exams.push(exam_title);
     return acc;
   }, {});
 
