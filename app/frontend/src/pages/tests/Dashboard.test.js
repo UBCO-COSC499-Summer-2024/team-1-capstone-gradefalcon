@@ -4,8 +4,8 @@ import Dashboard from '../Instructor/Dashboard';
 import '@testing-library/jest-dom/extend-expect';
 
 // Mock all the child components
-jest.mock('../../components/StandardAverageChart', () => (props) => <div>StandardAverageChart Mock - Data: {JSON.stringify(props.data)}</div>);
-jest.mock('../../components/PerformanceBarChart', () => (props) => <div>PerformanceBarChart Mock - Data: {JSON.stringify(props.data)}</div>);
+jest.mock('../../components/AverageperExamChart', () => (props) => <div>AverageperExamChart Mock - Data: {JSON.stringify(props.data)}</div>);
+jest.mock('../../components/AverageperCourseChart', () => (props) => <div>AverageperCourseChart Mock - Data: {JSON.stringify(props.data)}</div>);
 
 describe('Dashboard', () => {
   beforeEach(() => {
@@ -37,8 +37,8 @@ describe('Dashboard', () => {
       ],
       [
         JSON.stringify([
-          { examDate: '2023-01-01', averageScore: 85 },
-          { examDate: '2023-02-01', averageScore: 75 },
+          { examTitle: 'Midterm', averageScore: 85 },
+          { examTitle: 'Final', averageScore: 75 },
         ]),
         { status: 200, headers: { 'content-type': 'application/json' } },
       ],
@@ -57,8 +57,8 @@ describe('Dashboard', () => {
     await waitFor(() => screen.getByText('Welcome, John Doe!'));
     await waitFor(() => screen.getByText('Math 101 - MATH101'));
     await waitFor(() => screen.getByText('Midterm'));
-    await waitFor(() => screen.getByText('StandardAverageChart Mock - Data: [{"examDate":"2023-01-01","averageScore":85},{"examDate":"2023-02-01","averageScore":75}]'));
-    await waitFor(() => screen.getByText('PerformanceBarChart Mock - Data: [{"courseName":"Math 101","averageScore":90},{"courseName":"Science 101","averageScore":85}]'));
+    await waitFor(() => screen.getByText('AverageperExamChart Mock - Data: [{"examTitle":"Midterm","averageScore":85},{"examTitle":"Final","averageScore":75}]'));
+    await waitFor(() => screen.getByText('AverageperCourseChart Mock - Data: [{"courseName":"Math 101","averageScore":90},{"courseName":"Science 101","averageScore":85}]'));
 
     // Check if elements are rendered correctly
     expect(screen.getByText('Welcome, John Doe!')).toBeInTheDocument();
@@ -66,8 +66,8 @@ describe('Dashboard', () => {
     expect(screen.getByText('Science 101 - SCI101')).toBeInTheDocument();
     expect(screen.getByText('Midterm')).toBeInTheDocument();
     expect(screen.getByText('Final')).toBeInTheDocument();
-    expect(screen.getByText('StandardAverageChart Mock - Data: [{"examDate":"2023-01-01","averageScore":85},{"examDate":"2023-02-01","averageScore":75}]')).toBeInTheDocument();
-    expect(screen.getByText('PerformanceBarChart Mock - Data: [{"courseName":"Math 101","averageScore":90},{"courseName":"Science 101","averageScore":85}]')).toBeInTheDocument();
+    expect(screen.getByText('AverageperExamChart Mock - Data: [{"examTitle":"Midterm","averageScore":85},{"examTitle":"Final","averageScore":75}]')).toBeInTheDocument();
+    expect(screen.getByText('AverageperCourseChart Mock - Data: [{"courseName":"Math 101","averageScore":90},{"courseName":"Science 101","averageScore":85}]')).toBeInTheDocument();
   });
 
   test('displays "Guest" when userName is not available', async () => {
@@ -125,8 +125,8 @@ describe('Dashboard', () => {
       ],
       [
         JSON.stringify([
-          { examDate: '2023-01-01', averageScore: 85 },
-          { examDate: '2023-02-01', averageScore: 75 },
+          { examTitle: 'Midterm', averageScore: 85 },
+          { examTitle: 'Final', averageScore: 75 },
         ]),
         { status: 200, headers: { 'content-type': 'application/json' } },
       ],
@@ -172,8 +172,8 @@ describe('Dashboard', () => {
       ],
       [
         JSON.stringify([
-          { examDate: '2023-01-01', averageScore: 85 },
-          { examDate: '2023-02-01', averageScore: 75 },
+          { examTitle: 'Midterm', averageScore: 85 },
+          { examTitle: 'Final', averageScore: 75 },
         ]),
         { status: 200, headers: { 'content-type': 'application/json' } },
       ],
@@ -195,7 +195,7 @@ describe('Dashboard', () => {
     expect(screen.getByText('Final')).toBeInTheDocument();
   });
 
-  test('renders StandardAverageChart with correct data', async () => {
+  test('renders AverageperExamChart with correct data', async () => {
     fetch.mockResponses(
       [
         JSON.stringify({ userName: 'John Doe' }),
@@ -219,8 +219,8 @@ describe('Dashboard', () => {
       ],
       [
         JSON.stringify([
-          { examDate: '2023-01-01', averageScore: 85 },
-          { examDate: '2023-02-01', averageScore: 75 },
+          { examTitle: 'Midterm', averageScore: 85 },
+          { examTitle: 'Final', averageScore: 75 },
         ]),
         { status: 200, headers: { 'content-type': 'application/json' } },
       ],
@@ -235,12 +235,12 @@ describe('Dashboard', () => {
 
     render(<Dashboard />);
 
-    await waitFor(() => screen.getByText('StandardAverageChart Mock - Data: [{"examDate":"2023-01-01","averageScore":85},{"examDate":"2023-02-01","averageScore":75}]'));
+    await waitFor(() => screen.getByText('AverageperExamChart Mock - Data: [{"examTitle":"Midterm","averageScore":85},{"examTitle":"Final","averageScore":75}]'));
 
-    expect(screen.getByText('StandardAverageChart Mock - Data: [{"examDate":"2023-01-01","averageScore":85},{"examDate":"2023-02-01","averageScore":75}]')).toBeInTheDocument();
+    expect(screen.getByText('AverageperExamChart Mock - Data: [{"examTitle":"Midterm","averageScore":85},{"examTitle":"Final","averageScore":75}]')).toBeInTheDocument();
   });
 
-  test('renders PerformanceBarChart with correct data', async () => {
+  test('renders AverageperCourseChart with correct data', async () => {
     fetch.mockResponses(
       [
         JSON.stringify({ userName: 'John Doe' }),
@@ -264,8 +264,8 @@ describe('Dashboard', () => {
       ],
       [
         JSON.stringify([
-          { examDate: '2023-01-01', averageScore: 85 },
-          { examDate: '2023-02-01', averageScore: 75 },
+          { examTitle: 'Midterm', averageScore: 85 },
+          { examTitle: 'Final', averageScore: 75 },
         ]),
         { status: 200, headers: { 'content-type': 'application/json' } },
       ],
@@ -280,8 +280,8 @@ describe('Dashboard', () => {
 
     render(<Dashboard />);
 
-    await waitFor(() => screen.getByText('PerformanceBarChart Mock - Data: [{"courseName":"Math 101","averageScore":90},{"courseName":"Science 101","averageScore":85}]'));
+    await waitFor(() => screen.getByText('AverageperCourseChart Mock - Data: [{"courseName":"Math 101","averageScore":90},{"courseName":"Science 101","averageScore":85}]'));
 
-    expect(screen.getByText('PerformanceBarChart Mock - Data: [{"courseName":"Math 101","averageScore":90},{"courseName":"Science 101","averageScore":85}]')).toBeInTheDocument();
+    expect(screen.getByText('AverageperCourseChart Mock - Data: [{"courseName":"Math 101","averageScore":90},{"courseName":"Science 101","averageScore":85}]')).toBeInTheDocument();
   });
 });

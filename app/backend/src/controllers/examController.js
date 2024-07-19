@@ -2,12 +2,11 @@ const pool = require("../utils/db");
 
 // Save solution questions and answers
 const saveQuestions = async (req, res, next) => {
-  const questions = req.body.questions; // Assuming questions is an array of question objects
+  const questions = req.body.questions;
   const classID = req.body.classID;
   const examTitle = req.body.examTitle;
   const numQuestions = req.body.numQuestions;
 
-  // Convert the questions dictionary into an array of strings
   const questionsArray = Object.entries(questions).map(
     ([key, value]) => `${value.question}:${value.option}`
   );
@@ -58,11 +57,10 @@ const examBoard = async (req, res, next) => {
   }
 };
 
-// New function to get standard average data
-const getStandardAverageData = async (req, res, next) => {
+const getAveragePerExam = async (req, res, next) => {
   const instructorId = req.session.userId;
   try {
-    const standardAverageData = await pool.query(
+    const averagePerExamData = await pool.query(
       `
       SELECT e.exam_title AS "examTitle", AVG(sr.grade) AS "averageScore"
       FROM studentResults sr
@@ -75,17 +73,16 @@ const getStandardAverageData = async (req, res, next) => {
       [instructorId]
     );
 
-    res.json(standardAverageData.rows);
+    res.json(averagePerExamData.rows);
   } catch (err) {
     next(err);
   }
 };
 
-// New function to get performance data
-const getPerformanceData = async (req, res, next) => {
+const getAveragePerCourse = async (req, res, next) => {
   const instructorId = req.session.userId;
   try {
-    const performanceData = await pool.query(
+    const averagePerCourseData = await pool.query(
       `
       SELECT c.course_name AS "courseName", AVG(sr.grade) AS "averageScore"
       FROM studentResults sr
@@ -98,19 +95,19 @@ const getPerformanceData = async (req, res, next) => {
       [instructorId]
     );
 
-    res.json(performanceData.rows);
+    res.json(averagePerCourseData.rows);
   } catch (err) {
     next(err);
   }
 };
 
-
 const getStudentGrades = async (req, res, next) => {
   const { studentId } = req.params;
-  const { classId } = req.query; // Get the classId from the query parameters
+  const { classId } = req.query;
 
   try {
-    const result = await pool.query(`
+    const result = await pool.query(
+      `
       SELECT e.exam_title AS title, 
              CASE 
                WHEN sr.grade IS NULL THEN 'missing' 
@@ -121,13 +118,21 @@ const getStudentGrades = async (req, res, next) => {
       FROM exam e
       LEFT JOIN studentResults sr ON e.exam_id = sr.exam_id AND sr.student_id = $1
       WHERE e.class_id = $2
-    `, [studentId, classId]);
+    `,
+      [studentId, classId]
+    );
 
     res.json(result.rows);
   } catch (err) {
     next(err);
   }
 };
-module.exports = { saveQuestions, newExam, examBoard, getStandardAverageData, getPerformanceData, getStudentGrades };
 
-
+module.exports = {
+  saveQuestions,
+  newExam,
+  examBoard,
+  getAveragePerExam,
+  getAveragePerCourse,
+  getStudentGrades,
+};

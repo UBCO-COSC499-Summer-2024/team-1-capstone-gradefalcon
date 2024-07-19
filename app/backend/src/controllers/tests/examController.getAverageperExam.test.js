@@ -1,15 +1,15 @@
 const pool = require('../../utils/db');
-const { getStandardAverageData } = require('../examController');
+const { getAverageperExam } = require('../examController');
 
 // Mock the database query function
 jest.mock('../../utils/db');
 
-describe('Exam Controller - getStandardAverageData', () => {
+describe('Exam Controller - getAverageperExam', () => {
   beforeEach(() => {
     pool.query.mockReset();
   });
 
-  test('should return standard average data for the instructor', async () => {
+  test('should return average score per exam data for the instructor', async () => {
     const req = {
       session: { userId: 1 }
     };
@@ -25,7 +25,7 @@ describe('Exam Controller - getStandardAverageData', () => {
     ];
     pool.query.mockResolvedValue({ rows: mockData });
 
-    await getStandardAverageData(req, res, next);
+    await getAverageperExam(req, res, next);
 
     expect(pool.query).toHaveBeenCalledWith(expect.any(String), [1]);
     expect(res.status).not.toHaveBeenCalled(); // res.status is not set explicitly in your function
@@ -45,8 +45,9 @@ describe('Exam Controller - getStandardAverageData', () => {
     const mockError = new Error('Database error');
     pool.query.mockRejectedValue(mockError);
 
-    await getStandardAverageData(req, res, next);
+    await getAverageperExam(req, res, next);
 
     expect(next).toHaveBeenCalledWith(mockError);
   });
 });
+
