@@ -28,7 +28,6 @@ const NewExam = () => {
   const [className, setClassName] = useState("");
   const [courseId, setCourseId] = useState("");
   const params = useParams();
-  const navigate = useNavigate();
   const location = useLocation();
   const class_id = params.class_id;
   const navigate = useNavigate();
