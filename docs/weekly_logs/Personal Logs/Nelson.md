@@ -35,7 +35,7 @@ Clockify report
     </tr>
     <tr>
         <!-- Task/Issue # -->
-        <td>Writing Account seetting plus test
+        <td>Creating ADMIN users for group memebers
         </td>
         <!-- Status -->
         <td>Complete
