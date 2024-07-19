@@ -3,9 +3,9 @@ const {
   saveQuestions,
   newExam,
   examBoard,
-  getStandardAverageData,
-  getPerformanceData,
-  getStudentGrades
+  getAveragePerExam,
+  getAveragePerCourse,
+  getStudentGrades,
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
@@ -17,9 +17,9 @@ const router = express.Router();
 router.post("/saveQuestions", saveQuestions);
 router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
-router.get("/average-per-exam", getAverageperExam);
-router.get("/average-per-course", getAverageperCourse); // Updated route
-router.get('/grades/:studentId', getStudentGrades);
+router.get("/average-per-exam", getAveragePerExam);
+router.get("/average-per-course", getAveragePerCourse); // Updated route
+router.get("/grades/:studentId", getStudentGrades);
 
 router.get("/getResults", async function (req, res) {
   const filePath = path.join(

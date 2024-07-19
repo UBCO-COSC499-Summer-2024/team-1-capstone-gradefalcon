@@ -57,19 +57,11 @@ const examBoard = async (req, res, next) => {
   }
 };
 
-const examKey = async (req, res, next) => {
-  console.log(req.file);
-  res.send("File uploaded successfully");
-  const sourcePath = `app-backend-1:/code/uploads/${req.file.originalname}`;
-  const destinationPath = "./app/omr";
-  executeDockerCp(sourcePath, destinationPath);
-  console.log("File moved to OMR folder");
-};
-
-const getAverageperExam = async (req, res, next) => {
+const getAveragePerExam = async (req, res, next) => {
   const instructorId = req.session.userId;
   try {
-    const averagePerExamData = await pool.query(`
+    const averagePerExamData = await pool.query(
+      `
       SELECT e.exam_title AS "examTitle", AVG(sr.grade) AS "averageScore"
       FROM studentResults sr
       JOIN exam e ON sr.exam_id = e.exam_id
@@ -77,7 +69,9 @@ const getAverageperExam = async (req, res, next) => {
       WHERE c.instructor_id = $1
       GROUP BY e.exam_title
       ORDER BY e.exam_title
-    `, [instructorId]);
+    `,
+      [instructorId]
+    );
 
     res.json(averagePerExamData.rows);
   } catch (err) {
@@ -85,10 +79,11 @@ const getAverageperExam = async (req, res, next) => {
   }
 };
 
-const getAverageperCourse = async (req, res, next) => {
+const getAveragePerCourse = async (req, res, next) => {
   const instructorId = req.session.userId;
   try {
-    const averagePerCourseData = await pool.query(`
+    const averagePerCourseData = await pool.query(
+      `
       SELECT c.course_name AS "courseName", AVG(sr.grade) AS "averageScore"
       FROM studentResults sr
       JOIN exam e ON sr.exam_id = e.exam_id
@@ -96,7 +91,9 @@ const getAverageperCourse = async (req, res, next) => {
       WHERE c.instructor_id = $1
       GROUP BY c.course_name
       ORDER BY c.course_name
-    `, [instructorId]);
+    `,
+      [instructorId]
+    );
 
     res.json(averagePerCourseData.rows);
   } catch (err) {
@@ -109,7 +106,8 @@ const getStudentGrades = async (req, res, next) => {
   const { classId } = req.query;
 
   try {
-    const result = await pool.query(`
+    const result = await pool.query(
+      `
       SELECT e.exam_title AS title, 
              CASE 
                WHEN sr.grade IS NULL THEN 'missing' 
@@ -120,7 +118,9 @@ const getStudentGrades = async (req, res, next) => {
       FROM exam e
       LEFT JOIN studentResults sr ON e.exam_id = sr.exam_id AND sr.student_id = $1
       WHERE e.class_id = $2
-    `, [studentId, classId]);
+    `,
+      [studentId, classId]
+    );
 
     res.json(result.rows);
   } catch (err) {
@@ -128,7 +128,11 @@ const getStudentGrades = async (req, res, next) => {
   }
 };
 
-module.exports = { saveQuestions, newExam, examBoard, getAverageperExam, getAverageperCourse, getStudentGrades };
-
-
-
+module.exports = {
+  saveQuestions,
+  newExam,
+  examBoard,
+  getAveragePerExam,
+  getAveragePerCourse,
+  getStudentGrades,
+};
