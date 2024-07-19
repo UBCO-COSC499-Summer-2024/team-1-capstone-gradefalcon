@@ -1,3 +1,73 @@
+## Wednesday (17/7- 19/7)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/july18_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Implementing Auth0 to connect to DB and API calls
+  * #2: Writing Account seetting plus test
+  * #3: Creating ADMIN users for group memebers
+    
+### Progress Update (since 6/7/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Implementing Auth0 to connect to DB and API calls
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Writing Account seetting plus test
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Creating ADMIN users for group memebers
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+### Summary
+This cycle saw significant progress as I focused on implementing and integrating Auth0 with our backend. This included sending and fetching API calls to and from Auth0, creating middleware, and writing all relevant backend code such as controllers and routes to authenticate these calls and ensure proper user permissions. Additionally, I assisted team members in getting accustomed to AWS, which contributed to the overall progress of our project.
+
+#### Completed Tasks:
+- **More implementation of AWS File Upload plus tests**: Complete
+- **Integrating Ahmad's Flask/OMR code to AWS code to mitigate conflict changes**: Complete
+
+#### In Progress:
+- **Implementing Auth0 to connect to DB and API calls**: In Progress (Account settings feature put on hold due to potential refactoring needed for Auth0)
+- **Writing Account settings plus tests**: On Hold
+
+### Reflections and Lessons Learned:
+This cycle was focused on improving our progress and taking it to new levels. The integration of Auth0 and the successful implementation of AWS tests have strengthened our project's foundation. Moving forward, I recognize the importance of better communication and collaboration with my team. I plan to complete the remaining tasks, share progress updates, and commit my work regularly to foster a more collaborative environment.
+
+### Adjustments and Future Plans:
+- Postpone account settings implementation to focus on Auth0 integration.
+- AWS setup is now fully functional, with tests successfully implemented.
+- Plan to refactor code and enhance test coverage post-Auth0 integration.
+- Finish account settings and enable OMR to fetch files and upload images, leveraging the logic from current AWS implementation.
+
+
+
+
 ## Wednesday (12/7- 17/7)
 
 ### Timesheet
