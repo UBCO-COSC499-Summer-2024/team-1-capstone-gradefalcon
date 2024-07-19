@@ -24,10 +24,33 @@ import '../../css/App.css';
 
 const ExamBoard = () => {
   const [classData, setClassData] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [userID, setUserID] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchSessionInfo = async () => {
+      try {
+        const response = await fetch("/api/session-info", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUserName(data.userName);
+          setUserID(data.userId);
+        } else {
+          console.error("Failed to fetch session info");
+        }
+      } catch (error) {
+        console.error("Error fetching session info:", error);
+      }
+    };
+
     const fetchClassData = async () => {
       try {
         const response = await fetch(`/api/exam/ExamBoard`, {
@@ -39,7 +62,7 @@ const ExamBoard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          setClassData(data); // Set the class data state with the fetched data
+          setClassData(data);
         } else {
           setError("Failed to fetch class data");
         }
@@ -48,11 +71,12 @@ const ExamBoard = () => {
       }
     };
 
+    fetchSessionInfo();
     fetchClassData();
   }, []);
 
   const groupedExams = (classData.classes || []).reduce((acc, current) => {
-    const { course_id, course_name, exam_title, class_id } = current;
+    const { course_id, course_name, exam_title, class_id, exam_id } = current || {};
     if (!acc[course_id]) {
       acc[course_id] = {
         course_name,
@@ -60,7 +84,7 @@ const ExamBoard = () => {
         exams: [],
       };
     }
-    acc[course_id].exams.push(exam_title);
+    acc[course_id].exams.push({ exam_title, exam_id });
     return acc;
   }, {});
 

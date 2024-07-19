@@ -24,29 +24,97 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../..
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
+  const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Received state:", {
+      className,
+      userName,
+      userID,
+      examTitle,
+      examID,
+      courseID,
+      classID,
+    });
+
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
       if (file && file.type === "application/pdf") {
         const fileURL = URL.createObjectURL(file);
         setFileURL(fileURL);
+        setFile(file);
       }
     };
 
     const fileInput = fileInputRef.current;
-    fileInput.addEventListener('change', handleFileSelect);
+    fileInput.addEventListener("change", handleFileSelect);
 
     return () => {
-      fileInput.removeEventListener('change', handleFileSelect);
+      fileInput.removeEventListener("change", handleFileSelect);
     };
   }, []);
 
   const resetUpload = () => {
     setFileURL(null);
-    fileInputRef.current.value = '';
+    fileInputRef.current.value = "";
+  };
+
+  const sendToBackend = async () => {
+    if (!file) {
+      alert("Please select a file first.");
+      return;
+    }
+
+    console.log("Sending file upload request with form data:", {
+      file,
+      folder: `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`,
+      fileName: file.name,
+      examID,
+      examTitle,
+      classID,
+    });
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append(
+      "folder",
+      `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`
+    );
+    formData.append("fileName", file.name);
+    formData.append("examID", examID);
+    formData.append("examTitle", examTitle);
+    formData.append("classID", classID);
+
+    try {
+      const responses = await Promise.all([
+        await fetch("/api/exam/saveExamKey", {
+          method: "POST",
+          body: formData,
+        }),
+        await fetch("/api/exam/copyTemplate", {
+          method: "POST",
+          credentials: "include",
+        }),
+      ]);
+
+      const dataSaveExamKey = responses[0].json();
+      const dataCopyTemplate = responses[1].json();
+
+      console.log("Data from saveExamKey:", dataSaveExamKey);
+      console.log("Data from copyCSV:", dataCopyTemplate);
+
+      navigate("/OMRProcessing", {
+        state: {
+          examTitle: examTitle,
+          classID: classID,
+        },
+      });
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Error uploading file");
+    }
   };
 
   const handleLogout = async () => {

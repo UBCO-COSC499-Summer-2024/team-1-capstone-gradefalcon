@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../../css/App.css';
-import axios from 'axios';
 import {
   Home,
   Bookmark,
@@ -28,6 +27,8 @@ const UploadExams = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Received state:", { className, userName, userID, examTitle, examID, courseID, classID });
+
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
       if (file && file.type === "application/pdf") {
@@ -59,15 +60,23 @@ const UploadExams = () => {
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('folder', folderPath);
+    formData.append('fileName', fileName);
+    formData.append('examID', examID);
+
+    console.log("Sending file upload request with form data:", formData);
 
     try {
-      const response = await axios.post('/api/upload-exam', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      const response = await fetch('/api/upload/uploadExam', {
+        method: 'POST',
+        body: formData,
       });
 
-      if (response.data.success) {
+      const data = await response.json();
+
+      console.log("Upload response:", data);
+
+      if (data.success) {
         alert('File uploaded successfully');
         navigate("/Examboard");
       } else {

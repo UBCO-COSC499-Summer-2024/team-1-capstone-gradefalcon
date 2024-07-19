@@ -30,16 +30,18 @@ import {
   CardDescription,
 } from "../../components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
-import StandardAverageChart from "../../components/StandardAverageChart";
-import PerformanceBarChart from "../../components/PerformanceBarChart";
+import AverageperExamChart from "../../components/AverageperExamChart";
+import AverageperCourseChart from "../../components/AverageperCourseChart"; // Updated import
 
-export default function Component() {
+
+export default function Dashboard() {
   const [userName, setUserName] = useState("");
   const [courses, setCourses] = useState([]);
   const [exams, setExams] = useState([]);
   const [standardAverageData, setStandardAverageData] = useState([]);
-  const [performanceData, setPerformanceData] = useState([]);
+  const [averageCourseData, setAverageCourseData] = useState([]); 
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchSessionInfo = async () => {
@@ -98,13 +100,14 @@ export default function Component() {
 
     const fetchStandardAverageData = async () => {
       try {
-        const response = await fetch("/api/exam/standard-average-data", {
+        const response = await fetch("/api/exam/average-per-exam", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
+          console.log("Standard Average Data:", data);
           setStandardAverageData(data);
         } else {
           console.error("Failed to fetch standard average data");
@@ -114,21 +117,22 @@ export default function Component() {
       }
     };
 
-    const fetchPerformanceData = async () => {
+    const fetchAverageCourseData = async () => { // Updated function
       try {
-        const response = await fetch("/api/exam/performance-data", {
+        const response = await fetch("/api/exam/average-per-course", { // Updated endpoint
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
-          setPerformanceData(data);
+          console.log("Average Course Data:", data); // Log for debugging
+          setAverageCourseData(data);
         } else {
-          console.error("Failed to fetch performance data");
+          console.error("Failed to fetch average course data");
         }
       } catch (error) {
-        console.error("Error fetching performance data");
+        console.error("Error fetching average course data:", error);
       }
     };
 
@@ -136,7 +140,7 @@ export default function Component() {
     fetchCourses();
     fetchExams();
     fetchStandardAverageData();
-    fetchPerformanceData();
+    fetchAverageCourseData(); // Updated function call
   }, []);
 
   const handleLogout = async () => {
@@ -305,11 +309,3 @@ export default function Component() {
     </div>
   );
 }
-
-
-
-
-
-
-
-

@@ -23,7 +23,13 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../..
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userID, setUserID] = useState("");
+  const [className, setClassName] = useState("");
+  const [courseId, setCourseId] = useState("");
   const params = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const class_id = params.class_id;
   const navigate = useNavigate();
 
@@ -55,6 +61,22 @@ const NewExam = () => {
       console.error("Error:", error);
     }
   };
+
+  const handleUploadClick = (e) => {
+    if (!isFormValid()) {
+      e.preventDefault();
+      alert('Please enter an exam title before uploading the answer key.');
+    }
+  };
+
+  useEffect(() => {
+    if (location.state) {
+      setUserName(location.state.userName);
+      setUserID(location.state.userID);
+      setClassName(location.state.className);
+      setCourseId(location.state.courseID);  // Set courseID from state
+    }
+  }, [location.state]);
 
   return (
     <div className="flex min-h-screen">

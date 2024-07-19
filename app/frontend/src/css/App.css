@@ -111,6 +111,7 @@
   display: inline;
 }
 
+/* Main content styles */
 .main-content {
   margin-left: 80px;
   transition: margin-left 0.3s;
@@ -120,6 +121,8 @@
   margin-left: 250px;
 }
 
+
+/*All the css under this should not be needed moving forward*/
 .exam-item {
   display: flex;
   justify-content: space-between;

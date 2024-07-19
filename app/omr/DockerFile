@@ -19,23 +19,20 @@ RUN apt-get update -y && \
     apt-get -y autoremove
 
 # Install Python dependencies
-RUN pip3 install --user opencv-python-headless opencv-contrib-python-headless
+RUN pip3 install --user opencv-python-headless opencv-contrib-python-headless    
 
-# Copy over the development and production requirements files
+# Copy the Flask and OMR requirements files and the development and production requirements files
 COPY ./requirements.dev.txt /app
 COPY ./requirements.txt /app
 
 # Install additional Python dependencies for development
 RUN pip3 install -r requirements.dev.txt
 
-# Copy the entire project into the container
+# Copy the entire Flask and OMR project into the container
 COPY . /app
-
-# Clean up pip cache
-RUN pip3 cache purge
 
 # Set environment variables
 ENV OMR_CHECKER_CONTAINER True
 
-# Set the default command to run the main Python script
-CMD ["python3", "/app/main.py", "--inputDir", "/app/inputs/", "--outputDir", "/app/outputs/"]
+# Set the default command to run the Flask server
+CMD ["python3", "app.py"]
