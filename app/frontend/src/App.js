@@ -5,7 +5,7 @@ import Layout from '../src/components/Layout';
 import ProtectedRoute from "./ProtectedRoute";
 import Logout from "./pages/Logout";
 // Import pages
-import Component from "./pages/Instructor/Component";
+import Component from "./pages/Instructor/Dashboard";
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
 import Signup from "./pages/Signup";

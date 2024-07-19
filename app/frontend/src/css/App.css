@@ -3,10 +3,6 @@
 @tailwind utilities;
 @import './Tailwind.css';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -47,33 +43,131 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
   }
-  
+
   .antialiased {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 }
-/* Sidebar styles */
-/* .sidebar {
-  width: 250px;
-  height: 100%;
-  background-color: #45a049;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  box-sizing: border-box;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-} */
 
 .logo {
   text-align: left;
   margin-bottom: 20px;
-  font-size: 24px;
+  font-size: 24px; /* Adjusted font size */
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  overflow: hidden;
+  transition: width 0.3s;
 }
 
+.logo span {
+  display: none;
+}
 
+.sidebar {
+  width: 80px;
+  height: 100%;
+  background-color: #1F8B4C; /* Adjusted color to match the theme */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  box-sizing: border-box;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  transition: width 0.3s;
+}
+
+.sidebar:hover {
+  width: 250px;
+}
+
+.sidebar:hover .logo span {
+  display: inline;
+}
+
+.sidebar .nav-item {
+  position: relative;
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar .nav-item .icon {
+  font-size: 20px;
+}
+
+.sidebar .nav-item span {
+  display: none;
+  white-space: nowrap;
+}
+
+.sidebar:hover .nav-item span {
+  display: inline;
+}
+
+.main-content {
+  margin-left: 80px;
+  transition: margin-left 0.3s;
+}
+
+.sidebar:hover + .main-content {
+  margin-left: 250px;
+}
+
+.exam-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.grade-exam-btn {
+  color: #1F8B4C;
+}
+
+.grade-exam-btn:hover {
+  text-decoration: underline;
+}
+
+.create-new-btn {
+  display: inline-block;
+  margin-top: 10px;
+  color: #1F8B4C;
+}
+
+.create-new-btn:hover {
+  text-decoration: underline;
+}
+
+.green-button {
+  background-color: #1F8B4C;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.green-button:hover {
+  background-color: #167938;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
 
