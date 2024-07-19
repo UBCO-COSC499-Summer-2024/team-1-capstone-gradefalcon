@@ -1,7 +1,52 @@
 # Personal Log
 Ahmad Saleem Mirza
 
-## Friday (July 12 - 17)
+## Friday (July 17 - 19)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/July17-19.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Integrating changes into dev branch
+  * #2: Grading and displaying results from the OMR
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Integrating changes into dev branch
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Grading and displaying results from the OMR
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>   
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+I spent quite some time integrating my functional OMR into our development branch to thoroughly ensure that it passed all tests and was working as intended. As I suspected, the concepts and code I developed here are now being re-used when we are going to grade the actual student exams themselves. Functions to upload the file to the proper storage location in AWS are already working, so currently I have switched gears to helping out with the technical intricacies of helping the backend pass data between the flask OMR. 
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Continuing to work on the grading the assignment and then moving onto to more heavier and performance intensive files to better demonstrate real world applicability.
+
+
+
+## Wednesday (July 12 - 17)
 
 ### Timesheet
 Clockify report
