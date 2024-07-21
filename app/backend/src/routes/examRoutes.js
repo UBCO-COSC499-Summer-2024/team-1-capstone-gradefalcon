@@ -6,6 +6,7 @@ const {
   getStandardAverageData,
   getPerformanceData,
   getAnswerKeyForExam,
+  getStudentNameById,
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
@@ -47,8 +48,21 @@ router.get("/studentScores", async function (req, res) {
     .on("data", (data) =>
       results.push({ StudentID: data.StudentID, Score: data.score })
     ) // Extract only the student number (Roll) and score
-    .on("end", () => {
-      res.json(results); // Send the extracted data as a response
+    .on("end", async () => {
+      try {
+        // Map each result to include the student name
+        const resultsWithNames = await Promise.all(
+          results.map(async (result) => {
+            const studentName = await getStudentNameById(result.StudentID); // Assuming this function exists and returns the student's name
+            return { StudentName: studentName, ...result };
+          })
+        );
+
+        res.json(resultsWithNames); // Send the data including student names as a response
+      } catch (error) {
+        console.error("Error fetching student names:", error);
+        res.status(500).send("Error fetching student names");
+      }
     })
     .on("error", (error) => {
       console.error("Error reading CSV file:", error);

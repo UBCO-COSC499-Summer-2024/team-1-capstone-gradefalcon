@@ -104,7 +104,6 @@ const getPerformanceData = async (req, res, next) => {
   }
 };
 
-
 const getAnswerKeyForExam = async (exam_id) => {
   try {
     const solutionResult = await pool.query(
@@ -119,11 +118,30 @@ const getAnswerKeyForExam = async (exam_id) => {
     const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
 
     // Extract the answers in order
-    const answersInOrder = answersArray.map(answer => answer.split(':')[1]);
+    const answersInOrder = answersArray.map((answer) => answer.split(":")[1]);
 
     return answersInOrder;
   } catch (error) {
     console.error("Error getting answer key for exam:", error);
+    throw error;
+  }
+};
+
+const getStudentNameById = async (studentId) => {
+  try {
+    const result = await pool.query(
+      "SELECT name FROM student WHERE student_id = $1",
+      [studentId]
+    );
+
+    if (result.rows.length === 0) {
+      // throw new Error("Student not found");
+      return "Unknown student";
+    }
+
+    return result.rows[0].name;
+  } catch (error) {
+    console.error("Error getting student name by ID:", error);
     throw error;
   }
 };
@@ -134,5 +152,6 @@ module.exports = {
   examBoard,
   getStandardAverageData,
   getPerformanceData,
-  getAnswerKeyForExam
+  getAnswerKeyForExam,
+  getStudentNameById,
 };
