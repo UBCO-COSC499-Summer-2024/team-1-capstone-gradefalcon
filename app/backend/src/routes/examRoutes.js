@@ -5,7 +5,7 @@ const {
   examBoard,
   getStandardAverageData,
   getPerformanceData,
-  getAnswerKeyForExam
+  getAnswerKeyForExam,
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
@@ -19,7 +19,7 @@ router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
 router.get("/standard-average-data", getStandardAverageData);
 router.get("/performance-data", getPerformanceData);
-router.get('/getAnswerKey/:exam_id', async (req, res, next) => {
+router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
   try {
     const exam_id = parseInt(req.params.exam_id, 10);
     if (isNaN(exam_id)) {
@@ -28,9 +28,32 @@ router.get('/getAnswerKey/:exam_id', async (req, res, next) => {
     const answerKey = await getAnswerKeyForExam(exam_id);
     res.json({ answerKey });
   } catch (error) {
-    console.error('Error in /getAnswerKey:', error);
-    res.status(500).send('Error getting answer key');
+    console.error("Error in /getAnswerKey:", error);
+    res.status(500).send("Error getting answer key");
   }
+});
+
+// Add this route to the examRoutes.js file
+
+router.get("/studentScores", async function (req, res) {
+  const filePath = path.join(
+    __dirname,
+    "../../omr/outputs/Results/Results.csv"
+  );
+  const results = []; // Array to hold student number and score
+
+  fs.createReadStream(filePath)
+    .pipe(csv())
+    .on("data", (data) =>
+      results.push({ StudentID: data.StudentID, Score: data.score })
+    ) // Extract only the student number (Roll) and score
+    .on("end", () => {
+      res.json(results); // Send the extracted data as a response
+    })
+    .on("error", (error) => {
+      console.error("Error reading CSV file:", error);
+      res.status(500).send("Error reading CSV file");
+    });
 });
 
 router.get("/getResults", async function (req, res) {
@@ -55,7 +78,10 @@ router.get("/getResults", async function (req, res) {
     });
 });
 
-router.post( "/saveExamKey",upload.single("examKey"), async function (req, res) {
+router.post(
+  "/saveExamKey",
+  upload.single("examKey"),
+  async function (req, res) {
     console.log(req.file);
     res.send(JSON.stringify("File uploaded successfully"));
   }
@@ -92,17 +118,21 @@ router.post("/callOMR", async function (req, res) {
   }
 });
 
-router.post("/UploadExam", upload.single("examPages"), async function (req, res) {
-  const { exam_id } = req.body;
+router.post(
+  "/UploadExam",
+  upload.single("examPages"),
+  async function (req, res) {
+    const { exam_id } = req.body;
 
-  try {
-    // Here, we only handle the file upload
-    res.json({ message: "File uploaded successfully", exam_id });
-  } catch (error) {
-    console.error("Error in /UploadExam:", error);
-    res.status(500).send("Error uploading exam pages");
+    try {
+      // Here, we only handle the file upload
+      res.json({ message: "File uploaded successfully", exam_id });
+    } catch (error) {
+      console.error("Error in /UploadExam:", error);
+      res.status(500).send("Error uploading exam pages");
+    }
   }
-});
+);
 
 router.post("/GenerateEvaluation", async function (req, res) {
   const { exam_id } = req.body;
@@ -166,7 +196,10 @@ router.post("/GenerateEvaluation", async function (req, res) {
 
     const destinationDir = `/code/omr/inputs`;
     const evaluationFilePath = path.join(destinationDir, "evaluation.json");
-    fs.writeFileSync(evaluationFilePath, JSON.stringify(evaluationJson, null, 2));
+    fs.writeFileSync(
+      evaluationFilePath,
+      JSON.stringify(evaluationJson, null, 2)
+    );
 
     res.json({ message: "evaluation.json created successfully" });
   } catch (error) {
@@ -175,9 +208,12 @@ router.post("/GenerateEvaluation", async function (req, res) {
   }
 });
 
-router.get('/fetchImage', async function (req, res) {
-  const imagePath = path.join(__dirname, '../../omr/outputs/CheckedOMRs/colored/StudentAnswers_page_1.png');
-  
+router.get("/fetchImage", async function (req, res) {
+  const imagePath = path.join(
+    __dirname,
+    "../../omr/outputs/CheckedOMRs/colored/StudentAnswers_page_1.png"
+  );
+
   // Send the image file
   res.sendFile(imagePath);
 });

@@ -3,41 +3,32 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/App.css";
 
 const ReviewExams = () => {
-  const [imageSrc, setImageSrc] = useState('');
-
   useEffect(() => {
-    const fetchImage = async () => {
+    const fetchStudentScores = async () => {
       try {
-        const response = await fetch('/api/exam/fetchImage');
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        setImageSrc(url);
+        const response = await fetch("/api/exam/studentScores");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("data", data); // Handle the data as needed
       } catch (error) {
-        console.error('Error fetching the image:', error);
+        console.error("Error fetching student scores:", error);
       }
     };
 
-    fetchImage();
+    fetchStudentScores();
   }, []);
-
   return (
-    <div style={{ textAlign: 'center', margin: '2px 0' }}>
-      <h1>Graded Exam</h1>
-      {imageSrc ? (
-        <img 
-          src={imageSrc} 
-          alt="Student Answers" 
-          style={{ 
-            maxWidth: '50%', 
-            height: 'auto', 
-            display: 'block', 
-            marginLeft: 'auto' /* Aligns the image to the right */
-          }} 
-        />
-      ) : (
-        <p>Loading image...</p>
-      )}
-    </div>
+    <>
+      <div className="App">
+        <div className="main-content">
+          <header>
+            <h2>Review Exams</h2>
+          </header>
+        </div>
+      </div>
+    </>
   );
 };
 
