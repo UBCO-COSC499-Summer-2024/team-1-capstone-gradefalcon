@@ -146,6 +146,24 @@ const getStudentNameById = async (studentId) => {
   }
 };
 
+const getScoreByExamId = async (exam_id) => {
+  try {
+    const result = await pool.query(
+      "SELECT total_marks FROM exam WHERE exam_id = $1",
+      [exam_id]
+    );
+
+    if (result.rows.length === 0) {
+      return "No scores found for this exam";
+    }
+
+    return result.rows.map((row) => row.total_marks);
+  } catch (error) {
+    console.error("Error getting scores by exam ID:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   saveQuestions,
   newExam,
@@ -154,4 +172,5 @@ module.exports = {
   getPerformanceData,
   getAnswerKeyForExam,
   getStudentNameById,
+  getScoreByExamId,
 };

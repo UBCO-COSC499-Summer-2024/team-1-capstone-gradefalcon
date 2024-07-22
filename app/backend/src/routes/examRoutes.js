@@ -7,6 +7,7 @@ const {
   getPerformanceData,
   getAnswerKeyForExam,
   getStudentNameById,
+  getScoreByExamId,
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
@@ -231,6 +232,24 @@ router.get("/fetchImage", async function (req, res) {
   // Send the image file
   res.sendFile(imagePath);
 });
+
+router.get("/getScoreByExamId/:exam_id", async (req, res) => {
+  try {
+    const exam_id = parseInt(req.params.exam_id, 10);
+    if (isNaN(exam_id)) {
+      return res.status(400).send("Invalid exam_id");
+    }
+    const scores = await getScoreByExamId(exam_id);
+    if (scores.length === 0) {
+      return res.status(404).send("No scores found for this exam");
+    }
+    res.json({ scores });
+  } catch (error) {
+    console.error("Error in /getScoreByExamId:", error);
+    res.status(500).send("Error retrieving scores");
+  }
+});
+
 router.post("/test", async function (req, res) {
   console.log("test called");
   res.send(JSON.stringify("Test route called successfully"));
