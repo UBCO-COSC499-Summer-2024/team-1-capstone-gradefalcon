@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/App.css";
+import Toast from "../../components/Toast";
 
 const ReviewExams = () => {
   const location = useLocation();
+  const [toast, setToast] = useState(null);
   const [studentScores, setStudentScores] = useState([]);
   const [totalMarks, setTotalMarks] = useState();
   // const { exam_id } = location.state || {};
@@ -49,10 +51,39 @@ const ReviewExams = () => {
     });
   };
 
+  const saveResults = async () => {
+    try {
+      const response = await fetch("/api/exam/saveResults", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ studentScores, exam_id }),
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      console.log(data);
+      setToast({ message: "Results saved!", type: "success" });
+    } catch (error) {
+      console.error("Error saving results:", error);
+    }
+  };
+
   return (
     <>
       <div className="App">
         <div className="main-content">
+          {toast && (
+            <>
+              <Toast
+                message={toast.message}
+                type={toast.type}
+                onClose={() => setToast(null)}
+              />
+            </>
+          )}
           <header>
             <h2>Review Exams</h2>
           </header>
@@ -80,6 +111,9 @@ const ReviewExams = () => {
               ))}
             </tbody>
           </table>
+          <button className="save-changes-btn" onClick={() => saveResults()}>
+            Save Results
+          </button>
         </div>
       </div>
     </>

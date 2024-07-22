@@ -8,6 +8,7 @@ const {
   getAnswerKeyForExam,
   getStudentNameById,
   getScoreByExamId,
+  saveResults,
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
@@ -249,6 +250,8 @@ router.get("/getScoreByExamId/:exam_id", async (req, res) => {
     res.status(500).send("Error retrieving scores");
   }
 });
+
+router.post("/saveResults", saveResults);
 
 router.post("/test", async function (req, res) {
   console.log("test called");

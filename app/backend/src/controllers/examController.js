@@ -164,6 +164,29 @@ const getScoreByExamId = async (exam_id) => {
   }
 };
 
+const saveResults = async (req, res, next) => {
+  const { studentScores, exam_id } = req.body;
+  console.log(studentScores);
+  console.log(exam_id);
+
+  try {
+    // Assuming you have a database connection established and a model for studentResults
+    for (const score of studentScores) {
+      if (score.StudentName !== "Unknown student") {
+        // Assuming studentResults is your table/model name and it has a method to insert data
+        const result = await pool.query(
+          "INSERT INTO studentresults (student_id, exam_id, grade) VALUES ($1,$2,$3)",
+          [score.StudentID, exam_id, score.Score]
+        );
+      }
+    }
+    res.send({ message: "Scores saved successfully" });
+  } catch (error) {
+    console.error("Error saving student scores:", error);
+    res.status(500).send("Error saving scores");
+  }
+};
+
 module.exports = {
   saveQuestions,
   newExam,
@@ -173,4 +196,5 @@ module.exports = {
   getAnswerKeyForExam,
   getStudentNameById,
   getScoreByExamId,
+  saveResults,
 };
