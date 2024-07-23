@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Bookmark, ArrowUpRight, Plus } from "lucide-react";
 import { Button } from "../../components/ui/button";
-import { Badge } from "../../components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import { ScrollArea } from "../../components/ui/scroll-area";
@@ -126,9 +125,8 @@ export default function Dashboard() {
 
   return (
     <main className="flex flex-col gap-4">
-      <div>
-        <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
-        <div className="grid gap-4 lg:grid-cols-2">
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex-1">
           <Card className="bg-white border rounded">
             <CardHeader className="flex justify-between px-6 py-4">
               <div>
@@ -181,84 +179,84 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
-      </div>
-      <div className="grid gap-4">
-        <Card className="bg-white border rounded">
-          <CardHeader className="flex justify-between px-6 py-4">
-            <div>
-              <CardTitle className="mb-2">Exam Board</CardTitle>
-              <CardDescription>Recent exams from your classes.</CardDescription>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button size="sm" className="ml-auto gap-1" onClick={() => setIsDialogOpen(true)}>
-                    <Plus className="h-4 w-4" />
-                    Create New
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create New Exam</DialogTitle>
-                    <DialogDescription>Enter the details for the new exam and upload the answer key.</DialogDescription>
-                  </DialogHeader>
-                  <NewExamForm setIsDialogOpen={setIsDialogOpen} onExamCreated={handleExamCreated} />
-                  <DialogClose asChild>
-                    <Button variant="ghost">Close</Button>
-                  </DialogClose>
-                </DialogContent>
-              </Dialog>
-              <Button asChild size="sm" className="ml-auto gap-1">
-                <Link to="/Examboard">
-                  Manage Exams
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="max-h-80">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Exam Name</TableHead>
-                    <TableHead className="hidden sm:table-cell">Course</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {exams.map((exam, index) => (
-                    <TableRow key={index} className={index}>
-                      <TableCell>
-                        <div className="font-medium">{exam.exam_title}</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">{exam.course_id}</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
+        <div className="flex-1">
+          <Card className="bg-white border rounded">
+            <CardHeader className="flex justify-between px-6 py-4">
+              <div>
+                <CardTitle className="mb-2">Exam Board</CardTitle>
+                <CardDescription>Recent exams from your classes.</CardDescription>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="sm" className="ml-auto gap-1" onClick={() => setIsDialogOpen(true)}>
+                      <Plus className="h-4 w-4" />
+                      Create New
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Create New Exam</DialogTitle>
+                      <DialogDescription>Enter the details for the new exam and upload the answer key.</DialogDescription>
+                    </DialogHeader>
+                    <NewExamForm setIsDialogOpen={setIsDialogOpen} onExamCreated={handleExamCreated} />
+                    <DialogClose asChild>
+                      <Button variant="ghost">Close</Button>
+                    </DialogClose>
+                  </DialogContent>
+                </Dialog>
+                <Button asChild size="sm" className="ml-auto gap-1">
+                  <Link to="/Examboard">
+                    Manage Exams
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="max-h-80">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Exam Name</TableHead>
+                      <TableHead className="hidden sm:table-cell">Course</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </ScrollArea>
-          </CardContent>
-        </Card>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card className="bg-white border rounded">
-            <CardHeader>
-              <CardTitle>Standard Average Chart</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <AverageperExamChart data={standardAverageData} />
-            </CardContent>
-          </Card>
-          <Card className="bg-white border rounded">
-            <CardHeader>
-              <CardTitle>Performance Bar Chart</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <AverageperCourseChart data={averageperCourseData} />
+                  </TableHeader>
+                  <TableBody>
+                    {exams.map((exam, index) => (
+                      <TableRow key={index} className={index}>
+                        <TableCell>
+                          <div className="font-medium">{exam.exam_title}</div>
+                          <div className="hidden text-sm text-muted-foreground md:inline">{exam.course_id}</div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </ScrollArea>
             </CardContent>
           </Card>
         </div>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card className="bg-white border rounded">
+          <CardHeader>
+            <CardTitle>Standard Average Chart</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AverageperExamChart data={standardAverageData} />
+          </CardContent>
+        </Card>
+        <Card className="bg-white border rounded">
+          <CardHeader>
+            <CardTitle>Performance Bar Chart</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AverageperCourseChart data={averageperCourseData} />
+          </CardContent>
+        </Card>
       </div>
     </main>
   );
