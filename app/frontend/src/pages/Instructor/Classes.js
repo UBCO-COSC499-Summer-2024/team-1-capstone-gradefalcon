@@ -84,7 +84,7 @@ const Classes = () => {
                         <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
                         <TableCell className="hidden sm:table-cell">
                           <Button asChild size="sm" className="ml-auto gap-1">
-                            <Link to={`/ClassManagement/${classItem.course_id}`}>
+                            <Link to={`/ClassManagement/${classItem.class_id}`}>
                               Open Course
                               <ArrowUpRight className="h-4 w-4 ml-1" />
                             </Link>
@@ -107,7 +107,7 @@ const Classes = () => {
             <CardContent>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button size="sm" className="green-button">
+                  <Button size="sm">
                     Create Class
                   </Button>
                 </DialogTrigger>

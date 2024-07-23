@@ -69,7 +69,7 @@
 .sidebar {
   width: 80px;
   height: 100%;
-  background-color: #1F8B4C; /* Adjusted color to match the theme */
+  background-color: #139A23; /* Adjusted color to match the theme */
   color: white;
   display: flex;
   flex-direction: column;
@@ -174,24 +174,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.grade-exam-btn {
-  color: #1F8B4C;
-}
-
-.grade-exam-btn:hover {
-  text-decoration: underline;
-}
-
-.create-new-btn {
-  display: inline-block;
-  margin-top: 10px;
-  color: #1F8B4C;
-}
-
-.create-new-btn:hover {
-  text-decoration: underline;
 }
 
 .green-button {
