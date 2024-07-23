@@ -9,7 +9,7 @@ export default function Sidebar({ handleLogout }) {
         <ClipboardCheck className="h-6 w-6" />
         <span className="ml-2">GradeFalcon</span>
       </div>
-      <nav className="flex flex-col gap-4">
+      <nav className="flex flex-col gap-3 py-12">
         <Link to="/Dashboard" className="nav-item" data-tooltip="Dashboard">
           <Home className="icon" />
           <span>Dashboard</span>

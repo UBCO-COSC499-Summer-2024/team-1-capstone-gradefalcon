@@ -60,6 +60,7 @@
   padding-left: 20px;
   overflow: hidden;
   transition: width 0.3s;
+  margin-left: 5px;
 }
 
 .logo span {
@@ -121,7 +122,8 @@
 
 .sidebar .nav-item .icon {
   font-size: 20px;
-  margin-right: 10px; /* Added margin to space out icon */
+  margin-right: 5px; /* Added margin to space out icon */
+  margin-left: 5px;
 }
 
 .sidebar .nav-item span,
@@ -136,7 +138,7 @@
 }
 
 .sidebar .nav-item:hover {
-  background-color: hsl(var(--primary) / 0.9);; 
+  background-color: #167938;; 
 }
 
 
@@ -150,24 +152,9 @@
   margin-left: 250px;
 }
 
-/* Breadcrumb styles */
-.breadcrumb-container {
-  margin-left: 80px;
-  transition: margin-left 0.3s;
-}
 
 .sidebar:hover + .breadcrumb-container {
   margin-left: 250px;
-}
-
-.antialiased {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.breadcrumb-container {
-  padding-top: 20px;
-  padding-bottom: 20px;
 }
 
 /* All the css under this should not be needed moving forward */
