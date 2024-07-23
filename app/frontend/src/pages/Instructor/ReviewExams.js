@@ -10,6 +10,7 @@ const ReviewExams = () => {
   const [totalMarks, setTotalMarks] = useState();
   const [editStudentId, setEditStudentId] = useState(null);
   const [originalScores, setOriginalScores] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
   // const { exam_id } = location.state || {};
   const navigate = useNavigate(); // Initialize useNavigate
   const exam_id = 1; // placeholder
@@ -119,6 +120,12 @@ const ReviewExams = () => {
     }
   };
 
+  const filteredScores = searchQuery
+    ? studentScores.filter((student) =>
+        student.StudentID.toString().includes(searchQuery)
+      )
+    : studentScores;
+
   return (
     <>
       <div className="App">
@@ -134,6 +141,12 @@ const ReviewExams = () => {
           )}
           <header>
             <h2>Review Exams</h2>
+            <input // Step 2: Create search bar
+              type="text"
+              placeholder="Search by Student ID..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)} // Step 3: Update search query
+            />
           </header>
           <table>
             <thead>
@@ -145,7 +158,7 @@ const ReviewExams = () => {
               </tr>
             </thead>
             <tbody>
-              {studentScores.map((student, index) => (
+              {filteredScores.map((student, index) => (
                 <tr key={index}>
                   <td>{student.StudentName}</td>
                   <td>{student.StudentID}</td>
