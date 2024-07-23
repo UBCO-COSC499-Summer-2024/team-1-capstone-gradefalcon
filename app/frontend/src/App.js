@@ -86,7 +86,7 @@ function App() {
               element={<NotificationPreferences />}
             />
             <Route
-              path="/StudentDashboard"
+              path= "/StudentDashboard"
               element={
                 <ProtectedRoute>
                   <StudentDashboard />
