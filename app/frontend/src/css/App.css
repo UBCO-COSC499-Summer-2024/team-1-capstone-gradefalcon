@@ -69,8 +69,8 @@
 .sidebar {
   width: 80px;
   height: 100%;
-  background-color: #139A23; /* Adjusted color to match the theme */
-  color: white;
+  background-color: hsl(var(--primary)); /* Adjusted color to match the theme */
+  color: hsl(var(--primary-foreground));
   display: flex;
   flex-direction: column;
   padding: 20px 0;
@@ -136,8 +136,9 @@
 }
 
 .sidebar .nav-item:hover {
-  background-color: #167938; /* New hover background color */
+  background-color: hsl(var(--primary) / 0.9);; 
 }
+
 
 /* Main content styles */
 .main-content {
@@ -174,16 +175,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.green-button {
-  background-color: #1F8B4C;
-  color: white;
-  transition: background-color 0.3s;
-}
-
-.green-button:hover {
-  background-color: #167938;
 }
 
 .header {
@@ -225,17 +216,6 @@
   width: 100%;
 }
 
-/* Specific styles for the dialog components */
-.dialog-button {
-  background-color: #1F8B4C;
-  color: white;
-  transition: background-color 0.3s;
-}
-
-.dialog-button:hover {
-  background-color: #167938;
-}
-
 .file-input-container {
   display: flex;
   align-items: center;
@@ -243,9 +223,8 @@
 }
 
 
-
 .file-input-button {
-  background-color: #1F8B4C;
+  background-color:  hsl(var(--primary));
   color: white;
   padding: 0.5rem 1rem;
   border-radius: var(--radius);
@@ -253,7 +232,7 @@
 }
 
 .file-input-button:hover {
-  background-color: #167938;
+  background-color: hsl(var(--primary) / 0.9);
 }
 
 .file-input-label {

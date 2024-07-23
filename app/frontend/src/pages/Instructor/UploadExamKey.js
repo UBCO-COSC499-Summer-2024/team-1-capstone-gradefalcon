@@ -208,10 +208,10 @@ const UploadExamKey = () => {
                     <iframe src={fileURL} title="PDF Preview"></iframe>
                   </div>
                   <div className="flex gap-4 mt-4">
-                    <Button asChild size="sm" className="green-button" onClick={resetUpload}>
+                    <Button asChild size="sm"  onClick={resetUpload}>
                       <span>Import</span>
                     </Button>
-                    <Button asChild size="sm" className="green-button">
+                    <Button asChild size="sm" >
                       <Link to="/ExamControls">Confirm</Link>
                     </Button>
                   </div>

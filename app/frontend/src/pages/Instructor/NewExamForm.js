@@ -103,12 +103,12 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
         <div className="mb-4">
           <label htmlFor="answer-key" className="block text-sm font-medium text-gray-700">Answer Key:</label>
           <div className="flex gap-4 mt-1">
-            <Button asChild size="sm" className="green-button">
+            <Button asChild size="sm" >
               <Link to="/UploadExamKey" data-testid="upload-answer-key-btn">
                 Upload Answer Key
               </Link>
             </Button>
-            <Button asChild size="sm" className="green-button">
+            <Button asChild size="sm" >
               <Link to={isFormValid() ? "/ManualExamKey" : "#"} state={{ examTitle: examTitle, classID: class_id }} data-testid="manual-answer-key-btn">
                 Manually Select Answers
               </Link>
@@ -116,7 +116,7 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
           </div>
         </div>
         <div className="flex gap-4 mt-4">
-          <Button type="submit" size="sm" className="dialog-button">
+          <Button type="submit" size="sm">
             <span>Create Exam</span>
           </Button>
         </div>

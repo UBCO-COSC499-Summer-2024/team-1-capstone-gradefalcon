@@ -138,7 +138,7 @@ const ManualExamKey = () => {
                 <div className="nested-window mb-4">
                   <div className="bubble-grid" data-testid="bubble-grid"></div>
                 </div>
-                <Button asChild size="sm" className="green-button">
+                <Button asChild size="sm" >
                   <span onClick={() => {
                     navigate("/ExamControls", {
                       state: {

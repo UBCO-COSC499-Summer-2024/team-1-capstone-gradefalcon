@@ -6,6 +6,8 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { useToast } from "../../components/ui/use-toast";
 import { ToastProvider, ToastViewport } from "../../components/ui/toast";
+import { Label } from "../../components/ui/label";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 
 const NewClassForm = ({ setIsDialogOpen }) => {
   const [col, setCol] = useState([]);
@@ -140,7 +142,7 @@ const NewClassForm = ({ setIsDialogOpen }) => {
     <ToastProvider>
       <form>
         <div className="mb-4">
-          <label htmlFor="course-name" className="block text-sm font-medium text-gray-700">Course Name:</label>
+          <Label htmlFor="course-name" className="block text-sm font-medium text-gray-700">Course Name:</Label>
           <Input
             type="text"
             id="course-name"
@@ -151,7 +153,7 @@ const NewClassForm = ({ setIsDialogOpen }) => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="course-id" className="block text-sm font-medium text-gray-700">Course ID:</label>
+          <Label htmlFor="course-id" className="block text-sm font-medium text-gray-700">Course ID:</Label>
           <Input
             type="text"
             id="course-id"
@@ -163,7 +165,7 @@ const NewClassForm = ({ setIsDialogOpen }) => {
         </div>
         <p className="mb-4">Import a CSV file containing the student names and their student IDs in your class.</p>
         <div className="file-input-container">
-          <label className="file-input-button">
+        <label className="file-input-button">
             Choose File
             <input
               type="file"
@@ -173,30 +175,30 @@ const NewClassForm = ({ setIsDialogOpen }) => {
               className="hidden"
               onChange={handleFileChange}
             />
-          </label>
+             </label>
           <span className="file-input-label">no file selected</span>
         </div>
         <div className="flex gap-4 mt-4">
-          <Button size="sm" className="dialog-button" onClick={handleFileUpload}>
+          <Button size="sm" onClick={handleFileUpload}>
             <span>Import</span>
           </Button>
         </div>
-        <table className="mt-4 w-full border-collapse">
-          <thead>
-            <tr>
+        <Table className="mt-4 w-full border-collapse">
+          <TableHead>
+            <TableRow>
               {col.length > 0 && col.map((col, i) => <th key={i} className="border-b py-2 text-left">{col}</th>)}
-            </tr>
-          </thead>
-          <tbody data-testid="tableBody">
+            </TableRow>
+          </TableHead>
+          <TableBody data-testid="TableBody">
             {val.map((row, i) => (
-              <tr key={i}>
+              <TableRow key={i}>
                 {row.map((cell, j) => (
                   <td key={j} className="border-b py-2">{cell}</td>
                 ))}
-              </tr>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </form>
       <ToastViewport />
     </ToastProvider>

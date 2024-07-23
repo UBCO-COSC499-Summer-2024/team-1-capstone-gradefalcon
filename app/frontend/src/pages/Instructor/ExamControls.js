@@ -95,7 +95,7 @@ const ExamControls = () => {
                 </div>
               </div>
               <div className="flex gap-4 mt-4">
-                <Button asChild size="sm" className="green-button">
+                <Button asChild size="sm" >
                   <span onClick={handleConfirm}>Confirm</span>
                 </Button>
               </div>

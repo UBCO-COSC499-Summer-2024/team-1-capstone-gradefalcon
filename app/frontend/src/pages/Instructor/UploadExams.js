@@ -107,10 +107,10 @@ const UploadExams = () => {
                 <iframe src={fileURL} title="PDF Preview"></iframe>
               </div>
               <div className="flex gap-4 mt-4">
-                <Button size="sm" className="green-button" onClick={resetUpload}>
+                <Button size="sm"  onClick={resetUpload}>
                   <span>Reset</span>
                 </Button>
-                <Button size="sm" className="green-button" onClick={handleFileUpload}>
+                <Button size="sm"  onClick={handleFileUpload}>
                   <span>Upload</span>
                 </Button>
               </div>

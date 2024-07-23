@@ -117,10 +117,10 @@ const ClassManagement = () => {
             </CardHeader>
             <CardContent>
               <div className="flex justify-between mb-4">
-                <Link to={`../NewExam/${params.class_id}`} className="green-button">
+                <Link to={`../NewExam/${params.class_id}`} >
                   + New Exam
                 </Link>
-                <Button className="green-button" onClick={exportToCSV}>
+                <Button  onClick={exportToCSV}>
                   Export
                 </Button>
               </div>
