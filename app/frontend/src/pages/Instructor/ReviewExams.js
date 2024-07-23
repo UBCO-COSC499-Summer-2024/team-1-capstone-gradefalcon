@@ -16,6 +16,7 @@ const ReviewExams = () => {
   const exam_id = 1; // placeholder
 
   useEffect(() => {
+    // Fetch student scores for the exam
     const fetchStudentScores = async () => {
       try {
         const response = await fetch("/api/exam/studentScores");
@@ -29,6 +30,7 @@ const ReviewExams = () => {
       }
     };
 
+    // Fetch the max marks for the exam
     const fetchTotalScore = async () => {
       try {
         const response = await fetch(`/api/exam/getScoreByExamId/${exam_id}`);
@@ -36,7 +38,6 @@ const ReviewExams = () => {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log(data.scores[0]);
         setTotalMarks(data.scores[0]);
       } catch (error) {
         console.error("Error fetching total marks:", error);
@@ -54,6 +55,7 @@ const ReviewExams = () => {
     });
   };
 
+  // Function to handle manually changing the score
   const handleScoreChange = (e, studentId) => {
     const newScore = e.target.value;
     setStudentScores((currentScores) =>
@@ -63,6 +65,7 @@ const ReviewExams = () => {
     );
   };
 
+  // Function to handle editing the student score
   const handleEdit = (studentId) => {
     setEditStudentId(studentId);
     const studentScore = studentScores.find(
@@ -74,8 +77,8 @@ const ReviewExams = () => {
     }));
   };
 
+  // Function to handle canceling an edit
   const handleCancel = (studentId) => {
-    // Step 3: Handle Cancel
     setStudentScores((currentScores) =>
       currentScores.map((score) =>
         score.StudentID === studentId

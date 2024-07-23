@@ -224,10 +224,12 @@ router.post("/GenerateEvaluation", async function (req, res) {
   }
 });
 
-router.get("/fetchImage", async function (req, res) {
+router.post("/fetchImage", async function (req, res) {
+  const file_name = req.body.file_name;
+  // res.json({ message: file_name });
   const imagePath = path.join(
     __dirname,
-    "../../omr/outputs/CheckedOMRs/colored/StudentAnswers_page_1.png"
+    `../../omr/outputs/CheckedOMRs/colored/${file_name}`
   );
 
   // Send the image file
@@ -252,6 +254,33 @@ router.get("/getScoreByExamId/:exam_id", async (req, res) => {
 });
 
 router.post("/saveResults", saveResults);
+
+router.get("/searchExam/:student_id", async (req, res) => {
+  const studentId = req.params.student_id;
+  const filePath = path.join(
+    __dirname,
+    "../../omr/outputs/Results/Results.csv"
+  );
+  let found = false; // Flag to check if student is found
+
+  fs.createReadStream(filePath)
+    .pipe(csv())
+    .on("data", (data) => {
+      if (data.StudentID === studentId) {
+        found = true;
+        res.json({ file_id: data.file_id });
+      }
+    })
+    .on("end", () => {
+      if (!found) {
+        res.status(404).send("Student ID not found");
+      }
+    })
+    .on("error", (error) => {
+      console.error("Error reading CSV file:", error);
+      res.status(500).send("Error reading CSV file");
+    });
+});
 
 router.post("/test", async function (req, res) {
   console.log("test called");
