@@ -1,6 +1,6 @@
 const express = require('express');
 const { displayClasses, displayClassManagement, importClass } = require('../controllers/classController');
-const { checkJwt, checkRole } = require('./server'); // Importing from server.js
+const { checkJwt, checkRole } = require('../server'); // Importing from server.js
 
 const router = express.Router();
 
