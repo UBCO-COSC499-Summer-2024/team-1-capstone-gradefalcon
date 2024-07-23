@@ -8,6 +8,8 @@ const ReviewExams = () => {
   const [toast, setToast] = useState(null);
   const [studentScores, setStudentScores] = useState([]);
   const [totalMarks, setTotalMarks] = useState();
+  const [editStudentId, setEditStudentId] = useState(null);
+  const [originalScores, setOriginalScores] = useState({});
   // const { exam_id } = location.state || {};
   const navigate = useNavigate(); // Initialize useNavigate
   const exam_id = 1; // placeholder
@@ -51,7 +53,50 @@ const ReviewExams = () => {
     });
   };
 
+  const handleScoreChange = (e, studentId) => {
+    const newScore = e.target.value;
+    setStudentScores((currentScores) =>
+      currentScores.map((score) =>
+        score.StudentID === studentId ? { ...score, Score: newScore } : score
+      )
+    );
+  };
+
+  const handleEdit = (studentId) => {
+    setEditStudentId(studentId);
+    const studentScore = studentScores.find(
+      (s) => s.StudentID === studentId
+    ).Score;
+    setOriginalScores((prevScores) => ({
+      ...prevScores,
+      [studentId]: studentScore,
+    }));
+  };
+
+  const handleCancel = (studentId) => {
+    // Step 3: Handle Cancel
+    setStudentScores((currentScores) =>
+      currentScores.map((score) =>
+        score.StudentID === studentId
+          ? { ...score, Score: originalScores[studentId] }
+          : score
+      )
+    );
+    setEditStudentId(null); // Exit edit mode
+    setOriginalScores((prevScores) => {
+      const newScores = { ...prevScores };
+      delete newScores[studentId]; // Remove the original score as it's no longer needed
+      return newScores;
+    });
+  };
+
   const saveResults = async () => {
+    if (editStudentId !== null) {
+      alert(
+        "Please save or cancel the current edit before saving all results."
+      );
+      return;
+    }
     try {
       const response = await fetch("/api/exam/saveResults", {
         method: "POST",
@@ -65,7 +110,10 @@ const ReviewExams = () => {
       }
       const data = await response.json();
       console.log(data);
-      setToast({ message: "Results saved!", type: "success" });
+      setToast({ message: "Results saved! Redirecting...", type: "success" });
+      setTimeout(() => {
+        navigate("/GradeReport");
+      }, 2000);
     } catch (error) {
       console.error("Error saving results:", error);
     }
@@ -101,7 +149,36 @@ const ReviewExams = () => {
                 <tr key={index}>
                   <td>{student.StudentName}</td>
                   <td>{student.StudentID}</td>
-                  <td>{student.Score}</td>
+                  <td>
+                    {editStudentId === student.StudentID ? (
+                      <input
+                        type="number"
+                        value={student.Score}
+                        max={totalMarks}
+                        min="0"
+                        onChange={(e) =>
+                          handleScoreChange(e, student.StudentID)
+                        }
+                      />
+                    ) : (
+                      student.Score
+                    )}
+
+                    {editStudentId === student.StudentID ? (
+                      <>
+                        <button onClick={() => setEditStudentId(null)}>
+                          Save
+                        </button>
+                        <button onClick={() => handleCancel(student.StudentID)}>
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <button onClick={() => handleEdit(student.StudentID)}>
+                        Edit
+                      </button>
+                    )}
+                  </td>
                   <td>
                     <button onClick={() => handleViewClick(student.StudentID)}>
                       View
