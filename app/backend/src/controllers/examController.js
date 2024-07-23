@@ -1,13 +1,11 @@
 const pool = require("../utils/db");
 
-// Save solution questions and answers
 const saveQuestions = async (req, res, next) => {
   const questions = req.body.questions; // Assuming questions is an array of question objects
   const classID = req.body.classID;
   const examTitle = req.body.examTitle;
   const numQuestions = req.body.numQuestions;
 
-  // Convert the questions dictionary into an array of strings
   const questionsArray = Object.entries(questions).map(
     ([key, value]) => `${value.question}:${value.option}`
   );
@@ -28,7 +26,6 @@ const saveQuestions = async (req, res, next) => {
   }
 };
 
-// New exam route
 const newExam = async (req, res, next) => {
   const { exam_id, student_id, grade } = req.body;
 
@@ -43,9 +40,8 @@ const newExam = async (req, res, next) => {
   }
 };
 
-// Display classes and their exams
 const examBoard = async (req, res, next) => {
-  const instructorId = req.session.userId;
+  const instructorId = req.auth.payload.sub; // Get the instructor ID from Auth0 token
   try {
     const classes = await pool.query(
       "SELECT exam_id, classes.class_id, exam_title, course_id, course_name FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
@@ -58,19 +54,8 @@ const examBoard = async (req, res, next) => {
   }
 };
 
-const examKey = async (req, res, next) => {
-  console.log(req.file);
-  res.send("File uploaded successfully");
-  const sourcePath = `app-backend-1:/code/uploads/${req.file.originalname}`;
-  const destinationPath = "./app/omr";
-  executeDockerCp(sourcePath, destinationPath);
-  console.log("File moved to OMR folder");
-};
-
-module.exports = { saveQuestions, newExam, examBoard };
-// New function to get standard average data
 const getStandardAverageData = async (req, res, next) => {
-  const instructorId = req.session.userId;
+  const instructorId = req.auth.payload.sub; // Get the instructor ID from Auth0 token
   try {
     const standardAverageData = await pool.query(`
       SELECT e.exam_title AS "examTitle", AVG(sr.grade) AS "averageScore"
@@ -88,9 +73,8 @@ const getStandardAverageData = async (req, res, next) => {
   }
 };
 
-// New function to get performance data
 const getPerformanceData = async (req, res, next) => {
-  const instructorId = req.session.userId;
+  const instructorId = req.auth.payload.sub; // Get the instructor ID from Auth0 token
   try {
     const performanceData = await pool.query(`
       SELECT c.course_name AS "courseName", AVG(sr.grade) AS "averageScore"
@@ -107,7 +91,6 @@ const getPerformanceData = async (req, res, next) => {
     next(err);
   }
 };
-
 
 const getStudentGrades = async (req, res, next) => {
   const { studentId } = req.params;
@@ -132,6 +115,5 @@ const getStudentGrades = async (req, res, next) => {
     next(err);
   }
 };
+
 module.exports = { saveQuestions, newExam, examBoard, getStandardAverageData, getPerformanceData, getStudentGrades };
-
-

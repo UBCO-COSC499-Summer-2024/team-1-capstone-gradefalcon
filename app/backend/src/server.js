@@ -6,12 +6,12 @@ const bodyParser = require('body-parser');
 const pool = require('./utils/db');
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
 
-const authRoutes = require('./routes/authRoutes');
+// const authRoutes = require('./routes/authRoutes');
 const classRoutes = require('./routes/classRoutes');
 const userRoutes = require('./routes/userRoutes');
 const examRoutes = require('./routes/examRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
-const courseRoutes = require('./routes/courseRoutes'); 
+const courseRoutes = require('./routes/courseRoutes');
 
 const app = express();
 
@@ -38,43 +38,51 @@ app.use(
 
 // Auth0 configuration
 const checkJwt = auth({
-  audience: '{yourApiIdentifier}',
+  audience: 'https://Read-Current-User', // Replace with your actual API identifier
   issuerBaseURL: `https://dev-1wzrc3nphnk4w01y.ca.auth0.com/`,
 });
 
-const checkScopes = requiredScopes('read:messages');
+// Middleware to check roles
+const checkRole = (role) => {
+  return (req, res, next) => {
+    const roles = req.auth.payload['https://yourdomain.com/roles'] || []; // Use the correct custom namespace
+    if (roles.includes(role)) {
+      next();
+    } else {
+      res.status(403).json({ message: 'Insufficient role' });
+    }
+  };
+};
+
+// Exporting checkRole and checkJwt to be used in route files
+module.exports = { checkRole, checkJwt };
 
 // Public route
-app.get('/api/public', function(req, res) {
+app.get('/api/public', (req, res) => {
   res.json({
     message: 'Hello from a public endpoint! You don\'t need to be authenticated to see this.'
   });
 });
 
-// Private routes
-app.get('/api/private', checkJwt, function(req, res) {
+// Private routes with role-based access control
+app.get('/api/private', checkJwt, (req, res) => {
   res.json({
     message: 'Hello from a private endpoint! You need to be authenticated to see this.'
   });
 });
 
-app.get('/api/private-scoped', checkJwt, checkScopes, function(req, res) {
+app.get('/api/private-scoped', checkJwt, requiredScopes('read:messages'), (req, res) => {
   res.json({
     message: 'Hello from a private endpoint! You need to be authenticated and have a scope of read:messages to see this.'
   });
 });
 
-// Your existing routes
-// app.use('/auth', authRoutes);
-// app.use('/class', checkJwt, classRoutes); // Protecting existing routes with Auth0
-// app.use('/exam', checkJwt, examRoutes);   // Protecting existing routes with Auth0
-// app.use('/users', checkJwt, userRoutes); // Uncomment if userRoutes is used
-app.use('/auth', authRoutes);
-app.use('/class', classRoutes);
-app.use('/exam', examRoutes);
-app.use('/users', userRoutes);
-app.use('/upload', uploadRoutes);
-app.use('/courses', courseRoutes); 
+// Example of a protected route with RBAC
+app.use('/class', checkJwt, checkRole('instructor'), classRoutes); // Protecting existing routes with Auth0 and RBAC
+app.use('/exam', checkJwt, checkRole('instructor'), examRoutes); // Protecting existing routes with Auth0 and RBAC
+app.use('/users', checkJwt, checkRole('admin'), userRoutes); // Protecting existing routes with Auth0 and RBAC
+app.use('/upload', checkJwt, checkRole('uploader'), uploadRoutes); // Protecting existing routes with Auth0 and RBAC
+app.use('/courses', checkJwt, checkRole('instructor'), courseRoutes); // Protecting existing routes with Auth0 and RBAC
 
 app.get('/healthz', (req, res) => {
   res.send('I am happy and healthy\n');
