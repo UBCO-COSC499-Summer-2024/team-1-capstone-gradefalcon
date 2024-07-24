@@ -47,7 +47,8 @@ const Layout = ({ children }) => {
     location.pathname !== "/signup" &&
     location.pathname !== "/AdminDashboard" &&
     location.pathname !== "/userManagement" &&
-    location.pathname !== "/Logout";
+    location.pathname !== "/Logout" &&
+    location.pathname !== "/CustomBubbleSheet";
 
   return (
     <>

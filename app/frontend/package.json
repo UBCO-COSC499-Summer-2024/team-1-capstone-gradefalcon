@@ -12,6 +12,7 @@
     "customize-cra": "^1.0.0",
     "jest-puppeteer": "^10.0.1",
     "papaparse": "^5.4.1",
+    "pdf-lib": "^1.17.1",
     "playwright": "^1.45.1",
     "puppeteer": "^22.12.1",
     "react": "^17.0.2",
