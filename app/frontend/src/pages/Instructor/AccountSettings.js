@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import '../../css/App.css';
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
+import { Table, TableHeader, TableRow, TableBody, TableCell } from "../../components/ui/table";
+import { Input } from "../../components/ui/input"; // Importing the Shadcn Input component
+import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
 
 const AccountSettings = () => {
   const [username, setUsername] = useState('Dr. Pepper');
@@ -10,6 +13,7 @@ const AccountSettings = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
+  const { toast } = useToast(); // Using the toast hook
 
   const handleInputChange = (e, setState) => {
     const value = e.target.value;
@@ -17,100 +21,119 @@ const AccountSettings = () => {
     setState(sanitizedValue);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     if (newPassword !== confirmPassword) {
-      alert('New passwords do not match');
+      toast({
+        title: "Error",
+        description: "New passwords do not match.",
+        variant: "error"
+      });
       return;
     }
+
     // Backend call for saving changes
     // Implement the backend API call here
+    toast({
+      title: "Success",
+      description: "Account settings have been saved.",
+    });
   };
 
   const handleDeleteAccount = () => {
     // Backend call for deleting account
     // Implement the backend API call here
-  };
-
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.ok) {
-        alert("Logged out");
-        navigate("/");
-      } else {
-        console.error("Logout failed");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    toast({
+      title: "Deleted",
+      description: "Account deleted successfully.",
+      variant: "destructive"
+    });
   };
 
   return (
-    <div className="main-content flex-1 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
-      <main className="flex flex-col gap-4">
-        <Card className="bg-white border rounded">
+    <div className="main-content flex-1 p-8 bg-gradient-to-r from-gradient-start to-gradient-end h-full">
+      <main className="flex flex-col gap-4 h-full">
+        <Card className="bg-white border rounded flex-grow">
           <CardHeader className="flex justify-between px-6 py-4">
             <CardTitle className="text-3xl font-bold mb-4">Account Settings</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="account-settings">
-              <div className="user-info mb-4">
-                <p>User ID: 75826488</p> {/* dummy input, will be retrieved with SQL query when implemented */}
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
-                <input
-                  type="text"
-                  id="username"
-                  value={username}
-                  onChange={(e) => handleInputChange(e, setUsername)}
-                  className="input-field mt-1 block w-full"
-                  data-testid="username-input"
-                />
-                <p>*A GradeFalcon Employee will never ask for your password*</p>
-              </div>
-              <div className="change-password">
-                <label htmlFor="old-password" className="block text-sm font-medium text-gray-700">Old Password</label>
-                <input
-                  type="password"
-                  id="old-password"
-                  placeholder="Old Password"
-                  value={oldPassword}
-                  onChange={(e) => handleInputChange(e, setOldPassword)}
-                  className="input-field mt-1 block w-full"
-                  data-testid="old-password-input"
-                />
-                <label htmlFor="new-password" className="block text-sm font-medium text-gray-700">New Password</label>
-                <input
-                  type="password"
-                  id="new-password"
-                  placeholder="New Password"
-                  value={newPassword}
-                  onChange={(e) => handleInputChange(e, setNewPassword)}
-                  className="input-field mt-1 block w-full"
-                  data-testid="new-password-input"
-                />
-                <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">Confirm New Password</label>
-                <input
-                  type="password"
-                  id="confirm-password"
-                  placeholder="Confirm New Password"
-                  value={confirmPassword}
-                  onChange={(e) => handleInputChange(e, setConfirmPassword)}
-                  className="input-field mt-1 block w-full"
-                  data-testid="confirm-password-input"
-                />
-                <Button size="sm" className="green-button mt-4" onClick={handleSubmit} data-testid="save-changes-btn">
+            <form onSubmit={handleSubmit}>
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>User ID</TableCell>
+                    <TableCell>75826488</TableCell> {/* dummy input, will be retrieved with SQL query when implemented */}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Username</TableCell>
+                    <TableCell>
+                      <Input
+                        type="text"
+                        id="username"
+                        value={username}
+                        onChange={(e) => handleInputChange(e, setUsername)}
+                        className="w-full"
+                        data-testid="username-input"
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Old Password</TableCell>
+                    <TableCell>
+                      <Input
+                        type="password"
+                        id="old-password"
+                        placeholder="Old Password"
+                        value={oldPassword}
+                        onChange={(e) => handleInputChange(e, setOldPassword)}
+                        className="w-full"
+                        data-testid="old-password-input"
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>New Password</TableCell>
+                    <TableCell>
+                      <Input
+                        type="password"
+                        id="new-password"
+                        placeholder="New Password"
+                        value={newPassword}
+                        onChange={(e) => handleInputChange(e, setNewPassword)}
+                        className="w-full"
+                        data-testid="new-password-input"
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Confirm New Password</TableCell>
+                    <TableCell>
+                      <Input
+                        type="password"
+                        id="confirm-password"
+                        placeholder="Confirm New Password"
+                        value={confirmPassword}
+                        onChange={(e) => handleInputChange(e, setConfirmPassword)}
+                        className="w-full"
+                        data-testid="confirm-password-input"
+                      />
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+              <div className="flex justify-between mt-4">
+                <Button size="sm" className="gap-1 green-button" onClick={() => window.history.back()}>
+                  Back
+                </Button>
+                <Button type="submit" className="gap-1 green-button" data-testid="save-changes-btn">
                   Save changes
                 </Button>
-                <Button size="sm" className="red-button mt-2" onClick={handleDeleteAccount} data-testid="delete-account-btn">
+                <Button size="sm" className="gap-1 red-button" onClick={handleDeleteAccount} data-testid="delete-account-btn">
                   Delete Account
                 </Button>
               </div>
-            </div>
+            </form>
           </CardContent>
         </Card>
       </main>
