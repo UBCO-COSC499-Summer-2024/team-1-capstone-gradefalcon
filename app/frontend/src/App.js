@@ -27,6 +27,7 @@ import NotificationPreferences from "./pages/Instructor/NotificationPreferences"
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
 import OMRProcessing from "./pages/Instructor/OMRProcessing";
+import CustomBubbleSheeet from "./pages/Instructor/CustomBubbleSheet";
 //admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
@@ -75,25 +76,10 @@ function App() {
     <Router>
       <div className="App">
         <Layout>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/Login" element={<Login />} />
-            <Route
-              path="/Dashboard"
-              element={
-                <ProtectedRoute>
-                  {" "}
-                  <Dashboard />
-                </ProtectedRoute>
-              }
+          <Routes><Route path="/" element={<Login />} /><Route path="/Login" element={<Login />} />
+          <Route path="/Dashboard" element={ <ProtectedRoute> {" "} <Dashboard /> </ProtectedRoute> }
             />
-            <Route
-              path="/AdminDashboard"
-              element={
-                <ProtectedRoute>
-                  {" "}
-                  <AdminDashboard />
-                </ProtectedRoute>
+            <Route path="/AdminDashboard" element={ <ProtectedRoute>  {" "} <AdminDashboard /></ProtectedRoute>
               }
             />
             <Route
@@ -121,6 +107,8 @@ function App() {
             <Route path="/ConfirmExamKey" element={<ConfirmExamKey />} />
             <Route path="/UploadExams" element={<UploadExams />} />
             <Route path="/OMRProcessing" element={<OMRProcessing />} />
+            <Route path= "CustomBubbleSheet" element={<CustomBubbleSheeet />} />
+
             <Route
               path="/NotificationPreferences"
               element={<NotificationPreferences />}
