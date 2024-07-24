@@ -1,6 +1,50 @@
 # Personal Log
 Ahmad Saleem Mirza
 
+## Wednesday (July 19 - 24)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/July19-24.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Grading and displaying results from the OMR
+  * #2: Integrating grade exam process changes
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Grading and displaying results from the OMR
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Integrating grade exam process changes
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>   
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+Whilst other members of the team were resolving backend api fetch call issues with the OMR, I didn't want to wait on them, so I focused on creating the review exams page that displays the scores of the students in a table, allows the instructor to search for and edit records and view the scanned pages. I did this on a sample results file in the same format that the OMR would generate, so the next step is integrate this with with the actual OMR to ensure the grade exam process is working seamlessly . I also spent a significant chunk of time toward resolving a recurring internal server error but to no avail (this has now been fixed by Omar).
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Saving graded exam images and then enabling students to view their own exams.
+
+
 ## Friday (July 17 - 19)
 
 ### Timesheet
