@@ -126,128 +126,129 @@ export default function Dashboard() {
 
   return (
     <main className="flex flex-col gap-4">
-      <div className="flex flex-col lg:flex-row gap-4">
-        <div className="flex-1">
-          <Card className="bg-white border rounded">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <div>
-                <CardTitle className="mb-2">Your Courses</CardTitle>
-                <CardDescription>Your enrolled courses.</CardDescription>
+      <div className="flex-1">
+        <Card className="bg-white border rounded">
+          <CardHeader className="flex justify-between px-6 py-4">
+            <div>
+              <CardTitle className="mb-2">Your Courses</CardTitle>
+              <CardDescription>Your enrolled courses.</CardDescription>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="ml-auto gap-1">
+                    Create Course
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Create New Course</DialogTitle>
+                    <DialogDescription>Enter the details for the new course and import the student list via a CSV file.</DialogDescription>
+                  </DialogHeader>
+                  <NewClassForm />
+                  <DialogClose asChild>
+                    <Button variant="ghost">Close</Button>
+                  </DialogClose>
+                </DialogContent>
+              </Dialog>
+              <Button asChild size="sm" className="ml-auto gap-1">
+                <Link to="/ClassManagement">
+                  Manage Courses
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="max-h-80">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6">
+                {courses.map((course, index) => (
+                  <TooltipProvider key={index}>
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        <Link to={`/ClassManagement/${course.class_id}`}>
+                          <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md">
+                            <div className="flex items-center justify-between mb-4">
+                              <CardDescription>{course.course_name}</CardDescription>
+                              <Bookmark className="h-6 w-6 text-muted-foreground" />
+                            </div>
+                            <div className="flex flex-col items-center">
+                              <div className="text-2xl font-bold">{course.course_id}</div>
+                            </div>
+                          </Card>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Click to Open Course</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ))}
               </div>
-              <div className="flex flex-col gap-2">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button size="sm" className="ml-auto gap-1">
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Create New Course</DialogTitle>
-                      <DialogDescription>Enter the details for the new course and import the student list via a CSV file.</DialogDescription>
-                    </DialogHeader>
-                    <NewClassForm />
-                    <DialogClose asChild>
-                      <Button variant="ghost">Close</Button>
-                    </DialogClose>
-                  </DialogContent>
-                </Dialog>
-                <Button asChild size="sm" className="ml-auto gap-1">
-                  <Link to="/Classes">
-                    Manage Courses
-                    <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="max-h-80">
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6">
-                  {courses.map((course, index) => (
-                    <TooltipProvider key={index}>
-                      <Tooltip delayDuration={0}>
-                        <TooltipTrigger asChild>
-                          <Link to={`/ClassManagement/${course.class_id}`}>
-                            <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md">
-                              <div className="flex items-center justify-between mb-4">
-                                <CardDescription>{course.course_name}</CardDescription>
-                                <Bookmark className="h-6 w-6 text-muted-foreground" />
-                              </div>
-                              <div className="flex flex-col items-center">
-                                <div className="text-2xl font-bold">{course.course_id}</div>
-                              </div>
-                            </Card>
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Click to Open Course</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  ))}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="flex-1">
-          <Card className="bg-white border rounded">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <div>
-                <CardTitle className="mb-2">Exam Board</CardTitle>
-                <CardDescription>Recent exams from your classes.</CardDescription>
-              </div>
-              <div className="flex flex-col gap-2">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button size="sm" className="ml-auto gap-1" onClick={() => setIsDialogOpen(true)}>
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Create New Exam</DialogTitle>
-                      <DialogDescription>Enter the details for the new exam and upload the answer key.</DialogDescription>
-                    </DialogHeader>
-                    <NewExamForm setIsDialogOpen={setIsDialogOpen} onExamCreated={handleExamCreated} />
-                    <DialogClose asChild>
-                      <Button variant="ghost">Close</Button>
-                    </DialogClose>
-                  </DialogContent>
-                </Dialog>
-                <Button asChild size="sm" className="ml-auto gap-1">
-                  <Link to="/Examboard">
-                    Manage Exams
-                    <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="max-h-80">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Exam Name</TableHead>
-                      <TableHead className="hidden sm:table-cell">Course</TableHead>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="flex-1">
+        <Card className="bg-white border rounded">
+          <CardHeader className="flex justify-between px-6 py-4">
+            <div>
+              <CardTitle className="mb-2">Exam Board</CardTitle>
+              <CardDescription>Recent exams from your classes.</CardDescription>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="ml-auto gap-1" onClick={() => setIsDialogOpen(true)}>
+                    Create New
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Create New Exam</DialogTitle>
+                    <DialogDescription>Enter the details for the new exam and upload the answer key.</DialogDescription>
+                  </DialogHeader>
+                  <NewExamForm setIsDialogOpen={setIsDialogOpen} onExamCreated={handleExamCreated} />
+                  <DialogClose asChild>
+                    <Button variant="ghost">Close</Button>
+                  </DialogClose>
+                </DialogContent>
+              </Dialog>
+              <Button asChild size="sm" className="ml-auto gap-1">
+                <Link to="/Examboard">
+                  Manage Exams
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="max-h-80">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Exam Name</TableHead>
+                    <TableHead className="hidden sm:table-cell">Course</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {exams.map((exam, index) => (
+                    <TableRow key={index} className={index}>
+                      <TableCell>
+                        <div className="font-medium">{exam.exam_title}</div>
+                        <div className="hidden text-sm text-muted-foreground md:inline">{exam.course_id}</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {exams.map((exam, index) => (
-                      <TableRow key={index} className={index}>
-                        <TableCell>
-                          <div className="font-medium">{exam.exam_title}</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">{exam.course_id}</div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </div>
+                  ))}
+                </TableBody>
+              </Table>
+            </ScrollArea>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
