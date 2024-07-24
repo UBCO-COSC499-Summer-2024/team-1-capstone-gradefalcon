@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import "../../css/App.css";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip"; // Assuming this is the correct path
 
 const ClassManagement = () => {
   const params = useParams();
@@ -111,26 +112,27 @@ const ClassManagement = () => {
               <div>
                 <CardTitle className="mb-2">Grades</CardTitle>
               </div>
-              <Button asChild size="sm" className="ml-auto gap-1" onClick={() => window.history.back()}>
-                <span>Back</span>
-              </Button>
+              <TooltipProvider>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Link to={`../NewExam/${params.class_id}`} className="ml-auto gap-1">
+                      <Button size="sm">+</Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Create New Exam
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </CardHeader>
             <CardContent>
-              <div className="flex justify-between mb-4">
-                <Link to={`../NewExam/${params.class_id}`} >
-                  + New Exam
-                </Link>
-                <Button  onClick={exportToCSV}>
-                  Export
-                </Button>
-              </div>
               <table className="w-full border-collapse">
                 <thead>
                   <tr>
-                    <th className="border-b py-2 text-left">Student ID</th>
-                    <th className="border-b py-2 text-left">Student Name</th>
+                    <th className="border-b py-2 text-left px-4">Student ID</th>
+                    <th className="border-b py-2 text-left px-4">Student Name</th>
                     {[...Array(maxExams).keys()].map((_, index) => (
-                      <th key={index} className="border-b py-2 text-left">Exam {index + 1}</th>
+                      <th key={index} className="border-b py-2 text-left px-4">Exam {index + 1}</th>
                     ))}
                   </tr>
                 </thead>
@@ -138,19 +140,35 @@ const ClassManagement = () => {
                   {classData.studentInfo &&
                     classData.studentInfo.map((student) => (
                       <tr key={student.student_id}>
-                        <td className="border-b py-2">{student.student_id}</td>
-                        <td className="border-b py-2">{student.name}</td>
+                        <td className="border-b py-2 px-4">{student.student_id}</td>
+                        <td className="border-b py-2 px-4">{student.name}</td>
                         {student.exams.map((exam, index) => (
-                          <td key={index} className="border-b py-2">{exam.grade}</td>
+                          <td key={index} className="border-b py-2 px-4">{exam.grade}</td>
                         ))}
                         {[...Array(maxExams - student.exams.length).keys()].map((_, index) => (
-                          <td key={index} className="border-b py-2">-</td>
+                          <td key={index} className="border-b py-2 px-4">-</td>
                         ))}
                       </tr>
                     ))}
                 </tbody>
               </table>
-              <p className="mt-4">Export student grades into a csv file.</p>
+              <div className="flex justify-between mt-4">
+                <Button asChild size="sm" className="gap-1" onClick={() => window.history.back()}>
+                  <span>Back</span>
+                </Button>
+                <TooltipProvider>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                      <Button onClick={exportToCSV}>
+                        Export
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      Export grades as a csv file.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
             </CardContent>
           </Card>
         </div>
