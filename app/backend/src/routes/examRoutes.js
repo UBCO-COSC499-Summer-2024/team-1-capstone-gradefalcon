@@ -73,18 +73,64 @@ router.get("/studentScores", async function (req, res) {
 });
 
 router.get("/getResults", async function (req, res) {
-  const filePath = path.join(
-    __dirname,
-    "../../omr/outputs/Results/Results.csv"
-  );
+  // const filePath = path.join(__dirname,"../../omr/outputs/Results/Results.csv");
+  const inputDirPath = path.join(__dirname, "../../omr/inputs");
+  const outputDirPath = path.join(__dirname, "../../omr/outputs");
   const results = []; // Array to hold all rows of data
 
-  fs.createReadStream(filePath)
+  fs.createReadStream(path.join(outputDirPath, "Results/Results.csv"))
     .pipe(csv())
     .on("data", (data) => results.push(data)) // Push each row of data into the results array
     .on("end", () => {
       // Once file reading is done, send the entire results array as a response
       res.json({ csv_file: results });
+
+      // Function to delete all files in a directory
+      const deleteAllFilesInDir = (dirPath) => {
+        fs.readdir(dirPath, (err, files) => {
+          if (err) {
+            console.error(`Error reading directory ${dirPath}:`, err);
+            return;
+          }
+
+          files.forEach((file) => {
+            const fileToDelete = path.join(dirPath, file);
+            fs.stat(fileToDelete, (err, stats) => {
+              if (err) {
+                console.error(`Error stating file ${fileToDelete}:`, err);
+                return;
+              }
+
+              if (stats.isFile()) {
+                fs.unlink(fileToDelete, (err) => {
+                  if (err) {
+                    console.error(`Error deleting file ${fileToDelete}:`, err);
+                  } else {
+                    console.log(`File ${fileToDelete} deleted successfully`);
+                  }
+                });
+              } else if (stats.isDirectory()) {
+                fs.rmdir(fileToDelete, { recursive: true }, (err) => {
+                  if (err) {
+                    console.error(
+                      `Error deleting directory ${fileToDelete}:`,
+                      err
+                    );
+                  } else {
+                    console.log(
+                      `Directory ${fileToDelete} deleted successfully`
+                    );
+                  }
+                });
+              }
+            });
+          });
+        });
+      };
+
+      // Delete all files in the input and output directories
+      deleteAllFilesInDir(inputDirPath);
+      deleteAllFilesInDir(outputDirPath);
     })
 
     .on("error", (error) => {
@@ -113,7 +159,9 @@ router.post("/copyTemplate", async function (req, res) {
     // Copy template.json to the shared volume
     fs.copyFileSync(templatePath, destinationTemplatePath);
     console.log("Template.json copied successfully");
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error copying template.json:", error);
+  }
 
   res.send(JSON.stringify("File copied successfully"));
 });

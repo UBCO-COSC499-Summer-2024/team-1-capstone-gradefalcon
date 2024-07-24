@@ -30,7 +30,7 @@ const ConfirmExamKey = (props) => {
       console.log("dataCSV", dataCsv);
       setFields(getFilledQs(dataCsv));
       setNumQuestions(getQuestionCount(getFilledQs(dataCsv)));
-      console.log(getFilledQs(dataCsv));
+      console.log("getFilledQs", getFilledQs(dataCsv));
       toggleQuestionAnswer(1, "E"); // bug fix, still selects the correct option
       clickAnswersForQuestions(getFilledQs(dataCsv));
     } catch (error) {
