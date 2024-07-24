@@ -1,3 +1,63 @@
+## Wednesday (19/7- 23/7)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/july23_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Implementing Auth0 to connect to DB and API calls
+  * #2: Writing Account settings plus tests
+    
+### Progress Update (since 19/7/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Implementing Auth0 to connect to DB and API calls
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Writing Account settings plus tests
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+### Summary
+This cycle presented several personal and academic challenges, which limited my project work. Despite losing my phone and dealing with the subsequent complications of blocking it and changing numbers, as well as preparing for two midterms, I made strides in integrating Auth0 with our backend. I focused on developing a custom API to minimize the need for extensive code refactoring, given our time constraints. Although I encountered some bugs, I am confident that I am close to a working solution. Additionally, I plan to collaborate with Jusnoor on UI changes using ShadCN.
+
+#### Completed Tasks:
+- **More implementation of AWS File Upload plus tests**: Complete
+- **Integrating Ahmad's Flask/OMR code to AWS code to mitigate conflict changes**: Complete
+
+#### In Progress:
+- **Implementing Auth0 to connect to DB and API calls**: In Progress (Account settings feature put on hold due to potential refactoring needed for Auth0)
+- **Writing Account settings plus tests**: On Hold
+
+### Reflections and Lessons Learned:
+This cycle was focused on improving our progress and taking it to new levels. The integration of Auth0 and the successful implementation of AWS tests have strengthened our project's foundation. The personal and academic challenges I faced highlighted the importance of resilience and adaptability. Moving forward, I recognize the importance of better communication and collaboration with my team. I plan to complete the remaining tasks, share progress updates, and commit my work regularly to foster a more collaborative environment.
+
+### Adjustments and Future Plans:
+- Postpone account settings implementation to focus on Auth0 integration.
+- Plan to refactor code and enhance test coverage post-Auth0 integration.
+- Collaborate with Jusnoor on implementing UI changes using ShadCN.
+
+
+
+
 ## Wednesday (17/7- 19/7)
 
 ### Timesheet
