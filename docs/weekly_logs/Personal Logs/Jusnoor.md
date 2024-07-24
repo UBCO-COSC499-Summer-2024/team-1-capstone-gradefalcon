@@ -1,6 +1,78 @@
 
 # Personal Log
 
+## Wednesday ( 19/7 - 23/7 )
+
+### Timesheet 
+
+clockify report 
+
+![Time14](https://github.com/user-attachments/assets/126af096-ea1a-4ea2-b42d-f2eaf0698dfa)
+
+
+
+### Current Tasks (Provide Details):
+- #1: Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhanced look altogether.
+- #2: User Story: Optimize User Interface and Usability
+- #3: User Story: Enhance Navigation and Consistency
+- #4: User Story: Improve Dashboard Functionality #206
+
+
+  
+### Progress Update (since 19/7/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhnaced look altogether - also modifying the related frontend tests due to new components added/create new tests, if needed.
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Optimize User Interface and Usability
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Enhance Navigation and Consistency
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Improve Dashboard Functionality
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+I have made a good progress on updating the instructor view , after keeping in mind the reviews and comments received during the peer review - first round , and pages with a lot of new shad cn components, a review for the same is required to list down some final changes and minute details we want to add to the same. There still some of the componeents still under progress which should be finalised and completed byt the next cycle, hopefully. The rpocess of revamping is a bit time consuming as the complete layout and design with new componenets being added is changed, but its been a good progress. Now the next major task would be to get completed with the remaining components still under progress and move to modify the exisiting frontend tests and create the new tests as needed. The student view would then be created in the following week which would be a little less complex than the instructor view.
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Revamping the front end completely UI using Shad cn - also modifying the related frontend tests due to new components added/create new tests, if needed
+- User Story: Optimize User Interface and Usability
+- User Story: Enhance Navigation and Consistency
+- User Story: Improve Dashboard Functionality #206
+
+
+
+
 ## Friday ( 16/7 - 19/7 )
 
 ### Timesheet 
