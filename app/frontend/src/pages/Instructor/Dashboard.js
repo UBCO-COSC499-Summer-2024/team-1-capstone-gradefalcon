@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../..
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "../../components/ui/dialog";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
 import AverageperExamChart from "../../components/AverageperExamChart";
 import AverageperCourseChart from "../../components/AverageperCourseChart";
 import NewClassForm from "./NewClassForm";
@@ -163,17 +164,26 @@ export default function Dashboard() {
               <ScrollArea className="max-h-80">
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6">
                   {courses.map((course, index) => (
-                    <Link to={`/ClassManagement/${course.class_id}`} key={index}>
-                      <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md">
-                        <div className="flex items-center justify-between mb-4">
-                          <CardDescription>{course.course_name}</CardDescription>
-                          <Bookmark className="h-6 w-6 text-muted-foreground" />
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <div className="text-2xl font-bold">{course.course_id}</div>
-                        </div>
-                      </Card>
-                    </Link>
+                    <TooltipProvider key={index}>
+                      <Tooltip delayDuration={0}>
+                        <TooltipTrigger asChild>
+                          <Link to={`/ClassManagement/${course.class_id}`}>
+                            <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md">
+                              <div className="flex items-center justify-between mb-4">
+                                <CardDescription>{course.course_name}</CardDescription>
+                                <Bookmark className="h-6 w-6 text-muted-foreground" />
+                              </div>
+                              <div className="flex flex-col items-center">
+                                <div className="text-2xl font-bold">{course.course_id}</div>
+                              </div>
+                            </Card>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Click to Open Course</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   ))}
                 </div>
               </ScrollArea>
