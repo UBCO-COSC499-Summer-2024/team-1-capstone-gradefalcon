@@ -164,15 +164,17 @@ export default function Dashboard() {
               <ScrollArea className="max-h-80">
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6">
                   {courses.map((course, index) => (
-                    <Card key={index} className="p-4 border rounded-lg flex flex-col justify-between shadow-md">
-                      <div className="flex items-center justify-between mb-4">
-                        <CardDescription>{course.course_name}</CardDescription>
-                        <Bookmark className="h-6 w-6 text-muted-foreground" />
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <div className="text-2xl font-bold">{course.course_id}</div>
-                      </div>
-                    </Card>
+                    <Link to={`/ClassManagement/${course.class_id}`} key={index}>
+                      <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md">
+                        <div className="flex items-center justify-between mb-4">
+                          <CardDescription>{course.course_name}</CardDescription>
+                          <Bookmark className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <div className="text-2xl font-bold">{course.course_id}</div>
+                        </div>
+                      </Card>
+                    </Link>
                   ))}
                 </div>
               </ScrollArea>
