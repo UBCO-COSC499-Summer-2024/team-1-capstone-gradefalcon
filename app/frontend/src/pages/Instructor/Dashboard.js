@@ -137,8 +137,8 @@ export default function Dashboard() {
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button size="sm" className="ml-auto gap-1">
-                      <Plus className="h-4 w-4" />
                       Create Course
+                      <Plus className="h-4 w-4" />
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
@@ -190,8 +190,8 @@ export default function Dashboard() {
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button size="sm" className="ml-auto gap-1" onClick={() => setIsDialogOpen(true)}>
-                      <Plus className="h-4 w-4" />
                       Create New
+                      <Plus className="h-4 w-4" />
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
@@ -243,7 +243,7 @@ export default function Dashboard() {
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="bg-white border rounded">
           <CardHeader>
-            <CardTitle>Standard Average Chart</CardTitle>
+            <CardTitle>Average Per Exam</CardTitle>
           </CardHeader>
           <CardContent>
             <AverageperExamChart data={standardAverageData} />
@@ -251,7 +251,7 @@ export default function Dashboard() {
         </Card>
         <Card className="bg-white border rounded">
           <CardHeader>
-            <CardTitle>Performance Bar Chart</CardTitle>
+            <CardTitle>Average Per Course</CardTitle>
           </CardHeader>
           <CardContent>
             <AverageperCourseChart data={averageperCourseData} />
