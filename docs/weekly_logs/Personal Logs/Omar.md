@@ -1,6 +1,91 @@
 # Personal Log
 
-## Wednesday (7/16-7/19)
+## Wednesday (7/19-7/23)
+
+### Timesheet
+Clockify report
+![time](../Clockify/Omar/Time15.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Grading Exams and Displaying Results on Frontend**
+    1. Fixed Proxy error bug
+    2. Tried to integrate Taefik API Gateway initially
+    3. Display image of graded exam.
+
+2. **Refactor UI Using shadcn UI Components**
+    1. Refactored code to not create new css and only use shadcn root variables.
+    2. Optimized the nav bar's look and correct the color to match shadcn theme.
+
+3. **Custom Templates Support**
+    1. Started work on custom bubble sheet using the existing OMR in place.
+
+### Progress Update (since 7/16/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        <tr>
+        <tr>
+        <td>#17-User Story: Custom Bubble Sheet Support
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+        </td>
+        </tr>
+        <tr>
+        <td> #181-Grading Exams and Displaying Results on Frontend
+        </td>
+        <td>IN Review
+        </td>
+    </tr>
+    </tr>
+            <tr>
+        <td>#80-Refactor UI Using shadcn UI Components
+        </td>
+        <td>In Review
+        </td>
+    </tr>
+    </tr>
+     <tr>
+        <td> #188-Implement Refactored Code and Implement Color-Coded Grading
+        </td>
+        <td>Completed
+        </td>
+    <tr>
+</table> 
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - The grading exam demo finally works without the proxy error, still need to configure some settings.
+  - The UI is .
+
+- **What Was Done:**
+  - Fixed Grade Exam pipeline functional.
+  - Fixed Proxy Error.
+  - Modified the NavBar and optimized the UI and restructure some CSS.
+
+- **What Didn't Go Well:**
+  - I went down a rabbit hole trying to fix the Proxy Error and looking to implement an API Gateway at the end it wasn't very helpful for our use case and I had to drop it. I sunk about 4 hours into that.
+
+- **Retrospective:**
+  -The Proxy error has been finally fixed and I have a better understanding of how to use the Promise function and chaining APIs and putting them in sequence.
+
+  ### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **Scale solution for multiple students**.
+
+2. **Help finish the UI for Shadcn**
+
+3. **Work on custom bubble sheets**
+
+
+
+## Friday (7/16-7/19)
 
 ### Timesheet
 Clockify report
