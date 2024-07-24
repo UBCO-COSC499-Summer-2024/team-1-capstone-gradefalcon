@@ -8,21 +8,21 @@ const {
   getStudentGrades
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
-const { checkJwt, checkRole } = require('../server'); // Importing from server.js
+const { checkJwt, checkPermissions, checkRole } = require('../auth0'); // Importing from auth.js
 const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
 
 const router = express.Router();
 
-router.post("/saveQuestions", checkJwt, checkRole('instructor'), saveQuestions);
-router.post("/NewExam/:class_id", checkJwt, checkRole('instructor'), newExam);
-router.post("/ExamBoard", checkJwt, checkRole('instructor'), examBoard);
-router.get("/standard-average-data", checkJwt, checkRole('instructor'), getStandardAverageData);
-router.get("/performance-data", checkJwt, checkRole('instructor'), getPerformanceData);
-router.get('/grades/:studentId', checkJwt, checkRole('instructor'), getStudentGrades);
+router.post("/saveQuestions", checkJwt, checkRole('instructor'), checkPermissions(['create:exam']), saveQuestions);
+router.post("/NewExam/:class_id", checkJwt, checkRole('instructor'), checkPermissions(['create:exam']), newExam);
+router.post("/ExamBoard", checkJwt, checkRole('instructor'), checkPermissions(['read:exams']), examBoard);
+router.get("/standard-average-data", checkJwt, checkRole('instructor'), checkPermissions(['read:standardAverageData']), getStandardAverageData);
+router.get("/performance-data", checkJwt, checkRole('instructor'), checkPermissions(['read:performanceData']), getPerformanceData);
+router.get('/grades/:studentId', checkJwt, checkRole('instructor'), checkPermissions(['read:grades']), getStudentGrades);
 
-router.get("/getResults", checkJwt, checkRole('instructor'), async function (req, res) {
+router.get("/getResults", checkJwt, checkRole('instructor'), checkPermissions(['read:grades']), async function (req, res) {
   const filePath = path.join(
     __dirname,
     "../../omr/outputs/Results/Results.csv"
@@ -45,14 +45,14 @@ router.get("/getResults", checkJwt, checkRole('instructor'), async function (req
 
 router.post(
   "/saveExamKey",
-  checkJwt, checkRole('instructor'), upload.single("examKey"),
+  checkJwt, checkRole('instructor'), checkPermissions(['upload:file']), upload.single("examKey"),
   async function (req, res) {
     console.log(req.file);
     res.send(JSON.stringify("File uploaded successfully"));
   }
 );
 
-router.post("/copyTemplate", checkJwt, checkRole('instructor'), async function (req, res) {
+router.post("/copyTemplate", checkJwt, checkRole('instructor'), checkPermissions(['upload:file']), async function (req, res) {
   console.log("copyTemplate");
   const filePath = `/code/omr/inputs`;
   const templatePath = path.join(__dirname, "../assets/template.json"); // Adjust the path as necessary
@@ -67,7 +67,7 @@ router.post("/copyTemplate", checkJwt, checkRole('instructor'), async function (
   res.send(JSON.stringify("File copied successfully"));
 });
 
-router.post("/callOMR", checkJwt, checkRole('instructor'), async function (req, res) {
+router.post("/callOMR", checkJwt, checkRole('instructor'), checkPermissions(['upload:file']), async function (req, res) {
   console.log("callOMR");
   try {
     const response = await fetch("http://flaskomr:5000/process", {
@@ -83,7 +83,7 @@ router.post("/callOMR", checkJwt, checkRole('instructor'), async function (req, 
   }
 });
 
-router.post("/test", checkJwt, checkRole('instructor'), async function (req, res) {
+router.post("/test", checkJwt, checkRole('instructor'), checkPermissions(['upload:file']), async function (req, res) {
   console.log("test called");
   res.send(JSON.stringify("Test route called successfully"));
 });

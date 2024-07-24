@@ -2,14 +2,17 @@ import "../../css/App.css";
 import React, { useEffect, useState } from "react";
 import StandardAverageChart from "../../components/StandardAverageChart";
 import PerformanceBarChart from "../../components/PerformanceBarChart";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Dashboard = () => {
+  const { user } = useAuth0();
+  const roles = user[`${process.env.REACT_APP_AUTH0_AUDIENCE}/roles`] || [];
+
   const [userName, setUserName] = useState("");
   const [courses, setCourses] = useState([]);
   const [exams, setExams] = useState([]);
   const [standardAverageData, setStandardAverageData] = useState([]);
   const [performanceData, setPerformanceData] = useState([]);
-
 
   const colors = ["#E9D8FD", "#FEEBC8", "#BEE3F8", "#C6F6D5"];
   let colorIndex = 0;
@@ -92,7 +95,6 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          //console.log("Standard Average Data:", data); // Log for debugging
           setStandardAverageData(data);
         } else {
           console.error("Failed to fetch standard average data");
@@ -113,7 +115,6 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          //console.log("Performance Data:", data); // Log for debugging
           setPerformanceData(data);
         } else {
           console.error("Failed to fetch performance data");
@@ -122,8 +123,6 @@ const Dashboard = () => {
         console.error("Error fetching performance data:", error);
       }
     };
-
-
 
     fetchSessionInfo();
     fetchCourses();
