@@ -1,7 +1,6 @@
-// Examboard.js
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Plus } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
 import '../../css/App.css';
@@ -100,45 +99,52 @@ const ExamBoard = () => {
   }
 
   return (
-    <main className="flex flex-col gap-4">
-      <div>
-        <h1 className="text-3xl font-bold mb-4">Exam Board</h1>
-        <div className="grid gap-4 lg:grid-cols-2">
-          {Object.entries(groupedExams).map(
-            ([courseId, { course_name, class_id, exams }]) => (
-              <Card key={courseId} className="bg-white border rounded">
-                <CardHeader className="flex justify-between px-6 py-4">
-                  <div>
-                    <CardTitle className="mb-2">
-                      {courseId} {course_name}
-                    </CardTitle>
-                  </div>
-                  <Button asChild size="sm" className="ml-auto gap-1">
-                    <Link to={`/NewExam/${class_id}`}>
-                      Create New
-                      <ArrowUpRight className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-1 mt-6">
-                    {exams.map((exam, index) => (
-                      <div key={index} className="flex justify-between items-center">
-                        <p className="font-medium">{exam}</p>
-                        <Button asChild size="sm" className="ml-auto gap-1">
-                          <Link to="/UploadExams">
-                            Grade Exam
-                            <ArrowUpRight className="h-4 w-4" />
-                          </Link>
-                        </Button>
+    <main className="flex flex-col gap-4 p-6">
+      <div className="w-full">
+        <Card className="bg-white border rounded">
+          <CardHeader className="flex justify-between px-6 py-4">
+            <div>
+              <CardTitle className="mb-2">Exam Board</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4">
+              {Object.entries(groupedExams).map(
+                ([courseId, { course_name, class_id, exams }]) => (
+                  <Card key={courseId} className="bg-white border rounded">
+                    <CardHeader className="flex justify-between px-6 py-4">
+                      <div>
+                        <CardTitle className="mb-2">
+                          {courseId} {course_name}
+                        </CardTitle>
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          )}
-        </div>
+                      <Button asChild size="sm" className="ml-auto gap-1">
+                        <Link to={`/NewExam/${class_id}`}>
+                          <Plus className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex flex-col gap-4">
+                        {exams.map((exam, index) => (
+                          <div key={index} className="flex justify-between items-center">
+                            <p className="font-medium">{exam}</p>
+                            <Button asChild size="sm" className="ml-auto gap-1">
+                              <Link to="/UploadExams">
+                                Grade Exam
+                                <ArrowUpRight className="h-4 w-4" />
+                              </Link>
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </main>
   );
