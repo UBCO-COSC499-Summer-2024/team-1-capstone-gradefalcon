@@ -137,7 +137,6 @@ export default function Dashboard() {
               <Dialog>
                 <DialogTrigger asChild>
                   <Button size="sm" className="ml-auto gap-1">
-                    Create Course
                     <Plus className="h-4 w-4" />
                   </Button>
                 </DialogTrigger>
@@ -202,7 +201,6 @@ export default function Dashboard() {
               <Dialog>
                 <DialogTrigger asChild>
                   <Button size="sm" className="ml-auto gap-1" onClick={() => setIsDialogOpen(true)}>
-                    Create New
                     <Plus className="h-4 w-4" />
                   </Button>
                 </DialogTrigger>
