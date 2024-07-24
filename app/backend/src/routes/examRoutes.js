@@ -19,6 +19,7 @@ router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
 router.get("/standard-average-data", getStandardAverageData);
 router.get("/performance-data", getPerformanceData);
+
 router.get('/getAnswerKey/:exam_id', async (req, res, next) => {
   try {
     const exam_id = parseInt(req.params.exam_id, 10);

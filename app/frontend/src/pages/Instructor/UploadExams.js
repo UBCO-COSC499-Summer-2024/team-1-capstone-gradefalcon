@@ -41,40 +41,62 @@ const UploadExam = () => {
     formData.append("exam_id", exam_id); // Include exam_id in the form data
   
     try {
-      const responses = await Promise.all([
-        fetch("/api/exam/UploadExam", {
-          method: "POST",
-          body: formData,
-        }),
-        fetch("/api/exam/GenerateEvaluation", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ exam_id }),
-        }),
-        fetch("/api/exam/copyTemplate", {
-          method: "POST",
-          credentials: "include",
-        }),
+      // Create the individual promises with error handling
+      const uploadExamPromise = fetch("/api/exam/UploadExam", {
+        method: "POST",
+        body: formData,
+      }).then(response => response.json()).catch(error => ({ error }));
+  
+      const generateEvaluationPromise = fetch("/api/exam/GenerateEvaluation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ exam_id }),
+      }).then(response => response.json()).catch(error => ({ error }));
+  
+      const copyTemplatePromise = fetch("/api/exam/copyTemplate", {
+        method: "POST",
+        credentials: "include",
+      }).then(response => response.json()).catch(error => ({ error }));
+  
+      // Use Promise.all to handle all promises and wait for all of them to complete
+      const [dataUploadExam, dataGenerateEvaluation, dataCopyTemplate] = await Promise.all([
+        uploadExamPromise,
+        generateEvaluationPromise,
+        copyTemplatePromise
       ]);
   
-      const dataUploadExam = await responses[0].json();
-      const dataGenerateEvaluation = await responses[1].json();
-      const dataCopyTemplate = await responses[2].json();
+      // Check for errors in each response
+      if (dataUploadExam.error) {
+        console.error("Error in UploadExam:", dataUploadExam.error);
+      } else {
+        console.log("Data from UploadExam:", dataUploadExam);
+      }
   
-      console.log("Data from UploadExam:", dataUploadExam);
-      console.log("Data from GenerateEvaluation:", dataGenerateEvaluation);
-      console.log("Data from copyTemplate:", dataCopyTemplate);
-      
+      if (dataGenerateEvaluation.error) {
+        console.error("Error in GenerateEvaluation:", dataGenerateEvaluation.error);
+      } else {
+        console.log("Data from GenerateEvaluation:", dataGenerateEvaluation);
+      }
+  
+      if (dataCopyTemplate.error) {
+        console.error("Error in copyTemplate:", dataCopyTemplate.error);
+      } else {
+        console.log("Data from copyTemplate:", dataCopyTemplate);
+      }
+  
+      // Navigate after all API calls are done (you may want to check if all were successful first)
       navigate("/OMRProcessingUpload", {
         state: { exam_id },
       });
-
+  
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Unexpected Error:", error);
     }
   };
+  
+  
   
 
   return (
