@@ -39,10 +39,6 @@ Clockify report
 ### Summary
 This cycle presented several personal and academic challenges, which limited my project work. Despite losing my phone and dealing with the subsequent complications of blocking it and changing numbers, as well as preparing for two midterms, I made strides in integrating Auth0 with our backend. I focused on developing a custom API to minimize the need for extensive code refactoring, given our time constraints. Although I encountered some bugs, I am confident that I am close to a working solution. Additionally, I plan to collaborate with Jusnoor on UI changes using ShadCN.
 
-#### Completed Tasks:
-- **More implementation of AWS File Upload plus tests**: Complete
-- **Integrating Ahmad's Flask/OMR code to AWS code to mitigate conflict changes**: Complete
-
 #### In Progress:
 - **Implementing Auth0 to connect to DB and API calls**: In Progress (Account settings feature put on hold due to potential refactoring needed for Auth0)
 - **Writing Account settings plus tests**: On Hold
