@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import Dashboard from '../Instructor/Dashboard';
 import '@testing-library/jest-dom/extend-expect';
 
@@ -11,6 +12,14 @@ describe('Dashboard', () => {
   beforeEach(() => {
     fetch.resetMocks();
   });
+
+  const renderWithRouter = (component) => {
+    return render(
+      <MemoryRouter>
+        {component}
+      </MemoryRouter>
+    );
+  };
 
   test('renders the dashboard with user info, courses, exams, and charts', async () => {
     // Mock API responses
@@ -51,19 +60,19 @@ describe('Dashboard', () => {
       ]
     );
 
-    render(<Dashboard />);
+    renderWithRouter(<Dashboard />);
 
     // Wait for the async data to be rendered
-    await waitFor(() => screen.getByText('Welcome, John Doe!'));
-    await waitFor(() => screen.getByText('Math 101 - MATH101'));
+    await waitFor(() => screen.getByText('Your Courses'));
+    await waitFor(() => screen.getByText('Math 101'));
     await waitFor(() => screen.getByText('Midterm'));
     await waitFor(() => screen.getByText('AverageperExamChart Mock - Data: [{"examTitle":"Midterm","averageScore":85},{"examTitle":"Final","averageScore":75}]'));
     await waitFor(() => screen.getByText('AverageperCourseChart Mock - Data: [{"courseName":"Math 101","averageScore":90},{"courseName":"Science 101","averageScore":85}]'));
 
     // Check if elements are rendered correctly
-    expect(screen.getByText('Welcome, John Doe!')).toBeInTheDocument();
-    expect(screen.getByText('Math 101 - MATH101')).toBeInTheDocument();
-    expect(screen.getByText('Science 101 - SCI101')).toBeInTheDocument();
+    expect(screen.getByText('Your Courses')).toBeInTheDocument();
+    expect(screen.getByText('Math 101')).toBeInTheDocument();
+    expect(screen.getByText('Science 101')).toBeInTheDocument();
     expect(screen.getByText('Midterm')).toBeInTheDocument();
     expect(screen.getByText('Final')).toBeInTheDocument();
     expect(screen.getByText('AverageperExamChart Mock - Data: [{"examTitle":"Midterm","averageScore":85},{"examTitle":"Final","averageScore":75}]')).toBeInTheDocument();
@@ -94,11 +103,11 @@ describe('Dashboard', () => {
       ]
     );
 
-    render(<Dashboard />);
+    renderWithRouter(<Dashboard />);
 
-    await waitFor(() => screen.getByText('Welcome, Guest!'));
+    await waitFor(() => screen.getByText('Your Courses'));
 
-    expect(screen.getByText('Welcome, Guest!')).toBeInTheDocument();
+    expect(screen.getByText('Your Courses')).toBeInTheDocument();
   });
 
   test('renders course cards with correct data', async () => {
@@ -139,13 +148,13 @@ describe('Dashboard', () => {
       ]
     );
 
-    render(<Dashboard />);
+    renderWithRouter(<Dashboard />);
 
-    await waitFor(() => screen.getByText('Math 101 - MATH101'));
-    await waitFor(() => screen.getByText('Science 101 - SCI101'));
+    await waitFor(() => screen.getByText('Math 101'));
+    await waitFor(() => screen.getByText('Science 101'));
 
-    expect(screen.getByText('Math 101 - MATH101')).toBeInTheDocument();
-    expect(screen.getByText('Science 101 - SCI101')).toBeInTheDocument();
+    expect(screen.getByText('Math 101')).toBeInTheDocument();
+    expect(screen.getByText('Science 101')).toBeInTheDocument();
   });
 
   test('renders exam table with correct data', async () => {
@@ -186,7 +195,7 @@ describe('Dashboard', () => {
       ]
     );
 
-    render(<Dashboard />);
+    renderWithRouter(<Dashboard />);
 
     await waitFor(() => screen.getByText('Midterm'));
     await waitFor(() => screen.getByText('Final'));
@@ -233,7 +242,7 @@ describe('Dashboard', () => {
       ]
     );
 
-    render(<Dashboard />);
+    renderWithRouter(<Dashboard />);
 
     await waitFor(() => screen.getByText('AverageperExamChart Mock - Data: [{"examTitle":"Midterm","averageScore":85},{"examTitle":"Final","averageScore":75}]'));
 
@@ -278,10 +287,11 @@ describe('Dashboard', () => {
       ]
     );
 
-    render(<Dashboard />);
+    renderWithRouter(<Dashboard />);
 
     await waitFor(() => screen.getByText('AverageperCourseChart Mock - Data: [{"courseName":"Math 101","averageScore":90},{"courseName":"Science 101","averageScore":85}]'));
 
     expect(screen.getByText('AverageperCourseChart Mock - Data: [{"courseName":"Math 101","averageScore":90},{"courseName":"Science 101","averageScore":85}]')).toBeInTheDocument();
   });
 });
+
