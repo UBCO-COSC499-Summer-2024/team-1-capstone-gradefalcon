@@ -80,11 +80,15 @@ const UploadExamKey = () => {
         await fetch("/api/exam/copyTemplate", {
           method: "POST",
           credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ fileType: "examkey" }),
         }),
       ]);
 
-      const dataSaveExamKey = responses[0].json();
-      const dataCopyTemplate = responses[1].json();
+      const dataSaveExamKey = await responses[0].json();
+      const dataCopyTemplate = await responses[1].json();
 
       console.log("Data from saveExamKey:", dataSaveExamKey);
       console.log("Data from copyCSV:", dataCopyTemplate);

@@ -128,7 +128,6 @@ const getStudentGrades = async (req, res, next) => {
   }
 };
 
-
 const getAnswerKeyForExam = async (exam_id) => {
   try {
     const solutionResult = await pool.query(
@@ -143,7 +142,7 @@ const getAnswerKeyForExam = async (exam_id) => {
     const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
 
     // Extract the answers in order
-    const answersInOrder = answersArray.map(answer => answer.split(':')[1]);
+    const answersInOrder = answersArray.map((answer) => answer.split(":")[1]);
 
     return answersInOrder;
   } catch (error) {
@@ -152,12 +151,78 @@ const getAnswerKeyForExam = async (exam_id) => {
   }
 };
 
+const getStudentNameById = async (studentId) => {
+  try {
+    const result = await pool.query(
+      "SELECT name FROM student WHERE student_id = $1",
+      [studentId]
+    );
+
+    if (result.rows.length === 0) {
+      // throw new Error("Student not found");
+      return "Unknown student";
+    }
+
+    return result.rows[0].name;
+  } catch (error) {
+    console.error("Error getting student name by ID:", error);
+    throw error;
+  }
+};
+
+const getScoreByExamId = async (exam_id) => {
+  try {
+    const result = await pool.query(
+      "SELECT total_marks FROM exam WHERE exam_id = $1",
+      [exam_id]
+    );
+
+    if (result.rows.length === 0) {
+      return "No scores found for this exam";
+    }
+
+    return result.rows.map((row) => row.total_marks);
+  } catch (error) {
+    console.error("Error getting scores by exam ID:", error);
+    throw error;
+  }
+};
+
+const saveResults = async (req, res, next) => {
+  const { studentScores, exam_id } = req.body;
+  console.log(studentScores);
+  console.log(exam_id);
+
+  try {
+    // Assuming you have a database connection established and a model for studentResults
+    for (const score of studentScores) {
+      if (score.StudentName !== "Unknown student") {
+        // Assuming studentResults is your table/model name and it has a method to insert data
+        const result = await pool.query(
+          "INSERT INTO studentresults (student_id, exam_id, grade) VALUES ($1,$2,$3)",
+          [score.StudentID, exam_id, score.Score]
+        );
+      }
+    }
+    res.send({ message: "Scores saved successfully" });
+  } catch (error) {
+    console.error("Error saving student scores:", error);
+    res.status(500).send("Error saving scores");
+  }
+};
+
 module.exports = {
   saveQuestions,
   newExam,
   examBoard,
-  getAnswerKeyForExam
+  getAnswerKeyForExam,
   getAveragePerExam,
   getAveragePerCourse,
   getStudentGrades,
+  getStandardAverageData,
+  getPerformanceData,
+  getAnswerKeyForExam,
+  getStudentNameById,
+  getScoreByExamId,
+  saveResults,
 };
