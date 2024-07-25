@@ -86,6 +86,56 @@ const ManualExamKey = () => {
               <div>
                 <CardTitle className="mb-2">Questions</CardTitle>
                 <CardDescription>*The following details will be printed on the exam*</CardDescription>
+    <>
+      <div className="App">
+        <div className="main-content">
+          <header>
+            <h2>Create New Exam</h2>
+            <h2>{examTitle}</h2>
+          </header>
+          <section className="new-exam">
+            <button
+              className="back-button"
+              onClick={() => window.history.back()}
+            >
+              {" "}
+              Back
+            </button>
+
+            <h3>Questions</h3>
+            <p>*The following details will be printed on the exam*</p>
+            <form>
+              <label htmlFor="num-questions">#Questions:</label>
+              <input
+                type="number"
+                id="num-questions"
+                className="input-field"
+                value={numQuestions}
+                onChange={(e) =>
+                  setNumQuestions(Math.min(300, parseInt(e.target.value)))
+                }
+                min="1"
+                max="300"
+                data-testid="num-questions-input"
+              />
+
+              <label htmlFor="num-options">#Options per question:</label>
+              <input
+                type="number"
+                id="num-options"
+                className="input-field"
+                value={numOptions}
+                onChange={(e) =>
+                  setNumOptions(Math.min(26, parseInt(e.target.value)))
+                }
+                min="1"
+                max="26"
+                data-testid="num-options-input"
+              />
+
+
+              <div className="nested-window">
+                <div className="bubble-grid" data-testid="bubble-grid"></div>
               </div>
               <Button asChild size="sm" className="ml-auto gap-1">
                 <span onClick={() => window.history.back()}>Back</span>

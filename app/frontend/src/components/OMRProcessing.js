@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Toast from "../../components/Toast";
-import "../../css/App.css";
+import Toast from "./Toast";
+import "../css/App.css";
 
 const OMRProcessing = (props) => {
   const location = useLocation();

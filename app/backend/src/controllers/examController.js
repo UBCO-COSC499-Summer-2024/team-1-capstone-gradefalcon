@@ -128,10 +128,35 @@ const getStudentGrades = async (req, res, next) => {
   }
 };
 
+
+const getAnswerKeyForExam = async (exam_id) => {
+  try {
+    const solutionResult = await pool.query(
+      "SELECT answers FROM solution WHERE exam_id = $1",
+      [exam_id]
+    );
+
+    if (solutionResult.rows.length === 0) {
+      throw new Error("Solution not found");
+    }
+
+    const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
+
+    // Extract the answers in order
+    const answersInOrder = answersArray.map(answer => answer.split(':')[1]);
+
+    return answersInOrder;
+  } catch (error) {
+    console.error("Error getting answer key for exam:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   saveQuestions,
   newExam,
   examBoard,
+  getAnswerKeyForExam,
   getAveragePerExam,
   getAveragePerCourse,
   getStudentGrades,

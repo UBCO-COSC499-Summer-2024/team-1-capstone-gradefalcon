@@ -58,6 +58,9 @@ const ExamBoard = () => {
     fetchClassData();
   }, []);
 
+
+ // Transform classData.classes into a structure that groups exams by course_id
+  // Check if classData.classes is null and provide a fallback empty array
   const groupedExams = (classData.classes || []).reduce((acc, current) => {
     const { course_id, course_name, exam_title, class_id } = current || {};
     if (!acc[course_id]) {
@@ -119,21 +122,35 @@ const ExamBoard = () => {
                         </CardTitle>
                       </div>
                       <Button asChild size="sm" className="ml-auto gap-1">
-                        <Link to={`/NewExam/${class_id}`}>
-                          <Plus className="h-4 w-4" />
-                        </Link>
+                      <Link 
+                        to={`/NewExam/${class_id}`}
+                        state={{
+                          className: course_name,
+                          userName: userName,
+                          userID: userID,
+                          courseID: courseId  // Pass courseID here
+                        }}
+                        className="create-new-btn"
+                        data-testid={`create-new-${courseId}`}
+                      >
+                        Create New
+                        <Plus className="h-4 w-4" />
+                      </Link>  
                       </Button>
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-col gap-4">
                         {exams.map((exam, index) => (
-                          <div key={index} className="flex justify-between items-center">
-                            <p className="font-medium">{exam}</p>
+                          <div key={index} className="flex justify-between items-center" data-testid={`exam-${index}-${courseId}`}>
+                            <p className="font-medium">{exam.exam_title}</p>
                             <Button asChild size="sm" className="ml-auto gap-1">
-                              <Link to="/UploadExams">
-                                Grade Exam
-                                <ArrowUpRight className="h-4 w-4" />
-                              </Link>
+                            <Link 
+                              to={`/UploadExams/${exam.exam_id}`} 
+                              className="grade-exam-btn" 
+                              data-testid={`grade-btn-${index}-${exam.exam_id}`}>
+                              Grade Exam
+                              <ArrowUpRight className="h-4 w-4" />
+                            </Link>
                             </Button>
                           </div>
                         ))}
