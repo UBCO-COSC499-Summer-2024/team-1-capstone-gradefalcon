@@ -16,6 +16,8 @@ const UploadExam = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Received state:", { className, userName, userID, examTitle, examID, courseID, classID });
+    
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
       if (file && file.type === "application/pdf") {
