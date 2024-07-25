@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Toast from "./Toast";
 import "../css/App.css";
 
 const OMRProcessingUpload = () => {
-  const location = useLocation();
+  const { exam_id } = useParams();
   const [toast, setToast] = useState(null);
-  const { exam_id } = location.state || {};
   const navigate = useNavigate();
 
   const runOMR = async () => {
@@ -36,7 +35,7 @@ const OMRProcessingUpload = () => {
     // Timer stops the ECONREFUSED error
     const timer = setTimeout(() => {
       runOMR();
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);

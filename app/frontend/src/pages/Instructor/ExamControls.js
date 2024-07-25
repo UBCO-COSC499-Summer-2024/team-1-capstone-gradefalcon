@@ -73,13 +73,6 @@ const ExamControls = () => {
                 </label>
               </div>
             </div>
-            {/* <button
-              className="btn"
-              data-testid="confirm-btn"
-              onClick={handleConfirm}
-            >
-              Confirm
-            </button> */}
             <Link
               to="/ExamBoard"
               className="btn"

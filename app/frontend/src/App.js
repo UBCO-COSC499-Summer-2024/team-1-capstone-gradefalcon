@@ -8,6 +8,9 @@ import ProtectedRoute from "./ProtectedRoute";
 import Logout from "./pages/Logout";
 import OMRProcessing from "../src/components/OMRProcessing";
 import OMRProcessingUpload from "../src/components/OMRProcessingUpload";
+import GenerateEvaluation from "./components/GenerateEvaluation";
+import CopyTemplate from "./components/CopyTemplate";
+
 // Import Instructor pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
@@ -116,8 +119,10 @@ function App() {
             <Route path="/UploadExamKey" element={<UploadExamKey />} />
             <Route path="/ConfirmExamKey" element={<ConfirmExamKey />} />
             <Route path="/UploadExams/:exam_id" element={<UploadExams />} />
+            <Route path="/Generate-evaluation/:exam_id" element={<GenerateEvaluation />} />
+            <Route path="/copy-template/:exam_id" element={<CopyTemplate />} />
+            <Route path="/omr-processing/:exam_id"  element={<OMRProcessingUpload />} />
             <Route path="/OMRProcessing" element={<OMRProcessing />} />
-            <Route path="/OMRProcessingUpload" element={<OMRProcessingUpload />} /> {/* Add the new route */}
             <Route path="/ReviewExams" element={<ReviewExams />} />
             <Route
               path="/NotificationPreferences"
