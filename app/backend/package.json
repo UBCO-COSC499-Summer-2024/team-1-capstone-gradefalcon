@@ -13,19 +13,22 @@
   "test-watch": "nodemon --watch src --ignore /code/omr/inputs --exec \"npm test\""
 },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.614.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "chai": "^5.1.1",
     "connect-pg-simple": "^9.0.1",
     "csv-parser": "^3.0.0",
-    "express": "^4.17.1",
+    "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.10.0",
     "node-fetch": "^2.7.0",
+    "path": "^0.12.7",
     "pg": "^8.12.0"
   },
   "devDependencies": {

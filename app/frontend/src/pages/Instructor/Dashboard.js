@@ -1,15 +1,14 @@
 import "../../css/App.css";
 import React, { useEffect, useState } from "react";
-import StandardAverageChart from "../../components/StandardAverageChart";
-import PerformanceBarChart from "../../components/PerformanceBarChart";
+import AverageperExamChart from "../../components/AverageperExamChart";
+import AverageperCourseChart from "../../components/AverageperCourseChart"; // Updated import
 
 const Dashboard = () => {
   const [userName, setUserName] = useState("");
   const [courses, setCourses] = useState([]);
   const [exams, setExams] = useState([]);
   const [standardAverageData, setStandardAverageData] = useState([]);
-  const [performanceData, setPerformanceData] = useState([]);
-
+  const [averageCourseData, setAverageCourseData] = useState([]); // Renamed state
 
   const colors = ["#E9D8FD", "#FEEBC8", "#BEE3F8", "#C6F6D5"];
   let colorIndex = 0;
@@ -28,7 +27,7 @@ const Dashboard = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include", // This ensures cookies are included in the request
+          credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
@@ -83,7 +82,7 @@ const Dashboard = () => {
 
     const fetchStandardAverageData = async () => {
       try {
-        const response = await fetch("/api/exam/standard-average-data", {
+        const response = await fetch("/api/exam/average-per-exam", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -92,7 +91,7 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          //console.log("Standard Average Data:", data); // Log for debugging
+          console.log("Standard Average Data:", data);
           setStandardAverageData(data);
         } else {
           console.error("Failed to fetch standard average data");
@@ -102,9 +101,9 @@ const Dashboard = () => {
       }
     };
 
-    const fetchPerformanceData = async () => {
+    const fetchAverageCourseData = async () => { // Updated function
       try {
-        const response = await fetch("/api/exam/performance-data", {
+        const response = await fetch("/api/exam/average-per-course", { // Updated endpoint
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -113,23 +112,21 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          //console.log("Performance Data:", data); // Log for debugging
-          setPerformanceData(data);
+          console.log("Average Course Data:", data); // Log for debugging
+          setAverageCourseData(data);
         } else {
-          console.error("Failed to fetch performance data");
+          console.error("Failed to fetch average course data");
         }
       } catch (error) {
-        console.error("Error fetching performance data:", error);
+        console.error("Error fetching average course data:", error);
       }
     };
-
-
 
     fetchSessionInfo();
     fetchCourses();
     fetchExams();
     fetchStandardAverageData();
-    fetchPerformanceData();
+    fetchAverageCourseData(); // Updated function call
   }, []);
 
   return (
@@ -143,7 +140,6 @@ const Dashboard = () => {
           {courses.map((course, index) => (
             <div className="course-card" key={index} style={{ backgroundColor: getNextColor() }}>
               <h4>{course.course_name} - {course.course_id}</h4>
-              {/* Additional course details can be added here if available */}
             </div>
           ))}
         </section>
@@ -172,12 +168,12 @@ const Dashboard = () => {
           <h3>Performance Charts</h3>
           <div className="charts-container">
             <div className="chart">
-              <h4>Standard Average Chart</h4>
-              <StandardAverageChart data={standardAverageData} />
+              <h4>Average Score per Exam</h4>
+              <AverageperExamChart data={standardAverageData} />
             </div>
             <div className="chart">
-              <h4>Performance Bar Chart</h4>
-              <PerformanceBarChart data={performanceData} />
+              <h4>Average Score per Course</h4>
+              <AverageperCourseChart data={averageCourseData} /> {/* Updated component */}
             </div>
           </div>
         </section>
@@ -187,3 +183,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
