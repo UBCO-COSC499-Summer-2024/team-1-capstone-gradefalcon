@@ -5,13 +5,13 @@
   "description": "Node.js Hello world app using docker features for easy docker compose local dev and solid production defaults",
   "author": "Bret Fisher <bret@bretfisher.com>",
   "main": "src/index.js",
-  "scripts": {
-    "start": "node src/index.js",
-    "start-watch": "nodemon src/index.js --inspect=0.0.0.0:9229",
-    "start-wait-debuger": "nodemon src/index.js --inspect-brk=0.0.0.0:9229",
-    "test": "npx jest --config=jest.backend.config.js",
-    "test-watch": "nodemon --exec \"npm test\""
-  },
+"scripts": {
+  "start": "node src/index.js",
+  "start-watch": "nodemon --watch src --ignore /code/omr/inputs src/index.js --inspect=0.0.0.0:9229",
+  "start-wait-debuger": "nodemon --watch src --ignore /code/omr/inputs src/index.js --inspect-brk=0.0.0.0:9229",
+  "test": "npx jest --config=jest.backend.config.js",
+  "test-watch": "nodemon --watch src --ignore /code/omr/inputs --exec \"npm test\""
+},
   "dependencies": {
     "@aws-sdk/client-s3": "^3.614.0",
     "bcrypt": "^5.1.1",

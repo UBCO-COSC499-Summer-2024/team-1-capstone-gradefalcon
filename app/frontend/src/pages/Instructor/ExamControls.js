@@ -23,10 +23,17 @@ const ExamControls = () => {
         }),
       });
       console.log(response);
+      
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        // Handle success, maybe redirect or show a success message
+        const contentType = response.headers.get("Content-Type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          const data = await response.json();
+          console.log(data);
+          // Handle success, maybe redirect or show a success message
+        } else {
+          // Handle non-JSON response
+          console.log("Response was not JSON");
+        }
       } else {
         // Handle error, maybe show an error message
         console.error("Failed to save questions");
@@ -62,13 +69,6 @@ const ExamControls = () => {
                 <span>Students can view correct answers</span>
                 <label className="switch">
                   <input type="checkbox" data-testid="toggle-view-answers" />
-                  <span className="slider"></span>
-                </label>
-              </div>
-              <div className="control-item">
-                <span>Students can see exam statistics</span>
-                <label className="switch">
-                  <input type="checkbox" data-testid="toggle-view-stats" />
                   <span className="slider"></span>
                 </label>
               </div>

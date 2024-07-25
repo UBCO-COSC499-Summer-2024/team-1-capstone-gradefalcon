@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route, useLocation} from "react-router-dom";
 import "./css/App.css";
+
+// Import components
 import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
 import Logout from "./pages/Logout";
-// Import pages
+import OMRProcessing from "../src/components/OMRProcessing";
+import OMRProcessingUpload from "../src/components/OMRProcessingUpload";
+// Import Instructor pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
 import Signup from "./pages/Signup";
@@ -26,7 +25,7 @@ import ConfirmExamKey from "./pages/Instructor/ConfirmExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
-import OMRProcessing from "./pages/Instructor/OMRProcessing";
+import ReviewExams from "./pages/Instructor/ReviewExams";
 //admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
@@ -109,18 +108,17 @@ function App() {
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/Classes" element={<Classes />} />
             <Route path="/New-Class" element={<NewClass />} />
-            <Route
-              path="/ClassManagement/:class_id"
-              element={<ClassManagement />}
-            />
+            <Route path="/ClassManagement/:class_id" element={<ClassManagement />}/>
             <Route path="/NewExam/:class_id" element={<NewExam />} />
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
             <Route path="/ManualExamKey" element={<ManualExamKey />} />
             <Route path="/UploadExamKey" element={<UploadExamKey />} />
             <Route path="/ConfirmExamKey" element={<ConfirmExamKey />} />
-            <Route path="/UploadExams" element={<UploadExams />} />
+            <Route path="/UploadExams/:exam_id" element={<UploadExams />} />
             <Route path="/OMRProcessing" element={<OMRProcessing />} />
+            <Route path="/OMRProcessingUpload" element={<OMRProcessingUpload />} /> {/* Add the new route */}
+            <Route path="/ReviewExams" element={<ReviewExams />} />
             <Route
               path="/NotificationPreferences"
               element={<NotificationPreferences />}
