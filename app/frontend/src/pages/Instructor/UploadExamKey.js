@@ -8,10 +8,21 @@ const UploadExamKey = () => {
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const location = useLocation();
-  const { examTitle, classID } = location.state || {};
+  const { className, userName, userID, examTitle, examID, courseID, classID } =
+    location.state || {};
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Received state:", {
+      className,
+      userName,
+      userID,
+      examTitle,
+      examID,
+      courseID,
+      classID,
+    });
+
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
       if (file && file.type === "application/pdf") {
@@ -35,10 +46,28 @@ const UploadExamKey = () => {
   };
 
   const sendToBackend = async () => {
-    if (!file) return;
+    if (!file) {
+      alert("Please select a file first.");
+      return;
+    }
+
+    console.log("Sending file upload request with form data:", {
+      file,
+      folder: `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`,
+      fileName: file.name,
+      examID,
+      examTitle,
+      classID,
+    });
 
     const formData = new FormData();
-    formData.append("examKey", file);
+    formData.append("file", file);
+    formData.append(
+      "folder",
+      `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`
+    );
+    formData.append("fileName", file.name);
+    formData.append("examID", examID);
     formData.append("examTitle", examTitle);
     formData.append("classID", classID);
 
@@ -67,7 +96,8 @@ const UploadExamKey = () => {
         },
       });
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error uploading file:", error);
+      alert("Error uploading file");
     }
   };
 
