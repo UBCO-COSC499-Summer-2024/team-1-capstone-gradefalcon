@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
-import '../../css/App.css';
+import React, { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import "../../css/App.css";
 import "../../css/NewExam.css";
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");
-  const [userName, setUserName] = useState("");
-  const [userID, setUserID] = useState("");
-  const [className, setClassName] = useState("");
-  const [courseId, setCourseId] = useState("");
   const params = useParams();
-  const navigate = useNavigate();
-  const location = useLocation();
   const class_id = params.class_id;
-
   const handleInputChange = (event) => {
     const value = event.target.value;
+    // blocks chars that could cause error (i.e " ')
     const sanitizedValue = value.replace(/[^a-zA-Z0-9\s.,!?-]/g, "");
     setExamTitle(sanitizedValue);
   };
@@ -23,22 +17,6 @@ const NewExam = () => {
   const isFormValid = () => {
     return examTitle.trim() !== ""; // Simple validation check
   };
-
-  const handleUploadClick = (e) => {
-    if (!isFormValid()) {
-      e.preventDefault();
-      alert('Please enter an exam title before uploading the answer key.');
-    }
-  };
-
-  useEffect(() => {
-    if (location.state) {
-      setUserName(location.state.userName);
-      setUserID(location.state.userID);
-      setClassName(location.state.className);
-      setCourseId(location.state.courseID);  // Set courseID from state
-    }
-  }, [location.state]);
 
   return (
     <>
@@ -72,10 +50,9 @@ const NewExam = () => {
               <div>
                 <Link
                   to={isFormValid() ? "/UploadExamKey" : "#"}
-                  state={{ examTitle: examTitle, userID: userID, userName: userName, className: className, classID: class_id, courseID: courseId }} // Pass examTitle as state
+                  state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
                   className="btn"
                   data-testid="upload-answer-key-btn"
-                  onClick={handleUploadClick}
                 >
                   Upload Answer Key
                 </Link>
