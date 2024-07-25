@@ -1,8 +1,3 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../../css/App.css';
-import { Button } from "../../components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import React, { useState, useRef, useEffect } from "react";
 import "../../css/App.css";
 import "../../css/UploadExam.css";
@@ -16,8 +11,6 @@ const UploadExam = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Received state:", { className, userName, userID, examTitle, examID, courseID, classID });
-    
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
       if (file && file.type === "application/pdf") {
@@ -37,10 +30,8 @@ const UploadExam = () => {
 
   const resetUpload = () => {
     setFileURL(null);
-    fileInputRef.current.value = '';
-    alert('File reset successfully');
+    fileInputRef.current.value = "";
   };
-
 
   const sendToBackend = async () => {
     if (!file) return;
@@ -86,63 +77,54 @@ const UploadExam = () => {
   };
   
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.ok) {
-        alert("Logged out");
-        navigate("/");
-      } else {
-        console.error("Logout failed");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
   return (
-    <main className="flex flex-col gap-4 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
-      <div>
-        <h1 className="text-3xl font-bold mb-4">Upload Exams</h1>
-        <div className="grid gap-4 lg:grid-cols-1">
-          <Card className="bg-white border rounded">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <div>
-                <CardTitle className="mb-2">General</CardTitle>
-                <CardDescription>Upload the exam with all student submissions as a PDF file.</CardDescription>
+    <>
+      <div className="App">
+        <div className="main-content">
+          <header>
+            <h2>Upload Exam</h2>
+          </header>
+          <section className="upload-key">
+            <button
+              className="back-button"
+              onClick={() => window.history.back()}
+            ></button>
+            <h3>Upload the exam as a PDF file.</h3>
+            <div
+              className="upload-area"
+              style={{ display: fileURL ? "none" : "block" }}
+            >
+              <input
+                type="file"
+                id="file-input"
+                data-testid="file-input"
+                hidden
+                accept="application/pdf"
+                ref={fileInputRef}
+              />
+              <div
+                className="drag-drop-area"
+                onClick={() => fileInputRef.current.click()}
+              >
+                <p>Click to browse or drag and drop your files</p>
               </div>
-              <Button asChild size="sm" className="ml-auto gap-1">
-                <span onClick={() => window.history.back()}>Back</span>
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="upload-area" style={{ display: fileURL ? 'none' : 'block' }}>
-                <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} />
-                <div className="drag-drop-area" onClick={() => fileInputRef.current.click()}>
-                  <p>Click to browse or drag and drop your files</p>
-                </div>
-              </div>
-              <div className="pdf-display" style={{ display: fileURL ? 'block' : 'none' }}>
-                <iframe src={fileURL} title="PDF Preview"></iframe>
-              </div>
-              <div className="flex gap-4 mt-4">
-                <Button size="sm"  onClick={resetUpload}>
-                  <span>Reset</span>
-                </Button>
-                <Button size="sm"  onClick={sendToBackend}>
-                  <span>Upload</span>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+            <div
+              className="pdf-display"
+              style={{ display: fileURL ? "block" : "none" }}
+            >
+              <iframe src={fileURL} title="PDF Preview"></iframe>
+            </div>
+            <button className="btn-import" onClick={sendToBackend}>
+              Import
+            </button>
+            <button className="btn-confirm" onClick={resetUpload}>
+              Reset
+            </button>
+          </section>
         </div>
       </div>
-    </main>
+    </>
   );
 };
 
