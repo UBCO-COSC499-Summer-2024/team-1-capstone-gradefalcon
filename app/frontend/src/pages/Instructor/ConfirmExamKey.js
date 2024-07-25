@@ -12,7 +12,6 @@ const ConfirmExamKey = (props) => {
 
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(5);
-  const [numMarks, setNumMarks] = useState(10);
 
   const downloadCsv = async () => {
     try {
@@ -196,17 +195,6 @@ const ConfirmExamKey = (props) => {
                 min="1"
                 max="26"
                 data-testid="num-options-input"
-              />
-
-              <label htmlFor="num-marks">#Total marks:</label>
-              <input
-                type="number"
-                id="num-marks"
-                className="input-field"
-                value={numMarks}
-                onChange={(e) => setNumMarks(e.target.value)}
-                min="1"
-                data-testid="num-marks-input"
               />
 
               <div className="nested-window">

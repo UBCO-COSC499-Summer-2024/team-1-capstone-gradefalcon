@@ -33,12 +33,7 @@ const OMRProcessingUpload = () => {
   };
 
   useEffect(() => {
-    // Timer stops the ECONREFUSED error
-    const timer = setTimeout(() => {
-      runOMR();
-    }, 2000);
-
-    return () => clearTimeout(timer);
+    runOMR();
   }, []);
 
   return (

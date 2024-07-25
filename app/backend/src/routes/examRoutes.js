@@ -3,6 +3,10 @@ const {
   saveQuestions,
   newExam,
   examBoard,
+  getAnswerKeyForExam,
+  getAveragePerExam,
+  getAveragePerCourse,
+  getStudentGrades,
   getStandardAverageData,
   getPerformanceData,
   getAnswerKeyForExam,
@@ -20,6 +24,14 @@ const router = express.Router();
 router.post("/saveQuestions", saveQuestions);
 router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
+router.get("/average-per-exam", getAveragePerExam);
+router.get("/average-per-course", getAveragePerCourse); // Updated route
+router.get("/grades/:studentId", getStudentGrades);
+
+
+// Function to get the answer key for a specific exam
+
+router.get('/getAnswerKey/:exam_id', async (req, res, next) => {
 router.get("/standard-average-data", getStandardAverageData);
 router.get("/performance-data", getPerformanceData);
 router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
@@ -35,6 +47,7 @@ router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
     res.status(500).send("Error getting answer key");
   }
 });
+
 
 // Add this route to the examRoutes.js file
 
@@ -140,15 +153,15 @@ router.get("/getResults", async function (req, res) {
     });
 });
 
-router.post(
-  "/saveExamKey",
-  upload.single("examKey"),
-  async function (req, res) {
+// Save the exam key uploaded by the user
+router.post( "/saveExamKey",upload.single("examKey"), async function (req, res) {
     console.log(req.file);
     res.send(JSON.stringify("File uploaded successfully"));
   }
 );
 
+
+// Copy the template JSON file to the shared volume
 router.post("/copyTemplate", async function (req, res) {
   console.log("copyTemplate");
   const filePath = `/code/omr/inputs`;
@@ -156,7 +169,6 @@ router.post("/copyTemplate", async function (req, res) {
   const destinationTemplatePath = path.join(filePath, "template.json");
 
   try {
-    // Copy template.json to the shared volume
     fs.copyFileSync(templatePath, destinationTemplatePath);
     console.log("Template.json copied successfully");
   } catch (error) {
@@ -198,6 +210,7 @@ router.post(
   }
 );
 
+// Generate the evaluation JSON for an exam
 router.post("/GenerateEvaluation", async function (req, res) {
   const { exam_id } = req.body;
 
@@ -214,7 +227,7 @@ router.post("/GenerateEvaluation", async function (req, res) {
     const evaluationJson = {
       source_type: "custom",
       options: {
-        questions_in_order: Array.from({ length: 6 }, (_, i) => `q${i + 1}`),
+        questions_in_order: Array.from({ length: answerKey.length }, (_, i) => `q${i + 1}`),
         answers_in_order: answerKey,
       },
       outputs_configuration: {
@@ -272,16 +285,62 @@ router.post("/GenerateEvaluation", async function (req, res) {
   }
 });
 
-router.post("/fetchImage", async function (req, res) {
-  const file_name = req.body.file_name;
-  // res.json({ message: file_name });
-  const imagePath = path.join(
-    __dirname,
-    `../../omr/outputs/CheckedOMRs/colored/${file_name}`
-  );
+// Upload exam pages
+router.post("/UploadExam", upload.single("examPages"), async function (req, res) {
+  const { exam_id } = req.body;
 
-  // Send the image file
-  res.sendFile(imagePath);
+  try {
+    // Here, we only handle the file upload
+    res.json({ message: "File uploaded successfully", exam_id });
+  } catch (error) {
+    console.error("Error in /UploadExam:", error);
+    res.status(500).send("Error uploading exam pages");
+  }
+});
+
+
+// Call the OMR processing service
+router.post("/callOMR", async function (req, res) {
+  console.log("callOMR");
+  try {
+    const response = await fetch("http://flaskomr:5000/process", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("OMR Response: ", response);
+    res.send(JSON.stringify("OMR called successfully in /callOMR"));
+  } catch (error) {
+    console.error("Error calling OMR: ", error);
+  }
+});
+
+// Route to fetch the first PNG image in the folder
+router.get('/fetchImage', async function (req, res) {
+  const imagesFolderPath = path.join(__dirname, '../../omr/outputs/CheckedOMRs/colored');
+
+  try {
+    // Read all files in the directory
+    const files = await fs.promises.readdir(imagesFolderPath);
+
+    // Filter out the PNG files
+    const pngFiles = files.filter(file => path.extname(file).toLowerCase() === '.png');
+
+    if (pngFiles.length === 0) {
+      return res.status(404).send('No PNG images found in the folder');
+    }
+
+    // Get the first PNG file
+    const firstPngFile = pngFiles[0];
+    const imagePath = path.join(imagesFolderPath, firstPngFile);
+
+    // Send the image file
+    res.sendFile(imagePath);
+  } catch (error) {
+    console.error('Error fetching image:', error);
+    res.status(500).send('Error fetching image');
+  }
 });
 
 router.get("/getScoreByExamId/:exam_id", async (req, res) => {
@@ -330,6 +389,7 @@ router.get("/searchExam/:student_id", async (req, res) => {
     });
 });
 
+//test routes
 router.post("/test", async function (req, res) {
   console.log("test called");
   res.send(JSON.stringify("Test route called successfully"));

@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import "../../css/App.css";
 import "../../css/UploadExam.css";
@@ -11,6 +12,8 @@ const UploadExam = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Received state:", { className, userName, userID, examTitle, examID, courseID, classID });
+
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
       if (file && file.type === "application/pdf") {
@@ -32,6 +35,7 @@ const UploadExam = () => {
     setFileURL(null);
     fileInputRef.current.value = "";
   };
+
 
   const sendToBackend = async () => {
     if (!file) return;
@@ -124,7 +128,7 @@ const UploadExam = () => {
           </section>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
