@@ -135,11 +135,20 @@ export default function Dashboard() {
             </div>
             <div className="flex flex-col gap-2">
               <Dialog>
-                <DialogTrigger asChild>
-                  <Button size="sm" className="ml-auto gap-1">
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </DialogTrigger>
+                <TooltipProvider>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                      <DialogTrigger asChild>
+                        <Button size="sm" className="ml-auto gap-1">
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </DialogTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Create New Course</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Create New Course</DialogTitle>
@@ -152,7 +161,7 @@ export default function Dashboard() {
                 </DialogContent>
               </Dialog>
               <Button asChild size="sm" className="ml-auto gap-1">
-                <Link to="/ClassManagement">
+                <Link to="/Classes">
                   Manage Courses
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
@@ -199,11 +208,20 @@ export default function Dashboard() {
             </div>
             <div className="flex flex-col gap-2">
               <Dialog>
-                <DialogTrigger asChild>
-                  <Button size="sm" className="ml-auto gap-1" onClick={() => setIsDialogOpen(true)}>
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </DialogTrigger>
+                <TooltipProvider>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                      <DialogTrigger asChild>
+                        <Button size="sm" className="ml-auto gap-1" onClick={() => setIsDialogOpen(true)}>
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </DialogTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Create New Exam</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Create New Exam</DialogTitle>
