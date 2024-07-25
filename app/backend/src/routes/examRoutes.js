@@ -3,7 +3,7 @@ const {
   saveQuestions,
   newExam,
   examBoard,
-  getAnswerKeyForExam
+  getAnswerKeyForExam,
   getAveragePerExam,
   getAveragePerCourse,
   getStudentGrades,
