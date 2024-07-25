@@ -43,23 +43,62 @@ const BubbleSheetForm = ({ onSubmit }) => {
     });
   };
 
+  const showTable = (block) => {
+    const fieldLabels = block.fieldLabels;
+    const rows = 5;
+    const cols = Math.ceil(fieldLabels.length / rows);
+
+    return (
+      <table>
+        <tbody>
+          {Array.from({ length: rows }).map((_, rowIndex) => (
+            <tr key={rowIndex}>
+              {Array.from({ length: cols }).map((_, colIndex) => {
+                const labelIndex = rowIndex + colIndex * rows;
+                return (
+                  <td key={colIndex}>{fieldLabels[labelIndex] || ''}</td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <h2>Page and Bubble Dimensions</h2>
       <label>
-        Page Dimensions:
+        Page Width:
         <input
-          type="text"
-          value={pageDimensions}
-          onChange={(e) => setPageDimensions(e.target.value.split(',').map(Number))}
+          type="number"
+          value={pageDimensions[0]}
+          onChange={(e) => setPageDimensions([Number(e.target.value), pageDimensions[1]])}
         />
       </label>
       <label>
-        Bubble Dimensions:
+        Page Height:
         <input
-          type="text"
-          value={bubbleDimensions}
-          onChange={(e) => setBubbleDimensions(e.target.value.split(',').map(Number))}
+          type="number"
+          value={pageDimensions[1]}
+          onChange={(e) => setPageDimensions([pageDimensions[0], Number(e.target.value)])}
+        />
+      </label>
+      <label>
+        Bubble Width:
+        <input
+          type="number"
+          value={bubbleDimensions[0]}
+          onChange={(e) => setBubbleDimensions([Number(e.target.value), bubbleDimensions[1]])}
+        />
+      </label>
+      <label>
+        Bubble Height:
+        <input
+          type="number"
+          value={bubbleDimensions[1]}
+          onChange={(e) => setBubbleDimensions([bubbleDimensions[0], Number(e.target.value)])}
         />
       </label>
       <h2>Blocks</h2>
@@ -78,7 +117,7 @@ const BubbleSheetForm = ({ onSubmit }) => {
             Origin:
             <input
               type="text"
-              value={block.origin}
+              value={block.origin.join(',')}
               onChange={(e) => handleBlockChange(index, 'origin', e.target.value.split(',').map(Number))}
             />
           </label>
@@ -106,6 +145,10 @@ const BubbleSheetForm = ({ onSubmit }) => {
               onChange={(e) => handleBlockChange(index, 'labelsGap', Number(e.target.value))}
             />
           </label>
+          <button type="button" onClick={() => handleBlockChange(index, 'showTable', !block.showTable)}>
+            {block.showTable ? 'Hide Table' : 'Show Table'}
+          </button>
+          {block.showTable && showTable(block)}
         </div>
       ))}
       <button type="button" onClick={handleAddBlock}>Add Block</button>

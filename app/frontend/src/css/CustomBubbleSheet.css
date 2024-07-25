@@ -1,0 +1,46 @@
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .page {
+    width: 900px;
+    height: 1220px;
+    border: 1px solid #000;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  .student-id, .mcq-block {
+    margin-bottom: 20px;
+  }
+  
+  .bubbles {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .bubble {
+    width: 27px;
+    height: 27px;
+    border: 1px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .bubble span {
+    position: absolute;
+    top: -20px;
+    font-size: 12px;
+  }
+  
+  .mcq-block {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .mcq-block .bubbles {
+    flex-direction: column;
+  }
