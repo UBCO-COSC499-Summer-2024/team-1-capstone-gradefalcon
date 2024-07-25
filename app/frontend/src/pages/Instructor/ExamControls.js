@@ -72,13 +72,6 @@ const ExamControls = () => {
                   <span className="slider"></span>
                 </label>
               </div>
-              <div className="control-item">
-                <span>Students can see exam statistics</span>
-                <label className="switch">
-                  <input type="checkbox" data-testid="toggle-view-stats" />
-                  <span className="slider"></span>
-                </label>
-              </div>
             </div>
             {/* <button
               className="btn"

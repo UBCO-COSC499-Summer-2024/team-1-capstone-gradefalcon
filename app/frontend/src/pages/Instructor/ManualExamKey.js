@@ -11,7 +11,6 @@ const ManualExamKey = (props) => {
 
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(5);
-  const [numMarks, setNumMarks] = useState(10);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   const removeQuestion = (questionNumber, option) => {
@@ -111,16 +110,6 @@ const ManualExamKey = (props) => {
                 data-testid="num-options-input"
               />
 
-              <label htmlFor="num-marks">#Total marks:</label>
-              <input
-                type="number"
-                id="num-marks"
-                className="input-field"
-                value={numMarks}
-                onChange={(e) => setNumMarks(e.target.value)}
-                min="1"
-                data-testid="num-marks-input"
-              />
 
               <div className="nested-window">
                 <div className="bubble-grid" data-testid="bubble-grid"></div>

@@ -33,6 +33,29 @@ const UploadExam = () => {
     fileInputRef.current.value = "";
   };
 
+
+  function wait(ms, value) {
+    return new Promise(resolve => setTimeout(() => resolve(value), ms));
+  }
+
+  
+  const fetchWithTimeout = (url, options, timeout = 1000) => {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error('Request timed out')), timeout);
+      
+      fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+          clearTimeout(timer);
+          resolve(data);
+        })
+        .catch(error => {
+          clearTimeout(timer);
+          reject(error);
+        });
+    });
+  };
+  
   const sendToBackend = async () => {
     if (!file) return;
   
@@ -40,34 +63,36 @@ const UploadExam = () => {
     formData.append("examPages", file);
     formData.append("exam_id", exam_id); // Include exam_id in the form data
   
+    const fetchWithTimeoutAndDelay = (url, options, timeout = 1000, delay = 1000) => {
+      return fetchWithTimeout(url, options, timeout)
+        .then(data => wait(delay, data));
+    };
+  
     try {
-      // Create the individual promises with error handling
-      const uploadExamPromise = fetch("/api/exam/UploadExam", {
+      const uploadExamPromise = fetchWithTimeoutAndDelay("/api/exam/UploadExam", {
         method: "POST",
         body: formData,
-      }).then(response => response.json()).catch(error => ({ error }));
+      });
   
-      const generateEvaluationPromise = fetch("/api/exam/GenerateEvaluation", {
+      const generateEvaluationPromise = fetchWithTimeoutAndDelay("/api/exam/GenerateEvaluation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ exam_id }),
-      }).then(response => response.json()).catch(error => ({ error }));
+      });
   
-      const copyTemplatePromise = fetch("/api/exam/copyTemplate", {
+      const copyTemplatePromise = fetchWithTimeoutAndDelay("/api/exam/copyTemplate", {
         method: "POST",
         credentials: "include",
-      }).then(response => response.json()).catch(error => ({ error }));
+      });
   
-      // Use Promise.all to handle all promises and wait for all of them to complete
       const [dataUploadExam, dataGenerateEvaluation, dataCopyTemplate] = await Promise.all([
-        uploadExamPromise,
-        generateEvaluationPromise,
-        copyTemplatePromise
+        uploadExamPromise.catch(error => ({ error })),
+        generateEvaluationPromise.catch(error => ({ error })),
+        copyTemplatePromise.catch(error => ({ error }))
       ]);
   
-      // Check for errors in each response
       if (dataUploadExam.error) {
         console.error("Error in UploadExam:", dataUploadExam.error);
       } else {
@@ -86,7 +111,6 @@ const UploadExam = () => {
         console.log("Data from copyTemplate:", dataCopyTemplate);
       }
   
-      // Navigate after all API calls are done (you may want to check if all were successful first)
       navigate("/OMRProcessingUpload", {
         state: { exam_id },
       });
@@ -95,6 +119,7 @@ const UploadExam = () => {
       console.error("Unexpected Error:", error);
     }
   };
+  
   
   
   
