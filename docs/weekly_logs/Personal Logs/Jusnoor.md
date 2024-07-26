@@ -5,7 +5,7 @@
 
 ### Timesheet 
 
-clockify report 
+clockify report
 
 ![Time15](https://github.com/user-attachments/assets/310607f3-217d-4fc7-83ab-060682e5287b)
 
