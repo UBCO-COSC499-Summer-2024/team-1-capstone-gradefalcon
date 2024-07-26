@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import "./css/App.css";
 import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 
 // Import components
 import Profile from "./components/Profile";

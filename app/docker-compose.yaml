@@ -22,7 +22,7 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_REGION=${AWS_REGION}
     ports:
-      - 80:80
+      - "80:5001" # Map port 5001 to 80
       - 9229:9229
       - 9230:9230
     volumes:
