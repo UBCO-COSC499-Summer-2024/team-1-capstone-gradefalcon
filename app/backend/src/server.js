@@ -35,8 +35,8 @@ app.use(
 );
 
 const checkJwt = auth({
-  audience: process.env.AUTH0_AUDIENCE,
-  issuerBaseURL: process.env.AUTH0_ISSUERURL,
+  audience: 'http://localhost:3000/api',
+  issuerBaseURL: 'https://dev-1wzrc3nphnk4w01y.ca.auth0.com',
 });
 
 const checkRole = (role) => {
@@ -94,8 +94,8 @@ app.get("/session-info", (req, res) => {
 const PORT = process.env.PORT || 5001; // Change the internal port to 5001
 console.log(`Starting server on port ${PORT}`);
 
-app.listen(PORT, function() {
-  console.log(`Listening on http://localhost:${PORT}`);
-});
+// app.listen(PORT, function() {
+//   console.log(`Listening on http://localhost:${PORT}`);
+// });
 
 module.exports = app;

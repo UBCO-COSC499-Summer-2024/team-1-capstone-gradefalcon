@@ -5,7 +5,7 @@ import PerformanceBarChart from "../../components/PerformanceBarChart";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Dashboard = () => {
-  const { user } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const roles = user[`${process.env.REACT_APP_AUTH0_AUDIENCE}/roles`] || [];
 
   const [userName, setUserName] = useState("");
@@ -26,101 +26,127 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchSessionInfo = async () => {
       try {
+        const token = await getAccessTokenSilently();
+        console.log('overhere',token);
         const response = await fetch("/api/session-info", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           credentials: "include", // This ensures cookies are included in the request
         });
         if (response.ok) {
           const data = await response.json();
+          console.log("Session Info Data:", data);
           setUserName(data.userName);
         } else {
           console.error("Failed to fetch session info");
+          console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching session info:", error);
+        console.log("Authenticated:", isAuthenticated);
       }
     };
 
     const fetchCourses = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const response = await fetch("/api/class/classes", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
+          console.log("Courses Data:", data);
           setCourses(data);
         } else {
           console.error("Failed to fetch courses");
+          console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching courses:", error);
+        console.log("Authenticated:", isAuthenticated);
       }
     };
 
     const fetchExams = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const response = await fetch("/api/exam/ExamBoard", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
+          console.log("Exams Data:", data);
           setExams(data.classes);
         } else {
           console.error("Failed to fetch exams");
+          console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching exams:", error);
+        console.log("Authenticated:", isAuthenticated);
       }
     };
 
     const fetchStandardAverageData = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const response = await fetch("/api/exam/standard-average-data", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
+          console.log("Standard Average Data:", data);
           setStandardAverageData(data);
         } else {
           console.error("Failed to fetch standard average data");
+          console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching standard average data:", error);
+        console.log("Authenticated:", isAuthenticated);
       }
     };
 
     const fetchPerformanceData = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const response = await fetch("/api/exam/performance-data", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
+          console.log("Performance Data:", data);
           setPerformanceData(data);
         } else {
           console.error("Failed to fetch performance data");
+          console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching performance data:", error);
+        console.log("Authenticated:", isAuthenticated);
       }
     };
 
@@ -129,7 +155,7 @@ const Dashboard = () => {
     fetchExams();
     fetchStandardAverageData();
     fetchPerformanceData();
-  }, []);
+  }, [getAccessTokenSilently, isAuthenticated]);
 
   return (
     <div className="App">

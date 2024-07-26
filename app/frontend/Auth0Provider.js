@@ -11,7 +11,7 @@ root.render(
     clientId="zUtm0FsUWaknfcSxpx3cyhFHNjIuVpoI"
     authorizationParams={{
       redirect_uri: window.location.origin,
-      audience: "https://dev-1wzrc3nphnk4w01y.ca.auth0.com/api/v2/",
+      audience: "https://localhost:3000/api",
       scope: "read:current_user update:current_user_metadata"
     }}
   >
