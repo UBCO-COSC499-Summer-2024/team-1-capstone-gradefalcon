@@ -82,9 +82,9 @@ const UploadExam = () => {
       console.log("Data from GenerateEvaluation:", dataGenerateEvaluation);
       console.log("Data from copyTemplate:", dataCopyTemplate);
 
-      navigate("/OMRProcessingUpload", {
-        state: { exam_id },
-      });
+      // navigate("/OMRProcessingUpload", {
+      //   state: { exam_id },
+      // });
     } catch (error) {
       console.error("Error:", error);
     }

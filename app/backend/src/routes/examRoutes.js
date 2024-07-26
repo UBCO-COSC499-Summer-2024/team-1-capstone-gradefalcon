@@ -263,21 +263,35 @@ router.post("/UploadExam", async function (req, res) {
       const evenPagesPdf = await PDFDocument.create();
 
       for (let i = 0; i < totalPages; i++) {
-        const [copiedPage] = await pdfDoc.copyPages(pdfDoc, [i]);
-        if ((i + 1) % 2 === 1) {
-          oddPagesPdf.addPage(copiedPage);
-        } else {
-          evenPagesPdf.addPage(copiedPage);
-        }
+        const [pageToCopy] = await oddPagesPdf.copyPages(pdfDoc, [i]);
+        oddPagesPdf.addPage(pageToCopy);
       }
 
-      const oddPagesPdfBytes = await oddPagesPdf.save();
-      const evenPagesPdfBytes = await evenPagesPdf.save();
+      // const [firstDonorPage] = await oddPagesPdf.copyPages(pdfDoc, [0]);
+      // oddPagesPdf.addPage(firstDonorPage);
+      // const [secondDonorPage] = await oddPagesPdf.copyPages(pdfDoc, [1]);
+      // oddPagesPdf.addPage(secondDonorPage);
 
-      fs.writeFileSync(path.join(destinationDir1, "odd_pages.pdf"), oddPagesPdfBytes);
-      fs.writeFileSync(path.join(destinationDir2, "even_pages.pdf"), evenPagesPdfBytes);
-
+      const pdfBytes = await oddPagesPdf.save();
+      fs.writeFileSync(path.join(destinationDir1, "odd_pages.pdf"), pdfBytes);
       fs.unlinkSync(tempFilePath); // Clean up the temporary file
+
+      // for (let i = 0; i < totalPages; i++) {
+      //   const [copiedPage] = await pdfDoc.copyPages(pdfDoc, [i]);
+      //   if ((i + 1) % 2 === 1) {
+      //     oddPagesPdf.addPage(copiedPage);
+      //   } else {
+      //     evenPagesPdf.addPage(copiedPage);
+      //   }
+      // }
+
+      // const oddPagesPdfBytes = await oddPagesPdf.save();
+      // const evenPagesPdfBytes = await evenPagesPdf.save();
+
+      // fs.writeFileSync(path.join(destinationDir1, "odd_pages.pdf"), oddPagesPdfBytes);
+      // fs.writeFileSync(path.join(destinationDir2, "even_pages.pdf"), evenPagesPdfBytes);
+
+      // fs.unlinkSync(tempFilePath); // Clean up the temporary file
 
       res.json({ message: "File uploaded and split successfully" });
     } catch (error) {
@@ -348,7 +362,8 @@ router.post("/GenerateEvaluation", async function (req, res) {
       },
     };
 
-    const destinationDir = `/code/omr/inputs/page_2`;
+    // const destinationDir = `/code/omr/inputs/page_2`;
+    const destinationDir = `/code/omr/inputs`;
     const evaluationFilePath = path.join(destinationDir, "evaluation.json");
     fs.writeFileSync(evaluationFilePath, JSON.stringify(evaluationJson, null, 2));
 
