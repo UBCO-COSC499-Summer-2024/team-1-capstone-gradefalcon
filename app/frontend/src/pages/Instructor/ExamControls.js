@@ -8,7 +8,6 @@ const ExamControls = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { classID, examTitle, questions, numQuestions } = location.state || {};
-
   const handleConfirm = async (event) => {
     event.preventDefault();
     try {
@@ -24,35 +23,26 @@ const ExamControls = () => {
           numQuestions: numQuestions,
         }),
       });
+      console.log(response);
+      
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        navigate("/ExamBoard"); // Navigate to the ExamBoard page
+        const contentType = response.headers.get("Content-Type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          const data = await response.json();
+          console.log(data);
+          // Handle success, maybe redirect or show a success message
+        } else {
+          // Handle non-JSON response
+          console.log("Response was not JSON");
+        }
       } else {
+        // Handle error, maybe show an error message
         console.error("Failed to save questions");
       }
     } catch (error) {
       console.error("Error:", error);
     }
-  };
-
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.ok) {
-        alert("Logged out");
-        navigate("/");
-      } else {
-        console.error("Logout failed");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    navigate("/ExamBoard");
   };
 
   return (
