@@ -196,7 +196,7 @@ const saveResults = async (req, res, next) => {
         // Assuming studentResults is your table/model name and it has a method to insert data
         const result = await pool.query(
           "INSERT INTO studentresults (student_id, exam_id, grade) VALUES ($1,$2,$3)",
-          [score.StudentID, exam_id, score.Score]
+          [score.StudentID, exam_id, parseInt(score.Score, 10)]
         );
       }
     }
