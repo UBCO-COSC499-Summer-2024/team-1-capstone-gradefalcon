@@ -45,14 +45,14 @@ router.get("/getResults", checkJwt, checkPermissions(['read:grades']), async fun
 
 router.post(
   "/saveExamKey",
-  checkJwt, checkRole('instructor'), checkPermissions(['upload:file']), upload.single("examKey"),
+  checkJwt, checkPermissions(['upload:file']), upload.single("examKey"),
   async function (req, res) {
     console.log(req.file);
     res.send(JSON.stringify("File uploaded successfully"));
   }
 );
 
-router.post("/copyTemplate", checkJwt, checkRole('instructor'), checkPermissions(['upload:file']), async function (req, res) {
+router.post("/copyTemplate", checkJwt, checkPermissions(['upload:file']), async function (req, res) {
   console.log("copyTemplate");
   const filePath = `/code/omr/inputs`;
   const templatePath = path.join(__dirname, "../assets/template.json"); // Adjust the path as necessary
@@ -67,7 +67,7 @@ router.post("/copyTemplate", checkJwt, checkRole('instructor'), checkPermissions
   res.send(JSON.stringify("File copied successfully"));
 });
 
-router.post("/callOMR", checkJwt, checkRole('instructor'), checkPermissions(['upload:file']), async function (req, res) {
+router.post("/callOMR", checkJwt,  checkPermissions(['upload:file']), async function (req, res) {
   console.log("callOMR");
   try {
     const response = await fetch("http://flaskomr:5000/process", {
@@ -83,7 +83,7 @@ router.post("/callOMR", checkJwt, checkRole('instructor'), checkPermissions(['up
   }
 });
 
-router.post("/test", checkJwt, checkRole('instructor'), checkPermissions(['upload:file']), async function (req, res) {
+router.post("/test", checkJwt,  checkPermissions(['upload:file']), async function (req, res) {
   console.log("test called");
   res.send(JSON.stringify("Test route called successfully"));
 });
