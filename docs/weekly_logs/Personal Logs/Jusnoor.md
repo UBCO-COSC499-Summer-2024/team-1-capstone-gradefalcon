@@ -7,7 +7,8 @@
 
 clockify report
 
-![Time15](https://github.com/user-attachments/assets/310607f3-217d-4fc7-83ab-060682e5287b)
+
+![Time15](https://github.com/user-attachments/assets/54d93347-b801-4801-8ca5-7ca2417c8241)
 
 
 
@@ -16,9 +17,8 @@ clockify report
 - #2: User Story: Optimize User Interface and Usability
 - #3: User Story: Enhance Navigation and Consistency
 - #4: User Story: Improve Dashboard Functionality #206
-- #5: Student Dashboard 
-
-
+- #5: Student Dashboard
+  
   
 ### Progress Update (since 24/7/2024) 
 <table>
