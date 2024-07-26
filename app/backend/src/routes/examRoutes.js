@@ -255,43 +255,29 @@ router.post("/UploadExam", async function (req, res) {
 
     try {
       const existingPdfBytes = fs.readFileSync(tempFilePath);
-      const pdfDoc = await PDFDocument.load(existingPdfBytes);
-      const totalPages = pdfDoc.getPageCount();
+      const examsPDF = await PDFDocument.load(existingPdfBytes);
+      const totalPages = examsPDF.getPageCount();
       console.log("Total pages:", totalPages);
 
       const oddPagesPdf = await PDFDocument.create();
       const evenPagesPdf = await PDFDocument.create();
 
       for (let i = 0; i < totalPages; i++) {
-        const [pageToCopy] = await oddPagesPdf.copyPages(pdfDoc, [i]);
-        oddPagesPdf.addPage(pageToCopy);
+        if ((i + 1) % 2 === 1) {
+          const [pageToCopy] = await oddPagesPdf.copyPages(examsPDF, [i]);
+          oddPagesPdf.addPage(pageToCopy);
+        } else {
+          const [pageToCopy] = await evenPagesPdf.copyPages(examsPDF, [i]);
+          evenPagesPdf.addPage(pageToCopy);
+        }
       }
 
-      // const [firstDonorPage] = await oddPagesPdf.copyPages(pdfDoc, [0]);
-      // oddPagesPdf.addPage(firstDonorPage);
-      // const [secondDonorPage] = await oddPagesPdf.copyPages(pdfDoc, [1]);
-      // oddPagesPdf.addPage(secondDonorPage);
+      const oddBytes = await oddPagesPdf.save();
+      fs.writeFileSync(path.join(destinationDir1, "front_pages.pdf"), oddBytes);
+      const evenBytes = await evenPagesPdf.save();
+      fs.writeFileSync(path.join(destinationDir1, "back_pages.pdf"), evenBytes);
 
-      const pdfBytes = await oddPagesPdf.save();
-      fs.writeFileSync(path.join(destinationDir1, "odd_pages.pdf"), pdfBytes);
       fs.unlinkSync(tempFilePath); // Clean up the temporary file
-
-      // for (let i = 0; i < totalPages; i++) {
-      //   const [copiedPage] = await pdfDoc.copyPages(pdfDoc, [i]);
-      //   if ((i + 1) % 2 === 1) {
-      //     oddPagesPdf.addPage(copiedPage);
-      //   } else {
-      //     evenPagesPdf.addPage(copiedPage);
-      //   }
-      // }
-
-      // const oddPagesPdfBytes = await oddPagesPdf.save();
-      // const evenPagesPdfBytes = await evenPagesPdf.save();
-
-      // fs.writeFileSync(path.join(destinationDir1, "odd_pages.pdf"), oddPagesPdfBytes);
-      // fs.writeFileSync(path.join(destinationDir2, "even_pages.pdf"), evenPagesPdfBytes);
-
-      // fs.unlinkSync(tempFilePath); // Clean up the temporary file
 
       res.json({ message: "File uploaded and split successfully" });
     } catch (error) {
