@@ -3,8 +3,7 @@ const pool = require('../utils/db');
 // Display classes
 const displayClasses = async (req, res, next) => {
   try {
-    console.log("dipshit",req.auth);
-    const instructorAuth0Id = req.auth.sub; // Get the instructor ID from the JWT
+      const instructorAuth0Id = req.auth.sub; // Get the instructor ID from the JWT
     const result = await pool.query("SELECT * FROM classes WHERE instructor_id = $1", [instructorAuth0Id]);
     res.json(result.rows); // Send the list of classes as JSON
   } catch (err) {
