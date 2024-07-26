@@ -1,6 +1,88 @@
 
 # Personal Log
 
+## Friday ( 23/7 - 25/7 )
+
+### Timesheet 
+
+clockify report
+
+
+![Time15](https://github.com/user-attachments/assets/54d93347-b801-4801-8ca5-7ca2417c8241)
+
+
+
+### Current Tasks (Provide Details):
+- #1: Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhanced look altogether.
+- #2: User Story: Optimize User Interface and Usability
+- #3: User Story: Enhance Navigation and Consistency
+- #4: User Story: Improve Dashboard Functionality #206
+- #5: Student Dashboard
+  
+  
+### Progress Update (since 24/7/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhnaced look altogether - also modifying the related frontend tests due to new components added/create new tests, if needed.
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Optimize User Interface and Usability
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Enhance Navigation and Consistency
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Improve Dashboard Functionality
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Student Dashboard 
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+As I moved forward from the last cycle, I completed all the majorly required pages for the Instructor but since we got the OMR processing working, I completely revamped the pages for them as well to give it a enhanced look. I did some work on the student dashboard as well, revamping it completely to give it a new look. I managed to fix some testing for the frontend compoenents after doing work on the instructor pages but there are still a few to do. I am very happy with the work I did for the new UI design of the application and how the process is going altogether. Moving forward , I will be trying to make a PR over the weekend to get the completed UI changes merged into development branch before moving further with new UI changes. I will also be making progress with the student dashboard to get it almost done over the weekend, and moving forward will try to make a PR for the same as well before the next cycle.
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- Revamping the front end completely UI using Shad cn - also modifying the related frontend tests due to new components added/create new tests, if needed
+- User Story: Optimize User Interface and Usability
+- User Story: Enhance Navigation and Consistency
+- User Story: Improve Dashboard Functionality #206
+- Student Dashboard
+
+
+
 ## Wednesday ( 19/7 - 23/7 )
 
 ### Timesheet 
