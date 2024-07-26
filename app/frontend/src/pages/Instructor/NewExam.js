@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
-import '../../css/App.css';
+import "../../css/App.css";
 import "../../css/NewExam.css";
 
 const NewExam = () => {
@@ -9,6 +9,7 @@ const NewExam = () => {
   const [userID, setUserID] = useState("");
   const [className, setClassName] = useState("");
   const [courseId, setCourseId] = useState("");
+  const [template, setTemplate] = useState("100mcq"); // Default template
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,6 +21,10 @@ const NewExam = () => {
     setExamTitle(sanitizedValue);
   };
 
+  const handleTemplateChange = (event) => {
+    setTemplate(event.target.value);
+  };
+
   const isFormValid = () => {
     return examTitle.trim() !== ""; // Simple validation check
   };
@@ -27,7 +32,7 @@ const NewExam = () => {
   const handleUploadClick = (e) => {
     if (!isFormValid()) {
       e.preventDefault();
-      alert('Please enter an exam title before uploading the answer key.');
+      alert("Please enter an exam title before uploading the answer key.");
     }
   };
 
@@ -36,7 +41,7 @@ const NewExam = () => {
       setUserName(location.state.userName);
       setUserID(location.state.userID);
       setClassName(location.state.className);
-      setCourseId(location.state.courseID);  // Set courseID from state
+      setCourseId(location.state.courseID); // Set courseID from state
     }
   }, [location.state]);
 
@@ -48,10 +53,7 @@ const NewExam = () => {
             <h2>Create New Exam</h2>
           </header>
           <section className="new-exam">
-            <button
-              className="back-button"
-              onClick={() => window.history.back()}
-            ></button>
+            <button className="back-button" onClick={() => window.history.back()}></button>
 
             <h3>General</h3>
             <p>*The following details will be printed on the exam*</p>
@@ -68,11 +70,41 @@ const NewExam = () => {
                 required
               />
 
+              <label>Exam Template:</label>
+              <div>
+                <label>
+                  <input
+                    type="radio"
+                    value="100mcq"
+                    checked={template === "100mcq"}
+                    onChange={handleTemplateChange}
+                  />
+                  100 MCQ
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="200mcq"
+                    checked={template === "200mcq"}
+                    onChange={handleTemplateChange}
+                  />
+                  200 MCQ
+                </label>
+              </div>
+
               <label htmlFor="answer-key">Answer Key:</label>
               <div>
                 <Link
                   to={isFormValid() ? "/UploadExamKey" : "#"}
-                  state={{ examTitle: examTitle, userID: userID, userName: userName, className: className, classID: class_id, courseID: courseId }} // Pass examTitle as state
+                  state={{
+                    examTitle: examTitle,
+                    userID: userID,
+                    userName: userName,
+                    className: className,
+                    classID: class_id,
+                    courseID: courseId,
+                    template: template,
+                  }} // Pass examTitle and template as state
                   className="btn"
                   data-testid="upload-answer-key-btn"
                   onClick={handleUploadClick}
@@ -81,7 +113,11 @@ const NewExam = () => {
                 </Link>
                 <Link
                   to={isFormValid() ? "/ManualExamKey" : "#"}
-                  state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
+                  state={{
+                    examTitle: examTitle,
+                    classID: class_id,
+                    template: template,
+                  }} // Pass examTitle and template as state
                   className="btn"
                   data-testid="manual-answer-key-btn"
                 >

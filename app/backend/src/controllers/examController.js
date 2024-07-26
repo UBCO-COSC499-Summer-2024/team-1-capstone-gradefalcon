@@ -219,8 +219,6 @@ module.exports = {
   getAveragePerExam,
   getAveragePerCourse,
   getStudentGrades,
-  getStandardAverageData,
-  getPerformanceData,
   getAnswerKeyForExam,
   getStudentNameById,
   getScoreByExamId,

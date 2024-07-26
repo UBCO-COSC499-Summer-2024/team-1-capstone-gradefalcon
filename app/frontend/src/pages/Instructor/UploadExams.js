@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import "../../css/App.css";
 import "../../css/UploadExam.css";
@@ -12,7 +11,15 @@ const UploadExam = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Received state:", { className, userName, userID, examTitle, examID, courseID, classID });
+    // console.log("Received state:", {
+    //   className,
+    //   userName,
+    //   userID,
+    //   examTitle,
+    //   examID,
+    //   courseID,
+    //   classID,
+    // });
 
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
@@ -36,14 +43,13 @@ const UploadExam = () => {
     fileInputRef.current.value = "";
   };
 
-
   const sendToBackend = async () => {
     if (!file) return;
-  
+
     const formData = new FormData();
     formData.append("examPages", file);
     formData.append("exam_id", exam_id); // Include exam_id in the form data
-  
+
     try {
       const responses = await Promise.all([
         fetch("/api/exam/UploadExam", {
@@ -62,24 +68,22 @@ const UploadExam = () => {
           credentials: "include",
         }),
       ]);
-  
+
       const dataUploadExam = await responses[0].json();
       const dataGenerateEvaluation = await responses[1].json();
       const dataCopyTemplate = await responses[2].json();
-  
+
       console.log("Data from UploadExam:", dataUploadExam);
       console.log("Data from GenerateEvaluation:", dataGenerateEvaluation);
       console.log("Data from copyTemplate:", dataCopyTemplate);
-      
+
       navigate("/OMRProcessingUpload", {
         state: { exam_id },
       });
-
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  
 
   return (
     <>
@@ -128,7 +132,7 @@ const UploadExam = () => {
           </section>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

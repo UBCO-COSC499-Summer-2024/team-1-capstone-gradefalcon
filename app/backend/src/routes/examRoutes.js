@@ -7,14 +7,11 @@ const {
   getAveragePerExam,
   getAveragePerCourse,
   getStudentGrades,
-  getStandardAverageData,
-  getPerformanceData,
-  getAnswerKeyForExam,
   getStudentNameById,
   getScoreByExamId,
   saveResults,
 } = require("../controllers/examController");
-const { upload } = require("../middleware/uploadMiddleware");
+const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
@@ -28,12 +25,8 @@ router.get("/average-per-exam", getAveragePerExam);
 router.get("/average-per-course", getAveragePerCourse); // Updated route
 router.get("/grades/:studentId", getStudentGrades);
 
-
 // Function to get the answer key for a specific exam
 
-router.get('/getAnswerKey/:exam_id', async (req, res, next) => {
-router.get("/standard-average-data", getStandardAverageData);
-router.get("/performance-data", getPerformanceData);
 router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
   try {
     const exam_id = parseInt(req.params.exam_id, 10);
@@ -48,21 +41,15 @@ router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
   }
 });
 
-
 // Add this route to the examRoutes.js file
 
 router.get("/studentScores", async function (req, res) {
-  const filePath = path.join(
-    __dirname,
-    "../../omr/outputs/Results/Results.csv"
-  );
+  const filePath = path.join(__dirname, "../../omr/outputs/Results/Results.csv");
   const results = []; // Array to hold student number and score
 
   fs.createReadStream(filePath)
     .pipe(csv())
-    .on("data", (data) =>
-      results.push({ StudentID: data.StudentID, Score: data.score })
-    ) // Extract only the student number (Roll) and score
+    .on("data", (data) => results.push({ StudentID: data.StudentID, Score: data.score })) // Extract only the student number (Roll) and score
     .on("end", async () => {
       try {
         // Map each result to include the student name
@@ -125,14 +112,9 @@ router.get("/getResults", async function (req, res) {
               } else if (stats.isDirectory()) {
                 fs.rmdir(fileToDelete, { recursive: true }, (err) => {
                   if (err) {
-                    console.error(
-                      `Error deleting directory ${fileToDelete}:`,
-                      err
-                    );
+                    console.error(`Error deleting directory ${fileToDelete}:`, err);
                   } else {
-                    console.log(
-                      `Directory ${fileToDelete} deleted successfully`
-                    );
+                    console.log(`Directory ${fileToDelete} deleted successfully`);
                   }
                 });
               }
@@ -154,27 +136,74 @@ router.get("/getResults", async function (req, res) {
 });
 
 // Save the exam key uploaded by the user
-router.post( "/saveExamKey",upload.single("examKey"), async function (req, res) {
-    console.log(req.file);
-    res.send(JSON.stringify("File uploaded successfully"));
+router.post("/saveExamKey/:examType", async function (req, res) {
+  const template = req.params.examType;
+  console.log("template", template);
+  if (template === "100mcq") {
+    //only one page
+    const destinationDir = "/code/omr/inputs";
+    const upload = createUploadMiddleware(destinationDir);
+    upload.single("examKey")(req, res, function (err) {
+      if (err) {
+        return res.status(500).send("Error uploading file.");
+      }
+      console.log(req.file);
+      res.send(JSON.stringify("File uploaded successfully"));
+    });
+  } else {
+    // template === "200mcq"
+    // 2 pages
+    // WILL COME BACK TO THIS LATER
+    // const destinationDir1 = "/code/omr/inputs/page_1";
+    // const upload1 = createUploadMiddleware(destinationDir1);
+    // upload1.single("examKey");
+    // const destinationDir2 = "/code/omr/inputs/page_2";
+    // const upload2 = createUploadMiddleware(destinationDir2);
+    // upload1.single("examKey");
   }
-);
-
+});
 
 // Copy the template JSON file to the shared volume
 router.post("/copyTemplate", async function (req, res) {
   console.log("copyTemplate");
-  const filePath = `/code/omr/inputs`;
-  const templatePath = path.join(__dirname, "../assets/template.json"); // Adjust the path as necessary
-  const destinationTemplatePath = path.join(filePath, "template.json");
+  const examType = req.body.examType;
+  const keyOrExam = req.body.keyOrExam;
 
-  try {
-    fs.copyFileSync(templatePath, destinationTemplatePath);
-    console.log("Template.json copied successfully");
-  } catch (error) {
-    console.error("Error copying template.json:", error);
+  if (examType === "100mcq") {
+    if (keyOrExam === "key") {
+      // copying template for the key
+      // only template for the second page
+      // we can just store it straight in the inputs folder since it's just 1 page
+      const filePath = "/code/omr/inputs";
+      const templatePath = path.join(__dirname, "../assets/100mcq_page_2.json");
+      const destinationTemplatePath = path.join(filePath, "template.json");
+
+      try {
+        fs.copyFileSync(templatePath, destinationTemplatePath);
+        console.log("Template.json copied successfully");
+      } catch (error) {
+        console.error("Error copying template.json:", error);
+      }
+    } else {
+      // keyOrExam === "exam"
+      // copying template for the exam
+      // template for both ID and question page
+      const filePath_1 = "/code/omr/inputs/page_1";
+      const filePath_2 = "/code/omr/inputs/page_2";
+      const templatePath_1 = path.join(__dirname, "../assets/100mcq_page_1.json");
+      const templatePath_2 = path.join(__dirname, "../assets/100mcq_page_2.json");
+      const destinationTemplatePath1 = path.join(filePath_1, "template.json");
+      const destinationTemplatePath2 = path.join(filePath_2, "template.json");
+      try {
+        fs.copyFileSync(templatePath_1, destinationTemplatePath1);
+        console.log("First template.json copied successfully");
+        fs.copyFileSync(templatePath_2, destinationTemplatePath2);
+        console.log("Second template.json copied successfully");
+      } catch (error) {
+        console.error("Error copying template.json:", error);
+      }
+    }
   }
-
   res.send(JSON.stringify("File copied successfully"));
 });
 
@@ -194,21 +223,17 @@ router.post("/callOMR", async function (req, res) {
   }
 });
 
-router.post(
-  "/UploadExam",
-  upload.single("examPages"),
-  async function (req, res) {
-    const { exam_id } = req.body;
+// router.post("/UploadExam", upload.single("examPages"), async function (req, res) {
+//   const { exam_id } = req.body;
 
-    try {
-      // Here, we only handle the file upload
-      res.json({ message: "File uploaded successfully", exam_id });
-    } catch (error) {
-      console.error("Error in /UploadExam:", error);
-      res.status(500).send("Error uploading exam pages");
-    }
-  }
-);
+//   try {
+//     // Here, we only handle the file upload
+//     res.json({ message: "File uploaded successfully", exam_id });
+//   } catch (error) {
+//     console.error("Error in /UploadExam:", error);
+//     res.status(500).send("Error uploading exam pages");
+//   }
+// });
 
 // Generate the evaluation JSON for an exam
 router.post("/GenerateEvaluation", async function (req, res) {
@@ -273,10 +298,7 @@ router.post("/GenerateEvaluation", async function (req, res) {
 
     const destinationDir = `/code/omr/inputs`;
     const evaluationFilePath = path.join(destinationDir, "evaluation.json");
-    fs.writeFileSync(
-      evaluationFilePath,
-      JSON.stringify(evaluationJson, null, 2)
-    );
+    fs.writeFileSync(evaluationFilePath, JSON.stringify(evaluationJson, null, 2));
 
     res.json({ message: "evaluation.json created successfully" });
   } catch (error) {
@@ -284,20 +306,6 @@ router.post("/GenerateEvaluation", async function (req, res) {
     res.status(500).send("Error generating evaluation file");
   }
 });
-
-// Upload exam pages
-router.post("/UploadExam", upload.single("examPages"), async function (req, res) {
-  const { exam_id } = req.body;
-
-  try {
-    // Here, we only handle the file upload
-    res.json({ message: "File uploaded successfully", exam_id });
-  } catch (error) {
-    console.error("Error in /UploadExam:", error);
-    res.status(500).send("Error uploading exam pages");
-  }
-});
-
 
 // Call the OMR processing service
 router.post("/callOMR", async function (req, res) {
@@ -317,18 +325,18 @@ router.post("/callOMR", async function (req, res) {
 });
 
 // Route to fetch the first PNG image in the folder
-router.get('/fetchImage', async function (req, res) {
-  const imagesFolderPath = path.join(__dirname, '../../omr/outputs/CheckedOMRs/colored');
+router.get("/fetchImage", async function (req, res) {
+  const imagesFolderPath = path.join(__dirname, "../../omr/outputs/CheckedOMRs/colored");
 
   try {
     // Read all files in the directory
     const files = await fs.promises.readdir(imagesFolderPath);
 
     // Filter out the PNG files
-    const pngFiles = files.filter(file => path.extname(file).toLowerCase() === '.png');
+    const pngFiles = files.filter((file) => path.extname(file).toLowerCase() === ".png");
 
     if (pngFiles.length === 0) {
-      return res.status(404).send('No PNG images found in the folder');
+      return res.status(404).send("No PNG images found in the folder");
     }
 
     // Get the first PNG file
@@ -338,8 +346,8 @@ router.get('/fetchImage', async function (req, res) {
     // Send the image file
     res.sendFile(imagePath);
   } catch (error) {
-    console.error('Error fetching image:', error);
-    res.status(500).send('Error fetching image');
+    console.error("Error fetching image:", error);
+    res.status(500).send("Error fetching image");
   }
 });
 
@@ -364,10 +372,7 @@ router.post("/saveResults", saveResults);
 
 router.get("/searchExam/:student_id", async (req, res) => {
   const studentId = req.params.student_id;
-  const filePath = path.join(
-    __dirname,
-    "../../omr/outputs/Results/Results.csv"
-  );
+  const filePath = path.join(__dirname, "../../omr/outputs/Results/Results.csv");
   let found = false; // Flag to check if student is found
 
   fs.createReadStream(filePath)
