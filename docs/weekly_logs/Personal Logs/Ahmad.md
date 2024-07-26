@@ -1,5 +1,56 @@
 # Personal Log
 Ahmad Saleem Mirza
+## Wednesday (July 24 - 26)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/July24-26.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Integrating grade exam process changes
+  * #2: Adding support for both 100 and 200mcq template
+  * #3: Ensuring bulk upload of files
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Integrating grade exam process changes
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Adding support for both 100 and 200mcq template
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>  
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Ensuring bulk upload of files
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>    
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+The exam grading process is now integrated across my branch and Omar's and all conflicts are resolved. I am now working on adding support for UBC's 100mcq and 200mcq sheets and handling the bulk upload of files. What initially seemed most challenging was deciding how to split files, since the front page and back page of a single had to be scanned in a different way. However, I have now found a way to accomplish (separating the pdfs and then figuring out which front page is linked to which back page).
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Grading the bulk of exams and then allowing students to see their result.
 
 ## Wednesday (July 19 - 24)
 
