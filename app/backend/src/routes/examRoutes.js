@@ -15,7 +15,8 @@ const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
-
+const { PDFDocument } = require("pdf-lib");
+const multer = require("multer");
 const router = express.Router();
 
 router.post("/saveQuestions", saveQuestions);
@@ -169,6 +170,12 @@ router.post("/copyTemplate", async function (req, res) {
   const examType = req.body.examType;
   const keyOrExam = req.body.keyOrExam;
 
+  const ensureDirectoryExistence = (dirPath) => {
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+  };
+
   if (examType === "100mcq") {
     if (keyOrExam === "key") {
       // copying template for the key
@@ -178,11 +185,14 @@ router.post("/copyTemplate", async function (req, res) {
       const templatePath = path.join(__dirname, "../assets/100mcq_page_2.json");
       const destinationTemplatePath = path.join(filePath, "template.json");
 
+      ensureDirectoryExistence(filePath);
+
       try {
         fs.copyFileSync(templatePath, destinationTemplatePath);
         console.log("Template.json copied successfully");
       } catch (error) {
         console.error("Error copying template.json:", error);
+        return res.status(500).send("Error copying template.json");
       }
     } else {
       // keyOrExam === "exam"
@@ -194,6 +204,10 @@ router.post("/copyTemplate", async function (req, res) {
       const templatePath_2 = path.join(__dirname, "../assets/100mcq_page_2.json");
       const destinationTemplatePath1 = path.join(filePath_1, "template.json");
       const destinationTemplatePath2 = path.join(filePath_2, "template.json");
+
+      ensureDirectoryExistence(filePath_1);
+      ensureDirectoryExistence(filePath_2);
+
       try {
         fs.copyFileSync(templatePath_1, destinationTemplatePath1);
         console.log("First template.json copied successfully");
@@ -201,8 +215,12 @@ router.post("/copyTemplate", async function (req, res) {
         console.log("Second template.json copied successfully");
       } catch (error) {
         console.error("Error copying template.json:", error);
+        return res.status(500).send("Error copying template.json");
       }
     }
+  } else {
+    // examType === "200mcq"
+    // will get back to this
   }
   res.send(JSON.stringify("File copied successfully"));
 });
@@ -223,17 +241,51 @@ router.post("/callOMR", async function (req, res) {
   }
 });
 
-// router.post("/UploadExam", upload.single("examPages"), async function (req, res) {
-//   const { exam_id } = req.body;
+router.post("/UploadExam", async function (req, res) {
+  const upload = multer({ dest: "uploads/" }).single("examPages");
 
-//   try {
-//     // Here, we only handle the file upload
-//     res.json({ message: "File uploaded successfully", exam_id });
-//   } catch (error) {
-//     console.error("Error in /UploadExam:", error);
-//     res.status(500).send("Error uploading exam pages");
-//   }
-// });
+  upload(req, res, async function (err) {
+    if (err) {
+      return res.status(500).send("Error uploading file.");
+    }
+
+    const { path: tempFilePath } = req.file;
+    const destinationDir1 = "/code/omr/inputs/page_1";
+    const destinationDir2 = "/code/omr/inputs/page_2";
+
+    try {
+      const existingPdfBytes = fs.readFileSync(tempFilePath);
+      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+      const totalPages = pdfDoc.getPageCount();
+      console.log("Total pages:", totalPages);
+
+      const oddPagesPdf = await PDFDocument.create();
+      const evenPagesPdf = await PDFDocument.create();
+
+      for (let i = 0; i < totalPages; i++) {
+        const [copiedPage] = await pdfDoc.copyPages(pdfDoc, [i]);
+        if ((i + 1) % 2 === 1) {
+          oddPagesPdf.addPage(copiedPage);
+        } else {
+          evenPagesPdf.addPage(copiedPage);
+        }
+      }
+
+      const oddPagesPdfBytes = await oddPagesPdf.save();
+      const evenPagesPdfBytes = await evenPagesPdf.save();
+
+      fs.writeFileSync(path.join(destinationDir1, "odd_pages.pdf"), oddPagesPdfBytes);
+      fs.writeFileSync(path.join(destinationDir2, "even_pages.pdf"), evenPagesPdfBytes);
+
+      fs.unlinkSync(tempFilePath); // Clean up the temporary file
+
+      res.json({ message: "File uploaded and split successfully" });
+    } catch (error) {
+      console.error("Error processing PDF file:", error);
+      res.status(500).send("Error processing PDF file");
+    }
+  });
+});
 
 // Generate the evaluation JSON for an exam
 router.post("/GenerateEvaluation", async function (req, res) {
@@ -296,7 +348,7 @@ router.post("/GenerateEvaluation", async function (req, res) {
       },
     };
 
-    const destinationDir = `/code/omr/inputs`;
+    const destinationDir = `/code/omr/inputs/page_2`;
     const evaluationFilePath = path.join(destinationDir, "evaluation.json");
     fs.writeFileSync(evaluationFilePath, JSON.stringify(evaluationJson, null, 2));
 

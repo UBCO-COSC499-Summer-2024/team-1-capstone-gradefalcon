@@ -66,6 +66,11 @@ const UploadExam = () => {
         fetch("/api/exam/copyTemplate", {
           method: "POST",
           credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // need to create a fetch method to find examType from db
+          body: JSON.stringify({ examType: "100mcq", keyOrExam: "exam" }),
         }),
       ]);
 
@@ -93,15 +98,9 @@ const UploadExam = () => {
             <h2>Upload Exam</h2>
           </header>
           <section className="upload-key">
-            <button
-              className="back-button"
-              onClick={() => window.history.back()}
-            ></button>
+            <button className="back-button" onClick={() => window.history.back()}></button>
             <h3>Upload the exam as a PDF file.</h3>
-            <div
-              className="upload-area"
-              style={{ display: fileURL ? "none" : "block" }}
-            >
+            <div className="upload-area" style={{ display: fileURL ? "none" : "block" }}>
               <input
                 type="file"
                 id="file-input"
@@ -110,17 +109,11 @@ const UploadExam = () => {
                 accept="application/pdf"
                 ref={fileInputRef}
               />
-              <div
-                className="drag-drop-area"
-                onClick={() => fileInputRef.current.click()}
-              >
+              <div className="drag-drop-area" onClick={() => fileInputRef.current.click()}>
                 <p>Click to browse or drag and drop your files</p>
               </div>
             </div>
-            <div
-              className="pdf-display"
-              style={{ display: fileURL ? "block" : "none" }}
-            >
+            <div className="pdf-display" style={{ display: fileURL ? "block" : "none" }}>
               <iframe src={fileURL} title="PDF Preview"></iframe>
             </div>
             <button className="btn-import" onClick={sendToBackend}>
