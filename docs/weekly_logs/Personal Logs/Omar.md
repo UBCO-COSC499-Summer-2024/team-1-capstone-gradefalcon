@@ -1,5 +1,93 @@
 # Personal Log
 
+## Friday (7/23-7/26)
+
+### Timesheet
+Clockify report
+![time](../Clockify/Omar/Time16.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Grading Exams and Displaying Results on Frontend**
+    1. Disabled modemon from restarting server when input is changed to avoid proxy error.
+
+2. **Refactor UI Using shadcn UI Components**
+    1. Merged Upload Exam feature.
+
+3. **Custom Templates Support**
+    1. looked into creating custom bubble sheets using latex and reportlab
+
+4. **Configured Evaluation to have a custom marking schema for questions**    
+
+### Progress Update (since 7/16/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        <tr>
+        <tr>
+        <td>#17-User Story: Custom Bubble Sheet Support
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+                <tr>
+        <td>Configure custom grading schema
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    </tr>
+            <tr>
+        <td>#80-Refactor UI Using shadcn UI Components
+        </td>
+        <td>In Review
+        </td>
+    </tr>
+    </tr>
+            </td>
+        </tr>
+        <tr>
+        <td> #181-Grading Exams and Displaying Results on Frontend
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+    </tr>
+     <tr>
+        <td> #188-Implement Refactored Code and Implement Color-Coded Grading
+        </td>
+        <td>Completed
+        </td>
+    <tr>
+</table> 
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - The grading exam demo has been merged and we will no longer have issue with proxies now that we solved the root of the issue we can move forward easier.
+
+- **What Was Done:**
+  - Created custom grading schema
+  - Fixed Proxy Error.
+
+- **What Didn't Go Well:**
+  - The proxy error which I thoguh fixed prior took too much time out of me but thankfully it is no longer an issue.
+
+- **Retrospective:**
+  - We are making strides in creating custom bubble sheets and custom grading schemas and have come up with a plan.
+
+  ### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **Scale solution for multiple students**.
+
+2. **Error detection and flagging**
+
+3. **Work on custom bubble sheets**
+
+
 ## Wednesday (7/19-7/23)
 
 ### Timesheet
