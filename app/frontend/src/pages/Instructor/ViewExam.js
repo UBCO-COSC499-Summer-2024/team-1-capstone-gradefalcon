@@ -7,7 +7,8 @@ const ViewExam = () => {
   const navigate = useNavigate();
   const { student_id, exam_id, front_page, back_page } = location.state || {};
   const [examFileId, setExamFileId] = useState("");
-  const [imageSrc, setImageSrc] = useState("");
+  const [frontSrc, setFrontSrc] = useState("");
+  const [backSrc, setBackSrc] = useState("");
 
   // send the student_id and exam_id to a backend function
   // backend function reads the csv file, matches the student_id and returns exam file id
@@ -27,20 +28,33 @@ const ViewExam = () => {
         // // console.log("response", response);
         // const data = await response.json();
 
-        const responseImage = await fetch("/api/exam/fetchImage", {
+        const back_page_response = await fetch("/api/exam/fetchImage", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ file_name: back_page }),
+          body: JSON.stringify({ side: "back", file_name: back_page }),
         });
         // const data2 = await responseImage.json();
         // console.log(data2);
-        const blob = await responseImage.blob();
-        const url = URL.createObjectURL(blob);
-        setImageSrc(url);
+        let blob = await back_page_response.blob();
+        let url = URL.createObjectURL(blob);
+        setBackSrc(url);
 
-        setExamFileId(front_page);
+        const front_page_response = await fetch("/api/exam/fetchImage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ side: "front", file_name: front_page }),
+        });
+        // const data2 = await responseImage.json();
+        // console.log(data2);
+        blob = await front_page_response.blob();
+        url = URL.createObjectURL(blob);
+        setFrontSrc(url);
+
+        // setExamFileId(front_page);
       } catch (error) {
         console.error("Failed to fetch exam:", error);
       }
@@ -54,10 +68,22 @@ const ViewExam = () => {
       <div className="main-content">
         <h1>View Exam</h1>
 
-        {imageSrc ? (
+        {backSrc ? (
           <img
-            src={imageSrc}
+            src={backSrc}
             alt="Student Answers"
+            style={{
+              maxWidth: "30%",
+              height: "auto",
+            }}
+          />
+        ) : (
+          <p>Loading image...</p>
+        )}
+        {frontSrc ? (
+          <img
+            src={frontSrc}
+            alt="Student ID"
             style={{
               maxWidth: "30%",
               height: "auto",

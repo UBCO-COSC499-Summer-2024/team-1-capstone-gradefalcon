@@ -394,26 +394,20 @@ router.post("/callOMR", async function (req, res) {
 
 // Route to fetch the first PNG image in the folder
 router.post("/fetchImage", async function (req, res) {
-  const imagesFolderPath = path.join(
-    __dirname,
-    `../../omr/outputs/page_2/CheckedOMRs/colored/${req.body.file_name}`
-  );
+  let imagesFolderPath;
+  if (req.body.side === "back") {
+    imagesFolderPath = path.join(
+      __dirname,
+      `../../omr/outputs/page_2/CheckedOMRs/colored/${req.body.file_name}`
+    );
+  } else {
+    imagesFolderPath = path.join(
+      __dirname,
+      `../../omr/outputs/page_1/CheckedOMRs/colored/${req.body.file_name}`
+    );
+  }
   console.log(req.body.file_name);
   try {
-    // // Read all files in the directory
-    // const files = await fs.promises.readdir(imagesFolderPath);
-
-    // // Filter out the PNG files
-    // const pngFiles = files.filter((file) => path.extname(file).toLowerCase() === ".png");
-
-    // if (pngFiles.length === 0) {
-    //   return res.status(404).send("No PNG images found in the folder");
-    // }
-
-    // // Get the first PNG file
-    // const firstPngFile = pngFiles[0];
-    // const imagePath = path.join(imagesFolderPath, firstPngFile);
-
     // Send the image file
     res.sendFile(imagesFolderPath);
   } catch (error) {
