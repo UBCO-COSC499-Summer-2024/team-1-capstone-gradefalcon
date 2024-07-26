@@ -275,7 +275,7 @@ router.post("/UploadExam", async function (req, res) {
       const oddBytes = await oddPagesPdf.save();
       fs.writeFileSync(path.join(destinationDir1, "front_pages.pdf"), oddBytes);
       const evenBytes = await evenPagesPdf.save();
-      fs.writeFileSync(path.join(destinationDir1, "back_pages.pdf"), evenBytes);
+      fs.writeFileSync(path.join(destinationDir2, "back_pages.pdf"), evenBytes);
 
       fs.unlinkSync(tempFilePath); // Clean up the temporary file
 
@@ -348,8 +348,15 @@ router.post("/GenerateEvaluation", async function (req, res) {
       },
     };
 
-    // const destinationDir = `/code/omr/inputs/page_2`;
-    const destinationDir = `/code/omr/inputs`;
+    const destinationDir = `/code/omr/inputs/page_2`;
+    // Function to ensure the directory exists
+    const ensureDirectoryExistence = (dirPath) => {
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+      }
+    };
+    ensureDirectoryExistence(destinationDir);
+    // const destinationDir = `/code/omr/inputs`;
     const evaluationFilePath = path.join(destinationDir, "evaluation.json");
     fs.writeFileSync(evaluationFilePath, JSON.stringify(evaluationJson, null, 2));
 
