@@ -1,5 +1,43 @@
 # Personal Log
 
+## Thursday (7/24 - 7/25)
+
+## TimeSheet
+Clockify report
+![alt text](../Clockify/Bennett/07_24_2024-07_25_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: RBAC+API rework with Auth0
+
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * Just a a few hours before writting this log me and Nelson made had a great sucsess getting a working group of api calls with the dashboard page as our gineau pig where it make a (mostly) sucsessfull api call to the backend, but first verified user permissions as defined on auth0 relative to their role, what is left is mass implimentation (all our pages have the same strucutre so its almost as simple as copy paste) and a PR schedualed for end of friday
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Merge an up to date working auth0 implimentation with an up to date dev branch
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Personal Log
+
 ## Tuesday (7/19 - 7/23)
 
 ## TimeSheet
