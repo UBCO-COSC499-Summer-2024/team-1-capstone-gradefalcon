@@ -15,13 +15,25 @@ const checkJwt = jwt({
 
 const checkPermissions = (requiredPermissions) => {
   return (req, res, next) => {
-    const permissions = req.auth.permissions || [];
+    console.log("auth0.js, Line 29 - Permissions Check - Required Permissions:", requiredPermissions);
+    const permissions = req.auth?.permissions || [];
+    console.log("auth0.js, Line 31 - Permissions Check - User Permissions:", permissions);
     const hasPermissions = requiredPermissions.every(permission => permissions.includes(permission));
     if (!hasPermissions) {
-      return res.status(403).json({ message: 'Forbidden' });
+      console.error("auth0.js, Line 33 - Insufficient permissions:", permissions);
+      return res.status(403).json({ message: 'Forbidden', requiredPermissions, userPermissions: permissions });
     }
     next();
   };
+};
+
+const errorHandler = (err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    console.error("JWT Error:", err);
+    res.status(401).json({ message: "Invalid token" });
+  } else {
+    next(err);
+  }
 };
 
 const checkRole = (role) => {
@@ -34,4 +46,4 @@ const checkRole = (role) => {
   };
 };
 
-module.exports = { checkJwt, checkPermissions, checkRole };
+module.exports = { checkJwt, checkPermissions, checkRole, errorHandler };

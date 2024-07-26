@@ -74,11 +74,11 @@ app.get('/api/private-scoped', checkJwt, requiredScopes('read:messages'), (req, 
   });
 });
 
-app.use('/class', checkJwt, checkRole('instructor'), classRoutes);
-app.use('/exam', checkJwt, checkRole('instructor'), examRoutes);
-app.use('/users', checkJwt, checkRole('admin'), userRoutes);
-app.use('/upload', checkJwt, checkRole('uploader'), uploadRoutes);
-app.use('/courses', checkJwt, checkRole('instructor'), courseRoutes);
+app.use('/class', checkJwt, classRoutes);
+app.use('/exam', checkJwt,  examRoutes);
+app.use('/users', checkJwt,  userRoutes);
+app.use('/upload', checkJwt,  uploadRoutes);
+app.use('/courses', checkJwt,  courseRoutes);
 
 app.get('/healthz', (req, res) => {
   res.send('I am happy and healthy\n');

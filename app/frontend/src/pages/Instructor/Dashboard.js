@@ -27,7 +27,6 @@ const Dashboard = () => {
     const fetchSessionInfo = async () => {
       try {
         const token = await getAccessTokenSilently();
-        console.log('overhere',token);
         const response = await fetch("/api/session-info", {
           method: "GET",
           headers: {

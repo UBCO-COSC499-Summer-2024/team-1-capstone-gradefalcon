@@ -41,7 +41,7 @@ const newExam = async (req, res, next) => {
 };
 
 const examBoard = async (req, res, next) => {
-  const instructorId = req.auth.payload.sub; // Get the instructor ID from Auth0 token
+  const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
     const classes = await pool.query(
       "SELECT exam_id, classes.class_id, exam_title, course_id, course_name FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
@@ -55,7 +55,7 @@ const examBoard = async (req, res, next) => {
 };
 
 const getStandardAverageData = async (req, res, next) => {
-  const instructorId = req.auth.payload.sub; // Get the instructor ID from Auth0 token
+  const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
     const standardAverageData = await pool.query(`
       SELECT e.exam_title AS "examTitle", AVG(sr.grade) AS "averageScore"
@@ -74,7 +74,7 @@ const getStandardAverageData = async (req, res, next) => {
 };
 
 const getPerformanceData = async (req, res, next) => {
-  const instructorId = req.auth.payload.sub; // Get the instructor ID from Auth0 token
+  const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
     const performanceData = await pool.query(`
       SELECT c.course_name AS "courseName", AVG(sr.grade) AS "averageScore"

@@ -15,14 +15,14 @@ const csv = require("csv-parser");
 
 const router = express.Router();
 
-router.post("/saveQuestions", checkJwt, checkRole('instructor'), checkPermissions(['create:exam']), saveQuestions);
-router.post("/NewExam/:class_id", checkJwt, checkRole('instructor'), checkPermissions(['create:exam']), newExam);
-router.post("/ExamBoard", checkJwt, checkRole('instructor'), checkPermissions(['read:exams']), examBoard);
-router.get("/standard-average-data", checkJwt, checkRole('instructor'), checkPermissions(['read:standardAverageData']), getStandardAverageData);
-router.get("/performance-data", checkJwt, checkRole('instructor'), checkPermissions(['read:performanceData']), getPerformanceData);
-router.get('/grades/:studentId', checkJwt, checkRole('instructor'), checkPermissions(['read:grades']), getStudentGrades);
+router.post("/saveQuestions", checkJwt, checkPermissions(['create:exam']), saveQuestions);
+router.post("/NewExam/:class_id", checkJwt, checkPermissions(['create:exam']), newExam);
+router.post("/ExamBoard", checkJwt, checkPermissions(['read:exams']), examBoard);
+router.get("/standard-average-data", checkJwt, checkPermissions(['read:standardAverageData']), getStandardAverageData);
+router.get("/performance-data", checkJwt, checkPermissions(['read:performanceData']), getPerformanceData);
+router.get('/grades/:studentId', checkJwt, checkPermissions(['read:grades']), getStudentGrades);
 
-router.get("/getResults", checkJwt, checkRole('instructor'), checkPermissions(['read:grades']), async function (req, res) {
+router.get("/getResults", checkJwt, checkPermissions(['read:grades']), async function (req, res) {
   const filePath = path.join(
     __dirname,
     "../../omr/outputs/Results/Results.csv"

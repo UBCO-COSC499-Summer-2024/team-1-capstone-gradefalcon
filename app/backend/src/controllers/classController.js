@@ -3,10 +3,14 @@ const pool = require('../utils/db');
 // Display classes
 const displayClasses = async (req, res, next) => {
   try {
-    const instructorAuth0Id = req.auth.payload.sub; // Get the instructor ID from the JWT
+    console.log("dipshit",req.auth);
+    const instructorAuth0Id = req.auth.sub; // Get the instructor ID from the JWT
+    console.log("Instructor Auth0 ID:", instructorAuth0Id); // Log the instructor ID
     const result = await pool.query("SELECT * FROM classes WHERE instructor_id = $1", [instructorAuth0Id]);
+    console.log("Classes Data:", result.rows); // Log the retrieved classes
     res.json(result.rows); // Send the list of classes as JSON
   } catch (err) {
+    console.error("Error in displayClasses:", err); // Log any errors
     next(err);
   }
 };
@@ -62,7 +66,7 @@ const displayClassManagement = async (req, res, next) => {
 // Import class
 const importClass = async (req, res) => {
   const { students, courseName, courseId } = req.body;
-  const instructorId = req.auth.payload.sub; // Retrieve instructor ID from JWT
+  const instructorId = req.auth.sub; // Retrieve instructor ID from JWT
 
   if (!instructorId) {
     return res.status(403).json({ message: "Unauthorized" });
