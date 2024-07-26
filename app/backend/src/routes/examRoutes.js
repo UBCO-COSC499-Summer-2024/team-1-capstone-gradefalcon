@@ -15,6 +15,7 @@ const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
+const { Parser } = require("json2csv");
 const { PDFDocument } = require("pdf-lib");
 const multer = require("multer");
 const router = express.Router();
@@ -45,7 +46,7 @@ router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
 // Add this route to the examRoutes.js file
 
 router.get("/studentScores", async function (req, res) {
-  const filePath = path.join(__dirname, "../../omr/outputs/Results/Results.csv");
+  const filePath = path.join(__dirname, "../../omr/outputs/combined.csv");
   const results = []; // Array to hold student number and score
 
   fs.createReadStream(filePath)
@@ -451,6 +452,82 @@ router.get("/searchExam/:student_id", async (req, res) => {
     .on("error", (error) => {
       console.error("Error reading CSV file:", error);
       res.status(500).send("Error reading CSV file");
+    });
+});
+
+// There are 2 folders in outputs: page_1 and page_2
+// The first folder contains the ID page and the second folder contains the question page
+// Each ID page has a matching question page
+// e.g front_pages_page_1.png = back_pages_page_1.png
+// We extract the ID from front_pages_page_1.png and the answers from back_pages_page_1.png
+// Create a CSV file with the following fields:
+// "front_page_id", "back_page_id", "score", "student_id", "question_1", "question_2", ..., "question_100"
+router.get("/preprocessingCSV", async (req, res) => {
+  console.log("Hello from preprocessingCSV");
+  const frontPagePath = path.join(__dirname, "../../omr/outputs/page_1/Results/Results.csv");
+  const backPagePath = path.join(__dirname, "../../omr/outputs/page_2/Results/Results.csv");
+  const outputPath = path.join(__dirname, "../../omr/outputs/combined.csv");
+
+  const frontPageData = [];
+  const backPageData = [];
+
+  // Read front_page.csv
+  fs.createReadStream(frontPagePath)
+    .pipe(csv())
+    .on("data", (data) => {
+      frontPageData.push({
+        front_page_file_id: data.file_id,
+        FirstName: data.FirstName,
+        LastName: data.LastName,
+        StudentID: data.StudentID,
+      });
+    })
+    .on("end", () => {
+      // Read back_page.csv
+      fs.createReadStream(backPagePath)
+        .pipe(csv())
+        .on("data", (data) => {
+          backPageData.push({
+            back_page_file_id: data.file_id,
+            score: data.score,
+          });
+        })
+        .on("end", () => {
+          // Combine data from both CSV files
+          const combinedData = frontPageData.map((frontData) => {
+            const backData = backPageData.find(
+              (back) => back.back_page_file_id.slice(-6) === frontData.front_page_file_id.slice(-6)
+            );
+            return {
+              ...frontData,
+              back_page_file_id: backData ? backData.back_page_file_id : null,
+              score: backData ? backData.score : null,
+            };
+          });
+
+          // Convert combined data to CSV format
+          const json2csvParser = new Parser();
+          const csvData = json2csvParser.parse(combinedData);
+
+          // Save the combined CSV data to a file
+          fs.writeFile(outputPath, csvData, (err) => {
+            if (err) {
+              console.error("Error writing combined.csv:", err);
+              res.status(500).send("Error writing combined.csv");
+            } else {
+              console.log("Combined CSV file saved successfully.");
+              res.status(200).send("Combined CSV file saved successfully.");
+            }
+          });
+        })
+        .on("error", (error) => {
+          console.error("Error reading back_page.csv:", error);
+          res.status(500).send("Error reading back_page.csv");
+        });
+    })
+    .on("error", (error) => {
+      console.error("Error reading front_page.csv:", error);
+      res.status(500).send("Error reading front_page.csv");
     });
 });
 

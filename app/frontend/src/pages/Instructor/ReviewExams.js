@@ -16,6 +16,20 @@ const ReviewExams = () => {
   const exam_id = 1; // placeholder
 
   useEffect(() => {
+    //preprocess the data
+    const preprocessData = async () => {
+      try {
+        const response = await fetch("/api/exam/preprocessingCSV");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        // const data = await response.json();
+        // console.log("preprocessData", data);
+      } catch (error) {
+        console.error("Error preprocessing data:", error);
+      }
+    };
+
     // Fetch student scores for the exam
     const fetchStudentScores = async () => {
       try {
@@ -44,6 +58,7 @@ const ReviewExams = () => {
       }
     };
 
+    preprocessData();
     fetchStudentScores();
     fetchTotalScore();
   }, []);
@@ -68,9 +83,7 @@ const ReviewExams = () => {
   // Function to handle editing the student score
   const handleEdit = (studentId) => {
     setEditStudentId(studentId);
-    const studentScore = studentScores.find(
-      (s) => s.StudentID === studentId
-    ).Score;
+    const studentScore = studentScores.find((s) => s.StudentID === studentId).Score;
     setOriginalScores((prevScores) => ({
       ...prevScores,
       [studentId]: studentScore,
@@ -81,9 +94,7 @@ const ReviewExams = () => {
   const handleCancel = (studentId) => {
     setStudentScores((currentScores) =>
       currentScores.map((score) =>
-        score.StudentID === studentId
-          ? { ...score, Score: originalScores[studentId] }
-          : score
+        score.StudentID === studentId ? { ...score, Score: originalScores[studentId] } : score
       )
     );
     setEditStudentId(null); // Exit edit mode
@@ -96,9 +107,7 @@ const ReviewExams = () => {
 
   const saveResults = async () => {
     if (editStudentId !== null) {
-      alert(
-        "Please save or cancel the current edit before saving all results."
-      );
+      alert("Please save or cancel the current edit before saving all results.");
       return;
     }
     try {
@@ -124,9 +133,7 @@ const ReviewExams = () => {
   };
 
   const filteredScores = searchQuery
-    ? studentScores.filter((student) =>
-        student.StudentID.toString().includes(searchQuery)
-      )
+    ? studentScores.filter((student) => student.StudentID.toString().includes(searchQuery))
     : studentScores;
 
   return (
@@ -135,11 +142,7 @@ const ReviewExams = () => {
         <div className="main-content">
           {toast && (
             <>
-              <Toast
-                message={toast.message}
-                type={toast.type}
-                onClose={() => setToast(null)}
-              />
+              <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
             </>
           )}
           <header>
@@ -172,9 +175,7 @@ const ReviewExams = () => {
                         value={student.Score}
                         max={totalMarks}
                         min="0"
-                        onChange={(e) =>
-                          handleScoreChange(e, student.StudentID)
-                        }
+                        onChange={(e) => handleScoreChange(e, student.StudentID)}
                       />
                     ) : (
                       student.Score
@@ -182,23 +183,15 @@ const ReviewExams = () => {
 
                     {editStudentId === student.StudentID ? (
                       <>
-                        <button onClick={() => setEditStudentId(null)}>
-                          Save
-                        </button>
-                        <button onClick={() => handleCancel(student.StudentID)}>
-                          Cancel
-                        </button>
+                        <button onClick={() => setEditStudentId(null)}>Save</button>
+                        <button onClick={() => handleCancel(student.StudentID)}>Cancel</button>
                       </>
                     ) : (
-                      <button onClick={() => handleEdit(student.StudentID)}>
-                        Edit
-                      </button>
+                      <button onClick={() => handleEdit(student.StudentID)}>Edit</button>
                     )}
                   </td>
                   <td>
-                    <button onClick={() => handleViewClick(student.StudentID)}>
-                      View
-                    </button>
+                    <button onClick={() => handleViewClick(student.StudentID)}>View</button>
                   </td>
                 </tr>
               ))}
