@@ -23,8 +23,8 @@ const ReviewExams = () => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        // const data = await response.json();
-        // console.log("preprocessData", data);
+        const data = await response.json();
+        console.log("preprocessData", data);
       } catch (error) {
         console.error("Error preprocessing data:", error);
       }
@@ -38,6 +38,7 @@ const ReviewExams = () => {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
+        console.log("data", data);
         setStudentScores(data); // Update state with fetched data
       } catch (error) {
         console.error("Error fetching student scores:", error);
@@ -64,9 +65,14 @@ const ReviewExams = () => {
   }, []);
 
   // Function to handle view button click
-  const handleViewClick = (studentId) => {
+  const handleViewClick = (studentId, front_page, back_page) => {
     navigate("/ViewExam", {
-      state: { student_id: studentId, exam_id: exam_id },
+      state: {
+        student_id: studentId,
+        exam_id: exam_id,
+        front_page: front_page,
+        back_page: back_page,
+      },
     });
   };
 
@@ -191,7 +197,13 @@ const ReviewExams = () => {
                     )}
                   </td>
                   <td>
-                    <button onClick={() => handleViewClick(student.StudentID)}>View</button>
+                    <button
+                      onClick={() =>
+                        handleViewClick(student.StudentID, student.front_page, student.back_page)
+                      }
+                    >
+                      View
+                    </button>
                   </td>
                 </tr>
               ))}

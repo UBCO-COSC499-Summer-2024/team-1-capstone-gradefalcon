@@ -51,7 +51,14 @@ router.get("/studentScores", async function (req, res) {
 
   fs.createReadStream(filePath)
     .pipe(csv())
-    .on("data", (data) => results.push({ StudentID: data.StudentID, Score: data.score })) // Extract only the student number (Roll) and score
+    .on("data", (data) =>
+      results.push({
+        StudentID: data.StudentID,
+        Score: data.score,
+        front_page: data.front_page_file_id,
+        back_page: data.back_page_file_id,
+      })
+    ) // Extract only the student number (Roll) and score
     .on("end", async () => {
       try {
         // Map each result to include the student name
@@ -386,26 +393,29 @@ router.post("/callOMR", async function (req, res) {
 });
 
 // Route to fetch the first PNG image in the folder
-router.get("/fetchImage", async function (req, res) {
-  const imagesFolderPath = path.join(__dirname, "../../omr/outputs/CheckedOMRs/colored");
-
+router.post("/fetchImage", async function (req, res) {
+  const imagesFolderPath = path.join(
+    __dirname,
+    `../../omr/outputs/page_2/CheckedOMRs/colored/${req.body.file_name}`
+  );
+  console.log(req.body.file_name);
   try {
-    // Read all files in the directory
-    const files = await fs.promises.readdir(imagesFolderPath);
+    // // Read all files in the directory
+    // const files = await fs.promises.readdir(imagesFolderPath);
 
-    // Filter out the PNG files
-    const pngFiles = files.filter((file) => path.extname(file).toLowerCase() === ".png");
+    // // Filter out the PNG files
+    // const pngFiles = files.filter((file) => path.extname(file).toLowerCase() === ".png");
 
-    if (pngFiles.length === 0) {
-      return res.status(404).send("No PNG images found in the folder");
-    }
+    // if (pngFiles.length === 0) {
+    //   return res.status(404).send("No PNG images found in the folder");
+    // }
 
-    // Get the first PNG file
-    const firstPngFile = pngFiles[0];
-    const imagePath = path.join(imagesFolderPath, firstPngFile);
+    // // Get the first PNG file
+    // const firstPngFile = pngFiles[0];
+    // const imagePath = path.join(imagesFolderPath, firstPngFile);
 
     // Send the image file
-    res.sendFile(imagePath);
+    res.sendFile(imagesFolderPath);
   } catch (error) {
     console.error("Error fetching image:", error);
     res.status(500).send("Error fetching image");

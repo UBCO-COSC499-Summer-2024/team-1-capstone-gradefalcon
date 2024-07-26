@@ -5,7 +5,7 @@ import "../../css/App.css";
 const ViewExam = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { student_id, exam_id } = location.state || {};
+  const { student_id, exam_id, front_page, back_page } = location.state || {};
   const [examFileId, setExamFileId] = useState("");
   const [imageSrc, setImageSrc] = useState("");
 
@@ -20,19 +20,19 @@ const ViewExam = () => {
         return;
       }
       try {
-        const response = await fetch(`/api/exam/searchExam/${student_id}`);
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
-        // console.log("response", response);
-        const data = await response.json();
+        // const response = await fetch(`/api/exam/searchExam/${student_id}`);
+        // if (!response.ok) {
+        //   throw new Error(`Error: ${response.statusText}`);
+        // }
+        // // console.log("response", response);
+        // const data = await response.json();
 
         const responseImage = await fetch("/api/exam/fetchImage", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ file_name: examFileId }),
+          body: JSON.stringify({ file_name: back_page }),
         });
         // const data2 = await responseImage.json();
         // console.log(data2);
@@ -40,7 +40,7 @@ const ViewExam = () => {
         const url = URL.createObjectURL(blob);
         setImageSrc(url);
 
-        setExamFileId(data.file_id);
+        setExamFileId(front_page);
       } catch (error) {
         console.error("Failed to fetch exam:", error);
       }

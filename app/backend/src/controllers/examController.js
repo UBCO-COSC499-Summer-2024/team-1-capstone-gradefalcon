@@ -130,10 +130,9 @@ const getStudentGrades = async (req, res, next) => {
 
 const getAnswerKeyForExam = async (exam_id) => {
   try {
-    const solutionResult = await pool.query(
-      "SELECT answers FROM solution WHERE exam_id = $1",
-      [exam_id]
-    );
+    const solutionResult = await pool.query("SELECT answers FROM solution WHERE exam_id = $1", [
+      exam_id,
+    ]);
 
     if (solutionResult.rows.length === 0) {
       throw new Error("Solution not found");
@@ -153,10 +152,10 @@ const getAnswerKeyForExam = async (exam_id) => {
 
 const getStudentNameById = async (studentId) => {
   try {
-    const result = await pool.query(
-      "SELECT name FROM student WHERE student_id = $1",
-      [studentId]
-    );
+    if (studentId === "") {
+      return "Unknown student";
+    }
+    const result = await pool.query("SELECT name FROM student WHERE student_id = $1", [studentId]);
 
     if (result.rows.length === 0) {
       // throw new Error("Student not found");
@@ -172,10 +171,7 @@ const getStudentNameById = async (studentId) => {
 
 const getScoreByExamId = async (exam_id) => {
   try {
-    const result = await pool.query(
-      "SELECT total_marks FROM exam WHERE exam_id = $1",
-      [exam_id]
-    );
+    const result = await pool.query("SELECT total_marks FROM exam WHERE exam_id = $1", [exam_id]);
 
     if (result.rows.length === 0) {
       return "No scores found for this exam";
