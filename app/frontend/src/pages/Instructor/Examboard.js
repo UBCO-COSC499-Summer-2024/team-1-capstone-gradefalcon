@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowUpRight, Plus } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
@@ -33,7 +33,7 @@ const ExamBoard = () => {
     fetchClassData();
   }, []);
 
- // Transform classData.classes into a structure that groups exams by course_id
+  // Transform classData.classes into a structure that groups exams by course_id
   // Check if classData.classes is null and provide a fallback empty array
   const groupedExams = (classData.classes || []).reduce((acc, current) => {
     const { course_id, course_name, exam_title, class_id, exam_id } = current;
@@ -69,7 +69,7 @@ const ExamBoard = () => {
             <div className="grid gap-4">
               {Object.entries(groupedExams).map(
                 ([courseId, { course_name, class_id, exams }]) => (
-                  <Card key={courseId} className="bg-white border rounded">
+                  <Card key={courseId} data-testid={`course-${courseId}`} className="bg-white border rounded">
                     <CardHeader className="flex justify-between px-6 py-4">
                       <div>
                         <CardTitle className="mb-2">
@@ -77,14 +77,13 @@ const ExamBoard = () => {
                         </CardTitle>
                       </div>
                       <Button asChild size="sm" className="ml-auto gap-1">
-                      <Link 
-                        to={`./NewExam/${class_id}`} className="create-new-btn" data-testid={`create-new-${courseId}`}
-                      >
-                        Create New
-                        <Plus className="h-4 w-4" />
-                      </Link>  
+                        <Link 
+                          to={`/NewExam/${class_id}`} className="create-new-btn" data-testid={`create-new-${courseId}`}
+                        >
+                          Create New
+                          <Plus className="h-4 w-4" />
+                        </Link>  
                       </Button>
-
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-col gap-4">
@@ -92,13 +91,13 @@ const ExamBoard = () => {
                           <div key={index} className="flex justify-between items-center" data-testid={`exam-${index}-${courseId}`}>
                             <p className="font-medium">{exam.exam_title}</p>
                             <Button asChild size="sm" className="ml-auto gap-1">
-                            <Link 
-                              to={`/UploadExams/${exam.exam_id}`} 
-                              className="grade-exam-btn" 
-                              data-testid={`grade-btn-${index}-${exam.exam_id}`}>
-                              Grade Exam
-                              <ArrowUpRight className="h-4 w-4" />
-                            </Link>
+                              <Link 
+                                to={`/UploadExams/${exam.exam_id}`} 
+                                className="grade-exam-btn" 
+                                data-testid={`grade-btn-${index}-${exam.exam_id}`}>
+                                Grade Exam
+                                <ArrowUpRight className="h-4 w-4" />
+                              </Link>
                             </Button>
                           </div>
                         ))}
