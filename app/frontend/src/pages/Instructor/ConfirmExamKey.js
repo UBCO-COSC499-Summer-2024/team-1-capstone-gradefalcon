@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, Link } from "react-router-dom";
 import "../../css/App.css";
-// import "../../css/ManualExamKey.css";
+import { Button } from "../../components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
+import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
+import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
 
 const ConfirmExamKey = (props) => {
   const location = useLocation();
@@ -12,6 +15,7 @@ const ConfirmExamKey = (props) => {
 
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(5);
+  const { toast } = useToast();
 
   const downloadCsv = async () => {
     try {
@@ -34,6 +38,11 @@ const ConfirmExamKey = (props) => {
       clickAnswersForQuestions(getFilledQs(dataCsv));
     } catch (error) {
       console.error("Error downloading CSV: ", error);
+      toast({
+        title: "Error",
+        description: "Failed to download CSV.",
+        type: "error",
+      });
     }
   };
 
@@ -81,16 +90,12 @@ const ConfirmExamKey = (props) => {
     event.target.classList.toggle("selected");
     if (!questions.includes(selection)) {
       questions.push(selection);
-      // console.log(`Added: ${selection.question} ${selection.option}`);
     } else {
       removeQuestion(selection.question, selection.option);
-      // console.log(`Removed: ${selection.question} ${selection.option}`);
     }
-    // console.log(questions);
   };
 
   function toggleQuestionAnswer(questionNumber, answer) {
-    // Find the question div by its index (questionNumber - 1 because it's 1-indexed)
     const questionDiv = document.querySelector(
       `.bubble-grid .question:nth-child(${questionNumber})`
     );
@@ -99,7 +104,6 @@ const ConfirmExamKey = (props) => {
       return;
     }
 
-    // Find the option span within the question div that matches the answer
     const optionSpan = Array.from(questionDiv.querySelectorAll(".option")).find(
       (span) => span.innerText === answer
     );
@@ -110,7 +114,6 @@ const ConfirmExamKey = (props) => {
       return;
     }
 
-    // Simulate a click event on the option span
     optionSpan.click();
   }
 
@@ -152,70 +155,71 @@ const ConfirmExamKey = (props) => {
   return (
     <>
       <div className="App">
-        <div className="main-content">
-          <header>
-            <h2>Confirm Exam Key</h2>
-          </header>
-          <section className="new-exam">
-            <button
-              className="back-button"
-              onClick={() => window.history.back()}
-            >
-              {" "}
-              Back
-            </button>
-
-            <h3>Questions</h3>
-            <p>*The following details will be printed on the exam*</p>
-            {/* <button onClick={downloadCsv}>Download CSV</button> */}
-            <form>
-              <label htmlFor="num-questions">#Questions:</label>
-              <input
-                type="number"
-                id="num-questions"
-                className="input-field"
-                value={numQuestions}
-                onChange={(e) =>
-                  setNumQuestions(Math.min(300, parseInt(e.target.value)))
-                }
-                min="1"
-                max="300"
-                data-testid="num-questions-input"
-              />
-
-              <label htmlFor="num-options">#Options per question:</label>
-              <input
-                type="number"
-                id="num-options"
-                className="input-field"
-                value={numOptions}
-                onChange={(e) =>
-                  setNumOptions(Math.min(26, parseInt(e.target.value)))
-                }
-                min="1"
-                max="26"
-                data-testid="num-options-input"
-              />
-
-              <div className="nested-window">
-                <div className="bubble-grid" data-testid="bubble-grid"></div>
-              </div>
-
-              <Link
-                to="/ExamControls"
-                state={{
-                  classID: classID,
-                  examTitle: examTitle,
-                  questions: questions,
-                  numQuestions: numQuestions,
-                }}
-                className="btn"
-              >
-                Next
-              </Link>
-            </form>
-          </section>
-        </div>
+        <main className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-gradient-start to-gradient-end">
+          <h2 className="text-2xl font-semibold mb-2">Confirm Exam Key</h2>
+          <Card className="bg-white border rounded w-3/4">
+            <CardHeader className="px-6 py-4">
+              <CardTitle className="mb-2">Exam Details</CardTitle>
+              <CardDescription>*The following details will be printed on the exam*</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form>
+                <div className="mb-4">
+                  <label htmlFor="num-questions" className="block text-sm font-medium text-gray-700">#Questions:</label>
+                  <input
+                    type="number"
+                    id="num-questions"
+                    className="input-field mt-1 block w-full"
+                    value={numQuestions}
+                    onChange={(e) =>
+                      setNumQuestions(Math.min(300, parseInt(e.target.value)))
+                    }
+                    min="1"
+                    max="300"
+                    data-testid="num-questions-input"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="num-options" className="block text-sm font-medium text-gray-700">#Options per question:</label>
+                  <input
+                    type="number"
+                    id="num-options"
+                    className="input-field mt-1 block w-full"
+                    value={numOptions}
+                    onChange={(e) =>
+                      setNumOptions(Math.min(26, parseInt(e.target.value)))
+                    }
+                    min="1"
+                    max="26"
+                    data-testid="num-options-input"
+                  />
+                </div>
+                <div className="nested-window mb-4">
+                  <div className="bubble-grid" data-testid="bubble-grid"></div>
+                </div>
+                <div className="flex justify-between mt-4">
+                  <Button size="sm" className="gap-1 green-button" onClick={() => window.history.back()}>
+                    Back
+                  </Button>
+                  <Button asChild size="sm" className="gap-1 green-button">
+                    <Link
+                      to="/ExamControls"
+                      state={{
+                        classID: classID,
+                        examTitle: examTitle,
+                        questions: questions,
+                        numQuestions: numQuestions,
+                      }}
+                    >
+                      Next
+                    </Link>
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </main>
+        <Toaster /> {/* Adding the Toaster component */}
       </div>
     </>
   );
