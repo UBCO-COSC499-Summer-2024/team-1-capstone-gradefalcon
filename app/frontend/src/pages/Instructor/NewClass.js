@@ -259,7 +259,7 @@ const NewClass = () => {
                       onChange={handleFileChange}
                     />
                     <div className="flex gap-4 mt-4">
-                      <Button size="sm"  onClick={handleFileUpload}>
+                      <Button size="sm" onClick={handleFileUpload} data-testid="uploadButton">
                         <span>Import</span>
                       </Button>
                     </div>

@@ -78,15 +78,15 @@ const ExamControls = () => {
                 <div className="controls">
                   <div className="control-item flex justify-between items-center mb-4">
                     <span>Students can view their exam</span>
-                    <Switch id="toggle-view-exam" />
+                    <Switch id="toggle-view-exam" data-testid="toggle-view-exam" />
                   </div>
                   <div className="control-item flex justify-between items-center mb-4">
                     <span>Students can view correct answers</span>
-                    <Switch id="toggle-view-answers" />
+                    <Switch id="toggle-view-answers" data-testid="toggle-view-answers" />
                   </div>
                   <div className="control-item flex justify-between items-center mb-4">
                     <span>Students can see exam statistics</span>
-                    <Switch id="toggle-view-stats" />
+                    <Switch id="toggle-view-stats" data-testid="toggle-view-stats" />
                   </div>
                 </div>
                 <div className="flex justify-between mt-4">
@@ -108,4 +108,3 @@ const ExamControls = () => {
 };
 
 export default ExamControls;
-
