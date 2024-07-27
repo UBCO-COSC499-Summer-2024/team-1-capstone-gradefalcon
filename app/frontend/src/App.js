@@ -5,7 +5,6 @@ import "./css/App.css";
 
 // Import components
 import Layout from '../src/components/Layout';
-import NavBar from "../src/components/NavBar";
 import ProtectedRoute from "./ProtectedRoute";
 import Logout from "./pages/Logout";
 import OMRProcessing from "../src/components/OMRProcessing";
