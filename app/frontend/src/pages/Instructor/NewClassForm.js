@@ -179,21 +179,21 @@ const NewClassForm = ({ setIsDialogOpen }) => {
           <span className="file-input-label">no file selected</span>
         </div>
         <div className="flex gap-4 mt-4">
-          <Button size="sm" onClick={handleFileUpload}>
+          <Button size="sm" onClick={handleFileUpload} data-testid="uploadButton">
             <span>Import</span>
           </Button>
         </div>
         <Table className="mt-4 w-full border-collapse">
           <TableHead>
             <TableRow>
-              {col.length > 0 && col.map((col, i) => <th key={i} className="border-b py-2 text-left">{col}</th>)}
+              {col.length > 0 && col.map((col, i) => <TableCell key={i} className="border-b py-2 text-left">{col}</TableCell>)}
             </TableRow>
           </TableHead>
           <TableBody data-testid="TableBody">
             {val.map((row, i) => (
               <TableRow key={i}>
                 {row.map((cell, j) => (
-                  <td key={j} className="border-b py-2">{cell}</td>
+                  <TableCell key={j} className="border-b py-2">{cell}</TableCell>
                 ))}
               </TableRow>
             ))}

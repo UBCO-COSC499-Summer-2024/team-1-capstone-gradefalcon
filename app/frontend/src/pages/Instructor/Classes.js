@@ -12,6 +12,7 @@ import { ArrowUpRight } from "lucide-react";
 const Classes = () => {
   const navigate = useNavigate();
   const [classes, setClasses] = useState([]);
+  const [error, setError] = useState(null);
 
   const fetchClasses = async () => {
     try {
@@ -24,10 +25,10 @@ const Classes = () => {
         const data = await response.json();
         setClasses(data);
       } else {
-        console.error("Failed to fetch classes");
+        setError("Failed to fetch classes");
       }
     } catch (error) {
-      console.error("Error fetching classes:", error);
+      setError("Error fetching classes");
     }
   };
 
@@ -66,35 +67,41 @@ const Classes = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="max-h-80">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Class Name</TableHead>
-                      <TableHead className="hidden sm:table-cell">Course ID</TableHead>
-                      <TableHead className="hidden sm:table-cell">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {classes.map((classItem, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          <div className="font-medium">{classItem.course_name}</div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          <Button asChild size="sm" className="ml-auto gap-1">
-                            <Link to={`/ClassManagement/${classItem.class_id}`}>
-                              Open Course
-                              <ArrowUpRight className="h-4 w-4 ml-1" />
-                            </Link>
-                          </Button>
-                        </TableCell>
+              {error ? (
+                <div data-testid="list-classes-error">{error}</div>
+              ) : classes.length === 0 ? (
+                <div>No classes available</div>
+              ) : (
+                <ScrollArea className="max-h-80">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Class Name</TableHead>
+                        <TableHead className="hidden sm:table-cell">Course ID</TableHead>
+                        <TableHead className="hidden sm:table-cell">Actions</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </ScrollArea>
+                    </TableHeader>
+                    <TableBody>
+                      {classes.map((classItem, index) => (
+                        <TableRow key={index}>
+                          <TableCell>
+                            <div className="font-medium">{classItem.course_name}</div>
+                          </TableCell>
+                          <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
+                          <TableCell className="hidden sm:table-cell">
+                            <Button asChild size="sm" className="ml-auto gap-1">
+                              <Link to={`/ClassManagement/${classItem.class_id}`}>
+                                Open Course
+                                <ArrowUpRight className="h-4 w-4 ml-1" />
+                              </Link>
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </ScrollArea>
+              )}
             </CardContent>
           </Card>
           <Card className="bg-white border rounded mt-6">
@@ -131,6 +138,5 @@ const Classes = () => {
 };
 
 export default Classes;
-
 
 

@@ -1,10 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
-import "../../css/App.css";
-import "../../css/UploadExam.css";
-import { useLocation, useParams, Link, useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "../../components/ui/card";
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
+import { useParams, useNavigate } from "react-router-dom";
 
 const UploadExam = () => {
-  const { exam_id } = useParams(); // Retrieve exam_id from URL parameters
+  const { exam_id } = useParams();
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
@@ -35,11 +42,11 @@ const UploadExam = () => {
 
   const sendToBackend = async () => {
     if (!file) return;
-  
+
     const formData = new FormData();
     formData.append("examPages", file);
-    formData.append("exam_id", exam_id); // Include exam_id in the form data
-  
+    formData.append("exam_id", exam_id);
+
     try {
       const responses = await Promise.all([
         fetch("/api/exam/UploadExam", {
@@ -58,43 +65,44 @@ const UploadExam = () => {
           credentials: "include",
         }),
       ]);
-  
+
       const dataUploadExam = await responses[0].json();
       const dataGenerateEvaluation = await responses[1].json();
       const dataCopyTemplate = await responses[2].json();
-  
+
       console.log("Data from UploadExam:", dataUploadExam);
       console.log("Data from GenerateEvaluation:", dataGenerateEvaluation);
       console.log("Data from copyTemplate:", dataCopyTemplate);
-      
+
       navigate("/OMRProcessingUpload", {
         state: { exam_id },
       });
-
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  
 
   return (
-    <>
-      <div className="App">
-        <div className="main-content">
-          <header>
-            <h2>Upload Exam</h2>
-          </header>
-          <section className="upload-key">
-            <button
+    <div className="App">
+      <div className="main-content">
+        <Card className="upload-card">
+          <CardHeader>
+            <CardTitle>Upload Exam</CardTitle>
+            <CardDescription>Upload the exam as a PDF file.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button
               className="back-button"
+              variant="outline"
               onClick={() => window.history.back()}
-            ></button>
-            <h3>Upload the exam as a PDF file.</h3>
+            >
+              Back
+            </Button>
             <div
               className="upload-area"
               style={{ display: fileURL ? "none" : "block" }}
             >
-              <input
+              <Input
                 type="file"
                 id="file-input"
                 data-testid="file-input"
@@ -105,6 +113,13 @@ const UploadExam = () => {
               <div
                 className="drag-drop-area"
                 onClick={() => fileInputRef.current.click()}
+                style={{
+                  border: "2px dashed #4CAF50",
+                  borderRadius: "5px",
+                  padding: "20px",
+                  textAlign: "center",
+                  cursor: "pointer",
+                }}
               >
                 <p>Click to browse or drag and drop your files</p>
               </div>
@@ -113,18 +128,20 @@ const UploadExam = () => {
               className="pdf-display"
               style={{ display: fileURL ? "block" : "none" }}
             >
-              <iframe src={fileURL} title="PDF Preview"></iframe>
+              <iframe src={fileURL} title="PDF Preview" style={{ width: "100%", height: "500px" }}></iframe>
             </div>
-            <button className="btn-import" onClick={sendToBackend}>
-              Import
-            </button>
-            <button className="btn-confirm" onClick={resetUpload}>
-              Reset
-            </button>
-          </section>
-        </div>
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
+              <Button className="btn-import" onClick={sendToBackend}>
+                Import
+              </Button>
+              <Button className="btn-confirm" variant="outline" onClick={resetUpload}>
+                Reset
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </>
+    </div>
   );
 };
 
