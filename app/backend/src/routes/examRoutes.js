@@ -47,7 +47,7 @@ router.post(
   "/saveExamKey",
   checkJwt, checkPermissions(['upload:file']), upload.single("examKey"),
   async function (req, res) {
-    console.log(req.file);
+    // console.log(req.file);
     res.send(JSON.stringify("File uploaded successfully"));
   }
 );

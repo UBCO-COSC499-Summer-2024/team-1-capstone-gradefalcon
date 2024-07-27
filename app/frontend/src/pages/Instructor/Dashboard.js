@@ -37,15 +37,15 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("Session Info Data:", data);
+          // console.log("Session Info Data:", data);
           setUserName(data.userName);
         } else {
           console.error("Failed to fetch session info");
-          console.log("Authenticated:", isAuthenticated);
+          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching session info:", error);
-        console.log("Authenticated:", isAuthenticated);
+        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
@@ -62,15 +62,15 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("Courses Data:", data);
+          // console.log("Courses Data:", data);
           setCourses(data);
         } else {
           console.error("Failed to fetch courses");
-          console.log("Authenticated:", isAuthenticated);
+          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching courses:", error);
-        console.log("Authenticated:", isAuthenticated);
+        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
@@ -87,15 +87,15 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("Exams Data:", data);
+          // console.log("Exams Data:", data);
           setExams(data.classes);
         } else {
           console.error("Failed to fetch exams");
-          console.log("Authenticated:", isAuthenticated);
+          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching exams:", error);
-        console.log("Authenticated:", isAuthenticated);
+        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
@@ -112,15 +112,15 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("Standard Average Data:", data);
+          // console.log("Standard Average Data:", data);
           setStandardAverageData(data);
         } else {
           console.error("Failed to fetch standard average data");
-          console.log("Authenticated:", isAuthenticated);
+          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching standard average data:", error);
-        console.log("Authenticated:", isAuthenticated);
+        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
@@ -137,15 +137,15 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("Performance Data:", data);
+          // console.log("Performance Data:", data);
           setPerformanceData(data);
         } else {
           console.error("Failed to fetch performance data");
-          console.log("Authenticated:", isAuthenticated);
+          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching performance data:", error);
-        console.log("Authenticated:", isAuthenticated);
+        // console.log("Authenticated:", isAuthenticated);
       }
     };
 

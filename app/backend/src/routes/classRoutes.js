@@ -5,24 +5,24 @@ const { displayClasses, displayClassManagement, importClass } = require('../cont
 const router = express.Router();
 
 router.use((req, res, next) => {
-  console.log("Incoming request to /class route:");
-  console.log("Headers:", req.headers);
-  console.log("Body:", req.body);
+  // console.log("Incoming request to /class route:");
+  // console.log("Headers:", req.headers);
+  // console.log("Body:", req.body);
   next();
 });
 
 router.post('/classes', checkJwt, (req, res, next) => {
-  console.log("After JWT check, before Permissions check");
+  // console.log("After JWT check, before Permissions check");
   checkPermissions(['read:classes'])(req, res, next);
 }, displayClasses);
 
 router.post('/classManagement/:class_id', checkJwt, (req, res, next) => {
-  console.log("After JWT check, before Permissions check");
+  // console.log("After JWT check, before Permissions check");
   checkPermissions(['read:classManagement'])(req, res, next);
 }, displayClassManagement);
 
 router.post('/import-class', checkJwt, (req, res, next) => {
-  console.log("After JWT check, before Permissions check");
+  // console.log("After JWT check, before Permissions check");
   checkPermissions(['import:class'])(req, res, next);
 }, importClass);
 

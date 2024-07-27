@@ -6,7 +6,6 @@ import ProtectedRoute from "./ProtectedRoute";
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 
 // Import components
-import Profile from "./components/Profile";
 // Import pages
 // Instructor pages
 import Dashboard from "./pages/Instructor/Dashboard";
@@ -57,7 +56,6 @@ function App() {
           <Routes>
             <Route path="/Login" element={<Login />} />
             <Route path="/" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
-            <Route path="/Profile" element={<Profile />} />
             <Route path="/Dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/AccountSettings" element={<ProtectedRoute><AccountSettings /></ProtectedRoute>} />
             <Route path="/Classes" element={<ProtectedRoute><Classes /></ProtectedRoute>} />

@@ -15,12 +15,10 @@ const checkJwt = jwt({
 
 const checkPermissions = (requiredPermissions) => {
   return (req, res, next) => {
-    console.log("auth0.js, Line 29 - Permissions Check - Required Permissions:", requiredPermissions);
     const permissions = req.auth?.permissions || [];
-    console.log("auth0.js, Line 31 - Permissions Check - User Permissions:", permissions);
     const hasPermissions = requiredPermissions.every(permission => permissions.includes(permission));
     if (!hasPermissions) {
-      console.error("auth0.js, Line 33 - Insufficient permissions:", permissions);
+      console.error("auth0 Insufficient permissions:", permissions);
       return res.status(403).json({ message: 'Forbidden', requiredPermissions, userPermissions: permissions });
     }
     next();
