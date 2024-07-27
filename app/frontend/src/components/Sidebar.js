@@ -18,15 +18,15 @@ export default function Sidebar({ handleLogout }) {
           <BookOpen className="icon" />
           <span>Exam Board</span>
         </Link>
-        <Link to="/Classes" className="nav-item" data-tooltip="Classes">
+        <Link to="/Classes" className="nav-item" data-tooltip="Courses">
           <Users className="icon" />
-          <span>Classes</span>
+          <span>Courses</span>
         </Link>
       </nav>
       <div className="mt-auto flex items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="nav-item" data-tooltip="My Account">
+            <div className="nav-item" data-tooltip="My Account" data-testid="my-account-button">
               <Settings className="icon" />
               <span>My Account</span>
             </div>
