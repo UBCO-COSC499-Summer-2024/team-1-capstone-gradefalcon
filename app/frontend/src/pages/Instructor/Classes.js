@@ -36,24 +36,6 @@ const Classes = () => {
     fetchClasses();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.ok) {
-        navigate("/");
-      } else {
-        console.error("Logout failed");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
   return (
     <main className="flex flex-col gap-4">
       <div>
@@ -67,41 +49,35 @@ const Classes = () => {
               </div>
             </CardHeader>
             <CardContent>
-              {error ? (
-                <div data-testid="list-classes-error">{error}</div>
-              ) : classes.length === 0 ? (
-                <div>No classes available</div>
-              ) : (
-                <ScrollArea className="max-h-80">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Class Name</TableHead>
-                        <TableHead className="hidden sm:table-cell">Course ID</TableHead>
-                        <TableHead className="hidden sm:table-cell">Actions</TableHead>
+              <ScrollArea className="max-h-80">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Class Name</TableHead>
+                      <TableHead className="hidden sm:table-cell">Course ID</TableHead>
+                      <TableHead className="hidden sm:table-cell">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {classes.map((classItem, index) => (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <div className="font-medium">{classItem.course_name}</div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Button asChild size="sm" className="ml-auto gap-1">
+                            <Link to={`/ClassManagement/${classItem.class_id}`}>
+                              Open Course
+                              <ArrowUpRight className="h-4 w-4 ml-1" />
+                            </Link>
+                          </Button>
+                        </TableCell>
                       </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {classes.map((classItem, index) => (
-                        <TableRow key={index}>
-                          <TableCell>
-                            <div className="font-medium">{classItem.course_name}</div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            <Button asChild size="sm" className="ml-auto gap-1">
-                              <Link to={`/ClassManagement/${classItem.class_id}`}>
-                                Open Course
-                                <ArrowUpRight className="h-4 w-4 ml-1" />
-                              </Link>
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </ScrollArea>
-              )}
+                    ))}
+                  </TableBody>
+                </Table>
+              </ScrollArea>
             </CardContent>
           </Card>
           <Card className="bg-white border rounded mt-6">
@@ -135,6 +111,7 @@ const Classes = () => {
       </div>
     </main>
   );
+  
 };
 
 export default Classes;
