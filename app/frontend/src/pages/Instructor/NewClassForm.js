@@ -8,6 +8,7 @@ import { useToast } from "../../components/ui/use-toast";
 import { ToastProvider, ToastViewport } from "../../components/ui/toast";
 import { Label } from "../../components/ui/label";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 
 const NewClassForm = ({ setIsDialogOpen }) => {
   const [col, setCol] = useState([]);
@@ -141,66 +142,74 @@ const NewClassForm = ({ setIsDialogOpen }) => {
   return (
     <ToastProvider>
       <form>
-        <div className="mb-4">
-          <Label htmlFor="course-name" className="block text-sm font-medium text-gray-700">Course Name:</Label>
-          <Input
-            type="text"
-            id="course-name"
-            data-testid="courseName"
-            className="input-field mt-1 block w-full"
-            value={courseName}
-            onChange={(e) => setCourseName(e.target.value)}
-          />
-        </div>
-        <div className="mb-4">
-          <Label htmlFor="course-id" className="block text-sm font-medium text-gray-700">Course ID:</Label>
-          <Input
-            type="text"
-            id="course-id"
-            data-testid="courseId"
-            className="input-field mt-1 block w-full"
-            value={courseId}
-            onChange={(e) => setCourseId(e.target.value)}
-          />
-        </div>
-        <p className="mb-4">Import a CSV file containing the student names and their student IDs in your class.</p>
-        <div className="file-input-container">
-        <label className="file-input-button">
-            Choose File
-            <input
-              type="file"
-              accept=".csv"
-              ref={fileInputRef}
-              data-testid="csvFile"
-              className="hidden"
-              onChange={handleFileChange}
-            />
-             </label>
-          <span className="file-input-label">no file selected</span>
-        </div>
-        <div className="flex gap-4 mt-4">
-          <Button size="sm" onClick={handleFileUpload} data-testid="uploadButton">
-            <span>Import</span>
-          </Button>
-        </div>
-        <Table className="mt-4 w-full border-collapse">
-          <TableHead>
-            <TableRow>
-              {col.length > 0 && col.map((col, i) => <TableCell key={i} className="border-b py-2 text-left">{col}</TableCell>)}
-            </TableRow>
-          </TableHead>
-          <TableBody data-testid="TableBody">
-            {val.map((row, i) => (
-              <TableRow key={i}>
-                {row.map((cell, j) => (
-                  <TableCell key={j} className="border-b py-2">{cell}</TableCell>
+        <Card className="p-4">
+          <CardHeader>
+            <CardTitle>Create New Class</CardTitle>
+            <CardDescription>Enter the details for the new class and upload the student list.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-4">
+              <Label htmlFor="course-name" className="block text-sm font-medium text-gray-700">Course Name:</Label>
+              <Input
+                type="text"
+                id="course-name"
+                data-testid="courseName"
+                className="input-field mt-1 block w-full"
+                value={courseName}
+                onChange={(e) => setCourseName(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <Label htmlFor="course-id" className="block text-sm font-medium text-gray-700">Course ID:</Label>
+              <Input
+                type="text"
+                id="course-id"
+                data-testid="courseId"
+                className="input-field mt-1 block w-full"
+                value={courseId}
+                onChange={(e) => setCourseId(e.target.value)}
+              />
+            </div>
+            <p className="mb-4">Import a CSV file containing the student names and their student IDs in your class.</p>
+            <div className="file-input-container">
+              <label className="file-input-button">
+                Choose File
+                <input
+                  type="file"
+                  accept=".csv"
+                  ref={fileInputRef}
+                  data-testid="csvFile"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </label>
+              <span className="file-input-label">no file selected</span>
+            </div>
+            <div className="flex gap-4 mt-4">
+              <Button size="sm" onClick={handleFileUpload} data-testid="uploadButton">
+                <span>Import</span>
+              </Button>
+            </div>
+            <Table className="mt-4 w-full border-collapse">
+              <TableHead>
+                <TableRow>
+                  {col.length > 0 && col.map((col, i) => <TableCell key={i} className="border-b py-2 text-left">{col}</TableCell>)}
+                </TableRow>
+              </TableHead>
+              <TableBody data-testid="TableBody">
+                {val.map((row, i) => (
+                  <TableRow key={i}>
+                    {row.map((cell, j) => (
+                      <TableCell key={j} className="border-b py-2">{cell}</TableCell>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+        <ToastViewport />
       </form>
-      <ToastViewport />
     </ToastProvider>
   );
 };
