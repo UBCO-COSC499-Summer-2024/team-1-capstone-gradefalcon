@@ -80,7 +80,7 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch("/api/classes/getAllCourses");  // Updated endpoint
+        const response = await fetch("/api/class/getAllCourses");  // Updated endpoint
         const data = await response.json();
         setCourses(data);
       } catch (error) {
