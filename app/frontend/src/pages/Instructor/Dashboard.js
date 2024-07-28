@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Bookmark, ArrowUpRight, Plus } from "lucide-react";
+import { Bookmark, ArrowUpRight, Plus, Search } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
@@ -11,14 +11,19 @@ import AverageperExamChart from "../../components/AverageperExamChart";
 import AverageperCourseChart from "../../components/AverageperCourseChart";
 import NewClassForm from "./NewClassForm";
 import NewExamForm from "./NewExamForm"; // Import the new exam form
+import { Input } from "../../components/ui/input";
 
 export default function Dashboard() {
   const [userName, setUserName] = useState("");
   const [courses, setCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
   const [exams, setExams] = useState([]);
+  const [filteredExams, setFilteredExams] = useState([]);
   const [standardAverageData, setStandardAverageData] = useState([]);
   const [averageperCourseData, setAverageCourseData] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [courseSearchTerm, setCourseSearchTerm] = useState("");
+  const [examSearchTerm, setExamSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchSessionInfo = async () => {
@@ -49,6 +54,7 @@ export default function Dashboard() {
         if (response.ok) {
           const data = await response.json();
           setCourses(data);
+          setFilteredCourses(data); // Initialize filteredCourses with the fetched data
         } else {
           console.error("Failed to fetch courses");
         }
@@ -67,6 +73,7 @@ export default function Dashboard() {
         if (response.ok) {
           const data = await response.json();
           setExams(data.classes);
+          setFilteredExams(data.classes); // Initialize filteredExams with the fetched data
         } else {
           console.error("Failed to fetch exams");
         }
@@ -109,7 +116,7 @@ export default function Dashboard() {
           console.error("Failed to fetch average course data");
         }
       } catch (error) {
-        console.error("Error fetching average course data:", error);
+        console.error("Error fetching average course data", error);
       }
     };
 
@@ -120,14 +127,30 @@ export default function Dashboard() {
     fetchAverageCourseData();
   }, []);
 
+  useEffect(() => {
+    setFilteredCourses(
+      courses.filter((course) =>
+        course.course_name?.toLowerCase().includes(courseSearchTerm.toLowerCase())
+      )
+    );
+  }, [courseSearchTerm, courses]);
+
+  useEffect(() => {
+    setFilteredExams(
+      exams.filter((exam) =>
+        exam.exam_title?.toLowerCase().includes(examSearchTerm.toLowerCase())
+      )
+    );
+  }, [examSearchTerm, exams]);
+
   const handleExamCreated = (newExam) => {
     setExams([...exams, newExam]);
   };
 
   return (
-    <main className="flex flex-col gap-4">
+    <main className="flex flex-col gap-4 h-screen">
       <div className="flex-1">
-        <Card className="bg-white border rounded">
+        <Card className="bg-white border rounded h-full">
           <CardHeader className="flex justify-between px-6 py-4">
             <div>
               <CardTitle className="mb-2">Your Courses</CardTitle>
@@ -168,10 +191,20 @@ export default function Dashboard() {
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
-            <ScrollArea className="max-h-80">
+          <CardContent className="flex-1">
+            <div className="relative mb-4">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search courses..."
+                className="w-full pl-8"
+                value={courseSearchTerm}
+                onChange={(e) => setCourseSearchTerm(e.target.value)}
+              />
+            </div>
+            <ScrollArea className="h-80">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6">
-                {courses.map((course, index) => (
+                {filteredCourses.map((course, index) => (
                   <TooltipProvider key={index}>
                     <Tooltip delayDuration={0}>
                       <TooltipTrigger asChild>
@@ -200,7 +233,7 @@ export default function Dashboard() {
       </div>
 
       <div className="flex-1">
-        <Card className="bg-white border rounded">
+        <Card className="bg-white border rounded h-full">
           <CardHeader className="flex justify-between px-6 py-4">
             <div>
               <CardTitle className="mb-2">Exam Board</CardTitle>
@@ -241,8 +274,18 @@ export default function Dashboard() {
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
-            <ScrollArea className="max-h-80">
+          <CardContent className="flex-1">
+            <div className="relative mb-4">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search exams..."
+                className="w-full pl-8"
+                value={examSearchTerm}
+                onChange={(e) => setExamSearchTerm(e.target.value)}
+              />
+            </div>
+            <ScrollArea className="h-80">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -251,7 +294,7 @@ export default function Dashboard() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {exams.map((exam, index) => (
+                  {filteredExams.map((exam, index) => (
                     <TableRow key={index} className={index}>
                       <TableCell>
                         <div className="font-medium">{exam.exam_title}</div>
@@ -288,3 +331,4 @@ export default function Dashboard() {
     </main>
   );
 }
+
