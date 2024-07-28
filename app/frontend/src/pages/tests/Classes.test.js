@@ -41,8 +41,8 @@ test('renders Classes component', async () => {
     expect(screen.getByText('Database Test 2')).toBeInTheDocument();
   });
 
-  // Ensure the "Create Class" section is displayed
-  expect(screen.getByText('Create a new class')).toBeInTheDocument();
+  // Ensure the "Create a New Class" section is displayed
+  expect(screen.getByText('Create a New Class')).toBeInTheDocument();
   expect(screen.getByText('Import a CSV file containing the student names and their student IDs in your class.')).toBeInTheDocument();
   expect(screen.getByText('Create Class')).toBeInTheDocument();
 });
@@ -68,12 +68,11 @@ test('displays message when no classes are available', async () => {
   });
 });
 
-test('navigates to new class creation page on button click', async () => {
+test('opens new class creation dialog on button click', async () => {
   render(
     <MemoryRouter initialEntries={['/classes']}>
       <Routes>
         <Route path="/classes" element={<Classes />} />
-        <Route path="/new-class" element={<div>New Class Page</div>} />
       </Routes>
     </MemoryRouter>
   );
@@ -81,9 +80,10 @@ test('navigates to new class creation page on button click', async () => {
   // Simulate click on "Create Class" button
   fireEvent.click(screen.getByText('Create Class'));
 
-  // Ensure navigation to the new class creation page
+  // Ensure the dialog content is displayed
   await waitFor(() => {
-    expect(screen.getByText('New Class Page')).toBeInTheDocument();
+    expect(screen.getByText('Create New Class')).toBeInTheDocument();
+    expect(screen.getByText('Enter the details for the new class and import the student list via a CSV file.')).toBeInTheDocument();
   });
 });
 
@@ -118,5 +118,6 @@ test('ensures "Create Class" button has the correct link', async () => {
   );
 
   // Ensure the "Create Class" button link is correct
-  expect(screen.getByText('Create Class').closest('a')).toHaveAttribute('href', '/new-class');
+  const createClassButton = screen.getByText('Create Class').closest('button');
+  expect(createClassButton).toBeInTheDocument();
 });

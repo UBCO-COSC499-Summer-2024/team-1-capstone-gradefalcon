@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import "../../css/App.css";
-import "../../css/NewExam.css";
+import { Link, useParams } from "react-router-dom";
+import '../../css/App.css';
+import { Button } from "../../components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
+
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");
@@ -19,57 +21,64 @@ const NewExam = () => {
   };
 
   return (
-    <>
-      <div className="App">
-        <div className="main-content">
-          <header>
-            <h2>Create New Exam</h2>
-          </header>
-          <section className="new-exam">
-            <button
-              className="back-button"
-              onClick={() => window.history.back()}
-            ></button>
-
-            <h3>General</h3>
-            <p>*The following details will be printed on the exam*</p>
-            <form>
-              <label htmlFor="exam-title">Exam Title:</label>
-              <input
-                type="text"
-                id="exam-title"
-                className="input-field"
-                placeholder="Enter exam title"
-                value={examTitle}
-                onChange={handleInputChange}
-                data-testid="exam-title-input"
-                required
-              />
-
-              <label htmlFor="answer-key">Answer Key:</label>
+    <main className="flex flex-col gap-4 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
+      <div>
+        <h1 className="text-3xl font-bold mb-4">Create New Exam</h1>
+        <div className="grid gap-4 lg:grid-cols-1">
+          <Card className="bg-white border rounded">
+            <CardHeader className="flex justify-between px-6 py-4">
               <div>
-                <Link
-                  to={isFormValid() ? "/UploadExamKey" : "#"}
-                  state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
-                  className="btn"
-                  data-testid="upload-answer-key-btn"
-                >
-                  Upload Answer Key
-                </Link>
-                <Link
-                  to={isFormValid() ? "/ManualExamKey" : "#"}
-                  state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
-                  className="btn"
-                  data-testid="manual-answer-key-btn"
-                >
-                  Manually Select Answers
-                </Link>
+                <CardTitle className="mb-2">General</CardTitle>
+                <CardDescription>*The following details will be printed on the exam*</CardDescription>
               </div>
-            </form>
-          </section>
+              <Button asChild size="sm" className="ml-auto gap-1">
+                <span onClick={() => window.history.back()}>Back</span>
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <form>
+                <div className="mb-4">
+                  <label htmlFor="exam-title" className="block text-sm font-medium text-gray-700">Exam Title:</label>
+                  <input
+                    type="text"
+                    id="exam-title"
+                    className="input-field mt-1 block w-full"
+                    placeholder="Enter exam title"
+                    value={examTitle}
+                    onChange={handleInputChange}
+                    data-testid="exam-title-input"
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="answer-key" className="block text-sm font-medium text-gray-700">Answer Key:</label>
+                  <div className="flex gap-4 mt-1">
+                    <Button asChild size="sm">
+                      <Link 
+                        to={isFormValid() ? "/UploadExamKey" : "#"}
+                        state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
+                        data-testid="upload-answer-key-btn"
+                      >
+                        Upload Answer Key
+                      </Link>
+                    </Button>
+                    <Button asChild size="sm">
+                      <Link 
+                        to={isFormValid() ? "/ManualExamKey" : "#"} 
+                        state={{ examTitle: examTitle, classID: class_id }} 
+                        data-testid="manual-answer-key-btn"
+                      >
+                        Manually Select Answers
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
         </div>
       </div>
-    </>
+    </main>
   );
 };
 
