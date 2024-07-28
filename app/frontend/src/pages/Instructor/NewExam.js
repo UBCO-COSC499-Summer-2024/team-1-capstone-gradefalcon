@@ -4,11 +4,11 @@ import '../../css/App.css';
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 
+
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");
   const params = useParams();
   const class_id = params.class_id;
-
   const handleInputChange = (event) => {
     const value = event.target.value;
     // blocks chars that could cause error (i.e " ')
