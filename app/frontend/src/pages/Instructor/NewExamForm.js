@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "../../css/App.css";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
@@ -13,8 +13,6 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
   const params = useParams();
-  const location = useLocation();
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleInputChange = (event) => {
@@ -80,7 +78,7 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch("/api/class/getAllCourses");  // Updated endpoint
+        const response = await fetch("/api/class/getAllCourses");
         const data = await response.json();
         setCourses(data);
       } catch (error) {
@@ -116,12 +114,16 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
             <div className="mb-4">
               <label htmlFor="course-select" className="block text-sm font-medium text-gray-700">Select Course:</label>
               <Select onValueChange={handleCourseChange} value={selectedCourse} required>
-                <SelectTrigger className="mt-1 block w-full">
-                  <SelectValue placeholder="Select a course" />
+                <SelectTrigger className="mt-1 block w-full" data-testid="course-select-trigger">
+                  <SelectValue data-testid="course-select-value">
+                    {selectedCourse
+                      ? courses.find(course => course.class_id === selectedCourse)?.course_name
+                      : "Select a course"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {courses.map((course) => (
-                    <SelectItem key={course.class_id} value={course.class_id}>
+                    <SelectItem key={course.class_id} value={course.class_id} data-testid={`course-option-${course.class_id}`}>
                       {course.course_name}
                     </SelectItem>
                   ))}
@@ -144,7 +146,7 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
               </div>
             </div>
             <div className="flex gap-4 mt-4">
-              <Button type="submit" size="sm">
+              <Button type="submit" size="sm" data-testid="submit-button">
                 <span>Create Exam</span>
               </Button>
             </div>
