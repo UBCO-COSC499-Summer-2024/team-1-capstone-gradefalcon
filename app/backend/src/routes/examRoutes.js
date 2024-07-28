@@ -163,12 +163,50 @@ router.post("/saveExamKey/:examType", async function (req, res) {
     // template === "200mcq"
     // 2 pages
     // WILL COME BACK TO THIS LATER
-    // const destinationDir1 = "/code/omr/inputs/page_1";
-    // const upload1 = createUploadMiddleware(destinationDir1);
-    // upload1.single("examKey");
-    // const destinationDir2 = "/code/omr/inputs/page_2";
-    // const upload2 = createUploadMiddleware(destinationDir2);
-    // upload1.single("examKey");
+    const ensureDirectoryExistence = (dirPath) => {
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+      }
+    };
+
+    const upload = multer({ dest: "uploads/" }).single("examKey");
+
+    upload(req, res, async function (err) {
+      if (err) {
+        return res.status(500).send("Error uploading 200mcq key.");
+      }
+      const { path: tempFilePath } = req.file;
+      const destinationDir1 = "/code/omr/inputs/page_1";
+      const destinationDir2 = "/code/omr/inputs/page_2";
+
+      ensureDirectoryExistence(destinationDir1);
+      ensureDirectoryExistence(destinationDir2);
+
+      try {
+        const existingPdfBytes = fs.readFileSync(tempFilePath);
+        const keyPDF = await PDFDocument.load(existingPdfBytes);
+
+        const key_page_1 = await PDFDocument.create();
+        const key_page_2 = await PDFDocument.create();
+
+        const [page1] = await key_page_1.copyPages(keyPDF, [0]);
+        const [page2] = await key_page_2.copyPages(keyPDF, [1]);
+
+        key_page_1.addPage(page1);
+        key_page_2.addPage(page2);
+        const key_page_1_Bytes = await key_page_1.save();
+        fs.writeFileSync(path.join(destinationDir1, "page_1.pdf"), key_page_1_Bytes);
+        const key_page_2_Bytes = await key_page_2.save();
+        fs.writeFileSync(path.join(destinationDir2, "page_2.pdf"), key_page_2_Bytes);
+
+        fs.unlinkSync(tempFilePath); // Clean up the temporary file
+
+        res.json({ message: "200mcq key uploaded and split successfully" });
+      } catch (error) {
+        console.error("Error processing PDF file:", error);
+        res.status(500).send("Error processing PDF file");
+      }
+    });
   }
 });
 
@@ -229,6 +267,27 @@ router.post("/copyTemplate", async function (req, res) {
   } else {
     // examType === "200mcq"
     // will get back to this
+    if (keyOrExam === "key") {
+      const filePath_1 = "/code/omr/inputs/page_1";
+      const filePath_2 = "/code/omr/inputs/page_2";
+      const templatePath_1 = path.join(__dirname, "../assets/200mcq_page_1.json");
+      const templatePath_2 = path.join(__dirname, "../assets/200mcq_page_2.json");
+      const destinationTemplatePath1 = path.join(filePath_1, "template.json");
+      const destinationTemplatePath2 = path.join(filePath_2, "template.json");
+
+      ensureDirectoryExistence(filePath_1);
+      ensureDirectoryExistence(filePath_2);
+
+      try {
+        fs.copyFileSync(templatePath_1, destinationTemplatePath1);
+        console.log("First template.json copied successfully");
+        fs.copyFileSync(templatePath_2, destinationTemplatePath2);
+        console.log("Second template.json copied successfully");
+      } catch (error) {
+        console.error("Error copying template.json:", error);
+        return res.status(500).send("Error copying template.json");
+      }
+    }
   }
   res.send(JSON.stringify("File copied successfully"));
 });
