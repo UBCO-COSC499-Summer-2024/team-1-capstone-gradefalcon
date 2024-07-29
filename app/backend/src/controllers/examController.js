@@ -1,4 +1,6 @@
 const pool = require("../utils/db");
+const fs = require("fs");
+const path = require("path");
 
 // Save solution questions and answers
 const saveQuestions = async (req, res, next) => {
@@ -219,10 +221,61 @@ const saveResults = async (req, res, next) => {
       }
     }
     res.send({ message: "Scores saved successfully" });
+    resetOMR();
   } catch (error) {
     console.error("Error saving student scores:", error);
     res.status(500).send("Error saving scores");
   }
+};
+
+const ensureDirectoryExistence = (dirPath) => {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+};
+
+const resetOMR = () => {
+  deleteAllFilesInDir(path.join(__dirname, "../../omr/inputs"));
+  deleteAllFilesInDir(path.join(__dirname, "../../omr/outputs"));
+  return true;
+};
+
+// Function to delete all files in a directory
+const deleteAllFilesInDir = (dirPath) => {
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error(`Error reading directory ${dirPath}:`, err);
+      return;
+    }
+
+    files.forEach((file) => {
+      const fileToDelete = path.join(dirPath, file);
+      fs.stat(fileToDelete, (err, stats) => {
+        if (err) {
+          console.error(`Error stating file ${fileToDelete}:`, err);
+          return;
+        }
+
+        if (stats.isFile()) {
+          fs.unlink(fileToDelete, (err) => {
+            if (err) {
+              console.error(`Error deleting file ${fileToDelete}:`, err);
+            } else {
+              console.log(`File ${fileToDelete} deleted successfully`);
+            }
+          });
+        } else if (stats.isDirectory()) {
+          fs.rmdir(fileToDelete, { recursive: true }, (err) => {
+            if (err) {
+              console.error(`Error deleting directory ${fileToDelete}:`, err);
+            } else {
+              console.log(`Directory ${fileToDelete} deleted successfully`);
+            }
+          });
+        }
+      });
+    });
+  });
 };
 
 module.exports = {
@@ -238,4 +291,7 @@ module.exports = {
   getScoreByExamId,
   saveResults,
   getExamType,
+  deleteAllFilesInDir,
+  resetOMR,
+  ensureDirectoryExistence,
 };

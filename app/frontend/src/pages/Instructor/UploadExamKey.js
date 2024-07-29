@@ -98,6 +98,7 @@ const UploadExamKey = () => {
         state: {
           examTitle: examTitle,
           classID: classID,
+          template: template,
         },
       });
     } catch (error) {

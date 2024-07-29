@@ -6,7 +6,7 @@ import "../css/App.css";
 const OMRProcessing = (props) => {
   const location = useLocation();
   const [toast, setToast] = useState(null);
-  const { examTitle, classID } = location.state || {};
+  const { examTitle, classID, template } = location.state || {};
   const navigate = useNavigate();
 
   const runOMR = async () => {
@@ -26,6 +26,7 @@ const OMRProcessing = (props) => {
           state: {
             examTitle: examTitle,
             classID: classID,
+            template: template,
           },
         });
       }, 2000);
@@ -61,11 +62,7 @@ const OMRProcessing = (props) => {
           </style>
           {toast && (
             <>
-              <Toast
-                message={toast.message}
-                type={toast.type}
-                onClose={() => setToast(null)}
-              />
+              <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
               <style>{`.circle-loader { display: none; }`}</style>
             </>
           )}

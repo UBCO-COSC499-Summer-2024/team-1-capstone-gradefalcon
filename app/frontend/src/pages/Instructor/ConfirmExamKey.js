@@ -5,7 +5,7 @@ import "../../css/ManualExamKey.css";
 
 const ConfirmExamKey = (props) => {
   const location = useLocation();
-  const { examTitle, classID } = location.state || {};
+  const { examTitle, classID, template } = location.state || {};
   const [fields, setFields] = useState({});
 
   let questions = [];
@@ -16,11 +16,12 @@ const ConfirmExamKey = (props) => {
   const downloadCsv = async () => {
     try {
       const response = await fetch("/api/exam/getResults", {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
+        body: JSON.stringify({ singlePage: template === "100mcq" }),
       });
 
       console.log("Response from getResults", response);
@@ -29,6 +30,7 @@ const ConfirmExamKey = (props) => {
       console.log("dataCSV", dataCsv);
       setFields(getFilledQs(dataCsv));
       setNumQuestions(getQuestionCount(getFilledQs(dataCsv)));
+      toggleQuestionAnswer(1, "E"); // bug fix, still selects the correct option
     } catch (error) {
       console.error("Error downloading CSV: ", error);
     }

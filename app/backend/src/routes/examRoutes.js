@@ -11,6 +11,9 @@ const {
   getScoreByExamId,
   getExamType,
   saveResults,
+  deleteAllFilesInDir,
+  ensureDirectoryExistence,
+  resetOMR,
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
@@ -19,6 +22,7 @@ const csv = require("csv-parser");
 const { Parser } = require("json2csv");
 const { PDFDocument } = require("pdf-lib");
 const multer = require("multer");
+const { formatWithOptions } = require("util");
 const router = express.Router();
 
 router.post("/saveQuestions", saveQuestions);
@@ -82,78 +86,63 @@ router.get("/studentScores", async function (req, res) {
     });
 });
 
-router.get("/getResults", async function (req, res) {
-  const inputDirPath = path.join(__dirname, "../../omr/inputs");
-  const outputDirPath = path.join(__dirname, "../../omr/outputs");
-  const resultsPage1 = [];
-  const resultsPage2 = [];
+router.post("/getResults", async function (req, res) {
+  const singlePage = req.body.singlePage;
+  if (singlePage) {
+    const inputDirPath = path.join(__dirname, "../../omr/inputs");
+    const outputDirPath = path.join(__dirname, "../../omr/outputs");
+    const results = []; // Array to hold all rows of data
 
-  // Read page_1/Results/Results.csv
-  fs.createReadStream(path.join(outputDirPath, "page_1/Results/Results.csv"))
-    .pipe(csv())
-    .on("data", (data) => resultsPage1.push(data))
-    .on("end", () => {
-      // Read page_2/Results/Results.csv
-      fs.createReadStream(path.join(outputDirPath, "page_2/Results/Results.csv"))
-        .pipe(csv())
-        .on("data", (data) => resultsPage2.push(data))
-        .on("end", () => {
-          // Combine results from both pages
-          const combinedResults = [{ ...resultsPage1[0], ...resultsPage2[0] }];
-          // Send the combined results as a response
-          res.json({ csv_file: combinedResults });
+    fs.createReadStream(path.join(outputDirPath, "Results/Results.csv"))
+      .pipe(csv())
+      .on("data", (data) => results.push(data)) // Push each row of data into the results array
+      .on("end", () => {
+        // Once file reading is done, send the entire results array as a response
+        res.json({ csv_file: results });
 
-          // Function to delete all files in a directory
-          const deleteAllFilesInDir = (dirPath) => {
-            fs.readdir(dirPath, (err, files) => {
-              if (err) {
-                console.error(`Error reading directory ${dirPath}:`, err);
-                return;
-              }
+        // Delete all files in the input and output directories
+        resetOMR();
+      })
 
-              files.forEach((file) => {
-                const fileToDelete = path.join(dirPath, file);
-                fs.stat(fileToDelete, (err, stats) => {
-                  if (err) {
-                    console.error(`Error stating file ${fileToDelete}:`, err);
-                    return;
-                  }
+      .on("error", (error) => {
+        // Handle any errors during file reading
+        console.error("Error reading CSV file:", error);
+        res.status(500).send("Error reading CSV file");
+      });
+  } else {
+    const inputDirPath = path.join(__dirname, "../../omr/inputs");
+    const outputDirPath = path.join(__dirname, "../../omr/outputs");
+    const resultsPage1 = [];
+    const resultsPage2 = [];
 
-                  if (stats.isFile()) {
-                    fs.unlink(fileToDelete, (err) => {
-                      if (err) {
-                        console.error(`Error deleting file ${fileToDelete}:`, err);
-                      } else {
-                        console.log(`File ${fileToDelete} deleted successfully`);
-                      }
-                    });
-                  } else if (stats.isDirectory()) {
-                    fs.rmdir(fileToDelete, { recursive: true }, (err) => {
-                      if (err) {
-                        console.error(`Error deleting directory ${fileToDelete}:`, err);
-                      } else {
-                        console.log(`Directory ${fileToDelete} deleted successfully`);
-                      }
-                    });
-                  }
-                });
-              });
-            });
-          };
+    // Read page_1/Results/Results.csv
+    fs.createReadStream(path.join(outputDirPath, "page_1/Results/Results.csv"))
+      .pipe(csv())
+      .on("data", (data) => resultsPage1.push(data))
+      .on("end", () => {
+        // Read page_2/Results/Results.csv
+        fs.createReadStream(path.join(outputDirPath, "page_2/Results/Results.csv"))
+          .pipe(csv())
+          .on("data", (data) => resultsPage2.push(data))
+          .on("end", () => {
+            // Combine results from both pages
+            const combinedResults = [{ ...resultsPage1[0], ...resultsPage2[0] }];
+            // Send the combined results as a response
+            res.json({ csv_file: combinedResults });
 
-          // Delete all files in the input and output directories
-          deleteAllFilesInDir(inputDirPath);
-          deleteAllFilesInDir(outputDirPath);
-        })
-        .on("error", (error) => {
-          console.error("Error reading CSV file from page 2:", error);
-          res.status(500).send("Error reading CSV file from page 2");
-        });
-    })
-    .on("error", (error) => {
-      console.error("Error reading CSV file from page 1:", error);
-      res.status(500).send("Error reading CSV file from page 1");
-    });
+            // Delete all files in the input and output directories
+            resetOMR();
+          })
+          .on("error", (error) => {
+            console.error("Error reading CSV file from page 2:", error);
+            res.status(500).send("Error reading CSV file from page 2");
+          });
+      })
+      .on("error", (error) => {
+        console.error("Error reading CSV file from page 1:", error);
+        res.status(500).send("Error reading CSV file from page 1");
+      });
+  }
 });
 
 // Save the exam key uploaded by the user
@@ -175,11 +164,6 @@ router.post("/saveExamKey/:examType", async function (req, res) {
     // template === "200mcq"
     // 2 pages
     // WILL COME BACK TO THIS LATER
-    const ensureDirectoryExistence = (dirPath) => {
-      if (!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath, { recursive: true });
-      }
-    };
 
     const upload = multer({ dest: "uploads/" }).single("examKey");
 
@@ -227,12 +211,6 @@ router.post("/copyTemplate", async function (req, res) {
   console.log("copyTemplate");
   const examType = req.body.examType;
   const keyOrExam = req.body.keyOrExam;
-
-  const ensureDirectoryExistence = (dirPath) => {
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath, { recursive: true });
-    }
-  };
 
   if (examType === "100mcq") {
     if (keyOrExam === "key") {
@@ -320,12 +298,6 @@ router.post("/callOMR", async function (req, res) {
 router.post("/UploadExam", async function (req, res) {
   const upload = multer({ dest: "uploads/" }).single("examPages");
 
-  const ensureDirectoryExistence = (dirPath) => {
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath, { recursive: true });
-    }
-  };
-
   upload(req, res, async function (err) {
     if (err) {
       return res.status(500).send("Error uploading file.");
@@ -383,13 +355,6 @@ router.post("/GenerateEvaluation", async function (req, res) {
 
     // Get answer key from the database
     const answerKey = await getAnswerKeyForExam(exam_id);
-
-    // Function to ensure the directory exists
-    const ensureDirectoryExistence = (dirPath) => {
-      if (!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath, { recursive: true });
-      }
-    };
 
     if (examType === "200mcq") {
       // Split questions into two groups: 1-100 and 101-200
@@ -688,6 +653,8 @@ router.get("/preprocessingCSV", async (req, res) => {
   const backPagePath = path.join(__dirname, "../../omr/outputs/page_2/Results/Results.csv");
   const outputPath = path.join(__dirname, "../../omr/outputs/combined.csv");
 
+  // ensureDirectoryExistence(path.join(__dirname, "../../omr/outputs"));
+
   const frontPageData = [];
   const backPageData = [];
 
@@ -700,6 +667,7 @@ router.get("/preprocessingCSV", async (req, res) => {
         FirstName: data.FirstName,
         LastName: data.LastName,
         StudentID: data.StudentID,
+        score: data.score,
       });
     })
     .on("end", () => {
@@ -721,7 +689,10 @@ router.get("/preprocessingCSV", async (req, res) => {
             return {
               ...frontData,
               back_page_file_id: backData ? backData.back_page_file_id : null,
-              score: backData ? backData.score : null,
+              score:
+                backData && frontData
+                  ? parseInt(backData.score, 10) + parseInt(frontData.score, 10)
+                  : null,
             };
           });
 
@@ -732,22 +703,22 @@ router.get("/preprocessingCSV", async (req, res) => {
           // Save the combined CSV data to a file
           fs.writeFile(outputPath, csvData, (err) => {
             if (err) {
-              console.error("Error writing combined.csv:", err);
-              res.status(500).send("Error writing combined.csv");
+              console.log("Error writing combined.csv:", err);
+              res.status(500).json("Error writing combined.csv");
             } else {
               console.log("Combined CSV file saved successfully.");
-              res.status(200).send("Combined CSV file saved successfully.");
+              res.status(200).json("Combined CSV file saved successfully.");
             }
           });
         })
         .on("error", (error) => {
           console.error("Error reading back_page.csv:", error);
-          res.status(500).send("Error reading back_page.csv");
+          res.status(500).json("Error reading back_page.csv");
         });
     })
     .on("error", (error) => {
       console.error("Error reading front_page.csv:", error);
-      res.status(500).send("Error reading front_page.csv");
+      res.status(500).json("Error reading front_page.csv");
     });
 });
 
