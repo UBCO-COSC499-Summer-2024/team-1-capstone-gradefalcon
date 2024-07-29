@@ -146,23 +146,20 @@ export default function Dashboard() {
   const handleExamCreated = (newExam) => {
     setExams([...exams, newExam]);
   };
-
   return (
-    <main className="flex flex-col gap-4 h-screen">
+    <div className="flex flex-col gap-4 h-screen">
       <div className="flex-1">
         <Card className="bg-white border rounded h-full">
           <CardHeader className="flex justify-between px-6 py-4">
-            <div>
+          <div className="flex justify-between items-center">
               <CardTitle className="mb-2">Your Courses</CardTitle>
-              <CardDescription>Your enrolled courses.</CardDescription>
-            </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex gap-2">
               <Dialog>
                 <TooltipProvider>
                   <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
                       <DialogTrigger asChild>
-                        <Button size="sm" className="ml-auto gap-1">
+                        <Button size="sm" className="gap-1">
                           <Plus className="h-4 w-4" />
                         </Button>
                       </DialogTrigger>
@@ -183,13 +180,15 @@ export default function Dashboard() {
                   </DialogClose>
                 </DialogContent>
               </Dialog>
-              <Button asChild size="sm" className="ml-auto gap-1">
+              <Button asChild size="sm" className="gap-1">
                 <Link to="/Classes">
                   Manage Courses
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </Button>
             </div>
+          </div>
+          <CardDescription>Your enrolled courses.</CardDescription>
           </CardHeader>
           <CardContent className="flex-1">
             <div className="relative mb-4">
@@ -209,15 +208,16 @@ export default function Dashboard() {
                     <Tooltip delayDuration={0}>
                       <TooltipTrigger asChild>
                         <Link to={`/ClassManagement/${course.class_id}`}>
-                          <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md">
-                            <div className="flex items-center justify-between mb-4">
-                              <CardDescription>{course.course_name}</CardDescription>
-                              <Bookmark className="h-6 w-6 text-muted-foreground" />
-                            </div>
-                            <div className="flex flex-col items-center">
-                              <div className="text-2xl font-bold">{course.course_id}</div>
-                            </div>
-                          </Card>
+                        <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md max-w-md mx-auto h-30">
+  <div className="flex items-center justify-between mb-4">
+    <CardDescription>{course.course_name}</CardDescription>
+    <Bookmark className="h-6 w-6 text-muted-foreground" />
+  </div>
+  <div className="flex flex-col items-center">
+    <div className="text-2xl font-bold">{course.course_id}</div>
+  </div>
+</Card>
+
                         </Link>
                       </TooltipTrigger>
                       <TooltipContent>
@@ -231,21 +231,19 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-
+  
       <div className="flex-1">
         <Card className="bg-white border rounded h-full">
           <CardHeader className="flex justify-between px-6 py-4">
-            <div>
+          <div className="flex justify-between items-center">
               <CardTitle className="mb-2">Exam Board</CardTitle>
-              <CardDescription>Recent exams from your classes.</CardDescription>
-            </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex gap-2">
               <Dialog>
                 <TooltipProvider>
                   <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
                       <DialogTrigger asChild>
-                        <Button size="sm" className="ml-auto gap-1" onClick={() => setIsDialogOpen(true)}>
+                        <Button size="sm" className="gap-1" onClick={() => setIsDialogOpen(true)}>
                           <Plus className="h-4 w-4" />
                         </Button>
                       </DialogTrigger>
@@ -266,13 +264,15 @@ export default function Dashboard() {
                   </DialogClose>
                 </DialogContent>
               </Dialog>
-              <Button asChild size="sm" className="ml-auto gap-1">
+              <Button asChild size="sm" className="gap-1">
                 <Link to="/Examboard">
                   Manage Exams
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </Button>
             </div>
+            </div>
+            <CardDescription>Recent exams from your classes.</CardDescription>
           </CardHeader>
           <CardContent className="flex-1">
             <div className="relative mb-4">
@@ -309,7 +309,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-
+  
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="bg-white border rounded">
           <CardHeader>
@@ -328,7 +328,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   );
 }
 

@@ -89,21 +89,51 @@ router.post("/copyTemplate", async function (req, res) {
   res.send(JSON.stringify("File copied successfully"));
 });
 
+const getCustomMarkingSchemes = async (examId) => {
+  const res = await pool.query(
+    "SELECT section_name, questions, correct, incorrect, unmarked FROM marking_schemes WHERE exam_id = $1",
+    [examId]
+  );
+  return res.rows.reduce((acc, row) => {
+    acc[row.section_name] = {
+      questions: row.questions.split(",").map((q) => q.trim()),
+      marking: {
+        correct: row.correct,
+        incorrect: row.incorrect,
+        unmarked: row.unmarked,
+      },
+    };
+    return acc;
+  }, {});
+};
 
-// Generate the evaluation JSON for an exam
+
 router.post("/GenerateEvaluation", async function (req, res) {
   const { exam_id } = req.body;
 
   try {
-    // Validate exam_id
     if (!exam_id) {
       return res.status(400).send("Missing exam_id");
     }
 
-    // Get answer key from the database
     const answerKey = await getAnswerKeyForExam(exam_id);
+    const customMarkingSchemes = await getCustomMarkingSchemes(exam_id);
 
-    // Create evaluation.json
+    const markingSchemes = {
+      DEFAULT: {
+        correct: "1",
+        incorrect: "0",
+        unmarked: "0",
+      },
+    };
+
+    for (const [sectionName, scheme] of Object.entries(customMarkingSchemes)) {
+      markingSchemes[sectionName] = {
+        questions: scheme.questions,
+        marking: scheme.marking,
+      };
+    }
+
     const evaluationJson = {
       source_type: "custom",
       options: {
@@ -142,13 +172,7 @@ router.post("/GenerateEvaluation", async function (req, res) {
           enabled: false,
         },
       },
-      marking_schemes: {
-        DEFAULT: {
-          correct: "1",
-          incorrect: "0",
-          unmarked: "0",
-        },
-      },
+      marking_schemes: markingSchemes,
     };
 
     const destinationDir = `/code/omr/inputs`;

@@ -4,6 +4,10 @@ import "../../css/App.css";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip"; // Assuming this is the correct path
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
+import { ScrollArea } from "../../components/ui/scroll-area";
+import {Plus, FileIcon} from "lucide-react";
+import { ChevronLeftIcon} from "@heroicons/react/20/solid";
 
 const ClassManagement = () => {
   const params = useParams();
@@ -70,25 +74,6 @@ const ClassManagement = () => {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.ok) {
-        alert("Logged out");
-        navigate("/");
-      } else {
-        console.error("Logout failed");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -97,83 +82,96 @@ const ClassManagement = () => {
     return <div>{error}</div>;
   }
 
+
   return (
-    <main className="flex flex-col gap-4 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
-      <div>
-        <h1 className="text-3xl font-bold mb-4">
-          {courseDetails[0] ? courseDetails[0].course_id : "loading..."}
-        </h1>
-        <h2 className="text-xl mb-4">
-          {courseDetails[0] ? courseDetails[0].course_name : "loading..."}
-        </h2>
-        <div className="grid gap-4 lg:grid-cols-1">
-          <Card className="bg-white border rounded">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <div>
-                <CardTitle className="mb-2">Grades</CardTitle>
-              </div>
-              <TooltipProvider>
-                <Tooltip delayDuration={0}>
-                  <TooltipTrigger asChild>
-                    <Link to={`../NewExam/${params.class_id}`} className="ml-auto gap-1">
-                      <Button size="sm">+</Button>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    Create New Exam
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </CardHeader>
-            <CardContent>
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr>
-                    <th className="border-b py-2 text-left px-4">Student ID</th>
-                    <th className="border-b py-2 text-left px-4">Student Name</th>
-                    {[...Array(maxExams).keys()].map((_, index) => (
-                      <th key={index} className="border-b py-2 text-left px-4">Exam {index + 1}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {classData.studentInfo &&
-                    classData.studentInfo.map((student) => (
-                      <tr key={student.student_id}>
-                        <td className="border-b py-2 px-4">{student.student_id}</td>
-                        <td className="border-b py-2 px-4">{student.name}</td>
-                        {student.exams.map((exam, index) => (
-                          <td key={index} className="border-b py-2 px-4">{exam.grade}</td>
-                        ))}
-                        {[...Array(maxExams - student.exams.length).keys()].map((_, index) => (
-                          <td key={index} className="border-b py-2 px-4">-</td>
-                        ))}
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-              <div className="flex justify-between mt-4">
-                <Button asChild size="sm" className="gap-1" onClick={() => window.history.back()}>
-                  <span>Back</span>
+    <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
+    <div className="flex items-center gap-4">
+      <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => window.history.back()}>
+        <ChevronLeftIcon className="h-4 w-4" />
+        <span className="sr-only">Back</span>
+      </Button>
+      <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+        {courseDetails[0] ? courseDetails[0].course_id : "loading..."}
+      </h1>
+      <div className="flex items-center gap-2 ml-auto">
+        <TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Link to={`../NewExam/${params.class_id}`} className="gap-1">
+              <Button size="sm" className="gap-1">
+                  <Plus className="h-4 w-4" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap"></span>
                 </Button>
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <Button onClick={exportToCSV}>
-                        Export
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      Export grades as a csv file.
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              Create New Course
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button size="sm" variant="outline" className="h-8 gap-1" onClick={exportToCSV}>
+                <FileIcon className="h-4 w-4" />
+                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Export</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              Export grades as a csv file.
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
-    </main>
+    </div>
+  
+    <div className="grid gap-4 lg:grid-cols-1">
+    <Card className="bg-white border rounded">
+      <CardHeader className="flex justify-between px-6 py-4">
+        <div>
+          <CardTitle className="mb-2">Grades</CardTitle>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <ScrollArea className="h-80">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Student ID</TableHead>
+                <TableHead className="hidden sm:table-cell">Student Name</TableHead>
+                {[...Array(maxExams).keys()].map((_, index) => (
+                  <TableHead key={index} className="hidden sm:table-cell">Exam {index + 1}</TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {classData.studentInfo && classData.studentInfo.map((student) => (
+                <TableRow key={student.student_id}>
+                  <TableCell>
+                    <div className="font-medium">{student.student_id}</div>
+                  </TableCell>
+                  <TableCell className="hidden sm:table-cell">
+                    <div className="text-sm text-muted-foreground">{student.name}</div>
+                  </TableCell>
+                  {student.exams.map((exam, index) => (
+                    <TableCell key={index} className="hidden sm:table-cell">
+                      <div className="text-sm text-muted-foreground">{exam.grade}</div>
+                    </TableCell>
+                  ))}
+                  {[...Array(maxExams - student.exams.length).keys()].map((_, index) => (
+                    <TableCell key={index} className="hidden sm:table-cell">
+                      <div className="text-sm text-muted-foreground">-</div>
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </ScrollArea>
+      </CardContent>
+    </Card>
+  </div>
+</div>
   );
 };
 

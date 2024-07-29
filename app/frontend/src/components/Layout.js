@@ -58,7 +58,7 @@ const Layout = ({ children }) => {
       }}
     >
       {shouldDisplayNavBar && <Sidebar handleLogout={handleLogout} />}
-      <div className={shouldDisplayNavBar ? "main-content flex-1 p-8 bg-gradient-to-r from-gradient-start to-gradient-end" : ""}>
+      <div className={shouldDisplayNavBar ? "main-content flex-1 p-8 bg-gradient-to-r from-gradient-start to-gradient-end h-full flex-1" : ""}>
         {shouldDisplayNavBar && (
           <div className="py-4">
             <Breadcrumb>
