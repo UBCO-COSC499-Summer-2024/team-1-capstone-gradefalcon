@@ -278,27 +278,24 @@ router.post("/copyTemplate", async function (req, res) {
     }
   } else {
     // examType === "200mcq"
-    // will get back to this
-    if (keyOrExam === "key") {
-      const filePath_1 = "/code/omr/inputs/page_1";
-      const filePath_2 = "/code/omr/inputs/page_2";
-      const templatePath_1 = path.join(__dirname, "../assets/200mcq_page_1.json");
-      const templatePath_2 = path.join(__dirname, "../assets/200mcq_page_2.json");
-      const destinationTemplatePath1 = path.join(filePath_1, "template.json");
-      const destinationTemplatePath2 = path.join(filePath_2, "template.json");
+    const filePath_1 = "/code/omr/inputs/page_1";
+    const filePath_2 = "/code/omr/inputs/page_2";
+    const templatePath_1 = path.join(__dirname, "../assets/200mcq_page_1.json");
+    const templatePath_2 = path.join(__dirname, "../assets/200mcq_page_2.json");
+    const destinationTemplatePath1 = path.join(filePath_1, "template.json");
+    const destinationTemplatePath2 = path.join(filePath_2, "template.json");
 
-      ensureDirectoryExistence(filePath_1);
-      ensureDirectoryExistence(filePath_2);
+    ensureDirectoryExistence(filePath_1);
+    ensureDirectoryExistence(filePath_2);
 
-      try {
-        fs.copyFileSync(templatePath_1, destinationTemplatePath1);
-        console.log("First template.json copied successfully");
-        fs.copyFileSync(templatePath_2, destinationTemplatePath2);
-        console.log("Second template.json copied successfully");
-      } catch (error) {
-        console.error("Error copying template.json:", error);
-        return res.status(500).send("Error copying template.json");
-      }
+    try {
+      fs.copyFileSync(templatePath_1, destinationTemplatePath1);
+      console.log("First template.json copied successfully");
+      fs.copyFileSync(templatePath_2, destinationTemplatePath2);
+      console.log("Second template.json copied successfully");
+    } catch (error) {
+      console.error("Error copying template.json:", error);
+      return res.status(500).send("Error copying template.json");
     }
   }
   res.send(JSON.stringify("File copied successfully"));
@@ -322,6 +319,12 @@ router.post("/callOMR", async function (req, res) {
 
 router.post("/UploadExam", async function (req, res) {
   const upload = multer({ dest: "uploads/" }).single("examPages");
+
+  const ensureDirectoryExistence = (dirPath) => {
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+  };
 
   upload(req, res, async function (err) {
     if (err) {
@@ -351,6 +354,9 @@ router.post("/UploadExam", async function (req, res) {
         }
       }
 
+      ensureDirectoryExistence(destinationDir1);
+      ensureDirectoryExistence(destinationDir2);
+
       const oddBytes = await oddPagesPdf.save();
       fs.writeFileSync(path.join(destinationDir1, "front_pages.pdf"), oddBytes);
       const evenBytes = await evenPagesPdf.save();
@@ -366,9 +372,8 @@ router.post("/UploadExam", async function (req, res) {
   });
 });
 
-// Generate the evaluation JSON for an exam
 router.post("/GenerateEvaluation", async function (req, res) {
-  const { exam_id } = req.body;
+  const { examType, exam_id } = req.body;
 
   try {
     // Validate exam_id
@@ -379,67 +384,190 @@ router.post("/GenerateEvaluation", async function (req, res) {
     // Get answer key from the database
     const answerKey = await getAnswerKeyForExam(exam_id);
 
-    // Create evaluation.json
-    const evaluationJson = {
-      source_type: "custom",
-      options: {
-        questions_in_order: Array.from({ length: answerKey.length }, (_, i) => `q${i + 1}`),
-        answers_in_order: answerKey,
-      },
-      outputs_configuration: {
-        should_explain_scoring: true,
-        draw_score: {
-          enabled: true,
-          position: [600, 1100],
-          size: 1.5,
-        },
-        draw_answers_summary: {
-          enabled: true,
-          position: [300, 1200],
-          size: 1.0,
-        },
-        draw_question_verdicts: {
-          enabled: true,
-          verdict_colors: {
-            correct: "#00ff00",
-            neutral: "#ff0000",
-            incorrect: "#ff0000",
-          },
-          verdict_symbol_colors: {
-            positive: "#000000",
-            neutral: "#000000",
-            negative: "#000000",
-          },
-          draw_answer_groups: {
-            enabled: true,
-          },
-        },
-        draw_detected_bubble_texts: {
-          enabled: false,
-        },
-      },
-      marking_schemes: {
-        DEFAULT: {
-          correct: "1",
-          incorrect: "0",
-          unmarked: "0",
-        },
-      },
-    };
-
-    const destinationDir = `/code/omr/inputs/page_2`;
     // Function to ensure the directory exists
     const ensureDirectoryExistence = (dirPath) => {
       if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath, { recursive: true });
       }
     };
-    ensureDirectoryExistence(destinationDir);
-    // const destinationDir = `/code/omr/inputs`;
-    const evaluationFilePath = path.join(destinationDir, "evaluation.json");
-    fs.writeFileSync(evaluationFilePath, JSON.stringify(evaluationJson, null, 2));
 
-    res.json({ message: "evaluation.json created successfully" });
+    if (examType === "200mcq") {
+      // Split questions into two groups: 1-100 and 101-200
+      const firstHalfQuestions = answerKey.slice(0, 100);
+      const secondHalfQuestions = answerKey.slice(100);
+      console.log("First half questions:", firstHalfQuestions);
+      console.log("Second half questions:", secondHalfQuestions);
+      // Create evaluation.json for the first half
+      const evaluationJsonPage1 = {
+        source_type: "custom",
+        options: {
+          questions_in_order: Array.from(
+            { length: firstHalfQuestions.length },
+            (_, i) => `q${i + 1}`
+          ),
+          answers_in_order: firstHalfQuestions,
+        },
+        outputs_configuration: {
+          should_explain_scoring: true,
+          draw_score: {
+            enabled: true,
+            position: [600, 1100],
+            size: 1.5,
+          },
+          draw_answers_summary: {
+            enabled: true,
+            position: [300, 1200],
+            size: 1.0,
+          },
+          draw_question_verdicts: {
+            enabled: true,
+            verdict_colors: {
+              correct: "#00ff00",
+              neutral: "#ff0000",
+              incorrect: "#ff0000",
+            },
+            verdict_symbol_colors: {
+              positive: "#000000",
+              neutral: "#000000",
+              negative: "#000000",
+            },
+            draw_answer_groups: {
+              enabled: true,
+            },
+          },
+          draw_detected_bubble_texts: {
+            enabled: false,
+          },
+        },
+        marking_schemes: {
+          DEFAULT: {
+            correct: "1",
+            incorrect: "0",
+            unmarked: "0",
+          },
+        },
+      };
+
+      // Create evaluation.json for the second half
+      const evaluationJsonPage2 = {
+        source_type: "custom",
+        options: {
+          questions_in_order: Array.from(
+            { length: secondHalfQuestions.length },
+            (_, i) => `q${i + 101}`
+          ),
+          answers_in_order: secondHalfQuestions,
+        },
+        outputs_configuration: {
+          should_explain_scoring: true,
+          draw_score: {
+            enabled: true,
+            position: [600, 1100],
+            size: 1.5,
+          },
+          draw_answers_summary: {
+            enabled: true,
+            position: [300, 1200],
+            size: 1.0,
+          },
+          draw_question_verdicts: {
+            enabled: true,
+            verdict_colors: {
+              correct: "#00ff00",
+              neutral: "#ff0000",
+              incorrect: "#ff0000",
+            },
+            verdict_symbol_colors: {
+              positive: "#000000",
+              neutral: "#000000",
+              negative: "#000000",
+            },
+            draw_answer_groups: {
+              enabled: true,
+            },
+          },
+          draw_detected_bubble_texts: {
+            enabled: false,
+          },
+        },
+        marking_schemes: {
+          DEFAULT: {
+            correct: "1",
+            incorrect: "0",
+            unmarked: "0",
+          },
+        },
+      };
+
+      // Ensure directories exist
+      const destinationDirPage1 = `/code/omr/inputs/page_1`;
+      const destinationDirPage2 = `/code/omr/inputs/page_2`;
+      ensureDirectoryExistence(destinationDirPage1);
+      ensureDirectoryExistence(destinationDirPage2);
+
+      // Write JSON files
+      const evaluationFilePathPage1 = path.join(destinationDirPage1, "evaluation.json");
+      const evaluationFilePathPage2 = path.join(destinationDirPage2, "evaluation.json");
+      fs.writeFileSync(evaluationFilePathPage1, JSON.stringify(evaluationJsonPage1, null, 2));
+      fs.writeFileSync(evaluationFilePathPage2, JSON.stringify(evaluationJsonPage2, null, 2));
+
+      res.json({ message: "evaluation.json files created successfully for 200mcq" });
+    } else {
+      // Create evaluation.json for other exam types
+      const evaluationJson = {
+        source_type: "custom",
+        options: {
+          questions_in_order: Array.from({ length: answerKey.length }, (_, i) => `q${i + 1}`),
+          answers_in_order: answerKey,
+        },
+        outputs_configuration: {
+          should_explain_scoring: true,
+          draw_score: {
+            enabled: true,
+            position: [600, 1100],
+            size: 1.5,
+          },
+          draw_answers_summary: {
+            enabled: true,
+            position: [300, 1200],
+            size: 1.0,
+          },
+          draw_question_verdicts: {
+            enabled: true,
+            verdict_colors: {
+              correct: "#00ff00",
+              neutral: "#ff0000",
+              incorrect: "#ff0000",
+            },
+            verdict_symbol_colors: {
+              positive: "#000000",
+              neutral: "#000000",
+              negative: "#000000",
+            },
+            draw_answer_groups: {
+              enabled: true,
+            },
+          },
+          draw_detected_bubble_texts: {
+            enabled: false,
+          },
+        },
+        marking_schemes: {
+          DEFAULT: {
+            correct: "1",
+            incorrect: "0",
+            unmarked: "0",
+          },
+        },
+      };
+
+      const destinationDir = `/code/omr/inputs/page_2`;
+      ensureDirectoryExistence(destinationDir);
+      const evaluationFilePath = path.join(destinationDir, "evaluation.json");
+      fs.writeFileSync(evaluationFilePath, JSON.stringify(evaluationJson, null, 2));
+
+      res.json({ message: "evaluation.json created successfully" });
+    }
   } catch (error) {
     console.error("Error in /GenerateEvaluation:", error);
     res.status(500).send("Error generating evaluation file");

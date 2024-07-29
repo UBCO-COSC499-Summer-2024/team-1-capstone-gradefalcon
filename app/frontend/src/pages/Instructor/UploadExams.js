@@ -78,7 +78,7 @@ const UploadExam = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ exam_id }),
+          body: JSON.stringify({ examType, exam_id }),
         }),
         fetch("/api/exam/copyTemplate", {
           method: "POST",
