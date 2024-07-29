@@ -31,8 +31,9 @@ CREATE TABLE classes (
 );
 
 CREATE TABLE student (
-    auth0_id text primary key,
-    email text,
+    student_id text primary key,
+    auth0_id text NOT NULL unique,
+    email text unique,
     name text
 );
 
@@ -65,7 +66,7 @@ CREATE TABLE enrollment(
     class_id int,
     student_id text,
     foreign key (class_id) references classes(class_id),
-    foreign key (student_id) references student(auth0_id)
+    foreign key (student_id) references student(student_id)
 );
 
 CREATE TABLE studentResults(
@@ -76,7 +77,7 @@ CREATE TABLE studentResults(
     grade int,
     filepath text,
     foreign key (exam_id) references exam(exam_id),
-    foreign key (student_id) references student(auth0_id)
+    foreign key (student_id) references student(student_id)
 );
 
 CREATE TABLE scannedExam(
@@ -96,7 +97,7 @@ CREATE TABLE feedback(
     feedback_text text not null,
     feedback_time timestamp not null,
     status feedback_status not null,
-    foreign key (student_id) references student(auth0_id)
+    foreign key (student_id) references student(student_id)
 );
 
 CREATE TABLE admins(
@@ -122,9 +123,9 @@ INSERT INTO instructor (auth0_id, email, name) VALUES (
     'auth0|6696d634bec6c6d1cc3e2274', 'edu.instructor1@gmail.com', 'Instructor'
 );
 
-INSERT INTO student (auth0_id, email, name) VALUES 
-    ('auth0|669eca4940b5ccd84d81caa2', 'stu.example0@gmail.com', 'Student'),
-    ('auth0|669ecaa440b5ccd84d81caa3', 'stu.example1@gmail.com', 'Student II');
+INSERT INTO student (student_id, auth0_id, email, name) VALUES 
+    ('1', 'auth0|669eca4940b5ccd84d81caa2', 'stu.example0@gmail.com', 'Student'),
+    ('2', 'auth0|669ecaa440b5ccd84d81caa3', 'stu.example1@gmail.com', 'Student II');
 
 INSERT INTO classes (instructor_id, course_id, course_name) VALUES
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST100', 'Database Test'),
@@ -139,20 +140,20 @@ INSERT INTO solution (exam_id) VALUES
     (2);
 
 INSERT INTO enrollment (class_id, student_id) VALUES 
-    (1, 'auth0|669eca4940b5ccd84d81caa2'),
-    (1, 'auth0|669ecaa440b5ccd84d81caa3');
+    (1, '1'),
+    (1, '2');
 
 INSERT INTO studentResults (student_id, exam_id, grade) VALUES
-    ('auth0|669eca4940b5ccd84d81caa2', 1, 50),
-    ('auth0|669ecaa440b5ccd84d81caa3', 1, 11),
-    ('auth0|669eca4940b5ccd84d81caa2', 2, 69);
+    ('1', 1, 50),
+    ('2', 1, 11),
+    ('1', 2, 69);
 
 INSERT INTO scannedExam (exam_id) VALUES (
     1
 );
 
 INSERT INTO feedback (sheet_id, student_id, feedback_text, feedback_time, status) VALUES (
-    1, 'auth0|669eca4940b5ccd84d81caa2', 'Q5 is incorrectly marked', CURRENT_TIMESTAMP, 'Not Done'
+    1, '1', 'Q5 is incorrectly marked', CURRENT_TIMESTAMP, 'Not Done'
 );
 
 INSERT INTO admins (auth0_id, email, name) VALUES (
