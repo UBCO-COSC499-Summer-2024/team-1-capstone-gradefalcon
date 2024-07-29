@@ -29,9 +29,6 @@ const ConfirmExamKey = (props) => {
       console.log("dataCSV", dataCsv);
       setFields(getFilledQs(dataCsv));
       setNumQuestions(getQuestionCount(getFilledQs(dataCsv)));
-      console.log("getFilledQs", getFilledQs(dataCsv));
-      toggleQuestionAnswer(1, "E"); // bug fix, still selects the correct option
-      clickAnswersForQuestions(getFilledQs(dataCsv));
     } catch (error) {
       console.error("Error downloading CSV: ", error);
     }
@@ -50,12 +47,10 @@ const ConfirmExamKey = (props) => {
     );
 
     // Sort
-    const sortedEntries = filteredEntries.sort(
-      (a, b) => parseInt(a[0]) - parseInt(b[0])
-    );
+    const sortedEntries = filteredEntries.sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
 
     // We only want the questions so we skip file_id, input_path, output_path, and score
-    const entriesAfterSkipping = sortedEntries.slice(4);
+    const entriesAfterSkipping = sortedEntries.slice(5);
 
     // Convert back into object
     const transformedEntries = entriesAfterSkipping.map(([key, value]) => [
@@ -72,8 +67,7 @@ const ConfirmExamKey = (props) => {
 
   const removeQuestion = (questionNumber, option) => {
     questions = questions.filter(
-      (question) =>
-        question.question !== questionNumber || question.option !== option
+      (question) => question.question !== questionNumber || question.option !== option
     );
   };
 
@@ -104,9 +98,7 @@ const ConfirmExamKey = (props) => {
       (span) => span.innerText === answer
     );
     if (!optionSpan) {
-      console.error(
-        `Option ${answer} in question ${questionNumber} not found.`
-      );
+      console.error(`Option ${answer} in question ${questionNumber} not found.`);
       return;
     }
 
@@ -139,15 +131,21 @@ const ConfirmExamKey = (props) => {
 
       bubbleGrid.appendChild(questionDiv);
     }
-  }, [numQuestions, numOptions]);
 
-  useEffect(() => {
-    updateQuestions();
-  }, [numQuestions, numOptions, updateQuestions]);
+    clickAnswersForQuestions(fields);
+  }, [numQuestions, numOptions]);
 
   useEffect(() => {
     downloadCsv();
   }, []);
+
+  useEffect(() => {
+    updateQuestions();
+  }, [numQuestions, numOptions]);
+
+  // useEffect(() => {
+  //   setQuestions();
+  // }, [numOptions, numQuestions]);
 
   return (
     <>
@@ -157,10 +155,7 @@ const ConfirmExamKey = (props) => {
             <h2>Confirm Exam Key</h2>
           </header>
           <section className="new-exam">
-            <button
-              className="back-button"
-              onClick={() => window.history.back()}
-            >
+            <button className="back-button" onClick={() => window.history.back()}>
               {" "}
               Back
             </button>
@@ -175,9 +170,7 @@ const ConfirmExamKey = (props) => {
                 id="num-questions"
                 className="input-field"
                 value={numQuestions}
-                onChange={(e) =>
-                  setNumQuestions(Math.min(300, parseInt(e.target.value)))
-                }
+                onChange={(e) => setNumQuestions(Math.min(300, parseInt(e.target.value)))}
                 min="1"
                 max="300"
                 data-testid="num-questions-input"
@@ -189,9 +182,7 @@ const ConfirmExamKey = (props) => {
                 id="num-options"
                 className="input-field"
                 value={numOptions}
-                onChange={(e) =>
-                  setNumOptions(Math.min(26, parseInt(e.target.value)))
-                }
+                onChange={(e) => setNumOptions(Math.min(26, parseInt(e.target.value)))}
                 min="1"
                 max="26"
                 data-testid="num-options-input"

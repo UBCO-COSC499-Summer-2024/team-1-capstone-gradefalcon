@@ -82,65 +82,76 @@ router.get("/studentScores", async function (req, res) {
 });
 
 router.get("/getResults", async function (req, res) {
-  // const filePath = path.join(__dirname,"../../omr/outputs/Results/Results.csv");
   const inputDirPath = path.join(__dirname, "../../omr/inputs");
   const outputDirPath = path.join(__dirname, "../../omr/outputs");
-  const results = []; // Array to hold all rows of data
+  const resultsPage1 = [];
+  const resultsPage2 = [];
 
-  fs.createReadStream(path.join(outputDirPath, "Results/Results.csv"))
+  // Read page_1/Results/Results.csv
+  fs.createReadStream(path.join(outputDirPath, "page_1/Results/Results.csv"))
     .pipe(csv())
-    .on("data", (data) => results.push(data)) // Push each row of data into the results array
+    .on("data", (data) => resultsPage1.push(data))
     .on("end", () => {
-      // Once file reading is done, send the entire results array as a response
-      res.json({ csv_file: results });
+      // Read page_2/Results/Results.csv
+      fs.createReadStream(path.join(outputDirPath, "page_2/Results/Results.csv"))
+        .pipe(csv())
+        .on("data", (data) => resultsPage2.push(data))
+        .on("end", () => {
+          // Combine results from both pages
+          const combinedResults = [{ ...resultsPage1[0], ...resultsPage2[0] }];
+          // Send the combined results as a response
+          res.json({ csv_file: combinedResults });
 
-      // Function to delete all files in a directory
-      const deleteAllFilesInDir = (dirPath) => {
-        fs.readdir(dirPath, (err, files) => {
-          if (err) {
-            console.error(`Error reading directory ${dirPath}:`, err);
-            return;
-          }
-
-          files.forEach((file) => {
-            const fileToDelete = path.join(dirPath, file);
-            fs.stat(fileToDelete, (err, stats) => {
+          // Function to delete all files in a directory
+          const deleteAllFilesInDir = (dirPath) => {
+            fs.readdir(dirPath, (err, files) => {
               if (err) {
-                console.error(`Error stating file ${fileToDelete}:`, err);
+                console.error(`Error reading directory ${dirPath}:`, err);
                 return;
               }
 
-              if (stats.isFile()) {
-                fs.unlink(fileToDelete, (err) => {
+              files.forEach((file) => {
+                const fileToDelete = path.join(dirPath, file);
+                fs.stat(fileToDelete, (err, stats) => {
                   if (err) {
-                    console.error(`Error deleting file ${fileToDelete}:`, err);
-                  } else {
-                    console.log(`File ${fileToDelete} deleted successfully`);
+                    console.error(`Error stating file ${fileToDelete}:`, err);
+                    return;
+                  }
+
+                  if (stats.isFile()) {
+                    fs.unlink(fileToDelete, (err) => {
+                      if (err) {
+                        console.error(`Error deleting file ${fileToDelete}:`, err);
+                      } else {
+                        console.log(`File ${fileToDelete} deleted successfully`);
+                      }
+                    });
+                  } else if (stats.isDirectory()) {
+                    fs.rmdir(fileToDelete, { recursive: true }, (err) => {
+                      if (err) {
+                        console.error(`Error deleting directory ${fileToDelete}:`, err);
+                      } else {
+                        console.log(`Directory ${fileToDelete} deleted successfully`);
+                      }
+                    });
                   }
                 });
-              } else if (stats.isDirectory()) {
-                fs.rmdir(fileToDelete, { recursive: true }, (err) => {
-                  if (err) {
-                    console.error(`Error deleting directory ${fileToDelete}:`, err);
-                  } else {
-                    console.log(`Directory ${fileToDelete} deleted successfully`);
-                  }
-                });
-              }
+              });
             });
-          });
+          };
+
+          // Delete all files in the input and output directories
+          deleteAllFilesInDir(inputDirPath);
+          deleteAllFilesInDir(outputDirPath);
+        })
+        .on("error", (error) => {
+          console.error("Error reading CSV file from page 2:", error);
+          res.status(500).send("Error reading CSV file from page 2");
         });
-      };
-
-      // Delete all files in the input and output directories
-      deleteAllFilesInDir(inputDirPath);
-      deleteAllFilesInDir(outputDirPath);
     })
-
     .on("error", (error) => {
-      // Handle any errors during file reading
-      console.error("Error reading CSV file:", error);
-      res.status(500).send("Error reading CSV file");
+      console.error("Error reading CSV file from page 1:", error);
+      res.status(500).send("Error reading CSV file from page 1");
     });
 });
 
