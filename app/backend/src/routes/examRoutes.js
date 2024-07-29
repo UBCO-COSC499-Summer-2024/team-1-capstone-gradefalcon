@@ -9,6 +9,7 @@ const {
   getStudentGrades,
   getStudentNameById,
   getScoreByExamId,
+  getExamType,
   saveResults,
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
@@ -499,6 +500,23 @@ router.get("/getScoreByExamId/:exam_id", async (req, res) => {
     res.json({ scores });
   } catch (error) {
     console.error("Error in /getScoreByExamId:", error);
+    res.status(500).send("Error retrieving scores");
+  }
+});
+
+router.get("/getExamType/:exam_id", async (req, res) => {
+  try {
+    const exam_id = parseInt(req.params.exam_id, 10);
+    if (isNaN(exam_id)) {
+      return res.status(400).send("Invalid exam_id");
+    }
+    const exam_type = await getExamType(exam_id);
+    if (exam_type.length === 0) {
+      return res.status(404).send("No exam type found for this exam");
+    }
+    res.json({ exam_type });
+  } catch (error) {
+    console.error("Error in /getExamType:", error);
     res.status(500).send("Error retrieving scores");
   }
 });

@@ -169,6 +169,24 @@ const getStudentNameById = async (studentId) => {
   }
 };
 
+const getExamType = async (exam_id) => {
+  try {
+    const result = await pool.query("SELECT total_questions FROM exam WHERE exam_id = $1", [
+      exam_id,
+    ]);
+
+    if (result.rows.length === 0) {
+      return "No scores found for this exam";
+    }
+
+    const totalQuestions = result.rows[0].total_questions;
+    return totalQuestions > 100 ? "200mcq" : "100mcq";
+  } catch (error) {
+    console.error("Error getting scores by exam ID:", error);
+    throw error;
+  }
+};
+
 const getScoreByExamId = async (exam_id) => {
   try {
     const result = await pool.query("SELECT total_marks FROM exam WHERE exam_id = $1", [exam_id]);
@@ -176,7 +194,7 @@ const getScoreByExamId = async (exam_id) => {
     if (result.rows.length === 0) {
       return "No scores found for this exam";
     }
-
+    console.log(result.rows.map((row) => row.total_marks));
     return result.rows.map((row) => row.total_marks);
   } catch (error) {
     console.error("Error getting scores by exam ID:", error);
@@ -219,4 +237,5 @@ module.exports = {
   getStudentNameById,
   getScoreByExamId,
   saveResults,
+  getExamType,
 };

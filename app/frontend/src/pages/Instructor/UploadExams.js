@@ -7,6 +7,7 @@ const UploadExam = () => {
   const { exam_id } = useParams(); // Retrieve exam_id from URL parameters
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
+  const [examType, setExamType] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -20,6 +21,22 @@ const UploadExam = () => {
     //   courseID,
     //   classID,
     // });
+
+    const fetchExamType = async () => {
+      try {
+        const response = await fetch(`/api/exam/getExamType/${exam_id}`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log(data.exam_type);
+        setExamType(data.exam_type);
+      } catch (error) {
+        console.error("Error fetching exam type:", error);
+      }
+    };
+
+    fetchExamType();
 
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
@@ -70,7 +87,7 @@ const UploadExam = () => {
             "Content-Type": "application/json",
           },
           // need to create a fetch method to find examType from db
-          body: JSON.stringify({ examType: "100mcq", keyOrExam: "exam" }),
+          body: JSON.stringify({ examType: examType, keyOrExam: "exam" }),
         }),
       ]);
 
