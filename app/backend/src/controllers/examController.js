@@ -196,7 +196,7 @@ const getExamDetails = async (req, res, next) => {
       return res.status(404).json({ message: "Exam not found" });
     }
 
-    const examDetails = examResult.rows[0];
+    const ExamDetails = examResult.rows[0];
 
     const studentResultsQuery = `
       SELECT sr.student_id, s.name as student_name, sr.grade
@@ -206,9 +206,9 @@ const getExamDetails = async (req, res, next) => {
     `;
     const studentResultsResult = await pool.query(studentResultsQuery, [exam_id]);
 
-    examDetails.studentResults = studentResultsResult.rows;
+    ExamDetails.studentResults = studentResultsResult.rows;
 
-    res.json(examDetails);
+    res.json(ExamDetails);
   } catch (error) {
     console.error("Error fetching exam details:", error);
     res.status(500).json({ message: "Failed to fetch exam details" });

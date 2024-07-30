@@ -70,7 +70,7 @@ function App() {
             <Route path="/Classes" element={<Classes />} />
             <Route path="/New-Class" element={<NewClass />} />
             <Route path="/ClassManagement/:class_id" element={<ClassManagement />}/>
-            <Route path="/ExamDetails/:exam_id" element={<ExamDetails />} /> {/* Add this route */}
+            <Route path="/ExamDetails/:exam_id" element={<ExamDetails />} /> 
             <Route path="/NewExam/:class_id" element={<NewExam />} />
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
@@ -79,7 +79,7 @@ function App() {
             <Route path="/ConfirmExamKey" element={<ConfirmExamKey />} />
             <Route path="/UploadExams/:exam_id" element={<UploadExams />} />
             <Route path="/OMRProcessing" element={<OMRProcessing />} />
-            <Route path="/OMRProcessingUpload" element={<OMRProcessingUpload />} /> {/* Add the new route */}
+            <Route path="/OMRProcessingUpload" element={<OMRProcessingUpload />} />
             <Route path="/ReviewExams" element={<ReviewExams />} />
             <Route
               path="/NotificationPreferences"

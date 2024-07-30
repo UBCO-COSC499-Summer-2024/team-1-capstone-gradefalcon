@@ -16,7 +16,7 @@ const ExamDetails = () => {
   useEffect(() => {
     const fetchExamData = async () => {
       try {
-        const response = await fetch(`/api/exam/${exam_id}`);
+        const response = await fetch(`/api/exam/getExamDetails/${exam_id}`);
         if (response.ok) {
           const data = await response.json();
           setExamData(data);

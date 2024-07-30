@@ -306,7 +306,7 @@ export default function Dashboard() {
                         <TooltipProvider>
                           <Tooltip delayDuration={0}>
                             <TooltipTrigger asChild>
-                              <Link to={`/examManagement/${exam.exam_id}`} className="font-medium">
+                              <Link to={`/ExamDetails/${exam.exam_id}`} className="font-medium">
                                 {exam.exam_title}
                               </Link>
                             </TooltipTrigger>

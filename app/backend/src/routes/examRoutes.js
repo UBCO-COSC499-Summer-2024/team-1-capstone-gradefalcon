@@ -24,11 +24,9 @@ router.post("/ExamBoard", examBoard);
 router.get("/average-per-exam", getAveragePerExam);
 router.get("/average-per-course", getAveragePerCourse); // Updated route
 router.get("/grades/:studentId", getStudentGrades);
-// New route for fetching exam details
-router.get("/exam/:exam_id", getExamDetails);
+router.get("/getExamDetails/:exam_id", getExamDetails);
 
 // Function to get the answer key for a specific exam
-
 router.get('/getAnswerKey/:exam_id', async (req, res, next) => {
   try {
     const exam_id = parseInt(req.params.exam_id, 10);
