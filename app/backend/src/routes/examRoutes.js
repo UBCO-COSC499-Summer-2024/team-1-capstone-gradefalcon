@@ -91,7 +91,7 @@ router.post("/copyTemplate", checkJwt, checkPermissions(['upload:file']), async 
 
 
 // Generate the evaluation JSON for an exam
-router.post("/GenerateEvaluation" , checkJwt,  checkPermissions(['create:evaluation	']), async function (req, res) {
+router.post("/GenerateEvaluation" , checkJwt,  checkPermissions(['create:evaluation']), async function (req, res) {
   const { exam_id } = req.body;
 
   try {
