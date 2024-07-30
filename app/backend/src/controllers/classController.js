@@ -185,5 +185,15 @@ const importClass = async (req, res) => {
     res.status(500).json({ message: "Error importing class" });
   }
 };
+// Fetch all courses
+const getAllCourses = async (req, res, next) => {
+  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
+  try {
+    const result = await pool.query("SELECT class_id, course_id, course_name FROM classes WHERE instructor_id = $1", [auth0_id]);
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+};
 
-module.exports = { displayClasses, displayClassManagement, importClass, getClassNameById };
+module.exports = { displayClasses, displayClassManagement, importClass, getClassNameById, getAllCourses };
