@@ -2,10 +2,7 @@ const pool = require("../utils/db");
 
 // Save solution questions and answers
 const saveQuestions = async (req, res, next) => {
-  const questions = req.body.questions;
-  const classID = req.body.classID;
-  const examTitle = req.body.examTitle;
-  const numQuestions = req.body.numQuestions;
+  const { questions, classID, examTitle, numQuestions, markingSchemes = {} } = req.body;
 
   const questionsArray = Object.entries(questions).map(
     ([key, value]) => `${value.question}:${value.option}`
@@ -17,26 +14,19 @@ const saveQuestions = async (req, res, next) => {
       [classID, examTitle, numQuestions]
     );
     const insertedRowId = writeToExam.rows[0].exam_id;
+
     const writeToSolution = await pool.query(
-      "INSERT INTO solution (exam_id, answers) VALUES ($1, $2)",
-      [insertedRowId, questionsArray]
+      "INSERT INTO solution (exam_id, answers, marking_schemes) VALUES ($1, $2, $3)",
+      [insertedRowId, questionsArray, JSON.stringify(markingSchemes)]
     );
 
-    // Save custom marking schemes
-    if (markingSchemes) {
-      for (const [sectionName, scheme] of Object.entries(markingSchemes)) {
-        await pool.query(
-          "INSERT INTO marking_schemes (exam_id, section_name, questions, correct, incorrect, unmarked) VALUES ($1, $2, $3, $4, $5, $6)",
-          [insertedRowId, sectionName, scheme.questions.join(","), scheme.marking.correct, scheme.marking.incorrect, scheme.marking.unmarked]
-        );
-      }
-    }
-
-    res.sendStatus(200);
-  } catch (err) {
-    next(err);
+    res.status(200).json({ message: 'Questions and marking schemes saved successfully.' });
+  } catch (error) {
+    console.error("Error saving questions and marking schemes: ", error);
+    res.status(500).json({ message: 'Failed to save questions and marking schemes.' });
   }
 };
+
 
 // New exam route
 const newExam = async (req, res, next) => {
@@ -163,6 +153,31 @@ const getAnswerKeyForExam = async (exam_id) => {
   }
 };
 
+async function getCustomMarkingSchemes(exam_id) {
+  const result = await pool.query('SELECT marking_schemes FROM solution WHERE exam_id = $1', [exam_id]);
+
+  if (result.rows.length === 0) {
+    throw new Error(`No marking schemes found for exam_id ${exam_id}`);
+  }
+
+  const customMarkingSchemes = result.rows[0].marking_schemes;
+
+  const transformedSchemes = {};
+  customMarkingSchemes.forEach((scheme, index) => {
+    const schemeName = `SCHEME_${index + 1}`;
+    transformedSchemes[schemeName] = {
+      questions: scheme.questions,
+      marking: {
+        correct: scheme.correct,
+        incorrect: scheme.incorrect,
+        unmarked: scheme.unmarked,
+      },
+    };
+  });
+
+  return transformedSchemes;
+}
+
 module.exports = {
   saveQuestions,
   newExam,
@@ -171,4 +186,5 @@ module.exports = {
   getAveragePerExam,
   getAveragePerCourse,
   getStudentGrades,
+  getCustomMarkingSchemes,
 };
