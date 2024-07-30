@@ -1,10 +1,27 @@
 import React, { useState, useRef } from "react";
 import Papa from "papaparse";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import "../../css/App.css";
-import "../../css/NewClass.css";
 import Toast from "../../components/Toast";
+import {
+  Home,
+  ClipboardCheck,
+  Users,
+  LineChart,
+  Settings,
+  BookOpen
+} from "lucide-react";
+import { Button } from "../../components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem
+} from "../../components/ui/dropdown-menu";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 
 const NewClass = () => {
   const [col, setCol] = useState([]);
@@ -31,7 +48,6 @@ const NewClass = () => {
 
           if (results.errors.length > 0) {
             const errorMessages = results.errors.map(e => e.message).join(", ");
-            console.error("CSV Parsing errors:", results.errors);
             alert(`Error parsing CSV file. Please ensure the file is formatted correctly. Errors: ${errorMessages}`);
             fileInputRef.current.value = "";
             return;
@@ -85,7 +101,6 @@ const NewClass = () => {
         },
         header: false,
         error: (error) => {
-          console.error("Error parsing CSV file:", error);
           alert(`Error parsing CSV file. Please ensure the file is formatted correctly. Error: ${error.message}`);
           fileInputRef.current.value = "";
         },
@@ -147,81 +162,136 @@ const NewClass = () => {
       }
     } else {
       alert("Please provide a course name, course ID, and a CSV file:");
-    }
-  };
 
   return (
-    <div className="App">
-      <div className="main-content">
-        {toast && (
-          <Toast
-            message={toast.message}
-            type={toast.type}
-            onClose={() => setToast(null)}
-          />
-        )}
-        <header>
-          <h2>Create New Class</h2>
-        </header>
-        <section className="new-class">
-          <div className="new-class-form">
-            <label htmlFor="course-name">Course Name:</label>
-            <input
-              type="text"
-              id="course-name"
-              data-testid="courseName"
-              className="input-field"
-              value={courseName}
-              onChange={(e) => setCourseName(e.target.value)}
+    <div className="flex min-h-screen">
+      <aside className="sidebar">
+        <div className="logo">
+          <ClipboardCheck className="h-6 w-6" />
+          <span className="ml-2">GradeFalcon</span>
+        </div>
+        <nav className="flex flex-col gap-4">
+          <Link to="/Dashboard" className="nav-item" data-tooltip="Dashboard">
+            <Home className="icon" />
+            <span>Dashboard</span>
+          </Link>
+          <Link to="/Examboard" className="nav-item" data-tooltip="Exam Board">
+            <BookOpen className="icon" />
+            <span>Exam Board</span>
+          </Link>
+          <Link to="/Classes" className="nav-item" data-tooltip="Classes">
+            <Users className="icon" />
+            <span>Classes</span>
+          </Link>
+        </nav>
+        <div className="mt-auto flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="nav-item" data-tooltip="My Account">
+                <Settings className="icon" />
+                <span>My Account</span>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/AccountSettings">Account Settings</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/NotificationPreferences">Notification Preferences</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {/* <DropdownMenuItem asChild onClick={handleLogout}>
+                <span>Logout</span>
+              </DropdownMenuItem> */}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </aside>
+      <div className="main-content flex-1 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
+        <main className="flex flex-col gap-4">
+          {toast && (
+            <Toast
+              message={toast.message}
+              type={toast.type}
+              onClose={() => setToast(null)}
             />
-            <label htmlFor="course-id">Course ID:</label>
-            <input
-              type="text"
-              id="course-id"
-              data-testid="courseId"
-              className="input-field"
-              value={courseId}
-              onChange={(e) => setCourseId(e.target.value)}
-            />
-            <p>
-              Import a CSV file containing the student names, student IDs, and student emails in your class.
-            </p>
-            <input
-              type="file"
-              accept=".csv"
-              ref={fileInputRef}
-              data-testid="csvFile"
-              onChange={handleFileChange}
-            />
-            <button
-              className="import-btn"
-              data-testid="uploadButton"
-              onClick={handleFileUpload}
-            >
-              Import
-            </button>
-            <table>
-              <thead>
-                <tr>
-                  {col.length > 0 &&
-                    col.map((col, i) => <th key={i}>{col}</th>)}
-                </tr>
-              </thead>
-              <tbody data-testid="tableBody">
-                {val.map((row, i) => (
-                  <tr key={i}>
-                    {row.map((cell, j) => (
-                      <td key={j}>{cell}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          )}
+          <div>
+            <h1 className="text-3xl font-bold mb-4">Create New Class</h1>
+            <div className="grid gap-4 lg:grid-cols-1">
+              <Card className="bg-white border rounded">
+                <CardHeader className="flex justify-between px-6 py-4">
+                  <div>
+                    <CardTitle className="mb-2">New Class Details</CardTitle>
+                    <CardDescription>Enter the details for the new class and import the student list via a CSV file.</CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <form>
+                    <div className="mb-4">
+                      <label htmlFor="course-name" className="block text-sm font-medium text-gray-700">Course Name:</label>
+                      <input
+                        type="text"
+                        id="course-name"
+                        data-testid="courseName"
+                        className="input-field mt-1 block w-full"
+                        value={courseName}
+                        onChange={(e) => setCourseName(e.target.value)}
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label htmlFor="course-id" className="block text-sm font-medium text-gray-700">Course ID:</label>
+                      <input
+                        type="text"
+                        id="course-id"
+                        data-testid="courseId"
+                        className="input-field mt-1 block w-full"
+                        value={courseId}
+                        onChange={(e) => setCourseId(e.target.value)}
+                      />
+                    </div>
+                    <p className="mb-4">Import a CSV file containing the student names and their student IDs in your class.</p>
+                    <input
+                      type="file"
+                      accept=".csv"
+                      ref={fileInputRef}
+                      data-testid="csvFile"
+                      className="input-field mt-1 block w-full"
+                      onChange={handleFileChange}
+                    />
+                    <div className="flex gap-4 mt-4">
+                      <Button size="sm" onClick={handleFileUpload} data-testid="uploadButton">
+                        <span>Import</span>
+                      </Button>
+                    </div>
+                    <table className="mt-4 w-full border-collapse">
+                      <thead>
+                        <tr>
+                          {col.length > 0 && col.map((col, i) => <th key={i} className="border-b py-2 text-left">{col}</th>)}
+                        </tr>
+                      </thead>
+                      <tbody data-testid="tableBody">
+                        {val.map((row, i) => (
+                          <tr key={i}>
+                            {row.map((cell, j) => (
+                              <td key={j} className="border-b py-2">{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </section>
+        </main>
       </div>
     </div>
   );
 };
-
+  }
+};
 export default NewClass;

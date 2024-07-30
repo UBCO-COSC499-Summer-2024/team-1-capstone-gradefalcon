@@ -195,5 +195,5 @@ const getAllCourses = async (req, res, next) => {
     next(err);
   }
 };
-
 module.exports = { displayClasses, displayClassManagement, importClass, getClassNameById, getAllCourses };
+

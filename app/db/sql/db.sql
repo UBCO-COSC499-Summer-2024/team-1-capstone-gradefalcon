@@ -132,21 +132,29 @@ INSERT INTO classes (instructor_id, course_id, course_name) VALUES
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST200', 'Database Test 2');
 
 INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES
-    (1, 'Midterm', 50, 50),
-    (1, 'Final', 5, 100);
+    (1,'Midterm', 50, 50),
+    (1, 'Final', 5, 100),
+    (2, 'Midterm - 200', 50, 50),  -- Exams for TEST200
+    (2, 'Final - 200', 100, 100);  -- Exams for TEST200
 
 INSERT INTO solution (exam_id) VALUES
     (1),
     (2);
 
 INSERT INTO enrollment (class_id, student_id) VALUES 
-    (1, '1'),
-    (1, '2');
+    (1, 1),
+    (1, 2),
+    (2, 1),  -- Enrollments for TEST200
+    (2, 2);  -- Enrollments for TEST200
 
 INSERT INTO studentResults (student_id, exam_id, grade) VALUES
-    ('1', 1, 50),
-    ('2', 1, 11),
-    ('1', 2, 69);
+    (1, 1, 50),
+    (2, 1, 11),
+    (1, 2, 69),
+    (1, 3, 85),  -- Results for TEST200 Midterm
+    (2, 3, 90),  -- Results for TEST200 Midterm
+    (1, 4, 78),  -- Results for TEST200 Final
+    (2, 4, 88);  -- Results for TEST200 Final
 
 INSERT INTO scannedExam (exam_id) VALUES (
     1

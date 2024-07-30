@@ -1,122 +1,150 @@
-import React, { useState, useRef, useEffect } from 'react';
-import '../../css/App.css';
-import '../../css/UploadExam.css';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from "react";
+import "../../css/App.css";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "../../components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
+import { useToast } from "../../components/ui/use-toast";
+import { Toaster } from "../../components/ui/toaster";
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
-  const navigate = useNavigate();
   const location = useLocation();
-  const { className, userName, userID, examTitle, examID, courseID, classID } = location.state || {};
+  const { examTitle, classID } = location.state || {};
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
-    console.log("Received state:", { className, userName, userID, examTitle, examID, courseID, classID });
-
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
       if (file && file.type === "application/pdf") {
         const fileURL = URL.createObjectURL(file);
         setFileURL(fileURL);
         setFile(file);
+        toast({ title: "File Uploaded", description: "PDF file has been selected successfully." });
+      } else {
+        toast({ title: "Invalid File", description: "Please upload a valid PDF file." });
       }
     };
 
     const fileInput = fileInputRef.current;
-    fileInput.addEventListener('change', handleFileSelect);
+    fileInput.addEventListener("change", handleFileSelect);
 
     return () => {
-      fileInput.removeEventListener('change', handleFileSelect);
+      fileInput.removeEventListener("change", handleFileSelect);
     };
-  }, []);
+  }, [toast]);
 
   const resetUpload = () => {
     setFileURL(null);
-    fileInputRef.current.value = '';
+    fileInputRef.current.value = "";
+    toast({ title: "Reset", description: "File upload has been reset." });
   };
 
   const sendToBackend = async () => {
     if (!file) {
-      alert("Please select a file first.");
+      toast({ title: "No File", description: "No file selected to upload." });
       return;
     }
 
-    console.log("Sending file upload request with form data:", {
-      file,
-      folder: `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`,
-      fileName: file.name,
-      examID,
-      examTitle,
-      classID
-    });
-
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('folder', `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`);
-    formData.append('fileName', file.name);
-    formData.append('examID', examID);
-    formData.append('examTitle', examTitle);
-    formData.append('classID', classID);
+    formData.append("examKey", file);
+    formData.append("examTitle", examTitle);
+    formData.append("classID", classID);
 
     try {
-      const response = await fetch('/api/upload/uploadExamKey', {
-        method: 'POST',
-        body: formData,
+      const responses = await Promise.all([
+        fetch("/api/exam/saveExamKey", {
+          method: "POST",
+          body: formData,
+        }),
+        fetch("/api/exam/copyTemplate", {
+          method: "POST",
+          credentials: "include",
+        }),
+      ]);
+
+      const dataSaveExamKey = await responses[0].json();
+      const dataCopyTemplate = await responses[1].json();
+
+      console.log("Data from saveExamKey:", dataSaveExamKey);
+      console.log("Data from copyCSV:", dataCopyTemplate);
+
+      toast({ title: "Upload Successful", description: "The file has been uploaded successfully." });
+
+      navigate("/OMRProcessing", {
+        state: {
+          examTitle: examTitle,
+          classID: classID,
+        },
       });
-
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Error: ${response.status} - ${errorMessage}`);
-      }
-
-      const data = await response.json();
-      console.log('File uploaded successfully', data);
-      alert('File uploaded successfully');
-
-      // Call the /copyTemplate endpoint
-      const templateResponse = await fetch('/api/exam/copyTemplate', {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      if (templateResponse.ok) {
-        console.log('Template copied successfully');
-        alert('Template copied successfully');
-        navigate('/OMRProcessing', { state: { examTitle, classID } });
-      } else {
-        console.error('Failed to copy template');
-        alert('Failed to copy template');
-      }
     } catch (error) {
-      console.error('Error uploading file:', error);
-      alert('Error uploading file');
+      console.error("Error:", error);
+      toast({ title: "Upload Failed", description: "An error occurred while uploading the file." });
     }
   };
 
   return (
-    <div className="App">
-      <div className="main-content">
-        <header>
-          <h2>Answer Key</h2>
-        </header>
-        <section className="upload-key">
-          <button className="back-button" onClick={() => navigate(-1)}>&larr;</button>
-          <h3>Upload the exam answer key as a PDF file.</h3>
-          <div className="upload-area" style={{ display: fileURL ? 'none' : 'block' }}>
-            <input type="file" id="file-input" hidden accept="application/pdf" ref={fileInputRef} data-testid="file-input" />
-            <div className="drag-drop-area" onClick={() => fileInputRef.current.click()}>
-              <p>Click to browse or drag and drop your files</p>
-            </div>
-          </div>
-          <div className="pdf-display" style={{ display: fileURL ? 'block' : 'none' }}>
-            <iframe src={fileURL} title="PDF Preview"></iframe>
-          </div>
-          <button className="btn btn-import" onClick={resetUpload}>Reset</button>
-          <button className="btn-confirm" onClick={sendToBackend}>Confirm</button>
-        </section>
+    <>
+      <div className="App">
+        <main className="flex flex-col gap-4 px-8 pb-8 pt-2 bg-gradient-to-r from-gradient-start to-gradient-end">
+          <h2 className="text-2xl font-semibold mb-2">Upload Exam Key</h2>
+          <h3 className="text-xl mb-2">{examTitle}</h3>
+          <Card className="bg-white border rounded">
+            <CardHeader className="px-6 py-4">
+              <div>
+                <CardTitle>Answer Key</CardTitle>
+                <CardDescription>*Upload the exam answer key as a PDF file*</CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col gap-4">
+                <div
+                  className="upload-area"
+                  style={{ display: fileURL ? "none" : "block" }}
+                >
+                  <input
+                    type="file"
+                    id="file-input"
+                    data-testid="file-input"
+                    hidden
+                    accept="application/pdf"
+                    ref={fileInputRef}
+                  />
+                  <div
+                    className="drag-drop-area border-dashed border-2 border-gray-300 rounded-lg p-4 text-center cursor-pointer"
+                    onClick={() => fileInputRef.current.click()}
+                  >
+                    <p>Click to browse or drag and drop your files</p>
+                  </div>
+                </div>
+                <div
+                  className="pdf-display"
+                  style={{ display: fileURL ? "block" : "none" }}
+                >
+                  <iframe src={fileURL} title="PDF Preview" className="w-full h-96 border rounded-lg"></iframe>
+                </div>
+                <div className="flex justify-between">
+                  <Button size="sm" className="gap-1" onClick={sendToBackend}>
+                    Import
+                  </Button>
+                  <Button size="sm" className="gap-1" onClick={resetUpload}>
+                    Reset
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </main>
+        <div className="flex justify-center mt-4">
+          <Button size="sm" className="gap-1" onClick={() => window.history.back()}>
+            Back
+          </Button>
+        </div>
+        <Toaster />
       </div>
-    </div>
+    </>
   );
 };
 

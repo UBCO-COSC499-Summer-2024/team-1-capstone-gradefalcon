@@ -1,12 +1,13 @@
 # OMR Checker
 
-Read OMR sheets fast and accurately using a scanner 🖨 or your phone 🤳.
+Evaluate OMR sheets fast and accurately using a scanner 🖨 or your phone 🤳.
 
 ## What is OMR?
 
-OMR stands for Optical Mark Recognition, used to detect and interpret human-marked data on documents. OMR refers to the process of reading and evaluating OMR sheets, commonly used in exams, surveys, and other forms.
+OMR stands for Optical Mark Recognition, used to detect and interpret human-marked data on documents. OMR refers to the process of reading and evaluating OMR sheets, commonly used in exams, surveys, and other forms. The OMR sheet scanning is typically done using a scanner, but with OMRChecker it's supported from a mobile camera as well.
 
 #### **Quick Links**
+
 - [Installation](#getting-started)
 - [User Guide](https://github.com/Udayraj123/OMRChecker/wiki)
 - [Contributor Guide](https://github.com/Udayraj123/OMRChecker/blob/master/CONTRIBUTING.md)
@@ -33,9 +34,10 @@ A full-fledged OMR checking software that can read and evaluate OMR sheets scann
 | Specs <img width=200/> | ![Current_Speed](https://img.shields.io/badge/Speed-200+_OMRs/min-blue.svg?style=flat-square) ![Min Resolution](https://img.shields.io/badge/Min_Resolution-640x480-blue.svg?style=flat-square) <img width=200/> |
 | :--------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 💯 **Accurate**        | Currently nearly 100% accurate on good quality document scans; and about 90% accurate on mobile images.                                                                                                          |
-| 💪🏿 **Robust**          | Supports low resolution, xeroxed sheets. See [**Robustness**](https://github.com/Udayraj123/OMRChecker/wiki/Robustness) for more.                                                                                |
+| 💪🏿 **Robust**          | Supports low resolution, xeroxed sheets as well as colored images. See [**Robustness**](https://github.com/Udayraj123/OMRChecker/wiki/Robustness) for more.                                                      |
 | ⏩ **Fast**            | Current processing speed without any optimization is 200 OMRs/minute.                                                                                                                                            |
 | ✅ **Customizable**    | [Easily apply](https://github.com/Udayraj123/OMRChecker/wiki/User-Guide) to custom OMR layouts, surveys, etc.                                                                                                    |
+| ✅ **Colorful**        | Supports Colored Outputs Since April 2024                                                                                                                                                                        |
 | 📊 **Visually Rich**   | [Get insights](https://github.com/Udayraj123/OMRChecker/wiki/Rich-Visuals) to configure and debug easily.                                                                                                        |
 | 🎈 **Lightweight**     | Very minimal core code size.                                                                                                                                                                                     |
 | 🏫 **Large Scale**     | Tested on a large scale at [Technothlon](https://en.wikipedia.org/wiki/Technothlon).                                                                                                                             |
@@ -210,58 +212,6 @@ Command: <code>python3 -m pip install --user --upgrade pip</code>
 	Link to Solution: <a href="https://github.com/Udayraj123/OMRChecker/issues/70#issuecomment-1268094136">#70</a>
 </details>
 
-## Running OMRChecker in a Docker Container
-
-If you prefer to run OMRChecker in isolation without impacting your system's Python environment, you can utilize Docker. Follow the steps below to set it up:
-
-### Docker Installation
-
-1. **Install Docker Desktop:**
-   - For Windows and macOS users, download and install Docker Desktop from [Docker Hub](https://docs.docker.com/desktop/).
-   - For Linux users, follow the instructions provided in the official [Docker documentation](https://docs.docker.com/desktop/install/linux-install/) for your specific distribution.
-
-2. **Verify Installation:**
-   - After installation, open a terminal (or command prompt) and run the following command to verify that Docker is installed correctly:
-     ```bash
-     docker --version
-     ```
-   - This should display the installed Docker version, indicating that Docker is installed successfully.
-
-
-### Running OMRChecker in Docker
-
-Once Docker is installed, you can run OMRChecker within a Docker container by following these steps:
-
-1. Clone the repository and navigate into it:
-
-    ```bash
-    git clone https://github.com/Udayraj123/OMRChecker
-    cd OMRChecker/
-    ```
-
-2. Build the Docker container image (Initial build may take up to 2 minutes depending on your network connection):
-
-    ```bash
-    docker buildx build -t omrchecker:1.0 .
-    ```
-
-3. Run the Docker container to process the exam images:
-
-    - First, ensure you have your exam images, target image, and `template.json` file ready in the `inputs` directory.
-
-    - Now, run the container, which will automatically mark the exams and place the results in the `outputs/` directory:
-
-    ```bash
-    docker run -t --rm -v $(pwd)/inputs/:/app/inputs/ -v $(pwd)/outputs/:/app/outputs/ omrchecker:1.0
-    ```
-
-    This command mounts the `inputs/` and `outputs/` directories from your host machine to the respective directories inside the container, allowing data exchange.
-
-4. After the process completes, you can find the marked exams in the `outputs/` directory.
-
-By following these steps, you can efficiently use OMRChecker within a Docker container without affecting your local Python environment.
-
-
 ## OMRChecker for custom OMR Sheets
 
 1. First, [create your own template.json](https://github.com/Udayraj123/OMRChecker/wiki/User-Guide).
@@ -299,7 +249,6 @@ Low Quality Dataset(For CV Based methods)) (1.5 GB)
 Standard Quality Dataset(For ML Based methods) (3 GB)
 High Quality Dataset(For custom processing) (6 GB)
 -->
-
 
 ## FAQ
 
@@ -380,14 +329,16 @@ Here's a snapshot of the [Android OMR Helper App (archived)](https://github.com/
 
 [![Stargazers over time](https://starchart.cc/Udayraj123/OMRChecker.svg)](https://starchart.cc/Udayraj123/OMRChecker)
 
-***
+---
+
 <h2 align="center">Made with ❤️ by Awesome Contributors</h2>
 
 <a href="https://github.com/Udayraj123/OMRChecker/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Udayraj123/OMRChecker" />
 </a>
 
-***
+---
+
 ### License
 
 [![GitHub license](https://img.shields.io/github/license/Udayraj123/OMRChecker.svg)](https://github.com/Udayraj123/OMRChecker/blob/master/LICENSE)
@@ -395,8 +346,8 @@ Here's a snapshot of the [Android OMR Helper App (archived)](https://github.com/
 For more details see [LICENSE](https://github.com/Udayraj123/OMRChecker/blob/master/LICENSE).
 
 ### Donate
-<a href="https://www.buymeacoffee.com/Udayraj123" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a> [![paypal](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif)](https://www.paypal.me/Udayraj123/500)
 
+<a href="https://www.buymeacoffee.com/Udayraj123" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a> [![paypal](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif)](https://www.paypal.me/Udayraj123/500)
 
 _Find OMRChecker on_ [**_Product Hunt_**](https://www.producthunt.com/posts/omr-checker/) **|** [**_Reddit_**](https://www.reddit.com/r/computervision/comments/ccbj6f/omrchecker_grade_exams_using_python_and_opencv/) **|** [**Discord**](https://discord.gg/qFv2Vqf) **|** [**Linkedin**](https://www.linkedin.com/pulse/open-source-talks-udayraj-udayraj-deshmukh/) **|** [**goodfirstissue.dev**](https://goodfirstissue.dev/language/python) **|** [**codepeak.tech**](https://www.codepeak.tech/) **|** [**fossoverflow.dev**](https://fossoverflow.dev/projects) **|** [**Interview on Console by CodeSee**](https://console.substack.com/p/console-140) **|** [**Open Source Hub**](https://opensourcehub.io/udayraj123/omrchecker)
 

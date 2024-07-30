@@ -1,74 +1,120 @@
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import { BrowserRouter } from 'react-router-dom';
-import fetchMock from 'jest-fetch-mock';
-import UploadExamKey from '../Instructor/UploadExamKey';
+// UploadExamKey.test.js
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import fetchMock from "jest-fetch-mock";
+import UploadExamKey from "../Instructor/UploadExamKey"; // Adjust the import path as necessary
+import { BrowserRouter } from "react-router-dom";
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
-  useLocation: () => ({
-    state: { className: 'Test Class', userName: 'Test User', userID: '1', examTitle: 'Test Exam', examID: '123', courseID: '456', classID: '789' },
-  }),
-}));
+fetchMock.enableMocks();
+
+// Helper function to create a file
+const createFile = (name, size, type) => {
+  const file = new File(["dummy content"], name, { type });
+  Object.defineProperty(file, "size", {
+    get() {
+      return size;
+    },
+  });
+  return file;
+};
+
+// Mock URL.createObjectURL
+beforeAll(() => {
+  global.URL.createObjectURL = jest.fn(() => "mock-file-url");
+});
 
 beforeEach(() => {
   fetchMock.resetMocks();
-  global.URL.createObjectURL = jest.fn(() => 'mockedURL');
-  global.alert = jest.fn();
+  fetchMock.mockResponseOnce(JSON.stringify({ success: true })); // Mock response for the first fetch call
+  fetchMock.mockResponseOnce(JSON.stringify({ success: true })); // Mock response for the second fetch call
 });
 
-afterEach(() => {
-  jest.restoreAllMocks();
-});
-
-describe('UploadExamKey Component', () => {
-  test('renders UploadExamKey component', () => {
+describe("UploadExamKey Component", () => {
+  test("renders upload instructions", () => {
     render(
       <BrowserRouter>
         <UploadExamKey />
       </BrowserRouter>
     );
-
-    expect(screen.getByText(/Upload the exam answer key as a PDF file./i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Upload the exam answer key as a PDF file./i)
+    ).toBeInTheDocument();
   });
 
-  test('file upload and preview', () => {
+  test("only upload pdf files", async () => {
     render(
       <BrowserRouter>
         <UploadExamKey />
       </BrowserRouter>
     );
 
-    const fileInput = screen.getByTestId('file-input');
-    const file = new File(['dummy content'], 'Exam (2).pdf', { type: 'application/pdf' });
+    // Simulate file input selection
+    const fileInput = screen.getByTestId("file-input");
+    const pdfFile = createFile("test.pdf", 1024, "application/pdf");
+    Object.defineProperty(fileInput, "files", {
+      value: [pdfFile],
+    });
+    fireEvent.change(fileInput);
 
-    fireEvent.change(fileInput, { target: { files: [file] } });
-
-    expect(screen.getByTitle(/PDF Preview/i)).toBeInTheDocument();
+    // Check if the PDF iframe is displayed after uploading a PDF file
+    const pdfIframe = await screen.findByTitle("PDF Preview");
+    expect(pdfIframe).toBeInTheDocument();
   });
 
-  test('submits the form with file', async () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ success: true }), { status: 200 });
-
+  test("reset upload clears the file input", async () => {
     render(
       <BrowserRouter>
         <UploadExamKey />
       </BrowserRouter>
     );
 
-    const fileInput = screen.getByTestId('file-input');
-    const file = new File(['dummy content'], 'Exam (2).pdf', { type: 'application/pdf' });
+    // Simulate file input selection
+    const fileInput = screen.getByTestId("file-input");
+    const pdfFile = createFile("test.pdf", 1024, "application/pdf");
+    Object.defineProperty(fileInput, "files", {
+      value: [pdfFile],
+    });
+    fireEvent.change(fileInput);
 
-    fireEvent.change(fileInput, { target: { files: [file] } });
-    fireEvent.click(screen.getByText(/Confirm/i));
+    // Click the reset button
+    fireEvent.click(screen.getByText(/Reset/i));
 
-    await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalled();
-      expect(fetchMock).toHaveBeenCalledWith('/api/upload/uploadExamKey', expect.any(Object));
+    // Check if the upload-area div style is set to display: block
+    const uploadArea = document.querySelector(".upload-area");
+    expect(uploadArea).toHaveStyle("display: block");
+  });
+
+  test("should call saveExamKey and copyTemplate APIs on file upload", async () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <UploadExamKey />
+      </BrowserRouter>
+    );
+    const fileInput = getByTestId("file-input");
+    const file = new File(["dummy content"], "test.pdf", {
+      type: "application/pdf",
     });
 
-    expect(screen.getByTitle(/PDF Preview/i)).toBeInTheDocument();
+    fireEvent.change(fileInput, { target: { files: [file] } });
+    fireEvent.click(screen.getByText(/Import/i));
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(2);
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/exam/saveExamKey",
+        expect.anything()
+      );
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/exam/copyTemplate",
+        expect.anything()
+      );
+    });
+
+    const receivedFormData = fetchMock.mock.calls[0][1].body;
+    expect(receivedFormData).toBeInstanceOf(FormData);
+    const receivedFile = receivedFormData.get("examKey"); // Adjust 'examKey' to the actual key you're expecting
+    expect(receivedFile).toBeDefined();
+    expect(receivedFile.name).toEqual("test.pdf");
   });
 });
