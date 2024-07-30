@@ -24,6 +24,7 @@ import {
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 
 const NewClass = () => {
+  const { logout } = useAuth0();
   const [col, setCol] = useState([]);
   const [val, setVal] = useState([]);
   const [file, setFile] = useState(null);
@@ -162,7 +163,17 @@ const NewClass = () => {
       }
     } else {
       alert("Please provide a course name, course ID, and a CSV file:");
-
+      const handleLogout = async () => {
+        try {
+          // Perform the Auth0 logout
+          logout({ logoutParams: { returnTo: window.location.origin } });
+    
+          // Optionally navigate to a different page after logout
+          navigate("/");
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
   return (
     <div className="flex min-h-screen">
       <aside className="sidebar">
@@ -202,9 +213,9 @@ const NewClass = () => {
                 <Link to="/NotificationPreferences">Notification Preferences</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              {/* <DropdownMenuItem asChild onClick={handleLogout}>
+              <DropdownMenuItem asChild onClick={handleLogout}>
                 <span>Logout</span>
-              </DropdownMenuItem> */}
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
