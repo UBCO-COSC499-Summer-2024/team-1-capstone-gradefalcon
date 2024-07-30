@@ -55,7 +55,7 @@ const Classes = () => {
                     <TableRow>
                       <TableHead>Class Name</TableHead>
                       <TableHead className="hidden sm:table-cell">Course ID</TableHead>
-                      <TableHead className="hidden sm:table-cell">Actions</TableHead>
+                      <TableHead className="hidden sm:table-cell"></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

@@ -6,13 +6,16 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../..
 import { Label} from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import {Select, SelectItem, SelectContent, SelectValue, SelectTrigger} from "../../components/ui/select";
-import {ChevronLeftIcon} from "@heroicons/react/20/solid";
+import {ChevronLeftIcon,ExclamationCircleIcon} from "@heroicons/react/20/solid";
 import { Form } from "../../components/ui/form";
+import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");
+  const [showAlert, setShowAlert] = useState(false); // State to manage alert visibility
   const params = useParams();
   const class_id = params.class_id;
+
   const handleInputChange = (event) => {
     const value = event.target.value;
     // blocks chars that could cause error (i.e " ')
@@ -22,6 +25,15 @@ const NewExam = () => {
 
   const isFormValid = () => {
     return examTitle.trim() !== ""; // Simple validation check
+  };
+
+  const handleButtonClick = (event) => {
+    if (!isFormValid()) {
+      event.preventDefault();
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+    }
   };
 
   return (
@@ -37,7 +49,17 @@ const NewExam = () => {
         <div className="hidden items-center gap-2 md:ml-auto md:flex">
         </div>
       </div>
-      
+
+      {showAlert && (
+        <Alert className="mb-4">
+          <ExclamationCircleIcon className="h-4 w-4" />
+          <AlertTitle>Heads up!</AlertTitle>
+          <AlertDescription>
+            Please fill in all required fields before proceeding.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
         <div className="grid auto-rows-max items-start gap-8">
           <Card className="bg-white border rounded-lg p-6">
@@ -64,10 +86,9 @@ const NewExam = () => {
             </CardContent>
           </Card>
         </div>
-  
 
         <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-      <Card className="bg-white border rounded md:w-2/3">
+          <Card className="bg-white border rounded md:w-2/3">
             <CardHeader>
               <CardTitle>Select Course</CardTitle>
             </CardHeader>
@@ -91,7 +112,7 @@ const NewExam = () => {
           </Card>
         </div>
       </div>
-  
+
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
         <div className="grid auto-rows-max items-start gap-8">
           <Card className="bg-white border rounded-lg p-6">
@@ -109,6 +130,7 @@ const NewExam = () => {
                           to={isFormValid() ? "/UploadExamKey" : "#"}
                           state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
                           data-testid="upload-answer-key-btn"
+                          onClick={handleButtonClick}
                         >
                           Upload Answer Key
                         </Link>
@@ -118,6 +140,7 @@ const NewExam = () => {
                           to={isFormValid() ? "/ManualExamKey" : "#"} 
                           state={{ examTitle: examTitle, classID: class_id }} 
                           data-testid="manual-answer-key-btn"
+                          onClick={handleButtonClick}
                         >
                           Manually Select Answers
                         </Link>

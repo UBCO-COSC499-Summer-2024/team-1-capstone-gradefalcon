@@ -7,6 +7,7 @@ const {
   getAveragePerExam,
   getAveragePerCourse,
   getStudentGrades,
+  getCustomMarkingSchemes
 
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
@@ -88,24 +89,6 @@ router.post("/copyTemplate", async function (req, res) {
 
   res.send(JSON.stringify("File copied successfully"));
 });
-
-const getCustomMarkingSchemes = async (examId) => {
-  const res = await pool.query(
-    "SELECT section_name, questions, correct, incorrect, unmarked FROM marking_schemes WHERE exam_id = $1",
-    [examId]
-  );
-  return res.rows.reduce((acc, row) => {
-    acc[row.section_name] = {
-      questions: row.questions.split(",").map((q) => q.trim()),
-      marking: {
-        correct: row.correct,
-        incorrect: row.incorrect,
-        unmarked: row.unmarked,
-      },
-    };
-    return acc;
-  }, {});
-};
 
 
 router.post("/GenerateEvaluation", async function (req, res) {

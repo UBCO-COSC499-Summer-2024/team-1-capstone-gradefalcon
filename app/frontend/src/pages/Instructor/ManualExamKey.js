@@ -4,12 +4,13 @@ import '../../css/App.css';
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
-import { ChevronLeftIcon, ChevronRightIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/20/solid";
+import { ChevronLeftIcon, ChevronRightIcon, PlusCircleIcon, TrashIcon, PlusIcon, MinusIcon, ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { Label } from "../../components/ui/label";
 import { Form } from "../../components/ui/form";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../components/ui/select";
+import { MultiSelect } from "../../components/ui/multi-select";
+import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 
 const ManualExamKey = () => {
   const location = useLocation();
@@ -20,8 +21,9 @@ const ManualExamKey = () => {
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [markingSchemes, setMarkingSchemes] = useState([]);
   const [showCustomSchemeModal, setShowCustomSchemeModal] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [customScheme, setCustomScheme] = useState({
-    question: "",
+    questions: [],
     correct: 0,
     incorrect: 0,
     unmarked: 0,
@@ -93,12 +95,11 @@ const ManualExamKey = () => {
     updateQuestions();
   }, [numQuestions, numOptions, updateQuestions]);
 
-  const handleSelectChange = (index, value) => {
-    setSelectedOptions((prev) => {
-      const newOptions = [...prev];
-      newOptions[index] = { ...newOptions[index], question: value };
-      return newOptions;
-    });
+  const handleSelectChange = (values) => {
+    setCustomScheme((prev) => ({
+      ...prev,
+      questions: values,
+    }));
   };
 
   const addNewQuestion = () => {
@@ -106,10 +107,19 @@ const ManualExamKey = () => {
   };
 
   const handleAddCustomScheme = () => {
+    if (customScheme.questions.length === 0) {
+      setShowAlert(true);
+      return;
+    } else {
+      setShowAlert(false);
+    }
+    
+    const formattedQuestions = customScheme.questions.map(q => `q${q.split(' ')[1]}`);
+
     setMarkingSchemes((prev) => [
       ...prev,
       {
-        question: customScheme.question,
+        questions: formattedQuestions,
         correct: Math.abs(customScheme.correct),
         incorrect: -Math.abs(customScheme.incorrect),
         unmarked: -Math.abs(customScheme.unmarked),
@@ -117,7 +127,7 @@ const ManualExamKey = () => {
     ]);
     setShowCustomSchemeModal(false);
     setCustomScheme({
-      question: "",
+      questions: [],
       correct: 0,
       incorrect: 0,
       unmarked: 0,
@@ -207,30 +217,31 @@ const ManualExamKey = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border rounded-lg w-full md:w-1.5/2 p-6">
+        <Card className="bg-white border rounded-lg w-full md:w-1/2 p-6">
           <CardHeader className="flex justify-between px-6 py-4">
             <CardTitle>Custom Marking Scheme</CardTitle>
-            <CardDescription>Set the marking scheme for each question</CardDescription>
+            <CardDescription>Set the marking scheme for your questions</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[150px]">Question</TableHead>
+                  <TableHead>Questions</TableHead>
                   <TableHead>Correct</TableHead>
                   <TableHead>Incorrect</TableHead>
-                  <TableHead>Unmarked</TableHead>
-                  <TableHead>Action</TableHead>
+                  <TableHead>Blank</TableHead>
+                  <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {markingSchemes.map((scheme, index) => (
                   <TableRow key={index}>
-                    <TableCell>{scheme.question}</TableCell>
+                    <TableCell>{scheme.questions.join(', ')}</TableCell>
                     <TableCell>
                       <Input
                         type="number"
                         value={scheme.correct}
+                        className="w-full"
                         onChange={(e) => handleSchemeChange(index, 'correct', e.target.value)}
                       />
                     </TableCell>
@@ -238,6 +249,7 @@ const ManualExamKey = () => {
                       <Input
                         type="number"
                         value={scheme.incorrect}
+                        className="w-full"
                         onChange={(e) => handleSchemeChange(index, 'incorrect', e.target.value)}
                       />
                     </TableCell>
@@ -245,6 +257,7 @@ const ManualExamKey = () => {
                       <Input
                         type="number"
                         value={scheme.unmarked}
+                        className="w-full"
                         onChange={(e) => handleSchemeChange(index, 'unmarked', e.target.value)}
                       />
                     </TableCell>
@@ -290,27 +303,33 @@ const ManualExamKey = () => {
       {showCustomSchemeModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-md">
+          {showAlert && (
+                <Alert className="mb-4">
+                  <ExclamationCircleIcon className="h-4 w-4" />
+                  <AlertTitle>Heads up!</AlertTitle>
+                  <AlertDescription>
+                    Please select a question.
+                  </AlertDescription>
+                </Alert>
+              )}
             <h2 className="text-lg font-semibold mb-4">Add Custom Marking Scheme</h2>
             <div className="mb-4">
-              <Label>Question</Label>
-              <Select onValueChange={(value) => setCustomScheme({ ...customScheme, question: value })}>
-                <SelectTrigger className="w-[200px]">
-                  <SelectValue placeholder="Select question..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Questions</SelectLabel>
-                    {frameworks.map((framework) => (
-                      <SelectItem key={framework.value} value={framework.value}>
-                        {framework.label}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <Label>Questions</Label>
+              <MultiSelect
+                options={frameworks}
+                onValueChange={handleSelectChange}
+                defaultValue={customScheme.questions}
+                placeholder="Select questions..."
+                variant="inverted"
+                maxCount={10}
+                animation={2}
+              />
             </div>
             <div className="mb-4">
-              <Label>Correct Marks</Label>
+              <Label>
+              Correct
+              <PlusIcon className="h-5 w-5" />
+              </Label>
               <Input
                 type="number"
                 value={customScheme.correct}
@@ -318,7 +337,9 @@ const ManualExamKey = () => {
               />
             </div>
             <div className="mb-4">
-              <Label>Incorrect Marks</Label>
+              <Label>Incorrect
+              <MinusIcon className="h-5 w-5" />
+              </Label>
               <Input
                 type="number"
                 value={customScheme.incorrect}
@@ -326,7 +347,9 @@ const ManualExamKey = () => {
               />
             </div>
             <div className="mb-4">
-              <Label>Unmarked Marks</Label>
+              <Label>Blank
+              <MinusIcon className="h-5 w-5" />
+              </Label>
               <Input
                 type="number"
                 value={customScheme.unmarked}
