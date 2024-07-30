@@ -88,9 +88,9 @@ router.get("/studentScores", async function (req, res) {
 
 router.post("/getResults", async function (req, res) {
   const singlePage = req.body.singlePage;
+  const inputDirPath = path.join(__dirname, "../../omr/inputs");
+  const outputDirPath = path.join(__dirname, "../../omr/outputs");
   if (singlePage) {
-    const inputDirPath = path.join(__dirname, "../../omr/inputs");
-    const outputDirPath = path.join(__dirname, "../../omr/outputs");
     const results = []; // Array to hold all rows of data
 
     fs.createReadStream(path.join(outputDirPath, "Results/Results.csv"))
@@ -110,8 +110,6 @@ router.post("/getResults", async function (req, res) {
         res.status(500).send("Error reading CSV file");
       });
   } else {
-    const inputDirPath = path.join(__dirname, "../../omr/inputs");
-    const outputDirPath = path.join(__dirname, "../../omr/outputs");
     const resultsPage1 = [];
     const resultsPage2 = [];
 
@@ -212,54 +210,32 @@ router.post("/copyTemplate", async function (req, res) {
   const examType = req.body.examType;
   const keyOrExam = req.body.keyOrExam;
 
-  if (examType === "100mcq") {
-    if (keyOrExam === "key") {
-      // copying template for the key
-      // only template for the second page
-      // we can just store it straight in the inputs folder since it's just 1 page
-      const filePath = "/code/omr/inputs";
-      const templatePath = path.join(__dirname, "../assets/100mcq_page_2.json");
-      const destinationTemplatePath = path.join(filePath, "template.json");
+  if (examType === "100mcq" && keyOrExam === "key") {
+    // copying template for the key
+    // only template for the second page
+    // we can just store it straight in the inputs folder since it's just 1 page
+    const filePath = "/code/omr/inputs";
+    const templatePath = path.join(__dirname, "../assets/100mcq_page_2.json");
+    const destinationTemplatePath = path.join(filePath, "template.json");
 
-      ensureDirectoryExistence(filePath);
+    ensureDirectoryExistence(filePath);
 
-      try {
-        fs.copyFileSync(templatePath, destinationTemplatePath);
-        console.log("Template.json copied successfully");
-      } catch (error) {
-        console.error("Error copying template.json:", error);
-        return res.status(500).send("Error copying template.json");
-      }
-    } else {
-      // keyOrExam === "exam"
-      // copying template for the exam
-      // template for both ID and question page
-      const filePath_1 = "/code/omr/inputs/page_1";
-      const filePath_2 = "/code/omr/inputs/page_2";
-      const templatePath_1 = path.join(__dirname, "../assets/100mcq_page_1.json");
-      const templatePath_2 = path.join(__dirname, "../assets/100mcq_page_2.json");
-      const destinationTemplatePath1 = path.join(filePath_1, "template.json");
-      const destinationTemplatePath2 = path.join(filePath_2, "template.json");
-
-      ensureDirectoryExistence(filePath_1);
-      ensureDirectoryExistence(filePath_2);
-
-      try {
-        fs.copyFileSync(templatePath_1, destinationTemplatePath1);
-        console.log("First template.json copied successfully");
-        fs.copyFileSync(templatePath_2, destinationTemplatePath2);
-        console.log("Second template.json copied successfully");
-      } catch (error) {
-        console.error("Error copying template.json:", error);
-        return res.status(500).send("Error copying template.json");
-      }
+    try {
+      fs.copyFileSync(templatePath, destinationTemplatePath);
+      console.log("Template.json copied successfully");
+      res.send(JSON.stringify("File copied successfully"));
+    } catch (error) {
+      console.error("Error copying template.json:", error);
+      return res.status(500).send("Error copying template.json");
     }
   } else {
-    // examType === "200mcq"
+    // keyOrExam === "exam"
+    // copying template for the exam
+    // template for both ID and question page
     const filePath_1 = "/code/omr/inputs/page_1";
     const filePath_2 = "/code/omr/inputs/page_2";
-    const templatePath_1 = path.join(__dirname, "../assets/200mcq_page_1.json");
-    const templatePath_2 = path.join(__dirname, "../assets/200mcq_page_2.json");
+    const templatePath_1 = path.join(__dirname, `../assets/${examType}_page_1.json`);
+    const templatePath_2 = path.join(__dirname, `../assets/${examType}_page_2.json`);
     const destinationTemplatePath1 = path.join(filePath_1, "template.json");
     const destinationTemplatePath2 = path.join(filePath_2, "template.json");
 
@@ -271,12 +247,12 @@ router.post("/copyTemplate", async function (req, res) {
       console.log("First template.json copied successfully");
       fs.copyFileSync(templatePath_2, destinationTemplatePath2);
       console.log("Second template.json copied successfully");
+      res.send(JSON.stringify("Files copied successfully"));
     } catch (error) {
       console.error("Error copying template.json:", error);
       return res.status(500).send("Error copying template.json");
     }
   }
-  res.send(JSON.stringify("File copied successfully"));
 });
 
 router.post("/callOMR", async function (req, res) {
