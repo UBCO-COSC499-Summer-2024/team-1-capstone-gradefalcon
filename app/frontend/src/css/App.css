@@ -38,6 +38,7 @@
   body {
     @apply bg-background text-foreground font-body;
     font-family: var(--font-body);
+    background-color: #f8f9fa;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -144,7 +145,7 @@
 
 /* Main content styles */
 .main-content {
-  margin-left: 80px;
+  margin-left: 60px;
   transition: margin-left 0.3s;
 }
 
@@ -158,16 +159,6 @@
 }
 
 /* All the css under this should not be needed moving forward */
-.exam-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header {
-  margin-bottom: 20px;
-}
-
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
@@ -203,29 +194,6 @@
   width: 100%;
 }
 
-.file-input-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-
-.file-input-button {
-  background-color:  hsl(var(--primary));
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-.file-input-button:hover {
-  background-color: hsl(var(--primary) / 0.9);
-}
-
-.file-input-label {
-  margin-left: 10px;
-  color: var(--foreground);
-}
 
 
 /* Scrollbar styles */

@@ -10,7 +10,7 @@ import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster 
 const ExamControls = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { classID, examTitle, questions, numQuestions } = location.state || {};
+  const { classID, examTitle, questions, numQuestions, markingSchemes = [] } = location.state || {};
   const { toast } = useToast();
 
   const handleConfirm = async (event) => {
@@ -26,6 +26,7 @@ const ExamControls = () => {
           examTitle: examTitle,
           questions: questions,
           numQuestions: numQuestions,
+          markingSchemes: markingSchemes,
         }),
       });
       console.log(response);
@@ -37,17 +38,17 @@ const ExamControls = () => {
           console.log(data);
           toast({
             title: "Success",
-            description: "Questions saved successfully.",
+            description: "Questions and marking schemes saved successfully.",
             type: "success",
           });
         } else {
           console.log("Response was not JSON");
         }
       } else {
-        console.error("Failed to save questions");
+        console.error("Failed to save questions and marking schemes");
         toast({
           title: "Error",
-          description: "Failed to save questions.",
+          description: "Failed to save questions and marking schemes.",
           type: "error",
         });
       }
@@ -55,7 +56,7 @@ const ExamControls = () => {
       console.error("Error:", error);
       toast({
         title: "Error",
-        description: "An error occurred while saving questions.",
+        description: "An error occurred while saving questions and marking schemes.",
         type: "error",
       });
     }
@@ -90,7 +91,7 @@ const ExamControls = () => {
                   </div>
                 </div>
                 <div className="flex justify-between mt-4">
-                  <Button size="sm" className="gap-1 green-button" onClick={() => window.history.back()}>
+                  <Button size="sm" variant= "secondary" className="gap-1 green-button" onClick={() => window.history.back()}>
                     Back
                   </Button>
                   <Button size="sm" className="gap-1 green-button" onClick={handleConfirm}>

@@ -58,9 +58,9 @@ CREATE TABLE solution (
     exam_id int not null,
     answers text[],
     filepath text,
+    marking_schemes JSONB,
     foreign key (exam_id) references exam(exam_id)
 );
-
 CREATE TABLE enrollment(
     enrollment_id serial primary key,
     class_id int,

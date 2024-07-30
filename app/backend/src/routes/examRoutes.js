@@ -7,6 +7,7 @@ const {
   getAveragePerExam,
   getAveragePerCourse,
   getStudentGrades,
+  getCustomMarkingSchemes
 
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
@@ -94,15 +95,28 @@ router.post("/GenerateEvaluation" , checkJwt,  checkPermissions(['create:evaluat
   const { exam_id } = req.body;
 
   try {
-    // Validate exam_id
     if (!exam_id) {
       return res.status(400).send("Missing exam_id");
     }
 
-    // Get answer key from the database
     const answerKey = await getAnswerKeyForExam(exam_id);
+    const customMarkingSchemes = await getCustomMarkingSchemes(exam_id);
 
-    // Create evaluation.json
+    const markingSchemes = {
+      DEFAULT: {
+        correct: "1",
+        incorrect: "0",
+        unmarked: "0",
+      },
+    };
+
+    for (const [sectionName, scheme] of Object.entries(customMarkingSchemes)) {
+      markingSchemes[sectionName] = {
+        questions: scheme.questions,
+        marking: scheme.marking,
+      };
+    }
+
     const evaluationJson = {
       source_type: "custom",
       options: {
@@ -141,13 +155,7 @@ router.post("/GenerateEvaluation" , checkJwt,  checkPermissions(['create:evaluat
           enabled: false,
         },
       },
-      marking_schemes: {
-        DEFAULT: {
-          correct: "1",
-          incorrect: "0",
-          unmarked: "0",
-        },
-      },
+      marking_schemes: markingSchemes,
     };
 
     const destinationDir = `/code/omr/inputs`;
