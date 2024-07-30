@@ -10,7 +10,7 @@ fetchMock.enableMocks();
 
 // Helper function to create a file
 const createFile = (name, size, type) => {
-  const file = new File([], name, { type });
+  const file = new File(["dummy content"], name, { type });
   Object.defineProperty(file, "size", {
     get() {
       return size;
@@ -113,7 +113,7 @@ describe("UploadExamKey Component", () => {
 
     const receivedFormData = fetchMock.mock.calls[0][1].body;
     expect(receivedFormData).toBeInstanceOf(FormData);
-    const receivedFile = receivedFormData.get("file"); // Adjust 'file' to the actual key you're expecting
+    const receivedFile = receivedFormData.get("examKey"); // Adjust 'examKey' to the actual key you're expecting
     expect(receivedFile).toBeDefined();
     expect(receivedFile.name).toEqual("test.pdf");
   });

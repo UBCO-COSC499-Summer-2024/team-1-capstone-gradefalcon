@@ -104,4 +104,18 @@ const importClass = async (req, res) => {
   }
 };
 
-module.exports = { displayClasses, displayClassManagement, importClass, getClassNameById };
+
+// Fetch all courses
+const getAllCourses = async (req, res, next) => {
+  try {
+    const result = await pool.query("SELECT class_id, course_id, course_name FROM classes");
+    res.json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { displayClasses, displayClassManagement, importClass, getClassNameById, getAllCourses };
+
+
+

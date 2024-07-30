@@ -7,13 +7,15 @@ import {
 } from "react-router-dom";
 import "./css/App.css";
 
+
 // Import components
-import NavBar from "../src/components/NavBar";
+import Layout from '../src/components/Layout';
 import ProtectedRoute from "./ProtectedRoute";
 import Logout from "./pages/Logout";
 import OMRProcessing from "../src/components/OMRProcessing";
 import OMRProcessingUpload from "../src/components/OMRProcessingUpload";
 // Import Instructor pages
+
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
 import Signup from "./pages/Signup";
@@ -41,25 +43,6 @@ import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
 import StudentNotificationPreferences from "./pages/Student/StudentNotificationPreferences";
 import StudentGradeReport from "./pages/Student/StudentGradeReport";
 
-// Layout component to conditionally render NavBar
-const Layout = ({ children }) => {
-  const location = useLocation();
-  const shouldDisplayNavBar =
-    location.pathname !== "/" &&
-    location.pathname !== "/*" &&
-    location.pathname !== "/login" &&
-    location.pathname !== "/signup" &&
-    location.pathname !== "/AdminDashboard" &&
-    location.pathname !== "/userManagement" &&
-    location.pathname !== "/Logout";
-
-  return (
-    <>
-      {shouldDisplayNavBar && <NavBar />}
-      {children}
-    </>
-  );
-};
 
 function App() {
   const [message, setMessage] = useState("");
@@ -83,32 +66,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/Login" element={<Login />} />
-            <Route
-              path="/Dashboard"
-              element={
-                <ProtectedRoute>
-                  {" "}
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/AdminDashboard"
-              element={
-                <ProtectedRoute>
-                  {" "}
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/UserManagement"
-              element={
-                <ProtectedRoute>
-                  <UserManagement />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/Dashboard"element={ <ProtectedRoute> <Dashboard /></ProtectedRoute>}/>
+            <Route path="/AdminDashboard" element={<ProtectedRoute> <AdminDashboard /></ProtectedRoute>}/>
+            <Route path="/UserManagement" element={<ProtectedRoute><UserManagement /></ProtectedRoute>}/>
             <Route path="/Signup" element={<Signup />} />
             <Route path="/Logout" element={<Logout />} />
             <Route path="/AccountSettings" element={<AccountSettings />} />
@@ -138,7 +98,7 @@ function App() {
               element={<NotificationPreferences />}
             />
             <Route
-              path="/StudentDashboard"
+              path= "/StudentDashboard"
               element={
                 <ProtectedRoute>
                   <StudentDashboard />

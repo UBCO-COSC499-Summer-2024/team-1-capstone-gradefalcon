@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Toast from "./Toast";
+import { ToastProvider, ToastViewport } from "../components/ui/toast";
+import { Progress } from "../components/ui/progress";
+import { useToast } from "../components/ui/use-toast";
 import "../css/App.css";
 
-const OMRProcessing = (props) => {
+const OMRProcessing = () => {
   const location = useLocation();
-  const [toast, setToast] = useState(null);
-  const { examTitle, classID, template } = location.state || {};
+  const [progress, setProgress] = useState(0); // Initial progress value for visibility
+  const { examTitle, classID } = location.state || {};
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const runOMR = async () => {
     console.log("Running OMR");
@@ -20,7 +23,17 @@ const OMRProcessing = (props) => {
       console.log("response", response);
       console.log("data", data);
       console.log("finished");
-      setToast({ message: "Sheet successfully added!", type: "success" });
+
+      // Set the progress to 100% only after the OMR processing is complete
+      setProgress(100);
+
+      toast({
+        title: "Sheet successfully added!",
+        description: "The OMR sheet was added successfully.",
+        type: "success",
+      });
+
+      // Navigate to the next page after a short delay to show the toast notification
       setTimeout(() => {
         navigate("/ConfirmExamKey", {
           state: {
@@ -32,13 +45,18 @@ const OMRProcessing = (props) => {
       }, 2000);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setToast({ message: "Failed to add sheet!", type: "error" });
+      toast({
+        title: "Failed to add sheet!",
+        description: "An error occurred while adding the OMR sheet.",
+        type: "error",
+      });
     }
   };
 
   useEffect(() => {
-    // Timer stops the ECONREFUSED error
+    // Simulate the progress of the OMR processing
     const timer = setTimeout(() => {
+      setProgress(50); // Simulate initial progress
       runOMR();
     }, 1000);
 
@@ -46,33 +64,20 @@ const OMRProcessing = (props) => {
   }, []);
 
   return (
-    <>
+    <ToastProvider>
       <div className="App">
-        <div className="main-content">
-          <style>
-            {`
-                .App .main-content {
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  justify-content: center;
-                  height: 100vh; /* Adjust as needed */
-                }
-              `}
-          </style>
-          {toast && (
-            <>
-              <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
-              <style>{`.circle-loader { display: none; }`}</style>
-            </>
+        <main className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-gradient-start to-gradient-end">
+          <h2 className="text-2xl font-semibold mb-2">Scanning file</h2>
+          <Progress value={progress} className="w-1/2 mb-4 h-4 bg-green-500" />
+          {progress === 100 ? (
+            <p className="text-green-600 mt-4">OMR processing completed. Redirecting...</p>
+          ) : (
+            <p className="text-gray-600 mt-4">OMR processing in progress...</p>
           )}
-          <header>
-            <h2>Scanning file</h2>
-          </header>
-          <div class="loader"></div>
-        </div>
+          <ToastViewport />
+        </main>
       </div>
-    </>
+    </ToastProvider>
   );
 };
 

@@ -26,7 +26,8 @@ describe('UploadExams Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Upload the exam with all student submissions as a PDF file./i)).toBeInTheDocument();
+    expect(screen.getByText(/Upload Exam/i)).toBeInTheDocument();
+    expect(screen.getByText(/Upload the exam as a PDF file./i)).toBeInTheDocument();
   });
 
   test('file upload and preview', async () => {
@@ -62,11 +63,13 @@ describe('UploadExams Component', () => {
     const file = new File(['dummy content'], 'Exam (2).pdf', { type: 'application/pdf' });
 
     fireEvent.change(fileInput, { target: { files: [file] } });
-    fireEvent.click(screen.getByText(/Confirm/i));
+    fireEvent.click(screen.getByText(/Import/i));
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalled();
-      expect(global.fetch).toHaveBeenCalledWith('/api/upload/uploadExam', expect.any(Object));
+      expect(global.fetch).toHaveBeenCalledWith('/api/exam/UploadExam', expect.any(Object));
+      expect(global.fetch).toHaveBeenCalledWith('/api/exam/GenerateEvaluation', expect.any(Object));
+      expect(global.fetch).toHaveBeenCalledWith('/api/exam/copyTemplate', expect.any(Object));
     });
 
     expect(screen.getByTitle(/PDF Preview/i)).toBeInTheDocument();

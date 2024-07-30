@@ -27,7 +27,6 @@ afterAll(() => {
   global.fetch.mockRestore();
 });
 
-
 test('renders form inputs and table correctly', () => {
   const { getByTestId } = render(
     <MemoryRouter>
