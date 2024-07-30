@@ -3,10 +3,10 @@ import { Link, useParams } from "react-router-dom";
 import '../../css/App.css';
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
-import { Label} from "../../components/ui/label";
+import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
-import {Select, SelectItem, SelectContent, SelectValue, SelectTrigger} from "../../components/ui/select";
-import {ChevronLeftIcon,ExclamationCircleIcon} from "@heroicons/react/20/solid";
+import { Select, SelectItem, SelectContent, SelectValue, SelectTrigger } from "../../components/ui/select";
+import { ChevronLeftIcon, ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { Form } from "../../components/ui/form";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 
@@ -126,7 +126,7 @@ const NewExam = () => {
                     <Label htmlFor="answer-key">Answer Key</Label>
                     <div className="flex gap-4 mt-1">
                       <Button asChild size="sm">
-                        <Link 
+                        <Link
                           to={isFormValid() ? "/UploadExamKey" : "#"}
                           state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
                           data-testid="upload-answer-key-btn"
@@ -136,9 +136,9 @@ const NewExam = () => {
                         </Link>
                       </Button>
                       <Button asChild size="sm">
-                        <Link 
-                          to={isFormValid() ? "/ManualExamKey" : "#"} 
-                          state={{ examTitle: examTitle, classID: class_id }} 
+                        <Link
+                          to={isFormValid() ? "/ManualExamKey" : "#"}
+                          state={{ examTitle: examTitle, classID: class_id }}
                           data-testid="manual-answer-key-btn"
                           onClick={handleButtonClick}
                         >

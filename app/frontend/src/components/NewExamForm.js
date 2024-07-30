@@ -7,8 +7,10 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../co
 import { useToast } from "../components/ui/use-toast";
 import { ToastProvider, ToastViewport } from "../components/ui/toast";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../components/ui/select";
+import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 
 const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
+  const { getAccessTokenSilently } = useAuth0(); // Get the token
   const [examTitle, setExamTitle] = useState("");
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
@@ -36,10 +38,12 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
       return;
     }
     try {
+      const token = await getAccessTokenSilently(); // Get the token
       const response = await fetch("/api/exam/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // Include the token in the request
         },
         body: JSON.stringify({
           examTitle,
@@ -78,7 +82,13 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch("/api/class/getAllCourses");
+        const token = await getAccessTokenSilently(); // Get the token
+        const response = await fetch("/api/class/getAllCourses", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`, // Include the token in the request
+          },
+        });
         const data = await response.json();
         setCourses(data);
       } catch (error) {
@@ -87,7 +97,7 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
     };
 
     fetchCourses();
-  }, []);
+  }, [getAccessTokenSilently]);
 
   return (
     <ToastProvider>

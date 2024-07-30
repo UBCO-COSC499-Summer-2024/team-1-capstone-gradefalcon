@@ -6,8 +6,10 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../..
 import { Switch } from "../../components/ui/switch"; // Importing the Shadcn UI Switch component
 import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
 import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
+import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 
 const ExamControls = () => {
+  const { getAccessTokenSilently } = useAuth0(); // Get the token
   const location = useLocation();
   const navigate = useNavigate();
   const { classID, examTitle, questions, numQuestions, markingSchemes = [] } = location.state || {};
@@ -16,10 +18,12 @@ const ExamControls = () => {
   const handleConfirm = async (event) => {
     event.preventDefault();
     try {
+      const token = await getAccessTokenSilently(); // Get the token
       const response = await fetch("/api/exam/saveQuestions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // Include the token in the request
         },
         body: JSON.stringify({
           classID: classID,
