@@ -87,6 +87,54 @@ router.get("/studentScores", async function (req, res) {
     });
 });
 
+router.post("/UploadExam", async function (req, res) {
+  const upload = multer({ dest: "uploads/" }).single("examPages");
+
+  upload(req, res, async function (err) {
+    if (err) {
+      return res.status(500).send("Error uploading file.");
+    }
+
+    const { path: tempFilePath } = req.file;
+    const destinationDir1 = "/code/omr/inputs/page_1";
+    const destinationDir2 = "/code/omr/inputs/page_2";
+
+    try {
+      const existingPdfBytes = fs.readFileSync(tempFilePath);
+      const examsPDF = await PDFDocument.load(existingPdfBytes);
+      const totalPages = examsPDF.getPageCount();
+      console.log("Total pages:", totalPages);
+
+      const oddPagesPdf = await PDFDocument.create();
+      const evenPagesPdf = await PDFDocument.create();
+
+      for (let i = 0; i < totalPages; i++) {
+        if ((i + 1) % 2 === 1) {
+          const [pageToCopy] = await oddPagesPdf.copyPages(examsPDF, [i]);
+          oddPagesPdf.addPage(pageToCopy);
+        } else {
+          const [pageToCopy] = await evenPagesPdf.copyPages(examsPDF, [i]);
+          evenPagesPdf.addPage(pageToCopy);
+        }
+      }
+      ensureDirectoryExistence(destinationDir1);
+      ensureDirectoryExistence(destinationDir2);
+
+      const oddBytes = await oddPagesPdf.save();
+      fs.writeFileSync(path.join(destinationDir1, "front_pages.pdf"), oddBytes);
+      const evenBytes = await evenPagesPdf.save();
+      fs.writeFileSync(path.join(destinationDir2, "back_pages.pdf"), evenBytes);
+
+      fs.unlinkSync(tempFilePath); // Clean up the temporary file
+
+      res.json({ message: "File uploaded and split successfully" });
+    } catch (error) {
+      console.error("Error processing PDF file:", error);
+      res.status(500).send("Error processing PDF file");
+    }
+  });
+});
+
 router.post("/getResults", async function (req, res) {
   const singlePage = req.body.singlePage;
   const inputDirPath = path.join(__dirname, "../../omr/inputs");
