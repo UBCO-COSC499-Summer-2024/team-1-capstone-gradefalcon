@@ -1,17 +1,44 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button } from "../../components/ui/button"
+import { Button } from "../../components/ui/button";
 import { useParams, useNavigate } from "react-router-dom";
-import { ChevronLeftIcon } from "@heroicons/react/20/solid"; 
+import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { Toaster } from "../../components/ui/toaster";
 
 const UploadExam = () => {
   const { exam_id } = useParams();
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
+  const [examType, setExamType] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // console.log("Received state:", {
+    //   className,
+    //   userName,
+    //   userID,
+    //   examTitle,
+    //   examID,
+    //   courseID,
+    //   classID,
+    // });
+
+    const fetchExamType = async () => {
+      try {
+        const response = await fetch(`/api/exam/getExamType/${exam_id}`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log(data.exam_type);
+        setExamType(data.exam_type);
+      } catch (error) {
+        console.error("Error fetching exam type:", error);
+      }
+    };
+
+    fetchExamType();
+
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
       if (file && file.type === "application/pdf") {
@@ -45,7 +72,7 @@ const UploadExam = () => {
 
     const formData = new FormData();
     formData.append("examPages", file);
-    formData.append("exam_id", exam_id);
+    formData.append("exam_id", exam_id); // Include exam_id in the form data
 
     try {
       const responses = await Promise.all([
@@ -58,11 +85,16 @@ const UploadExam = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ exam_id }),
+          body: JSON.stringify({ examType, exam_id }),
         }),
         fetch("/api/exam/copyTemplate", {
           method: "POST",
           credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // need to create a fetch method to find examType from db
+          body: JSON.stringify({ examType: examType, keyOrExam: "exam" }),
         }),
       ]);
 
@@ -85,7 +117,12 @@ const UploadExam = () => {
   return (
     <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
+        <Button
+          variant="outline"
+          size="icon"
+          className="h-10 w-10"
+          onClick={() => window.history.back()}
+        >
           <ChevronLeftIcon className="h-4 w-4" />
           <span className="sr-only">Back</span>
         </Button>
@@ -100,8 +137,15 @@ const UploadExam = () => {
           {!fileURL ? (
             <div className="flex flex-col items-center gap-1 text-center w-full h-full">
               <h3 className="text-2xl font-bold tracking-tight">No File Selected</h3>
-              <p className="text-sm text-muted-foreground">You can upload the exam answer key as a PDF file.</p>
-              <Button className="mt-4" onClick={() => fileInputRef.current && fileInputRef.current.click()}>Browse Files</Button>
+              <p className="text-sm text-muted-foreground">
+                You can upload the exam answer key as a PDF file.
+              </p>
+              <Button
+                className="mt-4"
+                onClick={() => fileInputRef.current && fileInputRef.current.click()}
+              >
+                Browse Files
+              </Button>
               <input
                 type="file"
                 id="file-input"
@@ -113,7 +157,11 @@ const UploadExam = () => {
             </div>
           ) : (
             <div className="pdf-display w-full h-full">
-              <iframe src={fileURL} title="PDF Preview" className="w-full h-[90vh] border rounded-lg"></iframe>
+              <iframe
+                src={fileURL}
+                title="PDF Preview"
+                className="w-full h-[90vh] border rounded-lg"
+              ></iframe>
             </div>
           )}
         </div>

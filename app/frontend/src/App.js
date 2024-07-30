@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {BrowserRouter as Router, Routes, Route, useLocation} from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import "./css/App.css";
 
 
@@ -28,6 +33,7 @@ import NotificationPreferences from "./pages/Instructor/NotificationPreferences"
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
 import ReviewExams from "./pages/Instructor/ReviewExams";
+import ViewExam from "./pages/Instructor/ViewExam";
 //admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
@@ -68,7 +74,10 @@ function App() {
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/Classes" element={<Classes />} />
             <Route path="/New-Class" element={<NewClass />} />
-            <Route path="/ClassManagement/:class_id" element={<ClassManagement />}/>
+            <Route
+              path="/ClassManagement/:class_id"
+              element={<ClassManagement />}
+            />
             <Route path="/NewExam/:class_id" element={<NewExam />} />
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
@@ -77,8 +86,13 @@ function App() {
             <Route path="/ConfirmExamKey" element={<ConfirmExamKey />} />
             <Route path="/UploadExams/:exam_id" element={<UploadExams />} />
             <Route path="/OMRProcessing" element={<OMRProcessing />} />
-            <Route path="/OMRProcessingUpload" element={<OMRProcessingUpload />} /> {/* Add the new route */}
+            <Route
+              path="/OMRProcessingUpload"
+              element={<OMRProcessingUpload />}
+            />{" "}
+            {/* Add the new route */}
             <Route path="/ReviewExams" element={<ReviewExams />} />
+            <Route path="/ViewExam" element={<ViewExam />} />
             <Route
               path="/NotificationPreferences"
               element={<NotificationPreferences />}
