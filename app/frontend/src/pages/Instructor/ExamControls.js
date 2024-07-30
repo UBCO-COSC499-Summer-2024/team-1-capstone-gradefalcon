@@ -90,7 +90,7 @@ const ExamControls = () => {
                   </div>
                 </div>
                 <div className="flex justify-between mt-4">
-                  <Button size="sm" className="gap-1 green-button" onClick={() => window.history.back()}>
+                  <Button size="sm" variant= "secondary" className="gap-1 green-button" onClick={() => window.history.back()}>
                     Back
                   </Button>
                   <Button size="sm" className="gap-1 green-button" onClick={handleConfirm}>

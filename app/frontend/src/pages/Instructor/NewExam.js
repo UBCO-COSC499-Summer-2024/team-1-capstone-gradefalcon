@@ -27,7 +27,7 @@ const NewExam = () => {
   return (
     <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => window.history.back()}>
+        <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
           <ChevronLeftIcon className="h-4 w-4" />
           <span className="sr-only">Back</span>
         </Button>
@@ -67,7 +67,7 @@ const NewExam = () => {
   
 
         <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-      <Card className="bg-white border rounded">
+      <Card className="bg-white border rounded md:w-2/3">
             <CardHeader>
               <CardTitle>Select Course</CardTitle>
             </CardHeader>

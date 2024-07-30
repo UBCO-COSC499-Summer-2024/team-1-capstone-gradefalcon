@@ -86,7 +86,7 @@ const ClassManagement = () => {
   return (
     <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
     <div className="flex items-center gap-4">
-      <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => window.history.back()}>
+      <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
         <ChevronLeftIcon className="h-4 w-4" />
         <span className="sr-only">Back</span>
       </Button>
@@ -99,8 +99,7 @@ const ClassManagement = () => {
             <TooltipTrigger asChild>
               <Link to={`../NewExam/${params.class_id}`} className="gap-1">
               <Button size="sm" className="gap-1">
-                  <Plus className="h-4 w-4" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap"></span>
+                  <Plus className="h-3.5 w-3.5" />
                 </Button>
               </Link>
             </TooltipTrigger>

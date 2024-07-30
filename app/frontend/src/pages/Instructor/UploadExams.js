@@ -1,13 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "../../components/ui/card";
 import { Button } from "../../components/ui/button"
-import { Input } from "../../components/ui/input"
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid"; 
 import { Toaster } from "../../components/ui/toaster";
@@ -30,16 +22,22 @@ const UploadExam = () => {
     };
 
     const fileInput = fileInputRef.current;
-    fileInput.addEventListener("change", handleFileSelect);
+    if (fileInput) {
+      fileInput.addEventListener("change", handleFileSelect);
+    }
 
     return () => {
-      fileInput.removeEventListener("change", handleFileSelect);
+      if (fileInput) {
+        fileInput.removeEventListener("change", handleFileSelect);
+      }
     };
   }, []);
 
   const resetUpload = () => {
     setFileURL(null);
-    fileInputRef.current.value = "";
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const sendToBackend = async () => {
@@ -87,7 +85,7 @@ const UploadExam = () => {
   return (
     <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => window.history.back()}>
+        <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
           <ChevronLeftIcon className="h-4 w-4" />
           <span className="sr-only">Back</span>
         </Button>
@@ -103,7 +101,7 @@ const UploadExam = () => {
             <div className="flex flex-col items-center gap-1 text-center w-full h-full">
               <h3 className="text-2xl font-bold tracking-tight">No File Selected</h3>
               <p className="text-sm text-muted-foreground">You can upload the exam answer key as a PDF file.</p>
-              <Button className="mt-4" onClick={() => fileInputRef.current.click()}>Browse Files</Button>
+              <Button className="mt-4" onClick={() => fileInputRef.current && fileInputRef.current.click()}>Browse Files</Button>
               <input
                 type="file"
                 id="file-input"
@@ -123,7 +121,7 @@ const UploadExam = () => {
           <Button size="sm" className="gap-1" onClick={sendToBackend}>
             Import
           </Button>
-          <Button size="sm" className="gap-1 variant-2" onClick={resetUpload}>
+          <Button size="sm" variant="outline" onClick={resetUpload}>
             Reset
           </Button>
         </div>

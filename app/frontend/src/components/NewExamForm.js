@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import "../../css/App.css";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
-import { useToast } from "../../components/ui/use-toast";
-import { ToastProvider, ToastViewport } from "../../components/ui/toast";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../components/ui/select";
+import "../css/App.css";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../components/ui/card";
+import { useToast } from "../components/ui/use-toast";
+import { ToastProvider, ToastViewport } from "../components/ui/toast";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../components/ui/select";
 
 const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
   const [examTitle, setExamTitle] = useState("");
