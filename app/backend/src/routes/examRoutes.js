@@ -7,7 +7,8 @@ const {
   getAveragePerExam,
   getAveragePerCourse,
   getStudentGrades,
-  getCustomMarkingSchemes
+  getCustomMarkingSchemes,
+  getExamDetails,
 
 } = require("../controllers/examController");
 const { upload } = require("../middleware/uploadMiddleware");
@@ -23,7 +24,8 @@ router.post("/ExamBoard", examBoard);
 router.get("/average-per-exam", getAveragePerExam);
 router.get("/average-per-course", getAveragePerCourse); // Updated route
 router.get("/grades/:studentId", getStudentGrades);
-
+// New route for fetching exam details
+router.get("/exam/:exam_id", getExamDetails);
 
 // Function to get the answer key for a specific exam
 

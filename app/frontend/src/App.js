@@ -18,6 +18,7 @@ import Login from "./pages/Login";
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
+import ExamDetails from "./pages/Instructor/ExamDetails";
 import NewClass from "./pages/Instructor/NewClass";
 import NewExam from "./pages/Instructor/NewExam";
 import ExamBoard from "./pages/Instructor/Examboard";
@@ -69,6 +70,7 @@ function App() {
             <Route path="/Classes" element={<Classes />} />
             <Route path="/New-Class" element={<NewClass />} />
             <Route path="/ClassManagement/:class_id" element={<ClassManagement />}/>
+            <Route path="/ExamDetails/:exam_id" element={<ExamDetails />} /> {/* Add this route */}
             <Route path="/NewExam/:class_id" element={<NewExam />} />
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />

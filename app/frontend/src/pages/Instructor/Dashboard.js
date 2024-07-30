@@ -10,7 +10,7 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../
 import AverageperExamChart from "../../components/AverageperExamChart";
 import AverageperCourseChart from "../../components/AverageperCourseChart";
 import NewClassForm from "../../components/NewClassForm";
-import NewExamForm from "../../components/NewExamForm"; // Import the new exam form
+import NewExamForm from "../../components/NewExamForm";
 import { Input } from "../../components/ui/input";
 
 export default function Dashboard() {
@@ -146,6 +146,7 @@ export default function Dashboard() {
   const handleExamCreated = (newExam) => {
     setExams([...exams, newExam]);
   };
+
   return (
     <div className="flex flex-col gap-4 h-screen">
       <div className={`flex-1 ${filteredCourses.length === 0 ? "h-full" : ""}`}>
@@ -236,7 +237,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-  
+
       <div className="flex-1">
         <Card className="bg-white border rounded h-full">
           <CardHeader className="flex justify-between px-6 py-4">
@@ -300,9 +301,20 @@ export default function Dashboard() {
                 </TableHeader>
                 <TableBody>
                   {filteredExams.map((exam, index) => (
-                    <TableRow key={index} className={index}>
+                    <TableRow key={index}>
                       <TableCell>
-                        <div className="font-medium">{exam.exam_title}</div>
+                        <TooltipProvider>
+                          <Tooltip delayDuration={0}>
+                            <TooltipTrigger asChild>
+                              <Link to={`/examManagement/${exam.exam_id}`} className="font-medium">
+                                {exam.exam_title}
+                              </Link>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Click for details</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                         <div className="hidden text-sm text-muted-foreground md:inline">{exam.course_id}</div>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
@@ -314,7 +326,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-  
+
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="bg-white border rounded">
           <CardHeader>
@@ -335,6 +347,4 @@ export default function Dashboard() {
       </div>
     </div>
   );
-  
 }
-
