@@ -21,6 +21,17 @@ const saveQuestions = async (req, res, next) => {
       "INSERT INTO solution (exam_id, answers) VALUES ($1, $2)",
       [insertedRowId, questionsArray]
     );
+
+    // Save custom marking schemes
+    if (markingSchemes) {
+      for (const [sectionName, scheme] of Object.entries(markingSchemes)) {
+        await pool.query(
+          "INSERT INTO marking_schemes (exam_id, section_name, questions, correct, incorrect, unmarked) VALUES ($1, $2, $3, $4, $5, $6)",
+          [insertedRowId, sectionName, scheme.questions.join(","), scheme.marking.correct, scheme.marking.incorrect, scheme.marking.unmarked]
+        );
+      }
+    }
+
     res.sendStatus(200);
   } catch (err) {
     next(err);

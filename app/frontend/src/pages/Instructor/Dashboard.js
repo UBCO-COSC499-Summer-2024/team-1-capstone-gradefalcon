@@ -9,8 +9,8 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
 import AverageperExamChart from "../../components/AverageperExamChart";
 import AverageperCourseChart from "../../components/AverageperCourseChart";
-import NewClassForm from "./NewClassForm";
-import NewExamForm from "./NewExamForm"; // Import the new exam form
+import NewClassForm from "../../components/NewClassForm";
+import NewExamForm from "../../components/NewExamForm"; // Import the new exam form
 import { Input } from "../../components/ui/input";
 
 export default function Dashboard() {
@@ -146,50 +146,49 @@ export default function Dashboard() {
   const handleExamCreated = (newExam) => {
     setExams([...exams, newExam]);
   };
-
   return (
-    <main className="flex flex-col gap-4 h-screen">
-      <div className="flex-1">
+    <div className="flex flex-col gap-4 h-screen">
+      <div className={`flex-1 ${filteredCourses.length === 0 ? "h-full" : ""}`}>
         <Card className="bg-white border rounded h-full">
           <CardHeader className="flex justify-between px-6 py-4">
-            <div>
+            <div className="flex justify-between items-center">
               <CardTitle className="mb-2">Your Courses</CardTitle>
-              <CardDescription>Your enrolled courses.</CardDescription>
+              <div className="flex gap-2">
+                <Dialog>
+                  <TooltipProvider>
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
+                          <Button size="sm" className="gap-1">
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </DialogTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Create New Course</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Create New Course</DialogTitle>
+                      <DialogDescription>Enter the details for the new course and import the student list via a CSV file.</DialogDescription>
+                    </DialogHeader>
+                    <NewClassForm />
+                    <DialogClose asChild>
+                      <Button variant="ghost">Close</Button>
+                    </DialogClose>
+                  </DialogContent>
+                </Dialog>
+                <Button asChild size="sm" className="gap-1">
+                  <Link to="/Classes">
+                    Manage Courses
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <Dialog>
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <DialogTrigger asChild>
-                        <Button size="sm" className="ml-auto gap-1">
-                          <Plus className="h-4 w-4" />
-                        </Button>
-                      </DialogTrigger>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Create New Course</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create New Course</DialogTitle>
-                    <DialogDescription>Enter the details for the new course and import the student list via a CSV file.</DialogDescription>
-                  </DialogHeader>
-                  <NewClassForm />
-                  <DialogClose asChild>
-                    <Button variant="ghost">Close</Button>
-                  </DialogClose>
-                </DialogContent>
-              </Dialog>
-              <Button asChild size="sm" className="ml-auto gap-1">
-                <Link to="/Classes">
-                  Manage Courses
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
+            <CardDescription>Your enrolled courses.</CardDescription>
           </CardHeader>
           <CardContent className="flex-1">
             <div className="relative mb-4">
@@ -202,77 +201,83 @@ export default function Dashboard() {
                 onChange={(e) => setCourseSearchTerm(e.target.value)}
               />
             </div>
-            <ScrollArea className="h-80">
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6">
-                {filteredCourses.map((course, index) => (
-                  <TooltipProvider key={index}>
-                    <Tooltip delayDuration={0}>
-                      <TooltipTrigger asChild>
-                        <Link to={`/ClassManagement/${course.class_id}`}>
-                          <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md">
-                            <div className="flex items-center justify-between mb-4">
-                              <CardDescription>{course.course_name}</CardDescription>
-                              <Bookmark className="h-6 w-6 text-muted-foreground" />
-                            </div>
-                            <div className="flex flex-col items-center">
-                              <div className="text-2xl font-bold">{course.course_id}</div>
-                            </div>
-                          </Card>
-                        </Link>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Click to Open Course</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                ))}
+            {filteredCourses.length > 0 ? (
+              <ScrollArea className="h-80">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mt-6">
+                  {filteredCourses.map((course, index) => (
+                    <TooltipProvider key={index}>
+                      <Tooltip delayDuration={0}>
+                        <TooltipTrigger asChild>
+                          <Link to={`/ClassManagement/${course.class_id}`}>
+                            <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md max-w-md mx-auto h-30">
+                              <div className="flex items-center justify-between mb-4">
+                                <CardDescription>{course.course_name}</CardDescription>
+                                <Bookmark className="h-6 w-6 text-muted-foreground" />
+                              </div>
+                              <div className="flex flex-col items-center">
+                                <div className="text-2xl font-bold">{course.course_id}</div>
+                              </div>
+                            </Card>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Click to Open Course</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))}
+                </div>
+              </ScrollArea>
+            ) : (
+              <div className="flex justify-center items-center h-full">
+                <p className="text-muted-foreground">No courses available.</p>
               </div>
-            </ScrollArea>
+            )}
           </CardContent>
         </Card>
       </div>
-
+  
       <div className="flex-1">
         <Card className="bg-white border rounded h-full">
           <CardHeader className="flex justify-between px-6 py-4">
-            <div>
+            <div className="flex justify-between items-center">
               <CardTitle className="mb-2">Exam Board</CardTitle>
-              <CardDescription>Recent exams from your classes.</CardDescription>
+              <div className="flex gap-2">
+                <Dialog>
+                  <TooltipProvider>
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
+                          <Button size="sm" className="gap-1" onClick={() => setIsDialogOpen(true)}>
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </DialogTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Create New Exam</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Create New Exam</DialogTitle>
+                      <DialogDescription>Enter the details for the new exam and upload the answer key.</DialogDescription>
+                    </DialogHeader>
+                    <NewExamForm setIsDialogOpen={setIsDialogOpen} onExamCreated={handleExamCreated} />
+                    <DialogClose asChild>
+                      <Button variant="ghost">Close</Button>
+                    </DialogClose>
+                  </DialogContent>
+                </Dialog>
+                <Button asChild size="sm" className="gap-1">
+                  <Link to="/Examboard">
+                    Manage Exams
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <Dialog>
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <DialogTrigger asChild>
-                        <Button size="sm" className="ml-auto gap-1" onClick={() => setIsDialogOpen(true)}>
-                          <Plus className="h-4 w-4" />
-                        </Button>
-                      </DialogTrigger>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Create New Exam</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create New Exam</DialogTitle>
-                    <DialogDescription>Enter the details for the new exam and upload the answer key.</DialogDescription>
-                  </DialogHeader>
-                  <NewExamForm setIsDialogOpen={setIsDialogOpen} onExamCreated={handleExamCreated} />
-                  <DialogClose asChild>
-                    <Button variant="ghost">Close</Button>
-                  </DialogClose>
-                </DialogContent>
-              </Dialog>
-              <Button asChild size="sm" className="ml-auto gap-1">
-                <Link to="/Examboard">
-                  Manage Exams
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
+            <CardDescription>Recent exams from your classes.</CardDescription>
           </CardHeader>
           <CardContent className="flex-1">
             <div className="relative mb-4">
@@ -309,7 +314,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-
+  
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="bg-white border rounded">
           <CardHeader>
@@ -328,7 +333,8 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   );
+  
 }
 

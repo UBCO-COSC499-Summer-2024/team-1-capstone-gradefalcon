@@ -3,7 +3,11 @@ import { Link, useParams } from "react-router-dom";
 import '../../css/App.css';
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
-
+import { Label} from "../../components/ui/label";
+import { Input } from "../../components/ui/input";
+import {Select, SelectItem, SelectContent, SelectValue, SelectTrigger} from "../../components/ui/select";
+import {ChevronLeftIcon} from "@heroicons/react/20/solid";
+import { Form } from "../../components/ui/form";
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");
@@ -21,28 +25,34 @@ const NewExam = () => {
   };
 
   return (
-    <main className="flex flex-col gap-4 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
-      <div>
-        <h1 className="text-3xl font-bold mb-4">Create New Exam</h1>
-        <div className="grid gap-4 lg:grid-cols-1">
-          <Card className="bg-white border rounded">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <div>
-                <CardTitle className="mb-2">General</CardTitle>
-                <CardDescription>*The following details will be printed on the exam*</CardDescription>
-              </div>
-              <Button asChild size="sm" className="ml-auto gap-1">
-                <span onClick={() => window.history.back()}>Back</span>
-              </Button>
+    <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
+      <div className="flex items-center gap-4">
+        <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
+          <ChevronLeftIcon className="h-4 w-4" />
+          <span className="sr-only">Back</span>
+        </Button>
+        <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+          Create Exam
+        </h1>
+        <div className="hidden items-center gap-2 md:ml-auto md:flex">
+        </div>
+      </div>
+      
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+        <div className="grid auto-rows-max items-start gap-8">
+          <Card className="bg-white border rounded-lg p-6">
+            <CardHeader>
+              <CardTitle>Exam Details</CardTitle>
+              <CardDescription>The following details will define the exam details</CardDescription>
             </CardHeader>
             <CardContent>
-              <form>
-                <div className="mb-4">
-                  <label htmlFor="exam-title" className="block text-sm font-medium text-gray-700">Exam Title:</label>
-                  <input
-                    type="text"
+              <div className="grid gap-6">
+                <div className="grid gap-3">
+                  <Label htmlFor="exam-title">Exam Name</Label>
+                  <Input
                     id="exam-title"
-                    className="input-field mt-1 block w-full"
+                    type="text"
+                    className="w-full"
                     placeholder="Enter exam title"
                     value={examTitle}
                     onChange={handleInputChange}
@@ -50,35 +60,77 @@ const NewExam = () => {
                     required
                   />
                 </div>
-                <div className="mb-4">
-                  <label htmlFor="answer-key" className="block text-sm font-medium text-gray-700">Answer Key:</label>
-                  <div className="flex gap-4 mt-1">
-                    <Button asChild size="sm">
-                      <Link 
-                        to={isFormValid() ? "/UploadExamKey" : "#"}
-                        state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
-                        data-testid="upload-answer-key-btn"
-                      >
-                        Upload Answer Key
-                      </Link>
-                    </Button>
-                    <Button asChild size="sm">
-                      <Link 
-                        to={isFormValid() ? "/ManualExamKey" : "#"} 
-                        state={{ examTitle: examTitle, classID: class_id }} 
-                        data-testid="manual-answer-key-btn"
-                      >
-                        Manually Select Answers
-                      </Link>
-                    </Button>
-                  </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+  
+
+        <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
+      <Card className="bg-white border rounded md:w-2/3">
+            <CardHeader>
+              <CardTitle>Select Course</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6">
+                <div className="grid gap-3">
+                  <Label htmlFor="course">Course</Label>
+                  <Select>
+                    <SelectTrigger id="course" aria-label="Select course">
+                      <SelectValue placeholder="Select course" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="course1">Course 1</SelectItem>
+                      <SelectItem value="course2">Course 2</SelectItem>
+                      <SelectItem value="course3">Course 3</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-              </form>
+              </div>
             </CardContent>
           </Card>
         </div>
       </div>
-    </main>
+  
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+        <div className="grid auto-rows-max items-start gap-8">
+          <Card className="bg-white border rounded-lg p-6">
+            <CardHeader className="flex justify-between px-6 py-4">
+              <CardTitle className="mb-2">Upload Exam Options</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Form>
+                <div className="grid gap-6">
+                  <div className="grid gap-3">
+                    <Label htmlFor="answer-key">Answer Key</Label>
+                    <div className="flex gap-4 mt-1">
+                      <Button asChild size="sm">
+                        <Link 
+                          to={isFormValid() ? "/UploadExamKey" : "#"}
+                          state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
+                          data-testid="upload-answer-key-btn"
+                        >
+                          Upload Answer Key
+                        </Link>
+                      </Button>
+                      <Button asChild size="sm">
+                        <Link 
+                          to={isFormValid() ? "/ManualExamKey" : "#"} 
+                          state={{ examTitle: examTitle, classID: class_id }} 
+                          data-testid="manual-answer-key-btn"
+                        >
+                          Manually Select Answers
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
   );
 };
 

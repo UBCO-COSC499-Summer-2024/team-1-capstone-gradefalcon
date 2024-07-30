@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../..
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "../../components/ui/dialog";
-import NewClassForm from "./NewClassForm";
+import NewClassForm from "../../components/NewClassForm";
 import { ArrowUpRight } from "lucide-react";
 
 const Classes = () => {
