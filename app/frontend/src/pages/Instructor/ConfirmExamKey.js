@@ -37,7 +37,7 @@ import { Toaster } from "../../components/ui/toaster";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 const ConfirmExamKey = () => {
   const location = useLocation();
-  const { examTitle, classID } = location.state || {};
+  const { examTitle, classID, template } = location.state || {};
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(5);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -186,11 +186,12 @@ const ConfirmExamKey = () => {
   const downloadCsv = async () => {
     try {
       const response = await fetch("/api/exam/getResults", {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
+        body: JSON.stringify({ singlePage: template === "100mcq" }),
       });
 
       const data = await response.json();

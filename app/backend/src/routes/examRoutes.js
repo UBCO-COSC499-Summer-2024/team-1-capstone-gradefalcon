@@ -93,7 +93,7 @@ router.post("/getResults", async function (req, res) {
   const outputDirPath = path.join(__dirname, "../../omr/outputs");
   if (singlePage) {
     const results = []; // Array to hold all rows of data
-
+    console.log("singlePage");
     fs.createReadStream(path.join(outputDirPath, "Results/Results.csv"))
       .pipe(csv())
       .on("data", (data) => results.push(data)) // Push each row of data into the results array

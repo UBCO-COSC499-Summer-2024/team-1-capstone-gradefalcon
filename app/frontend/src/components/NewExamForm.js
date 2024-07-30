@@ -6,7 +6,13 @@ import { Input } from "../components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../components/ui/card";
 import { useToast } from "../components/ui/use-toast";
 import { ToastProvider, ToastViewport } from "../components/ui/toast";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "../components/ui/select";
 
 const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
   const [examTitle, setExamTitle] = useState("");
@@ -32,7 +38,7 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isFormValid()) {
-      alert('Please enter an exam title and select a course.');
+      alert("Please enter an exam title and select a course.");
       return;
     }
     try {
@@ -53,7 +59,7 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
         toast({
           title: "Exam created successfully",
           description: "The exam has been created successfully.",
-          variant: "default"
+          variant: "default",
         });
         onExamCreated(data); // Notify parent component about the new exam
         setIsDialogOpen(false); // Close the dialog
@@ -62,7 +68,7 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
         toast({
           title: "An error occurred",
           description: "An error occurred while creating the exam. Please try again.",
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     } catch (error) {
@@ -70,7 +76,7 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
       toast({
         title: "An error occurred",
         description: "An error occurred while creating the exam. Please try again.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -95,11 +101,15 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
         <Card className="p-4">
           <CardHeader>
             <CardTitle>Create New Exam</CardTitle>
-            <CardDescription>Enter the details for the new exam and upload the answer key.</CardDescription>
+            <CardDescription>
+              Enter the details for the new exam and upload the answer key.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="mb-4">
-              <label htmlFor="exam-title" className="block text-sm font-medium text-gray-700">Exam Title:</label>
+              <label htmlFor="exam-title" className="block text-sm font-medium text-gray-700">
+                Exam Title:
+              </label>
               <Input
                 type="text"
                 id="exam-title"
@@ -112,18 +122,24 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="course-select" className="block text-sm font-medium text-gray-700">Select Course:</label>
+              <label htmlFor="course-select" className="block text-sm font-medium text-gray-700">
+                Select Course:
+              </label>
               <Select onValueChange={handleCourseChange} value={selectedCourse} required>
                 <SelectTrigger className="mt-1 block w-full" data-testid="course-select-trigger">
                   <SelectValue data-testid="course-select-value">
                     {selectedCourse
-                      ? courses.find(course => course.class_id === selectedCourse)?.course_name
+                      ? courses.find((course) => course.class_id === selectedCourse)?.course_name
                       : "Select a course"}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {courses.map((course) => (
-                    <SelectItem key={course.class_id} value={course.class_id} data-testid={`course-option-${course.class_id}`}>
+                    <SelectItem
+                      key={course.class_id}
+                      value={course.class_id}
+                      data-testid={`course-option-${course.class_id}`}
+                    >
                       {course.course_name}
                     </SelectItem>
                   ))}
@@ -131,15 +147,25 @@ const NewExamForm = ({ setIsDialogOpen, onExamCreated }) => {
               </Select>
             </div>
             <div className="mb-4">
-              <label htmlFor="answer-key" className="block text-sm font-medium text-gray-700">Answer Key:</label>
+              <label htmlFor="answer-key" className="block text-sm font-medium text-gray-700">
+                Answer Key:
+              </label>
               <div className="flex gap-4 mt-1">
                 <Button asChild size="sm">
-                  <Link to="/UploadExamKey" data-testid="upload-answer-key-btn">
+                  <Link
+                    to="/UploadExamKey"
+                    state={{ examTitle: examTitle, classID: selectedCourse }}
+                    data-testid="upload-answer-key-btn"
+                  >
                     Upload Answer Key
                   </Link>
                 </Button>
                 <Button asChild size="sm">
-                  <Link to={isFormValid() ? "/ManualExamKey" : "#"} state={{ examTitle: examTitle, classID: params.class_id }} data-testid="manual-answer-key-btn">
+                  <Link
+                    to={isFormValid() ? "/ManualExamKey" : "#"}
+                    state={{ examTitle: examTitle, classID: selectedCourse }}
+                    data-testid="manual-answer-key-btn"
+                  >
                     Manually Select Answers
                   </Link>
                 </Button>

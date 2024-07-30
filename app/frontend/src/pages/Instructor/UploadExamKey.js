@@ -9,21 +9,16 @@ import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
+  const [template, setTemplate] = useState("100mcq");
   const fileInputRef = useRef(null);
   const location = useLocation();
-  const { className, userName, userID, examTitle, examID, courseID, classID, template } =
-    location.state || {};
+  const { examTitle, classID } = location.state || {};
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
     console.log("Received state:", {
-      className,
-      userName,
-      userID,
       examTitle,
-      examID,
-      courseID,
       classID,
       template,
     });
@@ -60,29 +55,33 @@ const UploadExamKey = () => {
     toast({ title: "Reset", description: "File upload has been reset." });
   };
 
+  const handleTemplateChange = (event) => {
+    setTemplate(event.target.value);
+  };
+
   const sendToBackend = async () => {
     if (!file) {
       toast({ title: "No File", description: "No file selected to upload." });
       return;
     }
 
-    console.log("Sending file upload request with form data:", {
-      file,
-      folder: `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`,
-      fileName: file.name,
-      examID,
-      examTitle,
-      classID,
-    });
+    // console.log("Sending file upload request with form data:", {
+    //   file,
+    //   folder: `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`,
+    //   fileName: file.name,
+    //   examID,
+    //   examTitle,
+    //   classID,
+    // });
 
     const formData = new FormData();
     formData.append("examKey", file);
-    formData.append(
-      "folder",
-      `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`
-    );
+    // formData.append(
+    //   "folder",
+    //   `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`
+    // );
     formData.append("fileName", file.name);
-    formData.append("examID", examID);
+    // formData.append("examID", examID);
     formData.append("examTitle", examTitle);
     formData.append("classID", classID);
 
@@ -142,6 +141,27 @@ const UploadExamKey = () => {
           Upload Exam Key
         </h1>
         <div className="hidden items-center gap-2 md:ml-auto md:flex"></div>
+      </div>
+      <label>Exam Template:</label>
+      <div>
+        <label>
+          <input
+            type="radio"
+            value="100mcq"
+            checked={template === "100mcq"}
+            onChange={handleTemplateChange}
+          />
+          100 MCQ
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="200mcq"
+            checked={template === "200mcq"}
+            onChange={handleTemplateChange}
+          />
+          200 MCQ
+        </label>
       </div>
 
       <div className="flex flex-col items-center gap-4 w-full">
