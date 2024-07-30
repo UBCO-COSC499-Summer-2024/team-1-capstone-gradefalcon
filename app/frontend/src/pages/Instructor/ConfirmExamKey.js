@@ -13,7 +13,10 @@ import { MultiSelect } from "../../components/ui/multi-select";
 import { useToast } from "../../components/ui/use-toast";
 import { Toaster } from "../../components/ui/toaster";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
+import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
+
 const ConfirmExamKey = () => {
+  const { getAccessTokenSilently } = useAuth0(); // Get the token
   const location = useLocation();
   const { examTitle, classID } = location.state || {};
   const [numQuestions, setNumQuestions] = useState(10);
@@ -155,10 +158,12 @@ const ConfirmExamKey = () => {
 
   const downloadCsv = async () => {
     try {
+      const token = await getAccessTokenSilently(); // Get the token
       const response = await fetch("/api/exam/getResults", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // Include the token in the request
         },
         credentials: "include",
       });
