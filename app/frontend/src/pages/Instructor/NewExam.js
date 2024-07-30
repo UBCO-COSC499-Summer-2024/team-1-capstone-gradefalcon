@@ -18,20 +18,20 @@ import {
   SelectValue,
   SelectTrigger,
 } from "../../components/ui/select";
-import { ChevronLeftIcon } from "@heroicons/react/20/solid";
+import { ChevronLeftIcon, ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { Form } from "../../components/ui/form";
+import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");
-  const [userName, setUserName] = useState("");
-  const [userID, setUserID] = useState("");
-  const [className, setClassName] = useState("");
   const [courseId, setCourseId] = useState("");
-  const [template, setTemplate] = useState("100mcq"); // Default template
+  const [template, setTemplate] = useState("100mcq");
+  const [showAlert, setShowAlert] = useState(false); // State to manage alert visibility
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const class_id = params.class_id;
+
   const handleInputChange = (event) => {
     const value = event.target.value;
     // blocks chars that could cause error (i.e " ')
@@ -47,10 +47,12 @@ const NewExam = () => {
     return examTitle.trim() !== ""; // Simple validation check
   };
 
-  const handleUploadClick = (e) => {
+  const handleButtonClick = (event) => {
     if (!isFormValid()) {
-      e.preventDefault();
-      alert("Please enter an exam title before uploading the answer key.");
+      event.preventDefault();
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
     }
   };
 
@@ -80,6 +82,14 @@ const NewExam = () => {
         </h1>
         <div className="hidden items-center gap-2 md:ml-auto md:flex"></div>
       </div>
+
+      {showAlert && (
+        <Alert className="mb-4">
+          <ExclamationCircleIcon className="h-4 w-4" />
+          <AlertTitle>Heads up!</AlertTitle>
+          <AlertDescription>Please fill in all required fields before proceeding.</AlertDescription>
+        </Alert>
+      )}
 
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
         <div className="grid auto-rows-max items-start gap-8">
@@ -151,6 +161,7 @@ const NewExam = () => {
                           to={isFormValid() ? "/UploadExamKey" : "#"}
                           state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
                           data-testid="upload-answer-key-btn"
+                          onClick={handleButtonClick}
                         >
                           Upload Answer Key
                         </Link>
@@ -160,6 +171,7 @@ const NewExam = () => {
                           to={isFormValid() ? "/ManualExamKey" : "#"}
                           state={{ examTitle: examTitle, classID: class_id }}
                           data-testid="manual-answer-key-btn"
+                          onClick={handleButtonClick}
                         >
                           Manually Select Answers
                         </Link>
