@@ -16,6 +16,14 @@ const ConfirmExamKey = (props) => {
   const location = useLocation();
   const { examTitle, classID, template } = location.state || {};
   const [fields, setFields] = useState({});
+  const [markingSchemes, setMarkingSchemes] = useState({});
+  const [showCustomSchemeModal, setShowCustomSchemeModal] = useState(false);
+  const [customScheme, setCustomScheme] = useState({
+    questions: "",
+    correct: 0,
+    incorrect: 0,
+    unmarked: 0,
+  });
 
   let questions = [];
 
@@ -149,14 +157,25 @@ const ConfirmExamKey = (props) => {
   useEffect(() => {
     downloadCsv();
   }, []);
-
   useEffect(() => {
     updateQuestions();
   }, [numQuestions, numOptions]);
 
-  // useEffect(() => {
-  //   setQuestions();
-  // }, [numOptions, numQuestions]);
+  const handleAddCustomScheme = () => {
+    const sectionName = `SECTION_${Object.keys(markingSchemes).length + 1}`;
+    setMarkingSchemes((prev) => ({
+      ...prev,
+      [sectionName]: {
+        questions: customScheme.questions.split(",").map((q) => q.trim()),
+        marking: {
+          correct: customScheme.correct,
+          incorrect: customScheme.incorrect,
+          unmarked: customScheme.unmarked,
+        },
+      },
+    }));
+    setShowCustomSchemeModal(false);
+  };
 
   return (
     <>
@@ -206,6 +225,57 @@ const ConfirmExamKey = (props) => {
                 <div className="nested-window mb-4">
                   <div className="bubble-grid" data-testid="bubble-grid"></div>
                 </div>
+                <div className="mb-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowCustomSchemeModal(true)}
+                    className="green-button"
+                  >
+                    Add Custom Marking Scheme
+                  </button>
+                </div>
+                {showCustomSchemeModal && (
+                  <div className="custom-scheme-modal">
+                    <label>Questions (comma separated):</label>
+                    <input
+                      type="text"
+                      value={customScheme.questions}
+                      onChange={(e) =>
+                        setCustomScheme({ ...customScheme, questions: e.target.value })
+                      }
+                    />
+                    <label>Correct Marks:</label>
+                    <input
+                      type="number"
+                      value={customScheme.correct}
+                      onChange={(e) =>
+                        setCustomScheme({ ...customScheme, correct: e.target.value })
+                      }
+                    />
+                    <label>Incorrect Marks:</label>
+                    <input
+                      type="number"
+                      value={customScheme.incorrect}
+                      onChange={(e) =>
+                        setCustomScheme({ ...customScheme, incorrect: e.target.value })
+                      }
+                    />
+                    <label>Unmarked Marks:</label>
+                    <input
+                      type="number"
+                      value={customScheme.unmarked}
+                      onChange={(e) =>
+                        setCustomScheme({ ...customScheme, unmarked: e.target.value })
+                      }
+                    />
+                    <button type="button" onClick={handleAddCustomScheme}>
+                      Save
+                    </button>
+                    <button type="button" onClick={() => setShowCustomSchemeModal(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                )}
                 <div className="flex justify-between mt-4">
                   <Button
                     size="sm"
@@ -222,6 +292,7 @@ const ConfirmExamKey = (props) => {
                         examTitle: examTitle,
                         questions: questions,
                         numQuestions: numQuestions,
+                        markingSchemes: markingSchemes,
                       }}
                     >
                       Next
@@ -232,7 +303,7 @@ const ConfirmExamKey = (props) => {
             </CardContent>
           </Card>
         </main>
-        <Toaster /> {/* Adding the Toaster component */}
+        <Toaster />
       </div>
     </>
   );

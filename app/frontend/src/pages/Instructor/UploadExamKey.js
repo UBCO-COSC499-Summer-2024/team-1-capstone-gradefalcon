@@ -2,15 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import "../../css/App.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from "../../components/ui/card";
 import { useToast } from "../../components/ui/use-toast";
 import { Toaster } from "../../components/ui/toaster";
+import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 
 const UploadExamKey = () => {
   const [fileURL, setFileURL] = useState(null);
@@ -47,16 +41,22 @@ const UploadExamKey = () => {
     };
 
     const fileInput = fileInputRef.current;
-    fileInput.addEventListener("change", handleFileSelect);
+    if (fileInput) {
+      fileInput.addEventListener("change", handleFileSelect);
+    }
 
     return () => {
-      fileInput.removeEventListener("change", handleFileSelect);
+      if (fileInput) {
+        fileInput.removeEventListener("change", handleFileSelect);
+      }
     };
   }, [toast]);
 
   const resetUpload = () => {
     setFileURL(null);
-    fileInputRef.current.value = "";
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     toast({ title: "Reset", description: "File upload has been reset." });
   };
 
@@ -127,63 +127,67 @@ const UploadExamKey = () => {
   };
 
   return (
-    <>
-      <div className="App">
-        <main className="flex flex-col gap-4 px-8 pb-8 pt-2 bg-gradient-to-r from-gradient-start to-gradient-end">
-          <h2 className="text-2xl font-semibold mb-2">Upload Exam Key</h2>
-          <h3 className="text-xl mb-2">{examTitle}</h3>
-          <Card className="bg-white border rounded">
-            <CardHeader className="px-6 py-4">
-              <div>
-                <CardTitle>Answer Key</CardTitle>
-                <CardDescription>*Upload the exam answer key as a PDF file*</CardDescription>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col gap-4">
-                <div className="upload-area" style={{ display: fileURL ? "none" : "block" }}>
-                  <input
-                    type="file"
-                    id="file-input"
-                    data-testid="file-input"
-                    hidden
-                    accept="application/pdf"
-                    ref={fileInputRef}
-                  />
-                  <div
-                    className="drag-drop-area border-dashed border-2 border-gray-300 rounded-lg p-4 text-center cursor-pointer"
-                    onClick={() => fileInputRef.current.click()}
-                  >
-                    <p>Click to browse or drag and drop your files</p>
-                  </div>
-                </div>
-                <div className="pdf-display" style={{ display: fileURL ? "block" : "none" }}>
-                  <iframe
-                    src={fileURL}
-                    title="PDF Preview"
-                    className="w-full h-96 border rounded-lg"
-                  ></iframe>
-                </div>
-                <div className="flex justify-between">
-                  <Button size="sm" className="gap-1" onClick={sendToBackend}>
-                    Import
-                  </Button>
-                  <Button size="sm" className="gap-1" onClick={resetUpload}>
-                    Reset
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </main>
-        <div className="flex justify-center mt-4">
-          <Button size="sm" className="gap-1" onClick={() => window.history.back()}>
-            Back
+    <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
+      <div className="flex items-center gap-4">
+        <Button
+          variant="outline"
+          size="icon"
+          className="h-10 w-10"
+          onClick={() => window.history.back()}
+        >
+          <ChevronLeftIcon className="h-4 w-4" />
+          <span className="sr-only">Back</span>
+        </Button>
+        <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+          Upload Exam Key
+        </h1>
+        <div className="hidden items-center gap-2 md:ml-auto md:flex"></div>
+      </div>
+
+      <div className="flex flex-col items-center gap-4 w-full">
+        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm p-6 bg-white w-full h-[200vh]">
+          {!fileURL ? (
+            <div className="flex flex-col items-center gap-1 text-center w-full h-full">
+              <h3 className="text-2xl font-bold tracking-tight">No File Selected</h3>
+              <p className="text-sm text-muted-foreground">
+                You can upload the exam answer key as a PDF file.
+              </p>
+              <Button
+                className="mt-4"
+                onClick={() => fileInputRef.current && fileInputRef.current.click()}
+              >
+                Browse Files
+              </Button>
+              <input
+                type="file"
+                id="file-input"
+                data-testid="file-input"
+                hidden
+                accept="application/pdf"
+                ref={fileInputRef}
+              />
+            </div>
+          ) : (
+            <div className="pdf-display w-full h-full">
+              <iframe
+                src={fileURL}
+                title="PDF Preview"
+                className="w-full h-[90vh] border rounded-lg"
+              ></iframe>
+            </div>
+          )}
+        </div>
+        <div className="flex gap-2 w-full mt-4">
+          <Button size="sm" className="gap-1" onClick={sendToBackend}>
+            Import
+          </Button>
+          <Button size="sm" variant="outline" onClick={resetUpload}>
+            Reset
           </Button>
         </div>
-        <Toaster />
       </div>
-    </>
+      <Toaster />
+    </div>
   );
 };
 

@@ -324,12 +324,10 @@ router.post("/GenerateEvaluation", async function (req, res) {
   const { examType, exam_id } = req.body;
 
   try {
-    // Validate exam_id
     if (!exam_id) {
       return res.status(400).send("Missing exam_id");
     }
 
-    // Get answer key from the database
     const answerKey = await getAnswerKeyForExam(exam_id);
 
     if (examType === "200mcq") {
