@@ -58,10 +58,8 @@ const NewExam = () => {
 
   useEffect(() => {
     if (location.state) {
-      setUserName(location.state.userName);
-      setUserID(location.state.userID);
-      setClassName(location.state.className);
       setCourseId(location.state.courseID); // Set courseID from state
+      setTemplate(location.state.template); // Set courseID from state
     }
   }, [location.state]);
 
