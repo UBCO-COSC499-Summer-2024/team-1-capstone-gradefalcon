@@ -1,14 +1,36 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, Link } from "react-router-dom";
-import '../../css/App.css';
+import "../../css/App.css";
 import { Button } from "../../components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "../../components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+  CardFooter,
+} from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
-import { ChevronLeftIcon, ChevronRightIcon, PlusCircleIcon, TrashIcon, PlusIcon, MinusIcon, ExclamationCircleIcon } from "@heroicons/react/20/solid";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  PlusCircleIcon,
+  TrashIcon,
+  PlusIcon,
+  MinusIcon,
+  ExclamationCircleIcon,
+} from "@heroicons/react/20/solid";
 import { Label } from "../../components/ui/label";
 import { Form } from "../../components/ui/form";
 import { ScrollArea } from "../../components/ui/scroll-area";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "../../components/ui/table";
 import { MultiSelect } from "../../components/ui/multi-select";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 
@@ -17,6 +39,7 @@ const ManualExamKey = () => {
   const { examTitle, classID } = location.state || {};
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(5);
+  const [totalMarks, setTotalMarks] = useState();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [markingSchemes, setMarkingSchemes] = useState([]);
@@ -35,9 +58,9 @@ const ManualExamKey = () => {
   }));
 
   const removeQuestion = (questionNumber, option) => {
-    setSelectedOptions(prevOptions =>
+    setSelectedOptions((prevOptions) =>
       prevOptions.filter(
-        question => question.question !== questionNumber || question.option !== option
+        (question) => question.question !== questionNumber || question.option !== option
       )
     );
   };
@@ -47,8 +70,13 @@ const ManualExamKey = () => {
     if (event.target.classList.contains("selected")) {
       event.target.style.backgroundColor = "hsl(var(--primary))";
       event.target.style.color = "white";
-      setSelectedOptions(prevOptions => {
-        if (!prevOptions.some(question => question.question === selection.question && question.option === selection.option)) {
+      setSelectedOptions((prevOptions) => {
+        if (
+          !prevOptions.some(
+            (question) =>
+              question.question === selection.question && question.option === selection.option
+          )
+        ) {
           return [...prevOptions, selection];
         } else {
           return prevOptions;
@@ -57,8 +85,11 @@ const ManualExamKey = () => {
     } else {
       event.target.style.backgroundColor = "";
       event.target.style.color = "";
-      setSelectedOptions(prevOptions => {
-        const newOptions = prevOptions.filter(question => question.question !== selection.question || question.option !== selection.option);
+      setSelectedOptions((prevOptions) => {
+        const newOptions = prevOptions.filter(
+          (question) =>
+            question.question !== selection.question || question.option !== selection.option
+        );
         return newOptions;
       });
     }
@@ -92,6 +123,7 @@ const ManualExamKey = () => {
   }, [numQuestions, numOptions]);
 
   useEffect(() => {
+    setTotalMarks(numQuestions);
     updateQuestions();
   }, [numQuestions, numOptions, updateQuestions]);
 
@@ -103,7 +135,7 @@ const ManualExamKey = () => {
   };
 
   const addNewQuestion = () => {
-    setNumQuestions(prev => prev + 1);
+    setNumQuestions((prev) => prev + 1);
   };
 
   const handleAddCustomScheme = () => {
@@ -113,8 +145,8 @@ const ManualExamKey = () => {
     } else {
       setShowAlert(false);
     }
-    
-    const formattedQuestions = customScheme.questions.map(q => `q${q.split(' ')[1]}`);
+
+    const formattedQuestions = customScheme.questions.map((q) => `q${q.split(" ")[1]}`);
 
     setMarkingSchemes((prev) => [
       ...prev,
@@ -139,7 +171,7 @@ const ManualExamKey = () => {
       const newSchemes = [...prev];
       newSchemes[index] = {
         ...newSchemes[index],
-        [field]: field === 'correct' ? Math.abs(value) : -Math.abs(value),
+        [field]: field === "correct" ? Math.abs(value) : -Math.abs(value),
       };
       return newSchemes;
     });
@@ -152,13 +184,16 @@ const ManualExamKey = () => {
   return (
     <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8 px-8 pb-8 pt-2 bg-gradient-to-r from-gradient-start to-gradient-end">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
+        <Button
+          variant="outline"
+          size="icon"
+          className="h-10 w-10"
+          onClick={() => window.history.back()}
+        >
           <ChevronLeftIcon className="h-4 w-4" />
           <span className="sr-only">Back</span>
         </Button>
-        <h1 className="flex-1 text-3xl font-semibold tracking-tight">
-          Manual Exam Key
-        </h1>
+        <h1 className="flex-1 text-3xl font-semibold tracking-tight">Manual Exam Key</h1>
         <div className="flex items-center gap-2 ml-auto">
           <Link
             to="/ExamControls"
@@ -167,6 +202,7 @@ const ManualExamKey = () => {
               examTitle: examTitle,
               questions: selectedOptions,
               numQuestions: numQuestions,
+              totalMarks: totalMarks,
               markingSchemes: markingSchemes,
             }}
           >
@@ -236,13 +272,13 @@ const ManualExamKey = () => {
               <TableBody>
                 {markingSchemes.map((scheme, index) => (
                   <TableRow key={index}>
-                    <TableCell>{scheme.questions.join(', ')}</TableCell>
+                    <TableCell>{scheme.questions.join(", ")}</TableCell>
                     <TableCell>
                       <Input
                         type="number"
                         value={scheme.correct}
                         className="w-full"
-                        onChange={(e) => handleSchemeChange(index, 'correct', e.target.value)}
+                        onChange={(e) => handleSchemeChange(index, "correct", e.target.value)}
                       />
                     </TableCell>
                     <TableCell>
@@ -250,7 +286,7 @@ const ManualExamKey = () => {
                         type="number"
                         value={scheme.incorrect}
                         className="w-full"
-                        onChange={(e) => handleSchemeChange(index, 'incorrect', e.target.value)}
+                        onChange={(e) => handleSchemeChange(index, "incorrect", e.target.value)}
                       />
                     </TableCell>
                     <TableCell>
@@ -258,7 +294,7 @@ const ManualExamKey = () => {
                         type="number"
                         value={scheme.unmarked}
                         className="w-full"
-                        onChange={(e) => handleSchemeChange(index, 'unmarked', e.target.value)}
+                        onChange={(e) => handleSchemeChange(index, "unmarked", e.target.value)}
                       />
                     </TableCell>
                     <TableCell>
@@ -270,9 +306,24 @@ const ManualExamKey = () => {
                 ))}
               </TableBody>
             </Table>
+            <Label>
+              By default, the total marks for the exam is the same as the total number of questions.
+              You can set the total marks manually below:
+            </Label>
+            <Input
+              type="number"
+              value={totalMarks}
+              className="w-full"
+              onChange={(e) => setTotalMarks(e.target.value)}
+            />
           </CardContent>
           <CardFooter className="justify-center border-t p-4">
-            <Button size="sm" variant="ghost" className="gap-1" onClick={() => setShowCustomSchemeModal(true)}>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="gap-1"
+              onClick={() => setShowCustomSchemeModal(true)}
+            >
               <PlusCircleIcon className="h-3.5 w-3.5" />
               Add Custom Marking Scheme
             </Button>
@@ -286,8 +337,7 @@ const ManualExamKey = () => {
             <CardTitle>Bubble Grid</CardTitle>
             <CardDescription>Select the answers</CardDescription>
           </div>
-          <div className="ml-auto flex items-center gap-1">
-          </div>
+          <div className="ml-auto flex items-center gap-1"></div>
         </CardHeader>
         <CardContent className="h-[48rem] flex items-center justify-center p-6">
           <ScrollArea className="h-full w-full">
@@ -303,15 +353,13 @@ const ManualExamKey = () => {
       {showCustomSchemeModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-md">
-          {showAlert && (
-                <Alert className="mb-4">
-                  <ExclamationCircleIcon className="h-4 w-4" />
-                  <AlertTitle>Heads up!</AlertTitle>
-                  <AlertDescription>
-                    Please select a question.
-                  </AlertDescription>
-                </Alert>
-              )}
+            {showAlert && (
+              <Alert className="mb-4">
+                <ExclamationCircleIcon className="h-4 w-4" />
+                <AlertTitle>Heads up!</AlertTitle>
+                <AlertDescription>Please select a question.</AlertDescription>
+              </Alert>
+            )}
             <h2 className="text-lg font-semibold mb-4">Add Custom Marking Scheme</h2>
             <div className="mb-4">
               <Label>Questions</Label>
@@ -327,8 +375,8 @@ const ManualExamKey = () => {
             </div>
             <div className="mb-4">
               <Label>
-              Correct
-              <PlusIcon className="h-5 w-5" />
+                Correct
+                <PlusIcon className="h-5 w-5" />
               </Label>
               <Input
                 type="number"
@@ -337,8 +385,9 @@ const ManualExamKey = () => {
               />
             </div>
             <div className="mb-4">
-              <Label>Incorrect
-              <MinusIcon className="h-5 w-5" />
+              <Label>
+                Incorrect
+                <MinusIcon className="h-5 w-5" />
               </Label>
               <Input
                 type="number"
@@ -347,8 +396,9 @@ const ManualExamKey = () => {
               />
             </div>
             <div className="mb-4">
-              <Label>Blank
-              <MinusIcon className="h-5 w-5" />
+              <Label>
+                Blank
+                <MinusIcon className="h-5 w-5" />
               </Label>
               <Input
                 type="number"
@@ -360,9 +410,7 @@ const ManualExamKey = () => {
               <Button variant="outline" onClick={() => setShowCustomSchemeModal(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleAddCustomScheme}>
-                Save
-              </Button>
+              <Button onClick={handleAddCustomScheme}>Save</Button>
             </div>
           </div>
         </div>

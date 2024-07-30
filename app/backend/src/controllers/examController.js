@@ -4,7 +4,7 @@ const path = require("path");
 
 // Save solution questions and answers
 const saveQuestions = async (req, res, next) => {
-  const { questions, classID, examTitle, numQuestions, markingSchemes = {} } = req.body;
+  const { questions, classID, examTitle, numQuestions, totalMarks, markingSchemes = {} } = req.body;
 
   const questionsArray = Object.entries(questions).map(
     ([key, value]) => `${value.question}:${value.option}`
@@ -12,8 +12,8 @@ const saveQuestions = async (req, res, next) => {
 
   try {
     const writeToExam = await pool.query(
-      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES ($1, $2, $3, 10) RETURNING exam_id",
-      [classID, examTitle, numQuestions]
+      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES ($1, $2, $3, $4) RETURNING exam_id",
+      [classID, examTitle, numQuestions, totalMarks]
     );
     const insertedRowId = writeToExam.rows[0].exam_id;
 
