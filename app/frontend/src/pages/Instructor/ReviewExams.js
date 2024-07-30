@@ -12,9 +12,9 @@ const ReviewExams = () => {
   const [originalScores, setOriginalScores] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [resultsCombined, setResultsCombined] = useState(false);
-  // const { exam_id } = location.state || {};
+  const { exam_id } = location.state || {};
   const navigate = useNavigate(); // Initialize useNavigate
-  const exam_id = 1; // placeholder
+  // const exam_id = 1; // placeholder
 
   useEffect(() => {
     //preprocess the data
@@ -31,44 +31,42 @@ const ReviewExams = () => {
       }
     };
     preprocessData();
+
+    // Fetch student scores for the exam
+    const fetchStudentScores = async () => {
+      try {
+        const response = await fetch("/api/exam/studentScores");
+        console.log(response);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("data", data);
+        setStudentScores(data); // Update state with fetched data
+      } catch (error) {
+        console.error("Error fetching student scores:", error);
+      }
+    };
+
+    fetchStudentScores();
+
+    // Fetch the max marks for the exam
+    const fetchTotalScore = async () => {
+      try {
+        const response = await fetch(`/api/exam/getScoreByExamId/${exam_id}`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setTotalMarks(data.scores[0]);
+      } catch (error) {
+        console.error("Error fetching total marks:", error);
+      }
+    };
+
+    fetchTotalScore();
     setResultsCombined(true);
   }, []);
-
-  useEffect(() => {
-    if (resultsCombined) {
-      // Fetch student scores for the exam
-      const fetchStudentScores = async () => {
-        try {
-          const response = await fetch("/api/exam/studentScores");
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          console.log("data", data);
-          setStudentScores(data); // Update state with fetched data
-        } catch (error) {
-          console.error("Error fetching student scores:", error);
-        }
-      };
-
-      // Fetch the max marks for the exam
-      const fetchTotalScore = async () => {
-        try {
-          const response = await fetch(`/api/exam/getScoreByExamId/${exam_id}`);
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          setTotalMarks(data.scores[0]);
-        } catch (error) {
-          console.error("Error fetching total marks:", error);
-        }
-      };
-
-      fetchStudentScores();
-      fetchTotalScore();
-    }
-  }, [resultsCombined]);
 
   // Function to handle view button click
   const handleViewClick = (studentId, front_page, back_page) => {

@@ -197,6 +197,7 @@ const ConfirmExamKey = () => {
       const data = await response.json();
       const dataCsv = data.csv_file[0];
       setSelectedOptions(getFilledQs(dataCsv));
+      console.log("dataCsv", dataCsv);
       setNumQuestions(getQuestionCount(getFilledQs(dataCsv)));
       clickAnswersForQuestions(getFilledQs(dataCsv));
     } catch (error) {
@@ -222,7 +223,12 @@ const ConfirmExamKey = () => {
 
     const sortedEntries = filteredEntries.sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
 
-    const entriesAfterSkipping = sortedEntries.slice(4);
+    // Skip 4 entries if 100mcq 5 if 200mcq
+    const sliceIndex = template === "100mcq" ? 4 : 5;
+
+    // We only want the questions so we skip file_id, input_path, output_path, and score
+
+    const entriesAfterSkipping = sortedEntries.slice(sliceIndex);
 
     const transformedEntries = entriesAfterSkipping.map(([key, value]) => [
       Number(key.substring(1)),
