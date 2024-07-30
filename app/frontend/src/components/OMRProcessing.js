@@ -8,7 +8,7 @@ import "../css/App.css";
 const OMRProcessing = () => {
   const location = useLocation();
   const [progress, setProgress] = useState(0); // Initial progress value for visibility
-  const { examTitle, classID } = location.state || {};
+  const { examTitle, classID, template } = location.state || {};
   const navigate = useNavigate();
   const { toast } = useToast();
 

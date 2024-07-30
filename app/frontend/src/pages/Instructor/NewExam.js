@@ -86,7 +86,7 @@ const NewExam = () => {
                     required
                   />
                 </div>
-                // Dropdown for selecting exam template
+                {/* Dropdown for selecting exam template */}
                 <div className="mb-4">
                   <label htmlFor="answer-key" className="block text-sm font-medium text-gray-700">
                     Answer Key:

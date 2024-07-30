@@ -6,8 +6,8 @@ import {
   CardTitle,
   CardDescription,
 } from "../../components/ui/card";
-import { Button } from "../../components/ui/button"
-import { Input } from "../../components/ui/input"
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 import { useParams, useNavigate } from "react-router-dom";
 
 const UploadExam = () => {
@@ -70,7 +70,6 @@ const UploadExam = () => {
   const sendToBackend = async () => {
     if (!file) return;
 
-
     const formData = new FormData();
     formData.append("examPages", file);
     formData.append("exam_id", exam_id); // Include exam_id in the form data
@@ -124,17 +123,10 @@ const UploadExam = () => {
             <CardDescription>Upload the exam as a PDF file.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button
-              className="back-button"
-              variant="outline"
-              onClick={() => window.history.back()}
-            >
+            <Button className="back-button" variant="outline" onClick={() => window.history.back()}>
               Back
             </Button>
-            <div
-              className="upload-area"
-              style={{ display: fileURL ? "none" : "block" }}
-            >
+            <div className="upload-area" style={{ display: fileURL ? "none" : "block" }}>
               <Input
                 type="file"
                 id="file-input"
@@ -157,11 +149,12 @@ const UploadExam = () => {
                 <p>Click to browse or drag and drop your files</p>
               </div>
             </div>
-            <div
-              className="pdf-display"
-              style={{ display: fileURL ? "block" : "none" }}
-            >
-              <iframe src={fileURL} title="PDF Preview" style={{ width: "100%", height: "500px" }}></iframe>
+            <div className="pdf-display" style={{ display: fileURL ? "block" : "none" }}>
+              <iframe
+                src={fileURL}
+                title="PDF Preview"
+                style={{ width: "100%", height: "500px" }}
+              ></iframe>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
               <Button className="btn-import" onClick={sendToBackend}>
@@ -174,7 +167,7 @@ const UploadExam = () => {
           </CardContent>
         </Card>
       </div>
-    </>
+    </div>
   );
 };
 
