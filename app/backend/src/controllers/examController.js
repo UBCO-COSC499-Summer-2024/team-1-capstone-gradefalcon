@@ -1,6 +1,7 @@
 const pool = require("../utils/db");
 const fs = require("fs");
 const path = require("path");
+const { exec } = require('child_process');
 
 // Save solution questions and answers
 const saveQuestions = async (req, res, next) => {
@@ -305,6 +306,98 @@ async function getCustomMarkingSchemes(exam_id) {
   return transformedSchemes;
 }
 
+async function generateLatexDocument(questions, options) {
+  const questionTemplate = `
+    \\noindent
+    \\begin{minipage}[t]{\\linewidth}
+    \\raggedleft
+    \\textbf{\\n} \\hspace{0.1cm}
+    \\begin{tikzpicture}[baseline=-0.5ex]
+      ${Array.from({ length: options }, (_, i) => `
+        \\node at (${i + 1}*0.6,0) {\\scriptsize ${String.fromCharCode(65 + i)}};
+        \\draw (${i + 1}*0.6,0) circle (0.2);
+      `).join('')}
+    \\end{tikzpicture}
+    \\vspace{0.25cm}
+    \\end{minipage}
+  `;
+
+  return `
+    \\documentclass{article}
+    \\usepackage[utf8]{inputenc}
+    \\usepackage{helvet}
+    \\renewcommand{\\familydefault}{\\sfdefault}
+    \\usepackage{tikz}
+    \\usepackage[margin=1in]{geometry}
+    \\usepackage{multicol}
+    \\usepackage{pgffor}
+    \\usepackage{graphicx}
+    \\usepackage{geometry}
+    \\geometry{
+      a4paper,
+      total={170mm,257mm},
+      left=20mm,
+      top=5mm,
+    }
+    \\newcommand*\\cir[1]{\\tikz[baseline=(char.base)]{
+                \\node[shape=circle,draw,inner sep=2.2pt] (char) {#1};}}
+
+    \\begin{document}
+    \\begin{center}
+        \\Large{\\textbf{Answer sheet}}
+    \\end{center}
+    \\textit{Please follow the directions on the exam question sheet. Fill in the entire circle that corresponds to your answer for each question on the exam. Erase marks completely to make a change.}
+    \\vspace{5mm}
+    \\begin{center}
+    \\begin{tabular}{ c c c c c c c c c c }
+    \\hspace{24mm}0 &  \\hspace{.85mm}1 & \\hspace{.85mm}2 & \\hspace{0.85mm}3 & \\hspace{0.85mm}4 &\\hspace{.85mm}5 & \\hspace{.85mm}6 &\\hspace{.85mm}7 &\\hspace{.85mm}8 &\\hspace{.85mm}9 \\\\    
+    \\end{tabular}
+    \\end{center}
+    Student I.D.\\\\
+    \\begin{tabular}{@{}l@{\\hspace*{0.5cm}}c@{\\hspace*{0.3cm}} c@{\\hspace*{0.3cm}} c @ {\\hspace*{0.3cm}}c @ {\\hspace*{0.3cm}}c @ {\\hspace*{0.3cm}}c @ {\\hspace*{0.3cm}}c @ {\\hspace*{0.3cm}}c @ {\\hspace*{0.3cm}}c @ {\\hspace*{0.3cm}}c @ {\\hspace*{0.3cm}}c @{}}
+
+    ${Array.from({ length: 8 }, () => `
+    \\vspace{1mm}\\hspace{46mm}\\rule{0.6cm}{0.2pt}\\hspace{0.4cm} & \\cir{\\tiny0} & \\cir{\\tiny1} & \\cir{\\tiny2} & \\cir{\\tiny3} & \\cir{\\tiny4} & \\cir{\\tiny5} & \\cir{\\tiny6} & \\cir{\\tiny7} & \\cir{\\tiny8} & \\cir{\\tiny9} \\\\  
+    `).join('')}
+    \\end{tabular}
+    \\vspace{1cm}
+
+    \\begin{center}
+    \\begin{multicols}{4}
+        \\foreach \\n in {1,2,...,${questions}} {
+            ${questionTemplate}
+        }
+    \\end{multicols}
+    \\end{center}
+
+    \\end{document}
+  `;
+}
+async function generateCustomBubbleSheet(req, res) {
+  const { numQuestions, numOptions } = req.body;
+
+  if (!numQuestions || !numOptions) {
+    return res.status(400).send("Missing number of questions or options.");
+  }
+
+  const latexDocument = await generateLatexDocument(numQuestions, numOptions);
+  const latexFilePath = path.join(__dirname, '../assets/bubble_sheet.tex');
+  const pdfFilePath = path.join(__dirname, '../assets/bubble_sheet.pdf');
+
+  fs.writeFileSync(latexFilePath, latexDocument);
+
+  exec(`pdflatex -output-directory=${path.join(__dirname, '../assets')} ${latexFilePath}`, (error, stdout, stderr) => {
+    if (error) {
+      console.error('Error compiling LaTeX:', stderr);
+      return res.status(500).send("Failed to generate PDF.");
+    }
+
+    res.setHeader('Content-Disposition', 'attachment; filename="custom_bubble_sheet.pdf"');
+    res.setHeader('Content-Type', 'application/pdf');
+    fs.createReadStream(pdfFilePath).pipe(res);
+  });
+}
+
 module.exports = {
   saveQuestions,
   newExam,
@@ -322,4 +415,5 @@ module.exports = {
   resetOMR,
   ensureDirectoryExistence,
   getCustomMarkingSchemes,
+  generateCustomBubbleSheet,
 };

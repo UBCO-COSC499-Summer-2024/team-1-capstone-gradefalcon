@@ -15,6 +15,7 @@ const {
   ensureDirectoryExistence,
   resetOMR,
   getCustomMarkingSchemes,
+  generateCustomBubbleSheet,
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const fs = require("fs");
@@ -30,8 +31,9 @@ router.post("/saveQuestions", saveQuestions);
 router.post("/NewExam/:class_id", newExam);
 router.post("/ExamBoard", examBoard);
 router.get("/average-per-exam", getAveragePerExam);
-router.get("/average-per-course", getAveragePerCourse); // Updated route
+router.get("/average-per-course", getAveragePerCourse);
 router.get("/grades/:studentId", getStudentGrades);
+router.post("/generateCustomBubbleSheet", generateCustomBubbleSheet)
 
 // Function to get the answer key for a specific exam
 

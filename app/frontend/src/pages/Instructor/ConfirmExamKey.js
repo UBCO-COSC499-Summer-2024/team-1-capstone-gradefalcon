@@ -55,7 +55,7 @@ const ConfirmExamKey = () => {
 
   const frameworks = Array.from({ length: numQuestions }, (_, j) => ({
     value: `Question ${j + 1}`,
-    label: `Question ${j + 1}`,
+    label: `Q${j + 1}`,
   }));
 
   const removeQuestion = (questionNumber, option) => {

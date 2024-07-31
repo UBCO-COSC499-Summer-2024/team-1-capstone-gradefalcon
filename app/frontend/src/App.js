@@ -15,7 +15,6 @@ import Logout from "./pages/Logout";
 import OMRProcessing from "../src/components/OMRProcessing";
 import OMRProcessingUpload from "../src/components/OMRProcessingUpload";
 // Import Instructor pages
-
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
 import Signup from "./pages/Signup";
@@ -34,6 +33,7 @@ import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
 import ReviewExams from "./pages/Instructor/ReviewExams";
 import ViewExam from "./pages/Instructor/ViewExam";
+import CustomBubbleSheet from "./pages/Instructor/CustomBubbleSheet";
 //admin pages
 import AdminDashboard from "./pages/Administator/AdminDashboard";
 import UserManagement from "./pages/Administator/UserManagment";
@@ -74,22 +74,17 @@ function App() {
             <Route path="/AccountSettings" element={<AccountSettings />} />
             <Route path="/Classes" element={<Classes />} />
             <Route path="/New-Class" element={<NewClass />} />
-            <Route
-              path="/ClassManagement/:class_id"
-              element={<ClassManagement />}
-            />
+            <Route path="/ClassManagement/:class_id" element={<ClassManagement />}/>
             <Route path="/NewExam/:class_id" element={<NewExam />} />
             <Route path="/ExamBoard" element={<ExamBoard />} />
             <Route path="/ExamControls" element={<ExamControls />} />
             <Route path="/ManualExamKey" element={<ManualExamKey />} />
             <Route path="/UploadExamKey" element={<UploadExamKey />} />
+            <Route path="/CustomBubbleSheet" element={<CustomBubbleSheet />} />
             <Route path="/ConfirmExamKey" element={<ConfirmExamKey />} />
             <Route path="/UploadExams/:exam_id" element={<UploadExams />} />
             <Route path="/OMRProcessing" element={<OMRProcessing />} />
-            <Route
-              path="/OMRProcessingUpload"
-              element={<OMRProcessingUpload />}
-            />{" "}
+            <Route path="/OMRProcessingUpload" element={<OMRProcessingUpload />} />{" "}
             {/* Add the new route */}
             <Route path="/ReviewExams" element={<ReviewExams />} />
             <Route path="/ViewExam" element={<ViewExam />} />

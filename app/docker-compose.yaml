@@ -27,6 +27,7 @@ services:
       - 9230:9230
     volumes:
       - ./backend/src:/code/src:ro
+      - ./backend/src/assets:/code/src/assets
       - ./backend/package.json:/code/package.json
       - ./backend/package-lock.json:/code/package-lock.json
       - back-notused:/opt/app/node_modules
