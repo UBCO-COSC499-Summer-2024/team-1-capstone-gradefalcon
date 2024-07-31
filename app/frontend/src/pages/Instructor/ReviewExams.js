@@ -155,6 +155,8 @@ const ReviewExams = () => {
       return;
     }
     try {
+      saveStudentExams(studentScores);
+
       const token = await getAccessTokenSilently();
       const response = await fetch("/api/exam/saveResults", {
         method: "POST",
@@ -169,19 +171,6 @@ const ReviewExams = () => {
       }
       const data = await response.json();
       console.log("saveResults:", data);
-
-      // const response2 = await fetch("/api/exam/saveStudentExams", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ exam_id: exam_id, data: data }),
-      // });
-      // if (!response.ok) {
-      //   throw new Error("saveExams Network response was not ok");
-      // }
-      // const data2 = await response2.json();
-      // console.log("saveResults:", data2);
 
       setToast({ message: "Results saved! Redirecting...", type: "success" });
       setTimeout(() => {
@@ -265,9 +254,6 @@ const ReviewExams = () => {
           </table>
           <button className="save-changes-btn" onClick={() => saveResults()}>
             Save Results
-          </button>
-          <button className="save-changes-btn" onClick={() => saveStudentExams(studentScores)}>
-            Save Exams
           </button>
         </div>
       </div>

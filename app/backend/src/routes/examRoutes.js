@@ -262,7 +262,9 @@ router.post(
           console.log("First page copied successfully");
           fs.copyFileSync(back_page_path, back_page_dest);
           console.log("Second page copied successfully");
-        } catch (error) {}
+        } catch (error) {
+          console.log("Error copying files:", error);
+        }
       }
       res.send({ message: "Student exam saved successfully" });
     } catch (error) {
