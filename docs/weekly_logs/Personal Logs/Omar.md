@@ -1,23 +1,16 @@
 # Personal Log
 
-## Friday (7/23-7/26)
+## Wednesday (7/26-7/30)
 
 ### Timesheet
 Clockify report
-![time](../Clockify/Omar/Time16.png)
+![time](../Clockify/Omar/Time17.png)
 
 ### Current Tasks (Provide sufficient detail)
 
-1. **Grading Exams and Displaying Results on Frontend**
-    1. Disabled modemon from restarting server when input is changed to avoid proxy error.
+1. **Refactor UI Using shadcn UI Components and improve instructor UI**
 
-2. **Refactor UI Using shadcn UI Components**
-    1. Merged Upload Exam feature.
-
-3. **Custom Templates Support**
-    1. looked into creating custom bubble sheets using latex and reportlab
-
-4. **Configured Evaluation to have a custom marking schema for questions**    
+2. **Custom Templates Support**   
 
 ### Progress Update (since 7/16/2024)
 
@@ -33,59 +26,89 @@ Clockify report
         <td>In Progress
         </td>
     </tr>
-                <tr>
-        <td>Configure custom grading schema
+    <tr>
+        <td>#228-User Story: Custom Marking/Evaluation
+
         </td>
-        <td>In Progress
+        <td>Completed
         </td>
     </tr>
     </tr>
+        </tr>
+        <tr>
+        <td>#209-User Story: Enhance Navigation and Consistency
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+    </tr>
+        </tr>
+     <tr>
+        <td> #230-Enhance coherence and consistency across Instructor pages
+        </td>
+        <td>Completed
+        </td>
+    <tr>
             <tr>
         <td>#80-Refactor UI Using shadcn UI Components
         </td>
-        <td>In Review
+        <td>Completed
         </td>
     </tr>
     </tr>
             </td>
         </tr>
         <tr>
-        <td> #181-Grading Exams and Displaying Results on Frontend
+        <td> #23-User Story: Upload and Parse Bubble Sheets
         </td>
         <td>Completed
         </td>
     </tr>
-    </tr>
-     <tr>
-        <td> #188-Implement Refactored Code and Implement Color-Coded Grading
-        </td>
-        <td>Completed
-        </td>
-    <tr>
 </table> 
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
 
 - **What Went Well:**
-  - The grading exam demo has been merged and we will no longer have issue with proxies now that we solved the root of the issue we can move forward easier.
+  - Frontend looks much better and custom marking is completed. 
 
 - **What Was Done:**
-  - Created custom grading schema
-  - Fixed Proxy Error.
+
+- **Refactored Instructor Pages:**
+   - Revamped the design of the instructor pages, particularly the "Upload Exam Key" page, improving the UI and user experience.
+   - Adjusted the height and layout of elements like the PDF display area, buttons, and input file boxes to optimize usability.
+   - Integrated responsive design techniques to ensure the pages adapt well to different screen sizes.
+
+- **Button Placement and Styling:**
+   - Standardized button placement across the application, ensuring consistent styling and alignment.
+   - Moved key buttons like "New Exam," "Manage Courses," and "Manage Exams" to more intuitive locations within the interface.
+
+- **Custom Marking Schemes:**
+   - Developed and integrated a feature for creating, managing, and applying custom marking schemes to exams.
+   - Implemented backend support for storing and retrieving these marking schemes, ensuring they are used during the evaluation process.
+
+- **Multi-Select Component Integration:**
+   - Replaced the existing select component with a MultiSelect component to allow users to select multiple questions efficiently during exam creation.
+
+- **Layout and Flexbox Enhancements:**
+   - Refactored layouts using flexbox properties to improve alignment and distribution of elements across various pages.
+
+- **Backend Enhancements:**
+   - Updated backend routes and functions to support the new custom marking schemes, ensuring they are reflected accurately in the evaluation.json file.
+   - Readded `react-app-rewired-start` to streamline the development process, avoiding the need to restart the frontend container frequently.
 
 - **What Didn't Go Well:**
-  - The proxy error which I thoguh fixed prior took too much time out of me but thankfully it is no longer an issue.
+  - Some frontend features gave me some trouble and I still have to implement the custom bubble sheet feature
 
 - **Retrospective:**
-  - We are making strides in creating custom bubble sheets and custom grading schemas and have come up with a plan.
+  - A lot of progress was made in the frontend, it is almost done and I am very happy with the create new exam pages and the custom marking scheme feature implements some cool frontend features.
 
   ### Next Cycle Goals (What are you going to accomplish during the next cycle)
 
-1. **Scale solution for multiple students**.
+1. **Custom Bubble Sheets**
 
-2. **Error detection and flagging**
+2. **Display statistics for each question**
 
-3. **Work on custom bubble sheets**
+3. **Continue Polishing the frontend**
 
 
 ## Wednesday (7/19-7/23)
