@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import '../../css/App.css';
+import React, { useState, useEffect } from "react";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import "../../css/App.css";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { Label } from "../../components/ui/label";
@@ -12,8 +12,12 @@ import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 
 const NewExam = () => {
   const [examTitle, setExamTitle] = useState("");
+  const [courseId, setCourseId] = useState("");
+  const [template, setTemplate] = useState("100mcq");
   const [showAlert, setShowAlert] = useState(false); // State to manage alert visibility
   const params = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const class_id = params.class_id || "defaultClassId"; // Set default class_id if not provided
 
   const handleInputChange = (event) => {
@@ -21,6 +25,10 @@ const NewExam = () => {
     // blocks chars that could cause error (i.e " ')
     const sanitizedValue = value.replace(/[^a-zA-Z0-9\s.,!?-]/g, "");
     setExamTitle(sanitizedValue);
+  };
+
+  const handleTemplateChange = (event) => {
+    setTemplate(event.target.value);
   };
 
   const isFormValid = () => {
@@ -36,27 +44,36 @@ const NewExam = () => {
     }
   };
 
+  useEffect(() => {
+    if (location.state) {
+      setCourseId(location.state.courseID); // Set courseID from state
+      setTemplate(location.state.template); // Set courseID from state
+    }
+  }, [location.state]);
+
   return (
     <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
+        <Button
+          variant="outline"
+          size="icon"
+          className="h-10 w-10"
+          onClick={() => window.history.back()}
+        >
           <ChevronLeftIcon className="h-4 w-4" />
           <span className="sr-only">Back</span>
         </Button>
         <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
           Create Exam
         </h1>
-        <div className="hidden items-center gap-2 md:ml-auto md:flex">
-        </div>
+        <div className="hidden items-center gap-2 md:ml-auto md:flex"></div>
       </div>
 
       {showAlert && (
         <Alert className="mb-4">
           <ExclamationCircleIcon className="h-4 w-4" />
           <AlertTitle>Heads up!</AlertTitle>
-          <AlertDescription>
-            Please fill in all required fields before proceeding.
-          </AlertDescription>
+          <AlertDescription>Please fill in all required fields before proceeding.</AlertDescription>
         </Alert>
       )}
 
@@ -126,7 +143,7 @@ const NewExam = () => {
                     <Label htmlFor="answer-key">Answer Key</Label>
                     <div className="flex gap-4 mt-1">
                       <Button asChild size="sm">
-                        <Link 
+                        <Link
                           to={isFormValid() ? "/UploadExamKey" : "#"}
                           state={{ examTitle: examTitle, classID: class_id }} // Pass examTitle as state
                           data-testid="upload-answer-key-btn"
@@ -136,9 +153,9 @@ const NewExam = () => {
                         </Link>
                       </Button>
                       <Button asChild size="sm">
-                        <Link 
-                          to={isFormValid() ? "/ManualExamKey" : "#"} 
-                          state={{ examTitle: examTitle, classID: class_id }} 
+                        <Link
+                          to={isFormValid() ? "/ManualExamKey" : "#"}
+                          state={{ examTitle: examTitle, classID: class_id }}
                           data-testid="manual-answer-key-btn"
                           onClick={handleButtonClick}
                         >

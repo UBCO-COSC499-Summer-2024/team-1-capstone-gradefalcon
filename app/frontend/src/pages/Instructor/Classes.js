@@ -12,9 +12,11 @@ import { Checkbox } from "../../components/ui/checkbox";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "../../components/ui/dropdown-menu";
 import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
 import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Classes = () => {
   const navigate = useNavigate();
+  const { getAccessTokenSilently } = useAuth0();
   const [classes, setClasses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
   const [allSelected, setAllSelected] = useState(false);
@@ -23,9 +25,13 @@ const Classes = () => {
 
   const fetchClasses = async () => {
     try {
+      const token = await getAccessTokenSilently(); // Get the token
       const response = await fetch("/api/class/classes", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // Include the token in the request
+        },
         credentials: "include",
       });
       if (response.ok) {

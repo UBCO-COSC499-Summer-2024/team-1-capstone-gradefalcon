@@ -1,8 +1,9 @@
 const pool = require("../utils/db");
+const fs = require("fs");
+const path = require("path");
 
-// Save solution questions and answers
 const saveQuestions = async (req, res, next) => {
-  const { questions, classID, examTitle, numQuestions, markingSchemes = {} } = req.body;
+  const { questions, classID, examTitle, numQuestions, totalMarks, markingSchemes = {} } = req.body;
 
   const questionsArray = Object.entries(questions).map(
     ([key, value]) => `${value.question}:${value.option}`
@@ -10,8 +11,8 @@ const saveQuestions = async (req, res, next) => {
 
   try {
     const writeToExam = await pool.query(
-      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES ($1, $2, $3, 10) RETURNING exam_id",
-      [classID, examTitle, numQuestions]
+      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES ($1, $2, $3, $4) RETURNING exam_id",
+      [classID, examTitle, numQuestions, totalMarks]
     );
     const insertedRowId = writeToExam.rows[0].exam_id;
 
@@ -20,13 +21,12 @@ const saveQuestions = async (req, res, next) => {
       [insertedRowId, questionsArray, JSON.stringify(markingSchemes)]
     );
 
-    res.status(200).json({ message: 'Questions and marking schemes saved successfully.' });
+    res.status(200).json({ message: "Questions and marking schemes saved successfully." });
   } catch (error) {
     console.error("Error saving questions and marking schemes: ", error);
-    res.status(500).json({ message: 'Failed to save questions and marking schemes.' });
+    res.status(500).json({ message: "Failed to save questions and marking schemes." });
   }
 };
-
 
 // New exam route
 const newExam = async (req, res, next) => {
@@ -43,9 +43,8 @@ const newExam = async (req, res, next) => {
   }
 };
 
-// Display classes and their exams
 const examBoard = async (req, res, next) => {
-  const instructorId = req.session.userId;
+  const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
     const classes = await pool.query(
       "SELECT exam_id, classes.class_id, exam_title, course_id, course_name FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
@@ -59,7 +58,7 @@ const examBoard = async (req, res, next) => {
 };
 
 const getAveragePerExam = async (req, res, next) => {
-  const instructorId = req.session.userId;
+  const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
     const averagePerExamData = await pool.query(
       `
@@ -81,8 +80,8 @@ const getAveragePerExam = async (req, res, next) => {
 };
 
 const getAveragePerCourse = async (req, res, next) => {
-  const instructorId = req.session.userId;
-  try {
+  const instructorId = req.auth.sub;
+    try {
     const averagePerCourseData = await pool.query(
       `
       SELECT c.course_name AS "courseName", AVG(sr.grade) AS "averageScore"
@@ -129,13 +128,11 @@ const getStudentGrades = async (req, res, next) => {
   }
 };
 
-
 const getAnswerKeyForExam = async (exam_id) => {
   try {
-    const solutionResult = await pool.query(
-      "SELECT answers FROM solution WHERE exam_id = $1",
-      [exam_id]
-    );
+    const solutionResult = await pool.query("SELECT answers FROM solution WHERE exam_id = $1", [
+      exam_id,
+    ]);
 
     if (solutionResult.rows.length === 0) {
       throw new Error("Solution not found");
@@ -144,7 +141,7 @@ const getAnswerKeyForExam = async (exam_id) => {
     const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
 
     // Extract the answers in order
-    const answersInOrder = answersArray.map(answer => answer.split(':')[1]);
+    const answersInOrder = answersArray.map((answer) => answer.split(":")[1]);
 
     return answersInOrder;
   } catch (error) {
@@ -153,8 +150,136 @@ const getAnswerKeyForExam = async (exam_id) => {
   }
 };
 
+const getStudentNameById = async (studentId) => {
+  try {
+    if (studentId === "") {
+      return "Unknown student";
+    }
+    const result = await pool.query("SELECT name FROM student WHERE student_id = $1", [studentId]);
+
+    if (result.rows.length === 0) {
+      // throw new Error("Student not found");
+      return "Unknown student";
+    }
+
+    return result.rows[0].name;
+  } catch (error) {
+    console.error("Error getting student name by ID:", error);
+    throw error;
+  }
+};
+
+const getExamType = async (exam_id) => {
+  try {
+    const result = await pool.query("SELECT total_questions FROM exam WHERE exam_id = $1", [
+      exam_id,
+    ]);
+
+    if (result.rows.length === 0) {
+      return "No scores found for this exam";
+    }
+
+    const totalQuestions = result.rows[0].total_questions;
+    return totalQuestions > 100 ? "200mcq" : "100mcq";
+  } catch (error) {
+    console.error("Error getting scores by exam ID:", error);
+    throw error;
+  }
+};
+
+const getScoreByExamId = async (exam_id) => {
+  try {
+    const result = await pool.query("SELECT total_marks FROM exam WHERE exam_id = $1", [exam_id]);
+
+    if (result.rows.length === 0) {
+      return "No scores found for this exam";
+    }
+    console.log(result.rows.map((row) => row.total_marks));
+    return result.rows.map((row) => row.total_marks);
+  } catch (error) {
+    console.error("Error getting scores by exam ID:", error);
+    throw error;
+  }
+};
+
+const saveResults = async (req, res, next) => {
+  const { studentScores, exam_id } = req.body;
+  console.log(studentScores);
+  console.log(exam_id);
+
+  try {
+    // Assuming you have a database connection established and a model for studentResults
+    for (const score of studentScores) {
+      if (score.StudentName !== "Unknown student") {
+        // Assuming studentResults is your table/model name and it has a method to insert data
+        const result = await pool.query(
+          "INSERT INTO studentresults (student_id, exam_id, grade) VALUES ($1,$2,$3)",
+          [score.StudentID, exam_id, parseInt(score.Score, 10)]
+        );
+      }
+    }
+    res.send({ message: "Scores saved successfully" });
+    resetOMR();
+  } catch (error) {
+    console.error("Error saving student scores:", error);
+    res.status(500).send("Error saving scores");
+  }
+};
+
+const ensureDirectoryExistence = (dirPath) => {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+};
+
+const resetOMR = () => {
+  deleteAllFilesInDir(path.join(__dirname, "../../omr/inputs"));
+  deleteAllFilesInDir(path.join(__dirname, "../../omr/outputs"));
+  return true;
+};
+
+// Function to delete all files in a directory
+const deleteAllFilesInDir = (dirPath) => {
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error(`Error reading directory ${dirPath}:`, err);
+      return;
+    }
+
+    files.forEach((file) => {
+      const fileToDelete = path.join(dirPath, file);
+      fs.stat(fileToDelete, (err, stats) => {
+        if (err) {
+          console.error(`Error stating file ${fileToDelete}:`, err);
+          return;
+        }
+
+        if (stats.isFile()) {
+          fs.unlink(fileToDelete, (err) => {
+            if (err) {
+              console.error(`Error deleting file ${fileToDelete}:`, err);
+            } else {
+              console.log(`File ${fileToDelete} deleted successfully`);
+            }
+          });
+        } else if (stats.isDirectory()) {
+          fs.rmdir(fileToDelete, { recursive: true }, (err) => {
+            if (err) {
+              console.error(`Error deleting directory ${fileToDelete}:`, err);
+            } else {
+              console.log(`Directory ${fileToDelete} deleted successfully`);
+            }
+          });
+        }
+      });
+    });
+  });
+};
+
 async function getCustomMarkingSchemes(exam_id) {
-  const result = await pool.query('SELECT marking_schemes FROM solution WHERE exam_id = $1', [exam_id]);
+  const result = await pool.query("SELECT marking_schemes FROM solution WHERE exam_id = $1", [
+    exam_id,
+  ]);
 
   if (result.rows.length === 0) {
     throw new Error(`No marking schemes found for exam_id ${exam_id}`);
@@ -224,6 +349,14 @@ module.exports = {
   getAveragePerExam,
   getAveragePerCourse,
   getStudentGrades,
+  getAnswerKeyForExam,
+  getStudentNameById,
+  getScoreByExamId,
+  saveResults,
+  getExamType,
+  deleteAllFilesInDir,
+  resetOMR,
+  ensureDirectoryExistence,
   getCustomMarkingSchemes,
   getExamDetails,
 };

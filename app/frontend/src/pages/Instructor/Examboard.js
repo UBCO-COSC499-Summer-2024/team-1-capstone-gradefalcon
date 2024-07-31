@@ -9,9 +9,11 @@ import { Checkbox } from "../../components/ui/checkbox";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
 import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
 import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
+import { useAuth0 } from "@auth0/auth0-react";
 import '../../css/App.css';
 
 const ExamBoard = () => {
+  const { getAccessTokenSilently } = useAuth0(); // Get the token
   const [classData, setClassData] = useState([]);
   const [selectedExams, setSelectedExams] = useState([]);
   const [allSelected, setAllSelected] = useState(false);
@@ -22,10 +24,12 @@ const ExamBoard = () => {
   useEffect(() => {
     const fetchClassData = async () => {
       try {
+        const token = await getAccessTokenSilently(); // Get the token
         const response = await fetch(`/api/exam/ExamBoard`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, // Include the token in the request
           },
           credentials: "include",
         });
@@ -41,7 +45,7 @@ const ExamBoard = () => {
     };
 
     fetchClassData();
-  }, []);
+  }, [getAccessTokenSilently]);
 
   // Transform classData.classes into a structure that groups exams by course_id
   const groupedExams = (classData.classes || []).reduce((acc, current) => {

@@ -3,20 +3,26 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ToastProvider, ToastViewport } from "../components/ui/toast";
 import { Progress } from "../components/ui/progress";
 import { useToast } from "../components/ui/use-toast";
+import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 import "../css/App.css";
 
 const OMRProcessing = () => {
   const location = useLocation();
   const [progress, setProgress] = useState(0); // Initial progress value for visibility
-  const { examTitle, classID } = location.state || {};
+  const { examTitle, classID, template } = location.state || {};
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { getAccessTokenSilently } = useAuth0(); // Get the token
 
   const runOMR = async () => {
     console.log("Running OMR");
     try {
+      const token = await getAccessTokenSilently(); // Get the token
       const response = await fetch("/api/exam/callOMR", {
         method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`, // Include the token in the request
+        },
         credentials: "include",
       });
       const data = await response.json();
@@ -39,6 +45,7 @@ const OMRProcessing = () => {
           state: {
             examTitle: examTitle,
             classID: classID,
+            template: template,
           },
         });
       }, 2000);
