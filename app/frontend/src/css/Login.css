@@ -5,9 +5,6 @@
   padding: 20px;
   text-align: center;
   width: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .logo {
@@ -24,11 +21,34 @@
   color: #333;
 }
 
+.email-input,
+.password-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.button:hover {
+  background-color: #218838;
+}
+
 .divider {
   display: flex;
   align-items: center;
-  width: 100%;
-  max-width: 300px; /* Ensure the divider doesn't get too wide */
   margin-bottom: 20px;
 }
 
@@ -46,7 +66,6 @@
 
 .google-button {
   width: 100%;
-  max-width: 300px; /* Ensure the button doesn't get too wide */
   padding: 10px;
   background-color: #fff;
   border: 1px solid #ccc;

@@ -6,19 +6,23 @@ import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/ca
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../../components/ui/table";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "../../components/ui/dropdown-menu";
 import { Checkbox } from "../../components/ui/checkbox";
+import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 import '../../css/App.css';
 
 const ExamBoard = () => {
+  const { getAccessTokenSilently } = useAuth0(); // Get the token
   const [classData, setClassData] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchClassData = async () => {
       try {
+        const token = await getAccessTokenSilently(); // Get the token
         const response = await fetch(`/api/exam/ExamBoard`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, // Include the token in the request
           },
           credentials: "include",
         });
@@ -34,7 +38,7 @@ const ExamBoard = () => {
     };
 
     fetchClassData();
-  }, []);
+  }, [getAccessTokenSilently]);
 
   // Transform classData.classes into a structure that groups exams by course_id
   const groupedExams = (classData.classes || []).reduce((acc, current) => {
@@ -52,10 +56,12 @@ const ExamBoard = () => {
 
   const handleDelete = async (examId) => {
     try {
+      const token = await getAccessTokenSilently(); // Get the token
       const response = await fetch(`/api/exam/delete/${examId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // Include the token in the request
         },
         credentials: "include",
       });
@@ -79,7 +85,7 @@ const ExamBoard = () => {
   if ((classData.classes || []).length === 0) {
     return <div data-testid="no-exams">No exams available</div>;
   }
-  
+
   return (
     <main className="flex flex-col gap-4 p-6">
       <div className="w-full">

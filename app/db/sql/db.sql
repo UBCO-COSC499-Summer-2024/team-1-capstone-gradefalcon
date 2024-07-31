@@ -13,29 +13,27 @@ DROP TABLE IF EXISTS admins CASCADE;
 DROP TABLE IF EXISTS sessions CASCADE;
 DROP TYPE IF EXISTS feedback_status CASCADE;
 
-
- -- ////////// Create tables: /////////////////
+-- ////////// Create tables: /////////////////
 
 CREATE TABLE instructor (
-    instructor_id serial primary key,
+    auth0_id text primary key,
     email text not null,
-    password text not null,
     name text not null
 );
 
 CREATE TABLE classes (
     class_id serial primary key,
-    instructor_id int,
+    instructor_id text,
     course_id text,
     course_name text,
     unique (instructor_id, course_id),
-    foreign key (instructor_id) references instructor(instructor_id)
+    foreign key (instructor_id) references instructor(auth0_id)
 );
 
 CREATE TABLE student (
-    student_id serial primary key,
-    email text,
-    password text,
+    student_id text primary key,
+    auth0_id text NOT NULL unique,
+    email text unique,
     name text
 );
 
@@ -66,14 +64,14 @@ CREATE TABLE solution (
 CREATE TABLE enrollment(
     enrollment_id serial primary key,
     class_id int,
-    student_id int,
+    student_id text,
     foreign key (class_id) references classes(class_id),
     foreign key (student_id) references student(student_id)
 );
 
 CREATE TABLE studentResults(
     sheet_int serial primary key,
-    student_id int not null,
+    student_id text not null,
     exam_id int not null,
     chosen_answers text[],
     grade int,
@@ -95,16 +93,16 @@ CREATE TYPE feedback_status as enum ('Not Done', 'Done', 'In Progress');
 CREATE TABLE feedback(
     feedback_id serial primary key,
     sheet_id int not null,
-    student_id int not null,
+    student_id text not null,
     feedback_text text not null,
     feedback_time timestamp not null,
-    status feedback_status not null
+    status feedback_status not null,
+    foreign key (student_id) references student(student_id)
 );
 
 CREATE TABLE admins(
-    admin_id serial primary key,
+    auth0_id text primary key,
     email text not null,
-    password text not null,
     name text not null
 );
 
@@ -119,20 +117,19 @@ ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid");
 
 CREATE INDEX "IDX_session_expire" ON "session" ("expire");
 
-
 -- ////////// Test value insertion: /////////////////
 
-INSERT INTO instructor (email, password, name) VALUES (
-    'instructor@ubc.ca', 'instructor', 'instructor'
+INSERT INTO instructor (auth0_id, email, name) VALUES (
+    'auth0|6696d634bec6c6d1cc3e2274', 'edu.instructor1@gmail.com', 'Instructor'
 );
 
-INSERT INTO student (email, password, name) VALUES 
-    ('student@ubc.ca', 'student', 'Student'),
-    ('student2@ubc.ca', 'student', 'Student II');
+INSERT INTO student (student_id, auth0_id, email, name) VALUES 
+    ('1', 'auth0|669eca4940b5ccd84d81caa2', 'stu.example0@gmail.com', 'Student'),
+    ('2', 'auth0|669ecaa440b5ccd84d81caa3', 'stu.example1@gmail.com', 'Student II');
 
 INSERT INTO classes (instructor_id, course_id, course_name) VALUES
-    (1, 'TEST100', 'Database Test'),
-    (1, 'TEST200', 'Database Test 2');
+    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST100', 'Database Test'),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST200', 'Database Test 2');
 
 INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES
     (1,'Midterm', 50, 50),
@@ -164,9 +161,9 @@ INSERT INTO scannedExam (exam_id) VALUES (
 );
 
 INSERT INTO feedback (sheet_id, student_id, feedback_text, feedback_time, status) VALUES (
-    1, 1, 'Q5 is incorrectly marked', CURRENT_TIMESTAMP, 'Not Done'
+    1, '1', 'Q5 is incorrectly marked', CURRENT_TIMESTAMP, 'Not Done'
 );
 
-INSERT INTO admins (email, password, name) VALUES (
-    'admin@ubc.ca', 'admin', 'Admin'
+INSERT INTO admins (auth0_id, email, name) VALUES (
+    'auth0|6697fe650e143a8cede3ec08', 'sys.controller0@gmail.com', 'Admin'
 );

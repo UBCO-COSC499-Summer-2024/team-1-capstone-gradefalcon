@@ -2,7 +2,6 @@ const pool = require("../utils/db");
 const fs = require("fs");
 const path = require("path");
 
-// Save solution questions and answers
 const saveQuestions = async (req, res, next) => {
   const { questions, classID, examTitle, numQuestions, totalMarks, markingSchemes = {} } = req.body;
 
@@ -44,9 +43,8 @@ const newExam = async (req, res, next) => {
   }
 };
 
-// Display classes and their exams
 const examBoard = async (req, res, next) => {
-  const instructorId = req.session.userId;
+  const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
     const classes = await pool.query(
       "SELECT exam_id, classes.class_id, exam_title, course_id, course_name FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
@@ -60,7 +58,7 @@ const examBoard = async (req, res, next) => {
 };
 
 const getAveragePerExam = async (req, res, next) => {
-  const instructorId = req.session.userId;
+  const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
     const averagePerExamData = await pool.query(
       `
@@ -82,8 +80,8 @@ const getAveragePerExam = async (req, res, next) => {
 };
 
 const getAveragePerCourse = async (req, res, next) => {
-  const instructorId = req.session.userId;
-  try {
+  const instructorId = req.auth.sub;
+    try {
     const averagePerCourseData = await pool.query(
       `
       SELECT c.course_name AS "courseName", AVG(sr.grade) AS "averageScore"

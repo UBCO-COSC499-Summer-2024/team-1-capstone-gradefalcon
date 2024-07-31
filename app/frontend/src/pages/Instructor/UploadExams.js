@@ -3,8 +3,10 @@ import { Button } from "../../components/ui/button";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { Toaster } from "../../components/ui/toaster";
+import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 
 const UploadExam = () => {
+  const { getAccessTokenSilently } = useAuth0(); // Get the token
   const { exam_id } = useParams();
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
@@ -25,7 +27,13 @@ const UploadExam = () => {
 
     const fetchExamType = async () => {
       try {
-        const response = await fetch(`/api/exam/getExamType/${exam_id}`);
+        const token = await getAccessTokenSilently(); // Get the token
+        const response = await fetch(`/api/exam/getExamType/${exam_id}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`, // Include the token in the request
+          },
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -75,15 +83,20 @@ const UploadExam = () => {
     formData.append("exam_id", exam_id); // Include exam_id in the form data
 
     try {
+      const token = await getAccessTokenSilently(); // Get the token
       const responses = await Promise.all([
         fetch("/api/exam/UploadExam", {
           method: "POST",
           body: formData,
+          headers: {
+            "Authorization": `Bearer ${token}`, // Include the token in the request
+          },
         }),
         fetch("/api/exam/GenerateEvaluation", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, // Include the token in the request
           },
           body: JSON.stringify({ examType, exam_id }),
         }),
@@ -91,6 +104,7 @@ const UploadExam = () => {
           method: "POST",
           credentials: "include",
           headers: {
+            "Authorization": `Bearer ${token}`, // Include the token in the request
             "Content-Type": "application/json",
           },
           // need to create a fetch method to find examType from db

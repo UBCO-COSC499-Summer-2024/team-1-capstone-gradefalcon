@@ -2,6 +2,8 @@ import React from 'react';
 import '@fontsource/inter/latin.css'; // Import the font
 import '../css/App.css'; // Import global styles
 import Sidebar from '../components/Sidebar';
+import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate} from "react-router-dom";
 import { useLocation, Link } from "react-router-dom";
 import {
   Breadcrumb,
@@ -12,26 +14,24 @@ import {
 } from '../components/ui/breadcrumb';
 
 const Layout = ({ children }) => {
+  const { logout } = useAuth0();
+  const navigate = useNavigate();
   const location = useLocation();
-  const shouldDisplayNavBar = location.pathname !== "/" && location.pathname !== "/*" && location.pathname !== "/login" 
+  const shouldDisplayNavBar =  location.pathname !== "/*" && location.pathname !== "/Login" 
     && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" 
     && location.pathname !== "/userManagement" && location.pathname !== "/Logout";
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (response.ok) {
-        alert("Logged out");
-        window.location.href = "/";
-      } else {
-        console.error("Logout failed");
+    const handleLogout = async () => {
+      
+      try {
+        // Perform the Auth0 logout
+        logout({ logoutParams: { returnTo: window.location.origin } });
+  
+        // Optionally navigate to a different page after logout
+        navigate("/");
+      } catch (error) {
+        console.error("Error:", error);
       }
-    } catch (error) {
-      console.error("Error:", error);
-    }
   };
 
   const generateBreadcrumbItems = () => {

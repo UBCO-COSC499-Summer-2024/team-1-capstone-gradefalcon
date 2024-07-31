@@ -5,8 +5,10 @@ import { Button } from "../../components/ui/button";
 import { useToast } from "../../components/ui/use-toast";
 import { Toaster } from "../../components/ui/toaster";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
+import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 
 const UploadExamKey = () => {
+  const { getAccessTokenSilently } = useAuth0(); // Get the token
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
   const [template, setTemplate] = useState("100mcq");
@@ -86,15 +88,20 @@ const UploadExamKey = () => {
     formData.append("classID", classID);
 
     try {
+      const token = await getAccessTokenSilently(); // Get the token
       const responses = await Promise.all([
         await fetch(`/api/exam/saveExamKey/${template}`, {
           method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`, // Include the token in the request
+          },
           body: formData,
         }),
         fetch("/api/exam/copyTemplate", {
           method: "POST",
           credentials: "include",
           headers: {
+            "Authorization": `Bearer ${token}`, // Include the token in the request
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ examType: template, keyOrExam: "key" }),
@@ -105,7 +112,7 @@ const UploadExamKey = () => {
       const dataCopyTemplate = await responses[1].json();
 
       console.log("Data from saveExamKey:", dataSaveExamKey);
-      console.log("Data from copyCSV:", dataCopyTemplate);
+      console.log("Data from copyTemplate:", dataCopyTemplate);
 
       toast({
         title: "Upload Successful",
