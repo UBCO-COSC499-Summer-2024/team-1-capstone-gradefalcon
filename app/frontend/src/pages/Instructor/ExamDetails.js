@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Plot from 'react-plotly.js';
+import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
@@ -20,6 +21,7 @@ import {
 } from "../../components/ui/drawer";
 
 const ExamDetails = () => {
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const { exam_id } = useParams();
   const [examData, setExamData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,16 @@ const ExamDetails = () => {
   useEffect(() => {
     const fetchExamData = async () => {
       try {
-        const response = await fetch(`/api/exam/getExamDetails/${exam_id}`);
+        const token = await getAccessTokenSilently();
+        const response = await fetch(`/api/exam/getExamDetails/${exam_id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          credentials: "include",
+        });
+  
         if (response.ok) {
           const data = await response.json();
           setExamData(data);
@@ -41,9 +52,9 @@ const ExamDetails = () => {
         setLoading(false);
       }
     };
-
+  
     fetchExamData();
-  }, [exam_id]);
+  }, [exam_id, getAccessTokenSilently]);
 
   const exportToCSV = () => {
     let csvContent = "Student ID,Student Name,Grade\r\n";
@@ -75,6 +86,104 @@ const ExamDetails = () => {
 
   const grades = examData.studentResults.map(result => result.grade);
   const darkGreenColor = '#006400'; // Darker green color hex code
+  const minGrade = Math.min(...grades);
+  const maxGrade = Math.max(...grades);
+  const meanGrade = (grades.reduce((a, b) => a + b, 0) / grades.length).toFixed(2);
+  const q1Grade = grades.sort((a, b) => a - b)[Math.floor(grades.length / 4)];
+  const medianGrade = grades.sort((a, b) => a - b)[Math.floor(grades.length / 2)];
+  const q3Grade = grades.sort((a, b) => a - b)[Math.floor((grades.length * 3) / 4)];
+
+  const layout = {
+    width: 400,
+    height: 300,
+    title: 'Box Plot of Exam Grades',
+    yaxis: {
+      showticklabels: false,
+    },
+    xaxis: {
+      title: 'Grades',
+      zeroline: false,
+    },
+    shapes: [
+      {
+        type: 'line',
+        y0: 0,
+        y1: 1,
+        yref: 'paper',
+        x0: minGrade,
+        x1: minGrade,
+        line: {
+          color: 'blue',
+          width: 2,
+          dash: 'dot',
+        },
+      },
+      {
+        type: 'line',
+        y0: 0,
+        y1: 1,
+        yref: 'paper',
+        x0: maxGrade,
+        x1: maxGrade,
+        line: {
+          color: 'blue',
+          width: 2,
+          dash: 'dot',
+        },
+      },
+      {
+        type: 'line',
+        y0: 0,
+        y1: 1,
+        yref: 'paper',
+        x0: meanGrade,
+        x1: meanGrade,
+        line: {
+          color: 'blue',
+          width: 2,
+          dash: 'dot',
+        },
+      },
+    ],
+    annotations: [
+      {
+        y: 1,
+        x: minGrade,
+        yref: 'paper',
+        xref: 'x',
+        text: `Min: ${minGrade}`,
+        showarrow: true,
+        arrowhead: 7,
+        ax: 0,
+        ay: -40,
+        textangle: 0,
+      },
+      {
+        y: 1,
+        x: maxGrade,
+        yref: 'paper',
+        xref: 'x',
+        text: `Max: ${maxGrade}`,
+        showarrow: true,
+        arrowhead: 7,
+        ax: 0,
+        ay: -40,
+        textangle: 0,
+      },
+      {
+        y: 1,
+        x: meanGrade,
+        yref: 'paper',
+        xref: 'x',
+        text: `Mean: ${meanGrade}`,
+        showarrow: true,
+        arrowhead: 7,
+        ax: 0,
+        ay: -40,
+        textangle: 0,
+      },
+    ],
+  };
 
   return (
     <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
@@ -117,16 +226,23 @@ const ExamDetails = () => {
                         <Plot
                           data={[
                             {
-                              y: grades,
+                              x: grades,
                               type: 'box',
                               boxpoints: 'all',
                               jitter: 0.3,
                               pointpos: -1.8,
                               marker: { color: darkGreenColor },
                               line: { color: darkGreenColor },
+                              whiskerwidth: 1,
+                              boxmean: true,
+                              meanline: {
+                                color: 'blue',
+                                width: 2,
+                              },
+                              hoverinfo: 'x',
                             },
                           ]}
-                          layout={{ width: 400, height: 300, title: 'Box Plot of Exam Grades' }}
+                          layout={layout}
                         />
                       </div>
                       <DrawerFooter>
