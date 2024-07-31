@@ -8,7 +8,8 @@
 clockify report
 
 
-![Time16](https://github.com/user-attachments/assets/29cb5e55-0a97-4542-ad11-52f5ab6476d7)
+
+![Time16](https://github.com/user-attachments/assets/d46945d1-7f60-4937-a01a-ffd257f9d98c)
 
 
 
