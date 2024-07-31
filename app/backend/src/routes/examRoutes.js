@@ -34,7 +34,7 @@ router.post("/ExamBoard", checkJwt, checkPermissions(['read:exams']), examBoard)
 router.get("/average-per-exam", checkJwt, checkPermissions(['read:examAverageData']), getAveragePerExam);
 router.get("/average-per-course", checkJwt, checkPermissions(['read:courseAverageData']), getAveragePerCourse); // Updated route
 router.get('/grades/:studentId', checkJwt, checkPermissions(['read:grades']), getStudentGrades);
-router.post("/generateCustomBubbleSheet", checkJwt, checkPermissions(['create:exam']), generateCustomBubbleSheet)
+router.post("/generateCustomBubbleSheet", checkJwt, checkPermissions(['create:exam']), generateCustomBubbleSheet);  
 
 // Function to get the answer key for a specific exam
 

@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
+import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 
 const CustomBubbleSheet = () => {
+  const { getAccessTokenSilently } = useAuth0(); // Get the token
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(4);
 

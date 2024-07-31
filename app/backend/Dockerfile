@@ -19,7 +19,7 @@ COPY package.json /code/package.json
 COPY package-lock.json /code/package-lock.json
 RUN npm ci
 
-# Install PostgreSQL client and TeX Live
+# # Install PostgreSQL client and TeX Live
 RUN apt-get update && apt-get install -y \
   postgresql-client \
   texlive-latex-base \

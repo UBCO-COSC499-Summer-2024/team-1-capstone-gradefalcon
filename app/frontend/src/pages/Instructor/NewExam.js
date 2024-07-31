@@ -94,7 +94,7 @@ const NewExam = () => {
           <Card className="bg-white border rounded-lg p-6">
             <CardHeader>
               <CardTitle>Exam Details</CardTitle>
-              <CardDescription>The following details will define the exam details</CardDescription>
+              <CardDescription>The following details will define the exam's configuration</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-6">

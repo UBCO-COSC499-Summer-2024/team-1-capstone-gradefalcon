@@ -9,10 +9,10 @@ const Home = () => {
   const { loginWithRedirect, isAuthenticated } = useAuth0();
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <Card className="w-full md:w-1/2 bg-white border rounded-lg p-6">
+<div className="flex justify-center items-center min-h-screen">
+<Card className="w-full sm:w-2/3 md:w-1/3 lg:w-1/4 bg-white border rounded-lg p-4">
         <CardHeader className="flex justify-center">
-          <img src={logo} alt="Logo" className="logo" />
+          <img src={logo} alt="Logo" className='h-30 w-30' />
         </CardHeader>
         <CardContent className="text-center">
           <div className="copy mb-4">

@@ -32,7 +32,7 @@ FIELD_TYPES = {
         "bubbleValues": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
         "direction": "vertical",
     },
-    "QTYPE_MC2": {"bubbleValues": ["A", "B"], "direction": "horizontal"},
+    "QTYPE_MCQ2": {"bubbleValues": ["A", "B"], "direction": "horizontal"},
     "QTYPE_MCQ3": {"bubbleValues": ["A", "B", "C"], "direction": "horizontal"},
     "QTYPE_MCQ4": {"bubbleValues": ["A", "B", "C", "D"], "direction": "horizontal"},
     "QTYPE_MCQ5": {

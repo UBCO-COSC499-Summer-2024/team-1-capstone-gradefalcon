@@ -37,6 +37,7 @@ import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
 import ReviewExams from "./pages/Instructor/ReviewExams";
 import ViewExam from "./pages/Instructor/ViewExam";
+import CustomBubbleSheet from "./pages/Instructor/CustomBubbleSheet";
 // Student pages
 import StudentDashboard from "./pages/Student/StudentDashboard";
 import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
@@ -68,13 +69,9 @@ function App() {
             <Route path="/OMRProcessingUpload" element={ <ProtectedRoute> <OMRProcessingUpload /> </ProtectedRoute> } /> {/* Add the new route */}
             <Route path="/ReviewExams" element={ <ProtectedRoute> <ReviewExams /> </ProtectedRoute> } />
             <Route path="/ViewExam" element={<ProtectedRoute><ViewExam /></ProtectedRoute>} />
-            <Route
-              path="/NotificationPreferences"
-              element={ <ProtectedRoute> <NotificationPreferences /> </ProtectedRoute> }
-            />
-            <Route path= "/StudentDashboard"
-              element={ <ProtectedRoute> <StudentDashboard /> </ProtectedRoute> }
-            />
+            <Route path="/CustomBubbleSheet" element={ <ProtectedRoute> <CustomBubbleSheet /> </ProtectedRoute> } />
+            <Route path="/NotificationPreferences"element={ <ProtectedRoute> <NotificationPreferences /> </ProtectedRoute> } />
+            <Route path= "/StudentDashboard" element={ <ProtectedRoute> <StudentDashboard /> </ProtectedRoute> }  />
             <Route
               path="/StudentGradeReport"
               element={ <ProtectedRoute> <StudentGradeReport /> </ProtectedRoute> }

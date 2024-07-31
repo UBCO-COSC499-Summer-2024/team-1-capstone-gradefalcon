@@ -43,13 +43,12 @@ CREATE TABLE exam (
     exam_title text, 
     total_questions int,
     total_marks int,
+    template text,
     mean double precision,
     high double precision,
     low double precision,
     upper_quartile double precision,
     lower_quartile double precision,
-    page_count int,
-    file_size int,
     foreign key (class_id) references classes(class_id)
 );
 

@@ -380,7 +380,7 @@ async function generateCustomBubbleSheet(req, res) {
 
   fs.writeFileSync(latexFilePath, latexDocument);
 
-  exec(`pdflatex -output-directory=${path.join(__dirname, '../assets')} ${latexFilePath}`, (error, stdout, stderr) => {
+  exec(`pdflatex -output-directory=${path.join(__dirname, '../assets/custom')} ${latexFilePath}`, (error, stdout, stderr) => {
     if (error) {
       console.error('Error compiling LaTeX:', stderr);
       return res.status(500).send("Failed to generate PDF.");
@@ -389,6 +389,23 @@ async function generateCustomBubbleSheet(req, res) {
     res.setHeader('Content-Disposition', 'attachment; filename="custom_bubble_sheet.pdf"');
     res.setHeader('Content-Type', 'application/pdf');
     fs.createReadStream(pdfFilePath).pipe(res);
+     // Clean up auxiliary files after the PDF has been sent
+     pdfStream.on('close', () => {
+      // Delete the auxiliary files
+      const auxFilePath = path.join(assetsDir, 'bubble_sheet.aux');
+      const logFilePath = path.join(assetsDir, 'bubble_sheet.log');
+      const texFilePath = latexFilePath;
+
+      fs.unlink(auxFilePath, (err) => {
+        if (err) console.error(`Error deleting ${auxFilePath}:`, err);
+      });
+      fs.unlink(logFilePath, (err) => {
+        if (err) console.error(`Error deleting ${logFilePath}:`, err);
+      });
+      fs.unlink(texFilePath, (err) => {
+        if (err) console.error(`Error deleting ${texFilePath}:`, err);
+      });
+    });
   });
 }
 
