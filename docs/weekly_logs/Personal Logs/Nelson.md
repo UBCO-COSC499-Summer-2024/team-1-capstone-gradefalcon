@@ -1,3 +1,68 @@
+## Wednesday (25/7- 30/7)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/july31_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Refactorizing code to integrate auth0
+  * #2: Writing Account settings
+  * #3: Storing user metadata on token and reading token
+    
+### Progress Update (since 23/7/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+ <tr>
+        <!-- Task/Issue # -->
+        <td>Implementing Auth0 to connect to DB and API calls
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Writing Account settings
+        </td>
+        <!-- Status -->
+        <td>In progress need to write tests
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Storing user metadata on token and reading token
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+### Summary
+This week, my primary focus was dedicated to integrating Auth0 into our existing API calls. After achieving a few successful API calls, Bennett and I worked on refactoring all our backend API calls to ensure users are authorized and have the necessary permissions. We also wrote new code to enhance the efficiency of our authorization checks. We made significant progress in refactoring our code and will now focus on refactoring our tests to ensure complete functionality. Additionally, I worked on the account settings feature, storing user metadata on the JWT token, and securely reading from the token. This included implementing functionalities for changing passwords with a reset link, updating email addresses, and other user information on both the database and Auth0.
+
+#### In Progress:
+- **Refactoring tests to work with new Auth0 integration**: In Progress
+- **Account settings**: In Progress (implemented but need to complete tests)
+
+### Reflections and Lessons Learned:
+This cycle emphasized improving our progress and reaching new milestones. The successful integration of Auth0 and the resolution of Docker issues have fortified our project's infrastructure. The personal and academic challenges I encountered highlighted the need for resilience and adaptability. Moving forward, I recognize the importance of better communication and collaboration with my team. I plan to complete the remaining tasks, share progress updates, and commit my work regularly to foster a more collaborative environment.
+
+### Adjustments and Future Plans:
+- Complete the tests for the account settings implementation.
+- Refactor code and enhance test coverage post-Auth0 integration.
+- Implementing logging for grade changes, including storing instructor comments.
+- Adding functionality for students to submit review comments and contest marks, with these stored in the database.
+
+
+
 ## Wednesday (23/7- 25/7)
 
 ### Timesheet
