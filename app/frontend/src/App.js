@@ -26,6 +26,7 @@ import Home from "./pages/Home";
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
+import ExamDetails from "./pages/Instructor/ExamDetails";
 import NewClass from "./pages/Instructor/NewClass";
 import NewExam from "./pages/Instructor/NewExam";
 import ExamBoard from "./pages/Instructor/Examboard";
@@ -58,6 +59,7 @@ function App() {
             <Route path="/Classes" element={ <ProtectedRoute> <Classes /> </ProtectedRoute> } />
             <Route path="/New-Class" element={ <ProtectedRoute> <NewClass /> </ProtectedRoute> } />
             <Route path="/ClassManagement/:class_id" element={ <ProtectedRoute> <ClassManagement /> </ProtectedRoute> }/>
+            <Route path="/ExamDetails/:exam_id" element={ <ProtectedRoute> <ExamDetails /> </ProtectedRoute> } />
             <Route path="/NewExam/:class_id" element={ <ProtectedRoute> <NewExam /> </ProtectedRoute> } />
             <Route path="/ExamBoard" element={ <ProtectedRoute> <ExamBoard /> </ProtectedRoute> } />
             <Route path="/ExamControls" element={ <ProtectedRoute> <ExamControls /> </ProtectedRoute> } />
