@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Plot from 'react-plotly.js';
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
-import { FileIcon } from "lucide-react";
+import { FileIcon, BarChartIcon } from "lucide-react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../../components/ui/drawer";
 
 const ExamDetails = () => {
   const { exam_id } = useParams();
@@ -62,6 +73,9 @@ const ExamDetails = () => {
     return <div>{error}</div>;
   }
 
+  const grades = examData.studentResults.map(result => result.grade);
+  const darkGreenColor = '#006400'; // Darker green color hex code
+
   return (
     <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
       <div className="flex items-center gap-4">
@@ -83,6 +97,49 @@ const ExamDetails = () => {
               </TooltipTrigger>
               <TooltipContent>
                 Export results as a CSV file.
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Drawer>
+                  <DrawerTrigger asChild>
+                    <Button size="sm" className="h-8 gap-1 text-white" style={{ backgroundColor: 'hsl(var(--primary))' }}>
+                      <BarChartIcon className="h-4 w-4" />
+                    </Button>
+                  </DrawerTrigger>
+                  <DrawerContent>
+                    <div className="mx-auto w-full max-w-sm">
+                      <DrawerHeader>
+                        <DrawerTitle>Exam Analysis</DrawerTitle>
+                        <DrawerDescription>View detailed analysis of the exam results.</DrawerDescription>
+                      </DrawerHeader>
+                      <div className="p-4 pb-0">
+                        <Plot
+                          data={[
+                            {
+                              y: grades,
+                              type: 'box',
+                              boxpoints: 'all',
+                              jitter: 0.3,
+                              pointpos: -1.8,
+                              marker: { color: darkGreenColor },
+                              line: { color: darkGreenColor },
+                            },
+                          ]}
+                          layout={{ width: 400, height: 300, title: 'Box Plot of Exam Grades' }}
+                        />
+                      </div>
+                      <DrawerFooter>
+                        <DrawerClose asChild>
+                          <Button variant="outline">Close</Button>
+                        </DrawerClose>
+                      </DrawerFooter>
+                    </div>
+                  </DrawerContent>
+                </Drawer>
+              </TooltipTrigger>
+              <TooltipContent>
+                View analysis of exam results.
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
