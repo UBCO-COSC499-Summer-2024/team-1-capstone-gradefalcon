@@ -5,13 +5,13 @@
   "description": "Node.js Hello world app using docker features for easy docker compose local dev and solid production defaults",
   "author": "Bret Fisher <bret@bretfisher.com>",
   "main": "src/index.js",
-"scripts": {
-  "start": "node src/index.js",
-  "start-watch": "nodemon --watch src --ignore /code/omr/inputs src/index.js --inspect=0.0.0.0:9229",
-  "start-wait-debuger": "nodemon --watch src --ignore /code/omr/inputs src/index.js --inspect-brk=0.0.0.0:9229",
-  "test": "npx jest --config=jest.backend.config.js",
-  "test-watch": "nodemon --watch src --ignore /code/omr/inputs --exec \"npm test\""
-},
+  "scripts": {
+    "start": "node src/index.js",
+    "start-watch": "nodemon --watch src --ignore /code/omr/inputs src/index.js --inspect=0.0.0.0:9229",
+    "start-wait-debuger": "nodemon --watch src --ignore /code/omr/inputs src/index.js --inspect-brk=0.0.0.0:9229",
+    "test": "npx jest --config=jest.backend.config.js",
+    "test-watch": "nodemon --watch src --ignore /code/omr/inputs --exec \"npm test\""
+  },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.614.0",
     "auth0": "^4.7.0",
@@ -27,6 +27,7 @@
     "express-oauth2-jwt-bearer": "^1.6.0",
     "express-session": "^1.18.0",
     "fs": "^0.0.1-security",
+    "json2csv": "^6.0.0-alpha.2",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.1.0",
     "knex": "^3.1.0",
@@ -35,6 +36,7 @@
     "mysql2": "^3.10.0",
     "node-fetch": "^2.7.0",
     "path": "^0.12.7",
+    "pdf-lib": "^1.17.1",
     "pg": "^8.12.0"
   },
   "devDependencies": {

@@ -1,8 +1,14 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import '../../css/App.css';
+import "../../css/App.css";
 import { Button } from "../../components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "../../components/ui/card";
 import { Switch } from "../../components/ui/switch"; // Importing the Shadcn UI Switch component
 import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
 import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
@@ -12,7 +18,14 @@ const ExamControls = () => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
   const location = useLocation();
   const navigate = useNavigate();
-  const { classID, examTitle, questions, numQuestions, markingSchemes = [] } = location.state || {};
+  const {
+    classID,
+    examTitle,
+    questions,
+    numQuestions,
+    totalMarks,
+    markingSchemes = [],
+  } = location.state || {};
   const { toast } = useToast();
 
   const handleConfirm = async (event) => {
@@ -30,11 +43,12 @@ const ExamControls = () => {
           examTitle: examTitle,
           questions: questions,
           numQuestions: numQuestions,
+          totalMarks: totalMarks,
           markingSchemes: markingSchemes,
         }),
       });
       console.log(response);
-      
+
       if (response.ok) {
         const contentType = response.headers.get("Content-Type");
         if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -95,7 +109,12 @@ const ExamControls = () => {
                   </div>
                 </div>
                 <div className="flex justify-between mt-4">
-                  <Button size="sm" variant= "secondary" className="gap-1 green-button" onClick={() => window.history.back()}>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="gap-1 green-button"
+                    onClick={() => window.history.back()}
+                  >
                     Back
                   </Button>
                   <Button size="sm" className="gap-1 green-button" onClick={handleConfirm}>

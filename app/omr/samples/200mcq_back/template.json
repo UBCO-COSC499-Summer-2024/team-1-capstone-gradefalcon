@@ -1,43 +1,44 @@
 {
-    "pageDimensions": [ 900, 1220 ],
-    "bubbleDimensions": [ 27, 27 ],
+    "templateDimensions": [ 900, 1220 ],
+    "bubbleDimensions": [ 23, 23 ],
     "customLabels": {},
     "fieldBlocks": {
       "MCQBlock1": {
         "fieldType": "QTYPE_MCQ5",
-        "origin": [ 86, 167 ],
+        "origin": [ 86, 170 ],
         "fieldLabels": ["q101", "q102", "q103", "q104", "q105", "q106", "q107", "q108", "q109", "q110", "q111", "q112", "q113", "q114", "q115", "q116", "q117", "q118", "q119", "q120", "q121", "q122", "q123", "q124", "q125"],
-        "bubblesGap": 23.4,
-        "labelsGap": 29.4
+        "bubblesGap": 24.9,
+        "labelsGap": 29.5
       },
       "MCQBlock2": {
         "fieldType": "QTYPE_MCQ5",
         "origin": [ 295, 167 ],
         "fieldLabels": ["q126", "q127", "q128", "q129", "q130", "q131", "q132", "q133", "q134", "q135", "q136", "q137", "q138", "q139", "q140", "q141", "q142", "q143", "q144", "q145", "q146", "q147", "q148", "q149", "q150"],
-        "bubblesGap": 23.4,
-        "labelsGap": 29.4
+        "bubblesGap": 25.3,
+        "labelsGap": 29.6
       },
       "MCQBlock3": {
         "fieldType": "QTYPE_MCQ5",
         "origin": [ 510, 167 ],
         "fieldLabels": ["q151", "q152", "q153", "q154", "q155", "q156", "q157", "q158", "q159", "q160", "q161", "q162", "q163", "q164", "q165", "q166", "q167", "q168", "q169", "q170", "q171", "q172", "q173", "q174", "q175"],
-        "bubblesGap": 23.4,
-        "labelsGap": 29.4
+        "bubblesGap": 25.3,
+        "labelsGap": 29.6
       },
       "MCQBlock4": {
         "fieldType": "QTYPE_MCQ5",
-        "origin": [ 717, 167 ],
+        "origin": [ 718, 165 ],
         "fieldLabels": ["q176", "q177", "q178", "q179", "q180", "q181", "q182", "q183", "q184", "q185", "q186", "q187", "q188", "q189", "q190", "q191", "q192", "q193", "q194", "q195", "q196", "q197", "q198", "q199", "q200"],
-        "bubblesGap": 23.4,
-        "labelsGap": 29.4
+        "bubblesGap": 25.5,
+        "labelsGap": 29.6
       }
     },
     "preProcessors": [
-      {
-        "name": "CropPage",
-        "options": {
-          "morphKernel": [ 10, 10 ]
-        }
-      }
-    ]
+  {
+    "name": "BorderPreprocessor",
+    "options": {
+      "border_size": 10,
+      "border_color": [255, 255, 255]
+    }
+  }
+]
 }

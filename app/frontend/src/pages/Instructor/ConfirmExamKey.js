@@ -2,13 +2,35 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, Link } from "react-router-dom";
 import "../../css/App.css";
 import { Button } from "../../components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "../../components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+  CardFooter,
+} from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
-import { ChevronLeftIcon, ChevronRightIcon, PlusCircleIcon, TrashIcon, PlusIcon, MinusIcon, ExclamationCircleIcon } from "@heroicons/react/20/solid";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  PlusCircleIcon,
+  TrashIcon,
+  PlusIcon,
+  MinusIcon,
+  ExclamationCircleIcon,
+} from "@heroicons/react/20/solid";
 import { Label } from "../../components/ui/label";
 import { Form } from "../../components/ui/form";
 import { ScrollArea } from "../../components/ui/scroll-area";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "../../components/ui/table";
 import { MultiSelect } from "../../components/ui/multi-select";
 import { useToast } from "../../components/ui/use-toast";
 import { Toaster } from "../../components/ui/toaster";
@@ -18,7 +40,7 @@ import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 const ConfirmExamKey = () => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
   const location = useLocation();
-  const { examTitle, classID } = location.state || {};
+  const { examTitle, classID, template } = location.state || {};
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(5);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -40,9 +62,9 @@ const ConfirmExamKey = () => {
   }));
 
   const removeQuestion = (questionNumber, option) => {
-    setSelectedOptions(prevOptions =>
+    setSelectedOptions((prevOptions) =>
       prevOptions.filter(
-        question => question.question !== questionNumber || question.option !== option
+        (question) => question.question !== questionNumber || question.option !== option
       )
     );
   };
@@ -52,11 +74,16 @@ const ConfirmExamKey = () => {
     if (event.target.classList.contains("selected")) {
       event.target.style.backgroundColor = "hsl(var(--primary))";
       event.target.style.color = "white";
-      setSelectedOptions(prevOptions => {
+      setSelectedOptions((prevOptions) => {
         if (!Array.isArray(prevOptions)) {
           prevOptions = [];
         }
-        if (!prevOptions.some(question => question.question === selection.question && question.option === selection.option)) {
+        if (
+          !prevOptions.some(
+            (question) =>
+              question.question === selection.question && question.option === selection.option
+          )
+        ) {
           return [...prevOptions, selection];
         } else {
           return prevOptions;
@@ -65,8 +92,11 @@ const ConfirmExamKey = () => {
     } else {
       event.target.style.backgroundColor = "";
       event.target.style.color = "";
-      setSelectedOptions(prevOptions => {
-        const newOptions = prevOptions.filter(question => question.question !== selection.question || question.option !== selection.option);
+      setSelectedOptions((prevOptions) => {
+        const newOptions = prevOptions.filter(
+          (question) =>
+            question.question !== selection.question || question.option !== selection.option
+        );
         return newOptions;
       });
     }
@@ -111,7 +141,7 @@ const ConfirmExamKey = () => {
   };
 
   const addNewQuestion = () => {
-    setNumQuestions(prev => prev + 1);
+    setNumQuestions((prev) => prev + 1);
   };
 
   const handleAddCustomScheme = () => {
@@ -121,7 +151,7 @@ const ConfirmExamKey = () => {
     } else {
       setShowAlert(false);
     }
-    const formattedQuestions = customScheme.questions.map(q => `q${q.split(' ')[1]}`);
+    const formattedQuestions = customScheme.questions.map((q) => `q${q.split(" ")[1]}`);
 
     setMarkingSchemes((prev) => [
       ...prev,
@@ -146,7 +176,7 @@ const ConfirmExamKey = () => {
       const newSchemes = [...prev];
       newSchemes[index] = {
         ...newSchemes[index],
-        [field]: field === 'correct' ? Math.abs(value) : -Math.abs(value),
+        [field]: field === "correct" ? Math.abs(value) : -Math.abs(value),
       };
       return newSchemes;
     });
@@ -160,17 +190,19 @@ const ConfirmExamKey = () => {
     try {
       const token = await getAccessTokenSilently(); // Get the token
       const response = await fetch("/api/exam/getResults", {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`, // Include the token in the request
         },
         credentials: "include",
+        body: JSON.stringify({ singlePage: template === "100mcq" }),
       });
 
       const data = await response.json();
       const dataCsv = data.csv_file[0];
       setSelectedOptions(getFilledQs(dataCsv));
+      console.log("dataCsv", dataCsv);
       setNumQuestions(getQuestionCount(getFilledQs(dataCsv)));
       clickAnswersForQuestions(getFilledQs(dataCsv));
     } catch (error) {
@@ -194,11 +226,14 @@ const ConfirmExamKey = () => {
       ([key, value]) => value !== undefined && value !== ""
     );
 
-    const sortedEntries = filteredEntries.sort(
-      (a, b) => parseInt(a[0]) - parseInt(b[0])
-    );
+    const sortedEntries = filteredEntries.sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
 
-    const entriesAfterSkipping = sortedEntries.slice(4);
+    // Skip 4 entries if 100mcq 5 if 200mcq
+    const sliceIndex = template === "100mcq" ? 4 : 5;
+
+    // We only want the questions so we skip file_id, input_path, output_path, and score
+
+    const entriesAfterSkipping = sortedEntries.slice(sliceIndex);
 
     const transformedEntries = entriesAfterSkipping.map(([key, value]) => [
       Number(key.substring(1)),
@@ -225,9 +260,7 @@ const ConfirmExamKey = () => {
       (span) => span.innerText === answer
     );
     if (!optionSpan) {
-      console.error(
-        `Option ${answer} in question ${questionNumber} not found.`
-      );
+      console.error(`Option ${answer} in question ${questionNumber} not found.`);
       return;
     }
 
@@ -241,13 +274,16 @@ const ConfirmExamKey = () => {
   return (
     <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8 px-8 pb-8 pt-2 bg-gradient-to-r from-gradient-start to-gradient-end">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
+        <Button
+          variant="outline"
+          size="icon"
+          className="h-10 w-10"
+          onClick={() => window.history.back()}
+        >
           <ChevronLeftIcon className="h-4 w-4" />
           <span className="sr-only">Back</span>
         </Button>
-        <h1 className="flex-1 text-3xl font-semibold tracking-tight">
-          Confirm Exam Key
-        </h1>
+        <h1 className="flex-1 text-3xl font-semibold tracking-tight">Confirm Exam Key</h1>
         <div className="flex items-center gap-2 ml-auto">
           <Link
             to="/ExamControls"
@@ -325,13 +361,13 @@ const ConfirmExamKey = () => {
               <TableBody>
                 {markingSchemes.map((scheme, index) => (
                   <TableRow key={index}>
-                    <TableCell>{scheme.questions.join(', ')}</TableCell>
+                    <TableCell>{scheme.questions.join(", ")}</TableCell>
                     <TableCell>
                       <Input
                         type="number"
                         value={scheme.correct}
                         className="w-full"
-                        onChange={(e) => handleSchemeChange(index, 'correct', e.target.value)}
+                        onChange={(e) => handleSchemeChange(index, "correct", e.target.value)}
                       />
                     </TableCell>
                     <TableCell>
@@ -339,7 +375,7 @@ const ConfirmExamKey = () => {
                         type="number"
                         value={scheme.incorrect}
                         className="w-full"
-                        onChange={(e) => handleSchemeChange(index, 'incorrect', e.target.value)}
+                        onChange={(e) => handleSchemeChange(index, "incorrect", e.target.value)}
                       />
                     </TableCell>
                     <TableCell>
@@ -347,7 +383,7 @@ const ConfirmExamKey = () => {
                         type="number"
                         value={scheme.unmarked}
                         className="w-full"
-                        onChange={(e) => handleSchemeChange(index, 'unmarked', e.target.value)}
+                        onChange={(e) => handleSchemeChange(index, "unmarked", e.target.value)}
                       />
                     </TableCell>
                     <TableCell>
@@ -361,7 +397,12 @@ const ConfirmExamKey = () => {
             </Table>
           </CardContent>
           <CardFooter className="justify-center border-t p-4">
-            <Button size="sm" variant="ghost" className="gap-1" onClick={() => setShowCustomSchemeModal(true)}>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="gap-1"
+              onClick={() => setShowCustomSchemeModal(true)}
+            >
               <PlusCircleIcon className="h-3.5 w-3.5" />
               Add Custom Marking Scheme
             </Button>
@@ -375,8 +416,7 @@ const ConfirmExamKey = () => {
             <CardTitle>Bubble Grid</CardTitle>
             <CardDescription>Select the answers</CardDescription>
           </div>
-          <div className="ml-auto flex items-center gap-1">
-          </div>
+          <div className="ml-auto flex items-center gap-1"></div>
         </CardHeader>
         <CardContent className="h-[48rem] flex items-center justify-center p-6">
           <ScrollArea className="h-full w-full">
@@ -392,15 +432,13 @@ const ConfirmExamKey = () => {
       {showCustomSchemeModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-md">
-          {showAlert && (
-                <Alert className="mb-4">
-                  <ExclamationCircleIcon className="h-4 w-4" />
-                  <AlertTitle>Heads up!</AlertTitle>
-                  <AlertDescription>
-                    Please select a question.
-                  </AlertDescription>
-                </Alert>
-              )}
+            {showAlert && (
+              <Alert className="mb-4">
+                <ExclamationCircleIcon className="h-4 w-4" />
+                <AlertTitle>Heads up!</AlertTitle>
+                <AlertDescription>Please select a question.</AlertDescription>
+              </Alert>
+            )}
             <h2 className="text-lg font-semibold mb-4">Add Custom Marking Scheme</h2>
             <div className="mb-4">
               <Label>Questions</Label>
@@ -426,7 +464,8 @@ const ConfirmExamKey = () => {
               />
             </div>
             <div className="mb-4">
-              <Label>Incorrect
+              <Label>
+                Incorrect
                 <MinusIcon className="h-5 w-5" />
               </Label>
               <Input
@@ -436,7 +475,8 @@ const ConfirmExamKey = () => {
               />
             </div>
             <div className="mb-4">
-              <Label>Blank
+              <Label>
+                Blank
                 <MinusIcon className="h-5 w-5" />
               </Label>
               <Input
@@ -449,9 +489,7 @@ const ConfirmExamKey = () => {
               <Button variant="outline" onClick={() => setShowCustomSchemeModal(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleAddCustomScheme}>
-                Save
-              </Button>
+              <Button onClick={handleAddCustomScheme}>Save</Button>
             </div>
           </div>
         </div>

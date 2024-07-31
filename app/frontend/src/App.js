@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {BrowserRouter as Router, Routes, Route, useLocation} from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import "./css/App.css";
 
 
@@ -32,7 +37,7 @@ import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
 // Student pages
 import ReviewExams from "./pages/Instructor/ReviewExams";
-
+import ViewExam from "./pages/Instructor/ViewExam";
 //student pages
 import StudentDashboard from "./pages/Student/StudentDashboard";
 import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
@@ -63,6 +68,7 @@ function App() {
             <Route path="/OMRProcessing" element={ <ProtectedRoute> <OMRProcessing /> </ProtectedRoute> } />
             <Route path="/OMRProcessingUpload" element={ <ProtectedRoute> <OMRProcessingUpload /> </ProtectedRoute> } /> {/* Add the new route */}
             <Route path="/ReviewExams" element={ <ProtectedRoute> <ReviewExams /> </ProtectedRoute> } />
+            <Route path="/ViewExam" element={<ProtectedRoute><ViewExam /></ProtectedRoute>} />
             <Route
               path="/NotificationPreferences"
               element={ <ProtectedRoute> <NotificationPreferences /> </ProtectedRoute> }

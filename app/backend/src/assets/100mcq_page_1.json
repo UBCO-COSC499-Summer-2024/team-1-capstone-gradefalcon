@@ -1,0 +1,47 @@
+{
+    "templateDimensions": [ 900, 1220 ],
+    "bubbleDimensions": [ 23, 23],
+    "customLabels": {
+      "StudentID": [
+      "roll1..8"
+      ],
+      "FirstName": [
+        "fn1..10"
+      ],
+      "LastName": [
+        "ln1..10"
+      ]
+  },
+    "fieldBlocks": {
+    "StudentID": {
+      "fieldType": "QTYPE_ID",
+      "origin": [ 331, 137.3 ],
+      "fieldLabels": ["roll1..8"],
+      "bubblesGap": 24.3,
+      "labelsGap": 26
+    },
+      "FirstName": {
+        "fieldType": "QTYPE_NAME",
+        "origin": [ 137.3, 411.5 ],
+        "fieldLabels": ["fn1..10"],
+        "bubblesGap": 24.3,
+        "labelsGap": 29
+      },
+      "LastName": {
+        "fieldType": "QTYPE_NAME",
+        "origin": [ 137, 787 ],
+        "fieldLabels": ["ln1..10"],
+        "bubblesGap": 24.3,
+        "labelsGap": 29
+      }
+    },
+    "preProcessors": [
+      {
+      "name": "BorderPreprocessor",
+      "options": {
+      "border_size": 10,
+      "border_color": [255, 255, 255]
+        }
+      }
+    ]
+}
