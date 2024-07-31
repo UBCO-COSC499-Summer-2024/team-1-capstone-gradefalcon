@@ -27,7 +27,13 @@ const UploadExam = () => {
 
     const fetchExamType = async () => {
       try {
-        const response = await fetch(`/api/exam/getExamType/${exam_id}`);
+        const token = await getAccessTokenSilently(); // Get the token
+        const response = await fetch(`/api/exam/getExamType/${exam_id}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`, // Include the token in the request
+          },
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

@@ -88,7 +88,7 @@ router.get("/studentScores", checkJwt, checkPermissions(['read:grades']), async 
     });
 });
 
-router.post("/UploadExam", checkJwt, checkPermissions(['upload:file']), upload.single("examPages"), async function (req, res) {
+router.post("/UploadExam", checkJwt, checkPermissions(['upload:file']), async function (req, res) {
   const upload = multer({ dest: "uploads/" }).single("examPages");
 
   upload(req, res, async function (err) {
@@ -136,7 +136,7 @@ router.post("/UploadExam", checkJwt, checkPermissions(['upload:file']), upload.s
   });
 });
 
-router.post("/getResults", checkJwt, checkPermissions(['read:grades	']),  async function (req, res) {
+router.post("/getResults", checkJwt, checkPermissions(['read:grades']),  async function (req, res) {
   const singlePage = req.body.singlePage;
   const inputDirPath = path.join(__dirname, "../../omr/inputs");
   const outputDirPath = path.join(__dirname, "../../omr/outputs");
@@ -195,8 +195,8 @@ router.post("/getResults", checkJwt, checkPermissions(['read:grades	']),  async 
 
 // Save the exam key uploaded by the user
 router.post(
-  "/saveExamKey",
-  checkJwt, checkPermissions(['upload:file']), upload.single("examKey"),
+  "/saveExamKey/:examType",
+  checkJwt, checkPermissions(['upload:file']),
   async function (req, res) {
   const template = req.params.examType;
   console.log("template", template);
@@ -309,7 +309,7 @@ router.post("/copyTemplate", checkJwt, checkPermissions(['upload:file']), async 
 
 // Generate the evaluation JSON for an exam
 router.post("/GenerateEvaluation" , checkJwt,  checkPermissions(['create:evaluation']), async function (req, res) {
-  const { exam_id } = req.body;
+  const {examType, exam_id } = req.body;
 
   try {
     if (!exam_id) {

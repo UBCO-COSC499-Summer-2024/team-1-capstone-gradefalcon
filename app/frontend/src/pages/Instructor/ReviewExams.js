@@ -19,69 +19,66 @@ const ReviewExams = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Preprocess the data
-    const preprocessData = async () => {
+    const fetchData = async () => {
       try {
-        const token = await getAccessTokenSilently();
-        const response = await fetch("/api/exam/preprocessingCSV", {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log("preprocessData", data);
+        // Preprocess the data
+        const preprocessData = async () => {
+          const token = await getAccessTokenSilently();
+          const response = await fetch("/api/exam/preprocessingCSV", {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log("preprocessData", data);
+        };
+
+        // Fetch student scores for the exam
+        const fetchStudentScores = async () => {
+          const token = await getAccessTokenSilently();
+          const response = await fetch("/api/exam/studentScores", {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log("data", data);
+          setStudentScores(data);
+        };
+
+        // Fetch the max marks for the exam
+        const fetchTotalScore = async () => {
+          const token = await getAccessTokenSilently();
+          const response = await fetch(`/api/exam/getScoreByExamId/${exam_id}`, {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          setTotalMarks(data.scores[0]);
+        };
+
+        await preprocessData();
+        await fetchStudentScores();
+        await fetchTotalScore();
+
+        setResultsCombined(true);
       } catch (error) {
-        console.error("Error preprocessing data:", error);
+        console.error("Error:", error);
       }
     };
-    preprocessData();
 
-    // Fetch student scores for the exam
-    const fetchStudentScores = async () => {
-      try {
-        const token = await getAccessTokenSilently();
-        const response = await fetch("/api/exam/studentScores", {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log("data", data);
-        setStudentScores(data);
-      } catch (error) {
-        console.error("Error fetching student scores:", error);
-      }
-    };
-
-    fetchStudentScores();
-
-    // Fetch the max marks for the exam
-    const fetchTotalScore = async () => {
-      try {
-        const response = await fetch(`/api/exam/getScoreByExamId/${exam_id}`, {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setTotalMarks(data.scores[0]);
-      } catch (error) {
-        console.error("Error fetching total marks:", error);
-      }
-    };
-
-    fetchTotalScore();
-    setResultsCombined(true);
-  }, [exam_id, getAccessTokenSilently]);
+    fetchData();
+  }, [getAccessTokenSilently, exam_id]);
 
   // Function to handle view button click
   const handleViewClick = (studentId, front_page, back_page) => {
