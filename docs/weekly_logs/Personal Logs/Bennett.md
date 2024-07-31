@@ -1,5 +1,52 @@
 # Personal Log
 
+## Tuesday (7/26 - 7/30)
+
+## TimeSheet
+Clockify report
+![alt text](../Clockify/Bennett/07_26_2024-07_30_2024.pdf)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: RBAC+API rework with Auth0
+  * #2: Archive and Delete courses+exams 
+
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>COMPLETED
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>2
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * Completed the pr and merge of auth0 functions into the development branch, ran into many errors that were a result of our old initial features not being as flushed out as we thought, the last 5 days we have worked very hard and put alot of hours into it, if we keep this up till friday we might just get the project done by then
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * quickly and efficiently create a feature to archive or delete courses or exams (with simple delay/recovery options), and then move on to remaining features
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Personal Log
+
 ## Thursday (7/24 - 7/25)
 
 ## TimeSheet
