@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowUpRight, Plus, MoreVertical } from "lucide-react";
 import { Button } from "../../components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
+import { Card, CardContent } from "../../components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../../components/ui/table";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "../../components/ui/dropdown-menu";
 import { Checkbox } from "../../components/ui/checkbox";
-import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
+import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
+import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
+import { useAuth0 } from "@auth0/auth0-react";
 import '../../css/App.css';
 
 const ExamBoard = () => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
   const [classData, setClassData] = useState([]);
+  const [selectedExams, setSelectedExams] = useState([]);
+  const [allSelected, setAllSelected] = useState(false);
   const [error, setError] = useState(null);
+  const { toast } = useToast(); // Using the toast hook
+  const navigate = useNavigate(); // Using the navigate hook
 
   useEffect(() => {
     const fetchClassData = async () => {
@@ -54,27 +61,54 @@ const ExamBoard = () => {
     return acc;
   }, {});
 
-  const handleDelete = async (examId) => {
-    try {
-      const token = await getAccessTokenSilently(); // Get the token
-      const response = await fetch(`/api/exam/delete/${examId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // Include the token in the request
-        },
-        credentials: "include",
-      });
-      if (response.ok) {
-        setClassData(prevData => {
-          const updatedClasses = prevData.classes.filter(exam => exam.exam_id !== examId);
-          return { ...prevData, classes: updatedClasses };
-        });
-      } else {
-        console.error("Failed to delete exam");
-      }
-    } catch (error) {
-      console.error("Error deleting exam:", error);
+  const handleDeleteFromBoard = (examId) => {
+    setClassData(prevData => {
+      const updatedClasses = prevData.classes.filter(exam => exam.exam_id !== examId);
+      return { ...prevData, classes: updatedClasses };
+    });
+    toast({
+      title: 'Deleted successfully',
+    });
+  };
+
+  const handleDeleteSelected = () => {
+    setClassData(prevData => {
+      const updatedClasses = prevData.classes.filter(exam => !selectedExams.includes(exam.exam_id));
+      return { ...prevData, classes: updatedClasses };
+    });
+    setSelectedExams([]);
+    setAllSelected(false);
+    toast({
+      title: 'Deleted selected exams successfully',
+    });
+  };
+
+  const handleArchiveSelected = () => {
+    // Implement archiving logic here
+    console.log("Archiving selected exams:", selectedExams);
+    // Reset selection after archiving
+    setSelectedExams([]);
+    setAllSelected(false);
+    toast({
+      title: 'Archived selected exams successfully',
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (allSelected) {
+      setSelectedExams([]);
+    } else {
+      const allExamIds = Object.values(groupedExams).flatMap(({ exams }) => exams.map(exam => exam.exam_id));
+      setSelectedExams(allExamIds);
+    }
+    setAllSelected(!allSelected);
+  };
+
+  const handleSelectExam = (examId) => {
+    if (selectedExams.includes(examId)) {
+      setSelectedExams(selectedExams.filter(id => id !== examId));
+    } else {
+      setSelectedExams([...selectedExams, examId]);
     }
   };
 
@@ -88,25 +122,51 @@ const ExamBoard = () => {
 
   return (
     <main className="flex flex-col gap-4 p-6">
+      <div className="flex justify-between items-center w-full mb-4">
+        <h1 className="text-2xl font-semibold">Exam Board</h1>
+        <TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button asChild size="sm" className="gap-1">
+                <Link to={`/NewExam/defaultClassId`}>
+                  <Plus className="h-6 w-6" />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Create New Exam</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
       <div className="w-full">
         <Card className="bg-white border rounded">
-          <CardHeader className="flex justify-between px-6 py-4">
-            <div>
-              <CardTitle className="mb-2">Exam Board</CardTitle>
-            </div>
-          </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>
-                    <Checkbox />
+                    <Checkbox
+                      checked={allSelected}
+                      onCheckedChange={handleSelectAll}
+                    />
                   </TableHead>
                   <TableHead>Exam Name</TableHead>
                   <TableHead>Course Name</TableHead>
                   <TableHead>Grade Exam</TableHead>
-                  <TableHead>Create New Exam</TableHead>
-                  <TableHead></TableHead>
+                  <TableHead>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={handleDeleteSelected}>Delete Selected</DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleArchiveSelected}>Archive Selected</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -115,7 +175,10 @@ const ExamBoard = () => {
                     exams.map((exam, index) => (
                       <TableRow key={`${courseId}-${exam.exam_id}`}>
                         <TableCell>
-                          <Checkbox />
+                          <Checkbox
+                            checked={selectedExams.includes(exam.exam_id)}
+                            onCheckedChange={() => handleSelectExam(exam.exam_id)}
+                          />
                         </TableCell>
                         <TableCell>
                           {exam.exam_title}
@@ -132,14 +195,6 @@ const ExamBoard = () => {
                           </Button>
                         </TableCell>
                         <TableCell>
-                          <Button asChild size="sm" className="ml-auto gap-1">
-                            <Link to={`/NewExam/${class_id}`}>
-                              Create New
-                              <Plus className="h-4 w-4" />
-                            </Link>
-                          </Button>
-                        </TableCell>
-                        <TableCell>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" size="icon">
@@ -147,8 +202,9 @@ const ExamBoard = () => {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                              <DropdownMenuItem onClick={() => handleDelete(exam.exam_id)}>Delete</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleDeleteFromBoard(exam.exam_id)}>Delete</DropdownMenuItem>
                               <DropdownMenuItem>Archive</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}>View Results</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
@@ -161,6 +217,7 @@ const ExamBoard = () => {
           </CardContent>
         </Card>
       </div>
+      <Toaster /> {/* Adding the Toaster component */}
     </main>
   );
 };

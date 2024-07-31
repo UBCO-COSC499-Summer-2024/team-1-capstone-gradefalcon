@@ -2,22 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import "../../css/App.css";
 import { Button } from "../../components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from "../../components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
-import {
-  Select,
-  SelectItem,
-  SelectContent,
-  SelectValue,
-  SelectTrigger,
-} from "../../components/ui/select";
+import { Select, SelectItem, SelectContent, SelectValue, SelectTrigger } from "../../components/ui/select";
 import { ChevronLeftIcon, ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { Form } from "../../components/ui/form";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
@@ -30,7 +18,7 @@ const NewExam = () => {
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const class_id = params.class_id;
+  const class_id = params.class_id || "defaultClassId"; // Set default class_id if not provided
 
   const handleInputChange = (event) => {
     const value = event.target.value;
