@@ -1,6 +1,92 @@
 
 # Personal Log
 
+## Friday ( 26/7 - 30/7)
+
+### Timesheet 
+
+clockify report
+
+
+![Time16](https://github.com/user-attachments/assets/29cb5e55-0a97-4542-ad11-52f5ab6476d7)
+
+
+
+### Current Tasks (Provide Details):
+- #1 : User Story: Enhance Course and Exam Management #207
+- #2 : User Story: Download Results #18
+- #3: Student Dashboard - to display the courses and the exams for each student individually
+- #4 : 5-point summary analysis for the instructor
+  
+  
+### Progress Update (since 26/7/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Enhancing the front end UI using Shad cn - installed some packages locally: the aim is to revamp the dashboard and the application and give it a enhnaced look altogether - also modifying the related frontend tests due to new components added/create new tests, if needed.
+        </td>
+        <!-- Status -->
+        <td>Completed 
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Optimize User Interface and Usability
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Enhance Navigation and Consistency
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Improve Dashboard Functionality
+        </td>
+        <!-- Status -->
+        <td>In Review
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Revamp Student Dashboard - to display the courses and the exams for each student individually
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr
+       <tr>
+        <!-- Task/Issue # -->
+        <td>5-point summary analysis for the instructor
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+Since I moved ahead from the last cycle, it was planned to get the PR approved and merged after the long work of revamping the application using shad cn with all the major components revamped and integrated well , and the little details for the same will be revisited later as and when we make some noticeable changes. Hence, the PR was approved which closed issues #80 #206 and #207, and was merged for the team members to work ahead on the related components. Over the weekend , I created a new component which fetched the dats from the backend and displays the exam details for each of them , seperately. I created a PR for the same which is in review and needs some related changes after the authO PR being merged. I have also added the functionality for the instructor to export the results for the course and the exam as a CSV. I started working on the five point number analysis for the instructor for each exam as well, for which the backend call needs a little fix which wont be taking long. Additionally , the frontend for the student dashboard is done as for now , will be working on the backend as I move forward towards the next cycle.
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- User Story: Enhance Course and Exam Management #207
+- User Story: Download Results #18
+- Revamp Student Dashboard - to display the courses and the exams for each student individually
+- 5-point summary analysis for the instructor
+
 ## Friday ( 23/7 - 25/7 )
 
 ### Timesheet 
