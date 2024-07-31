@@ -18,11 +18,11 @@ import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 // Instructor pages
 import OMRProcessing from "../src/components/OMRProcessing";
 import OMRProcessingUpload from "../src/components/OMRProcessingUpload";
-// Import Instructor pages
 
+// Import Instructor pages
 import Dashboard from "./pages/Instructor/Dashboard";
 import NotFound from "./components/NotFound";
-import Login from "./pages/Login"; 
+import Home from "./pages/Home"; 
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
@@ -35,10 +35,9 @@ import ConfirmExamKey from "./pages/Instructor/ConfirmExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
-// Student pages
 import ReviewExams from "./pages/Instructor/ReviewExams";
 import ViewExam from "./pages/Instructor/ViewExam";
-//student pages
+// Student pages
 import StudentDashboard from "./pages/Student/StudentDashboard";
 import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
 import StudentNotificationPreferences from "./pages/Student/StudentNotificationPreferences";
@@ -51,7 +50,7 @@ function App() {
       <div className="App">
         <Layout>
           <Routes>
-            <Route path="/Login" element={<Login />} />
+            <Route path="/Home" element={<Home />} />
             <Route path="/" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
             <Route path="/Dashboard"element={ <ProtectedRoute> <Dashboard /></ProtectedRoute>}/>
             <Route path="/AccountSettings" element={ <ProtectedRoute> <AccountSettings /> </ProtectedRoute> } />
@@ -73,13 +72,8 @@ function App() {
               path="/NotificationPreferences"
               element={ <ProtectedRoute> <NotificationPreferences /> </ProtectedRoute> }
             />
-            <Route
-              path= "/StudentDashboard"
-              element={
-                <ProtectedRoute>
-                  <StudentDashboard />
-                </ProtectedRoute>
-              }
+            <Route path= "/StudentDashboard"
+              element={ <ProtectedRoute> <StudentDashboard /> </ProtectedRoute> }
             />
             <Route
               path="/StudentGradeReport"
@@ -93,7 +87,6 @@ function App() {
               path="/StudentNotificationPreferences"
               element={ <ProtectedRoute> <StudentNotificationPreferences /> </ProtectedRoute> }
             />
-            {/* <Route path="/Schedule" element={<Schedule />} /> Schedule plugin is brocken ->will fix */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

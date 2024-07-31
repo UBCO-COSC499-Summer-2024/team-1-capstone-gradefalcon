@@ -19,8 +19,21 @@ COPY package.json /code/package.json
 COPY package-lock.json /code/package-lock.json
 RUN npm ci
 
-# Install PostgreSQL client
-RUN apt-get update && apt-get install -y postgresql-client
+# Install PostgreSQL client and TeX Live
+RUN apt-get update && apt-get install -y \
+  postgresql-client \
+  texlive-latex-base \
+  texlive-fonts-recommended \
+  texlive-fonts-extra \
+  texlive-latex-extra
+
+# Use this instead to avoid long build times (or use prebuild images)
+# Install PostgreSQL client and a minimal TeX Live installation
+# RUN apt-get update && apt-get install -y \
+# postgresql-client \
+# texlive-latex-base \
+# texlive-fonts-recommended
+
 
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK --interval=30s \

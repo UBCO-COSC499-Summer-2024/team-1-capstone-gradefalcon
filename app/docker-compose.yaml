@@ -5,10 +5,10 @@ services:
     build:
       args:
         - NODE_ENV=development
-        # - PORT=5001
       context: backend
       target: development
     command: npm run start-watch
+
     environment:
       - DATABASE_DB=root
       - DATABASE_USER=root
@@ -17,7 +17,6 @@ services:
       - NODE_ENV=development
       - JWT_SECRET=secret
       - DATABASE_PORT=5432
-      # - PORT=5001
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_REGION=${AWS_REGION}
@@ -26,11 +25,12 @@ services:
       - REACT_APP_AUTH0_CLIENT_ID=${REACT_APP_AUTH0_CLIENT_ID}
       - REACT_APP_AUTH0_CLIENT_SECRET=${REACT_APP_AUTH0_CLIENT_SECRET}
     ports:
-      - "80:5001" # Map port 5001 to 80
+      - 80:80
       - 9229:9229
       - 9230:9230
     volumes:
       - ./backend/src:/code/src:ro
+      - ./backend/src/assets:/code/src/assets
       - ./backend/package.json:/code/package.json
       - ./backend/package-lock.json:/code/package-lock.json
       - back-notused:/opt/app/node_modules
@@ -84,8 +84,7 @@ services:
       - omr-outputs:/app/outputs
     networks:
       - app-network
-    # depends_on:
-    #   - backend
+
 
 networks:
   app-network:
