@@ -4,10 +4,11 @@ const multer = require('multer');
 const fs = require('fs');
 const { uploadFile, saveFileUrlToDatabase } = require('../controllers/s3Controller');
 const pool = require('../utils/db');
+const { checkJwt, checkPermissions, checkRole } = require('../auth0');
 
 const upload = multer({ dest: 'uploads/' });
 
-routes.post('/uploadExam', upload.single('file'), async (req, res) => {
+routes.post('/uploadExam', checkJwt, checkPermissions(['upload:file']), upload.single('file'), async (req, res) => {
   const { folder, fileName: customFileName, examID } = req.body;
   const file = req.file;
   const fileContent = fs.readFileSync(file.path);
@@ -31,7 +32,7 @@ routes.post('/uploadExam', upload.single('file'), async (req, res) => {
   }
 });
 
-routes.post('/uploadExamKey', upload.single('file'), async (req, res) => {
+routes.post('/uploadExamKey', checkJwt, checkPermissions(['upload:file']), upload.single('file'), async (req, res) => {
   let { folder, fileName: customFileName, examID, examTitle, classID } = req.body;
   const file = req.file;
   const fileContent = fs.readFileSync(file.path);

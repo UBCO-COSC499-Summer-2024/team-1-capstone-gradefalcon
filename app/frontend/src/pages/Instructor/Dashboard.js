@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "react-router-dom";
 import { Bookmark, ArrowUpRight, Plus, Search } from "lucide-react";
 import { Button } from "../../components/ui/button";
@@ -14,6 +15,8 @@ import NewExamForm from "../../components/NewExamForm"; // Import the new exam f
 import { Input } from "../../components/ui/input";
 
 export default function Dashboard() {
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const roles = user[`${process.env.REACT_APP_AUTH0_AUDIENCE}/roles`] || [];
   const [userName, setUserName] = useState("");
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
@@ -28,65 +31,90 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchSessionInfo = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const response = await fetch("/api/session-info", {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          credentials: "include", // This ensures cookies are included in the request
         });
         if (response.ok) {
           const data = await response.json();
+          // console.log("Session Info Data:", data);
           setUserName(data.userName);
         } else {
           console.error("Failed to fetch session info");
+          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching session info:", error);
+        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
     const fetchCourses = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const response = await fetch("/api/class/classes", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
+          // console.log("Courses Data:", data);
           setCourses(data);
           setFilteredCourses(data); // Initialize filteredCourses with the fetched data
         } else {
           console.error("Failed to fetch courses");
+          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
-        console.error("Error fetching courses");
+        console.error("Error fetching courses:", error);
+        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
     const fetchExams = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const response = await fetch("/api/exam/ExamBoard", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
+          // console.log("Exams Data:", data);
           setExams(data.classes);
           setFilteredExams(data.classes); // Initialize filteredExams with the fetched data
         } else {
           console.error("Failed to fetch exams");
+          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
-        console.error("Error fetching exams");
+        console.error("Error fetching exams:", error);
+        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
     const fetchStandardAverageData = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const response = await fetch("/api/exam/average-per-exam", {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
           credentials: "include",
         });
         if (response.ok) {
@@ -95,28 +123,36 @@ export default function Dashboard() {
           setStandardAverageData(data);
         } else {
           console.error("Failed to fetch standard average data");
+          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
-        console.error("Error fetching standard average data");
+        console.error("Error fetching standard average data:", error);
+        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
     const fetchAverageCourseData = async () => {
       try {
+        const token = await getAccessTokenSilently();
         const response = await fetch("/api/exam/average-per-course", {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("Average Course Data:", data);
+          // console.log("Performance Data:", data);
           setAverageCourseData(data);
         } else {
-          console.error("Failed to fetch average course data");
+          console.error("Failed to fetch performance data");
+          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
-        console.error("Error fetching average course data", error);
+        console.error("Error fetching performance data:", error);
+        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
@@ -125,7 +161,7 @@ export default function Dashboard() {
     fetchExams();
     fetchStandardAverageData();
     fetchAverageCourseData();
-  }, []);
+  }, [getAccessTokenSilently, isAuthenticated]);
 
   useEffect(() => {
     setFilteredCourses(

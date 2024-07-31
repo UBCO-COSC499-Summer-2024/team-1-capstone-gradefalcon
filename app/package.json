@@ -7,8 +7,11 @@
     "test": "npm run test:backend && npm run test:frontend"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
     "@aws-sdk/client-s3": "^3.614.0",
     "csv-parser": "^3.0.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "express-jwt": "^8.4.1",
+    "jwks-rsa": "^3.1.0"
   }
 }

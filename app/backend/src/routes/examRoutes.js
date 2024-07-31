@@ -16,7 +16,8 @@ const {
   resetOMR,
   getCustomMarkingSchemes,
 } = require("../controllers/examController");
-const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
+const {  createUploadMiddleware } = require("../middleware/uploadMiddleware");
+const { checkJwt, checkPermissions, checkRole } = require('../auth0'); // Importing from auth.js
 const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
@@ -26,12 +27,12 @@ const multer = require("multer");
 const { formatWithOptions } = require("util");
 const router = express.Router();
 
-router.post("/saveQuestions", saveQuestions);
-router.post("/NewExam/:class_id", newExam);
-router.post("/ExamBoard", examBoard);
-router.get("/average-per-exam", getAveragePerExam);
-router.get("/average-per-course", getAveragePerCourse); // Updated route
-router.get("/grades/:studentId", getStudentGrades);
+router.post("/saveQuestions", checkJwt, checkPermissions(['create:exam']), saveQuestions);
+router.post("/NewExam/:class_id", checkJwt, checkPermissions(['create:exam']), newExam);
+router.post("/ExamBoard", checkJwt, checkPermissions(['read:exams']), examBoard);
+router.get("/average-per-exam", checkJwt, checkPermissions(['read:examAverageData']), getAveragePerExam);
+router.get("/average-per-course", checkJwt, checkPermissions(['read:courseAverageData']), getAveragePerCourse); // Updated route
+router.get('/grades/:studentId', checkJwt, checkPermissions(['read:grades']), getStudentGrades);
 
 // Function to get the answer key for a specific exam
 
@@ -51,7 +52,7 @@ router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
 
 // Add this route to the examRoutes.js file
 
-router.get("/studentScores", async function (req, res) {
+router.get("/studentScores", checkJwt, checkPermissions(['read:grades']), async function (req, res) {
   const filePath = path.join(__dirname, "../../omr/outputs/combined.csv");
   const results = []; // Array to hold student number and score
 
@@ -87,7 +88,7 @@ router.get("/studentScores", async function (req, res) {
     });
 });
 
-router.post("/UploadExam", async function (req, res) {
+router.post("/UploadExam", checkJwt, checkPermissions(['upload:file']), async function (req, res) {
   const upload = multer({ dest: "uploads/" }).single("examPages");
 
   upload(req, res, async function (err) {
@@ -135,7 +136,7 @@ router.post("/UploadExam", async function (req, res) {
   });
 });
 
-router.post("/getResults", async function (req, res) {
+router.post("/getResults", checkJwt, checkPermissions(['read:grades']),  async function (req, res) {
   const singlePage = req.body.singlePage;
   const inputDirPath = path.join(__dirname, "../../omr/inputs");
   const outputDirPath = path.join(__dirname, "../../omr/outputs");
@@ -193,7 +194,10 @@ router.post("/getResults", async function (req, res) {
 });
 
 // Save the exam key uploaded by the user
-router.post("/saveExamKey/:examType", async function (req, res) {
+router.post(
+  "/saveExamKey/:examType",
+  checkJwt, checkPermissions(['upload:file']),
+  async function (req, res) {
   const template = req.params.examType;
   console.log("template", template);
   if (template === "100mcq") {
@@ -254,7 +258,7 @@ router.post("/saveExamKey/:examType", async function (req, res) {
 });
 
 // Copy the template JSON file to the shared volume
-router.post("/copyTemplate", async function (req, res) {
+router.post("/copyTemplate", checkJwt, checkPermissions(['upload:file']), async function (req, res) {
   console.log("copyTemplate");
   const examType = req.body.examType;
   const keyOrExam = req.body.keyOrExam;
@@ -302,8 +306,10 @@ router.post("/copyTemplate", async function (req, res) {
   }
 });
 
-router.post("/GenerateEvaluation", async function (req, res) {
-  const { examType, exam_id } = req.body;
+
+// Generate the evaluation JSON for an exam
+router.post("/GenerateEvaluation" , checkJwt,  checkPermissions(['create:evaluation']), async function (req, res) {
+  const {examType, exam_id } = req.body;
 
   try {
     if (!exam_id) {
@@ -494,7 +500,7 @@ router.post("/GenerateEvaluation", async function (req, res) {
 });
 
 // Call the OMR processing service
-router.post("/callOMR", async function (req, res) {
+router.post("/callOMR", checkJwt,  checkPermissions(['upload:file']), async function (req, res) {
   console.log("callOMR");
   try {
     const response = await fetch("http://flaskomr:5000/process", {
@@ -511,7 +517,7 @@ router.post("/callOMR", async function (req, res) {
 });
 
 // Route to fetch the first PNG image in the folder
-router.post("/fetchImage", async function (req, res) {
+router.get('/fetchImage', checkJwt,  checkPermissions(['read:image']), async function (req, res) {
   let imagesFolderPath;
   if (req.body.side === "back") {
     imagesFolderPath = path.join(
@@ -534,7 +540,7 @@ router.post("/fetchImage", async function (req, res) {
   }
 });
 
-router.get("/getScoreByExamId/:exam_id", async (req, res) => {
+router.get("/getScoreByExamId/:exam_id", checkJwt,  checkPermissions(['read:grades']), async (req, res) => {
   try {
     const exam_id = parseInt(req.params.exam_id, 10);
     if (isNaN(exam_id)) {
@@ -551,7 +557,7 @@ router.get("/getScoreByExamId/:exam_id", async (req, res) => {
   }
 });
 
-router.get("/getExamType/:exam_id", async (req, res) => {
+router.get("/getExamType/:exam_id", checkJwt,  checkPermissions(['read:exam']), async (req, res) => {
   try {
     const exam_id = parseInt(req.params.exam_id, 10);
     if (isNaN(exam_id)) {
@@ -570,7 +576,7 @@ router.get("/getExamType/:exam_id", async (req, res) => {
 
 router.post("/saveResults", saveResults);
 
-router.get("/searchExam/:student_id", async (req, res) => {
+router.get("/searchExam/:student_id", checkJwt,  checkPermissions(['read:students']), async (req, res) => {
   const studentId = req.params.student_id;
   const filePath = path.join(__dirname, "../../omr/outputs/Results/Results.csv");
   let found = false; // Flag to check if student is found
@@ -601,7 +607,7 @@ router.get("/searchExam/:student_id", async (req, res) => {
 // We extract the ID from front_pages_page_1.png and the answers from back_pages_page_1.png
 // Create a CSV file with the following fields:
 // "front_page_id", "back_page_id", "score", "student_id", "question_1", "question_2", ..., "question_100"
-router.get("/preprocessingCSV", async (req, res) => {
+router.get("/preprocessingCSV", checkJwt,  checkPermissions(['upload:file']), async (req, res) => {
   console.log("Hello from preprocessingCSV");
   const frontPagePath = path.join(__dirname, "../../omr/outputs/page_1/Results/Results.csv");
   const backPagePath = path.join(__dirname, "../../omr/outputs/page_2/Results/Results.csv");
@@ -677,7 +683,7 @@ router.get("/preprocessingCSV", async (req, res) => {
 });
 
 //test routes
-router.post("/test", async function (req, res) {
+router.post("/test", checkJwt,  checkPermissions(['upload:file']), async function (req, res) {
   console.log("test called");
   res.send(JSON.stringify("Test route called successfully"));
 });

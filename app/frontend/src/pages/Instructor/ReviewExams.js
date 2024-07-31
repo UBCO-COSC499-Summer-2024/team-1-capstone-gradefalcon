@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/App.css";
 import Toast from "../../components/Toast";
 
 const ReviewExams = () => {
+  const { getAccessTokenSilently } = useAuth0();
+  const [imageSrc, setImageSrc] = useState('');
   const location = useLocation();
   const [toast, setToast] = useState(null);
   const [studentScores, setStudentScores] = useState([]);
@@ -13,60 +16,69 @@ const ReviewExams = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [resultsCombined, setResultsCombined] = useState(false);
   const { exam_id } = location.state || {};
-  const navigate = useNavigate(); // Initialize useNavigate
-  // const exam_id = 1; // placeholder
+  const navigate = useNavigate();
 
   useEffect(() => {
-    //preprocess the data
-    const preprocessData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("/api/exam/preprocessingCSV");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log("preprocessData", data);
+        // Preprocess the data
+        const preprocessData = async () => {
+          const token = await getAccessTokenSilently();
+          const response = await fetch("/api/exam/preprocessingCSV", {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log("preprocessData", data);
+        };
+
+        // Fetch student scores for the exam
+        const fetchStudentScores = async () => {
+          const token = await getAccessTokenSilently();
+          const response = await fetch("/api/exam/studentScores", {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log("data", data);
+          setStudentScores(data);
+        };
+
+        // Fetch the max marks for the exam
+        const fetchTotalScore = async () => {
+          const token = await getAccessTokenSilently();
+          const response = await fetch(`/api/exam/getScoreByExamId/${exam_id}`, {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          setTotalMarks(data.scores[0]);
+        };
+
+        await preprocessData();
+        await fetchStudentScores();
+        await fetchTotalScore();
+
+        setResultsCombined(true);
       } catch (error) {
-        console.error("Error preprocessing data:", error);
+        console.error("Error:", error);
       }
     };
-    preprocessData();
 
-    // Fetch student scores for the exam
-    const fetchStudentScores = async () => {
-      try {
-        const response = await fetch("/api/exam/studentScores");
-        console.log(response);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log("data", data);
-        setStudentScores(data); // Update state with fetched data
-      } catch (error) {
-        console.error("Error fetching student scores:", error);
-      }
-    };
-
-    fetchStudentScores();
-
-    // Fetch the max marks for the exam
-    const fetchTotalScore = async () => {
-      try {
-        const response = await fetch(`/api/exam/getScoreByExamId/${exam_id}`);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setTotalMarks(data.scores[0]);
-      } catch (error) {
-        console.error("Error fetching total marks:", error);
-      }
-    };
-
-    fetchTotalScore();
-    setResultsCombined(true);
-  }, []);
+    fetchData();
+  }, [getAccessTokenSilently, exam_id]);
 
   // Function to handle view button click
   const handleViewClick = (studentId, front_page, back_page) => {
@@ -121,10 +133,12 @@ const ReviewExams = () => {
       return;
     }
     try {
+      const token = await getAccessTokenSilently();
       const response = await fetch("/api/exam/saveResults", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({ studentScores, exam_id }),
       });
@@ -157,11 +171,11 @@ const ReviewExams = () => {
           )}
           <header>
             <h2>Review Exams</h2>
-            <input // Step 2: Create search bar
+            <input
               type="text"
               placeholder="Search by Student ID..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)} // Step 3: Update search query
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </header>
           <table>

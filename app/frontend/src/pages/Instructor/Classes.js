@@ -8,17 +8,23 @@ import { ScrollArea } from "../../components/ui/scroll-area";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "../../components/ui/dialog";
 import NewClassForm from "../../components/NewClassForm";
 import { ArrowUpRight } from "lucide-react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Classes = () => {
   const navigate = useNavigate();
+  const { getAccessTokenSilently } = useAuth0();
   const [classes, setClasses] = useState([]);
   const [error, setError] = useState(null);
 
   const fetchClasses = async () => {
     try {
+      const token = await getAccessTokenSilently(); // Get the token
       const response = await fetch("/api/class/classes", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // Include the token in the request
+        },
         credentials: "include",
       });
       if (response.ok) {
@@ -111,9 +117,6 @@ const Classes = () => {
       </div>
     </main>
   );
-  
 };
 
 export default Classes;
-
-
