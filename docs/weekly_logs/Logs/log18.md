@@ -51,11 +51,11 @@
 
 | Team Member | Logged Hours |
 | ----------- | ------------ |
-| Omar Ankit      | 28,34      |
+| Omar Ankit      | 28:34      |
 | Jusnoor Kaur      | 19:45     |
 | Ahmad Mirza      | 30:48      |
-| Nelson Ngumo      | 29.05      |
-| Bennett Witt     | 47.45      |
+| Nelson Ngumo      | 29:05      |
+| Bennett Witt     | 47:45      |
 
 - ![docs/weekly logs/Clockify/[Time Tracking Image]](../Clockify/Time18.png)
 
