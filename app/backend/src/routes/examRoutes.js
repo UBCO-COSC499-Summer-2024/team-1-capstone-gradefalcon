@@ -15,6 +15,7 @@ const {
   ensureDirectoryExistence,
   resetOMR,
   getCustomMarkingSchemes,
+  getExamDetails,
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const { checkJwt, checkPermissions, checkRole } = require("../auth0"); // Importing from auth.js
@@ -43,6 +44,7 @@ router.get(
   getAveragePerCourse
 ); // Updated route
 router.get("/grades/:studentId", checkJwt, checkPermissions(["read:grades"]), getStudentGrades);
+router.get("/getExamDetails/:exam_id", checkJwt, checkPermissions(["read:exams"]), getExamDetails);
 
 // Function to get the answer key for a specific exam
 

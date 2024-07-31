@@ -7,14 +7,21 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from ".
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "../../components/ui/dialog";
 import NewClassForm from "../../components/NewClassForm";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, MoreVertical } from "lucide-react";
+import { Checkbox } from "../../components/ui/checkbox";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "../../components/ui/dropdown-menu";
+import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
+import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Classes = () => {
   const navigate = useNavigate();
   const { getAccessTokenSilently } = useAuth0();
   const [classes, setClasses] = useState([]);
+  const [selectedClasses, setSelectedClasses] = useState([]);
+  const [allSelected, setAllSelected] = useState(false);
   const [error, setError] = useState(null);
+  const { toast } = useToast(); // Using the toast hook
 
   const fetchClasses = async () => {
     try {
@@ -42,6 +49,57 @@ const Classes = () => {
     fetchClasses();
   }, []);
 
+  const handleDeleteFromBoard = (classId) => {
+    setClasses(prevData => {
+      const updatedClasses = prevData.filter(classItem => classItem.class_id !== classId);
+      return updatedClasses;
+    });
+    toast({
+      title: 'Deleted successfully',
+    });
+  };
+
+  const handleDeleteSelected = () => {
+    setClasses(prevData => {
+      const updatedClasses = prevData.filter(classItem => !selectedClasses.includes(classItem.class_id));
+      return updatedClasses;
+    });
+    setSelectedClasses([]);
+    setAllSelected(false);
+    toast({
+      title: 'Deleted selected classes successfully',
+    });
+  };
+
+  const handleArchiveSelected = () => {
+    // Implement archiving logic here
+    console.log("Archiving selected classes:", selectedClasses);
+    // Reset selection after archiving
+    setSelectedClasses([]);
+    setAllSelected(false);
+    toast({
+      title: 'Archived selected classes successfully',
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (allSelected) {
+      setSelectedClasses([]);
+    } else {
+      const allClassIds = classes.map(classItem => classItem.class_id);
+      setSelectedClasses(allClassIds);
+    }
+    setAllSelected(!allSelected);
+  };
+
+  const handleSelectClass = (classId) => {
+    if (selectedClasses.includes(classId)) {
+      setSelectedClasses(selectedClasses.filter(id => id !== classId));
+    } else {
+      setSelectedClasses([...selectedClasses, classId]);
+    }
+  };
+
   return (
     <main className="flex flex-col gap-4">
       <div>
@@ -59,25 +117,63 @@ const Classes = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead>
+                        <Checkbox
+                          checked={allSelected}
+                          onCheckedChange={handleSelectAll}
+                        />
+                      </TableHead>
                       <TableHead>Class Name</TableHead>
                       <TableHead className="hidden sm:table-cell">Course ID</TableHead>
-                      <TableHead className="hidden sm:table-cell"></TableHead>
+                      <TableHead className="hidden sm:table-cell">Actions</TableHead>
+                      <TableHead>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuItem onClick={handleDeleteSelected}>Delete Selected</DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleArchiveSelected}>Archive Selected</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {classes.map((classItem, index) => (
                       <TableRow key={index}>
                         <TableCell>
+                          <Checkbox
+                            checked={selectedClasses.includes(classItem.class_id)}
+                            onCheckedChange={() => handleSelectClass(classItem.class_id)}
+                          />
+                        </TableCell>
+                        <TableCell>
                           <div className="font-medium">{classItem.course_name}</div>
                         </TableCell>
                         <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
-                        <TableCell className="hidden sm:table-cell">
+                        <TableCell>
                           <Button asChild size="sm" className="ml-auto gap-1">
                             <Link to={`/ClassManagement/${classItem.class_id}`}>
                               Open Course
                               <ArrowUpRight className="h-4 w-4 ml-1" />
                             </Link>
                           </Button>
+                        </TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                              <DropdownMenuItem onClick={() => handleDeleteFromBoard(classItem.class_id)}>Delete</DropdownMenuItem>
+                              <DropdownMenuItem>Archive</DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -115,8 +211,10 @@ const Classes = () => {
           </Card>
         </div>
       </div>
+      <Toaster /> {/* Adding the Toaster component */}
     </main>
   );
 };
 
 export default Classes;
+

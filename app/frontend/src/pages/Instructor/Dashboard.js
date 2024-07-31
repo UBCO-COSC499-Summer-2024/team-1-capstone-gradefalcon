@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React , { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Link } from "react-router-dom";
 import { Bookmark, ArrowUpRight, Plus, Search } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
@@ -11,7 +11,7 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../
 import AverageperExamChart from "../../components/AverageperExamChart";
 import AverageperCourseChart from "../../components/AverageperCourseChart";
 import NewClassForm from "../../components/NewClassForm";
-import NewExamForm from "../../components/NewExamForm"; // Import the new exam form
+import NewExamForm from "../../components/NewExamForm";
 import { Input } from "../../components/ui/input";
 
 export default function Dashboard() {
@@ -27,6 +27,8 @@ export default function Dashboard() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [courseSearchTerm, setCourseSearchTerm] = useState("");
   const [examSearchTerm, setExamSearchTerm] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSessionInfo = async () => {
@@ -182,6 +184,7 @@ export default function Dashboard() {
   const handleExamCreated = (newExam) => {
     setExams([...exams, newExam]);
   };
+
   return (
     <div className="flex flex-col gap-4 h-screen">
       <div className={`flex-1 ${filteredCourses.length === 0 ? "h-full" : ""}`}>
@@ -272,7 +275,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-  
+
       <div className="flex-1">
         <Card className="bg-white border rounded h-full">
           <CardHeader className="flex justify-between px-6 py-4">
@@ -336,13 +339,25 @@ export default function Dashboard() {
                 </TableHeader>
                 <TableBody>
                   {filteredExams.map((exam, index) => (
-                    <TableRow key={index} className={index}>
-                      <TableCell>
-                        <div className="font-medium">{exam.exam_title}</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">{exam.course_id}</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
-                    </TableRow>
+                    <TooltipProvider key={index}>
+                      <Tooltip delayDuration={0}>
+                        <TooltipTrigger asChild>
+                          <TableRow
+                            className="hover:bg-gray-100 cursor-pointer"
+                            onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}
+                          >
+                            <TableCell>
+                              <span className="font-bold">{exam.exam_title}</span>
+                              <div className="hidden text-sm text-muted-foreground md:inline">{exam.course_id}</div>
+                            </TableCell>
+                            <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
+                          </TableRow>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Click for details</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   ))}
                 </TableBody>
               </Table>
@@ -350,7 +365,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-  
+
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="bg-white border rounded">
           <CardHeader>
@@ -371,6 +386,4 @@ export default function Dashboard() {
       </div>
     </div>
   );
-  
 }
-
