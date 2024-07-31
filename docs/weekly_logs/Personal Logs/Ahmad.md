@@ -1,6 +1,73 @@
 # Personal Log
 Ahmad Saleem Mirza
-## Wednesday (July 24 - 26)
+
+## Wednesday (July 26 - 31)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/July26-31.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Adding support for both 100 and 200mcq template
+  * #2: Integrating changes with new UI
+  * #3: Ensuring bulk upload of files
+  * #4: Displaying results on student view
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Adding support for both 100 and 200mcq template
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Integrating changes with new UI
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>  
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Ensuring bulk upload of files
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>  
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Displaying results on student view
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>  
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+I have successfully finished the uploading and grading of exam files for 100mcq and 200mcq templates. The challenge was ensuring that whilst this major feature was completed, it did not impact the older code I had written. In several files I had to go back and change what I previously wrote to make it work with the newer changes. As for the feature itself, I had to ensure that I was following convention and storing the files in the Docker container in a proper manner and then accessing them appropriately. As our OMR scanner is ran multiple times, I also had to make sure it was cleared out before each run so the results of the previous run didn't interfere with newer ones. 
+
+The main difficulty was resolving the different merge conflicts my code was having with everyone elses, particularly with the new UI we have now implemented. I had to painstakingly review intricate details in several files to debug feature breaking issues. However, I am glad I got it resolved.
+
+Overall, I am feeling confident that we can meet all the main requirements, as well as some bonus ones, before our meeting with Dr. Lawrence.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Storing exams locally following the previously agreed upon storage mechanism and then retrieving the results to display them on the student's view 
+
+
+## Friday (July 24 - 26)
 
 ### Timesheet
 Clockify report
