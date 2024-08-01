@@ -26,6 +26,7 @@ import Login from "./pages/Login";
 import AccountSettings from "./pages/Instructor/AccountSettings";
 import Classes from "./pages/Instructor/Classes";
 import ClassManagement from "./pages/Instructor/ClassManagement";
+import ExamDetails from "./pages/Instructor/ExamDetails";
 import NewClass from "./pages/Instructor/NewClass";
 import NewExam from "./pages/Instructor/NewExam";
 import ExamBoard from "./pages/Instructor/Examboard";
@@ -35,6 +36,8 @@ import ConfirmExamKey from "./pages/Instructor/ConfirmExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
+import Reports from "./pages/Instructor/Reports"; 
+import ViewReport from "./pages/Instructor/ViewReport"; 
 // Student pages
 import ReviewExams from "./pages/Instructor/ReviewExams";
 import ViewExam from "./pages/Instructor/ViewExam";
@@ -58,6 +61,7 @@ function App() {
             <Route path="/Classes" element={ <ProtectedRoute> <Classes /> </ProtectedRoute> } />
             <Route path="/New-Class" element={ <ProtectedRoute> <NewClass /> </ProtectedRoute> } />
             <Route path="/ClassManagement/:class_id" element={ <ProtectedRoute> <ClassManagement /> </ProtectedRoute> }/>
+            <Route path="/ExamDetails/:exam_id" element={ <ProtectedRoute> <ExamDetails /> </ProtectedRoute> } />
             <Route path="/NewExam/:class_id" element={ <ProtectedRoute> <NewExam /> </ProtectedRoute> } />
             <Route path="/ExamBoard" element={ <ProtectedRoute> <ExamBoard /> </ProtectedRoute> } />
             <Route path="/ExamControls" element={ <ProtectedRoute> <ExamControls /> </ProtectedRoute> } />
@@ -69,18 +73,10 @@ function App() {
             <Route path="/OMRProcessingUpload" element={ <ProtectedRoute> <OMRProcessingUpload /> </ProtectedRoute> } /> {/* Add the new route */}
             <Route path="/ReviewExams" element={ <ProtectedRoute> <ReviewExams /> </ProtectedRoute> } />
             <Route path="/ViewExam" element={<ProtectedRoute><ViewExam /></ProtectedRoute>} />
-            <Route
-              path="/NotificationPreferences"
-              element={ <ProtectedRoute> <NotificationPreferences /> </ProtectedRoute> }
-            />
-            <Route
-              path= "/StudentDashboard"
-              element={
-                <ProtectedRoute>
-                  <StudentDashboard />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/NotificationPreferences" element={ <ProtectedRoute> <NotificationPreferences /> </ProtectedRoute> } />
+            <Route path= "/StudentDashboard" element={  <ProtectedRoute> <StudentDashboard /> </ProtectedRoute> } />
+            <Route path="/Reports" element={ <ProtectedRoute> <Reports /> </ProtectedRoute> } />
+            <Route path="/ViewReport" element={ <ProtectedRoute> <ViewReport /> </ProtectedRoute> } />
             <Route
               path="/StudentGradeReport"
               element={ <ProtectedRoute> <StudentGradeReport /> </ProtectedRoute> }
@@ -93,7 +89,6 @@ function App() {
               path="/StudentNotificationPreferences"
               element={ <ProtectedRoute> <StudentNotificationPreferences /> </ProtectedRoute> }
             />
-            {/* <Route path="/Schedule" element={<Schedule />} /> Schedule plugin is brocken ->will fix */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

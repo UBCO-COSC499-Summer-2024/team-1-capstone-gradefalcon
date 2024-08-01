@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React , { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Link } from "react-router-dom";
 import { Bookmark, ArrowUpRight, Plus, Search } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
@@ -11,7 +11,7 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../
 import AverageperExamChart from "../../components/AverageperExamChart";
 import AverageperCourseChart from "../../components/AverageperCourseChart";
 import NewClassForm from "../../components/NewClassForm";
-import NewExamForm from "../../components/NewExamForm"; // Import the new exam form
+import NewExamForm from "../../components/NewExamForm";
 import { Input } from "../../components/ui/input";
 
 export default function Dashboard() {
@@ -27,6 +27,8 @@ export default function Dashboard() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [courseSearchTerm, setCourseSearchTerm] = useState("");
   const [examSearchTerm, setExamSearchTerm] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSessionInfo = async () => {
@@ -176,7 +178,7 @@ export default function Dashboard() {
         <Card className="bg-white border rounded h-full">
           <CardHeader className="flex justify-between px-6 py-4">
             <div className="flex justify-between items-center">
-              <CardTitle className="mb-2">Your Courses</CardTitle>
+              <CardTitle className="mb-2">Your Classes</CardTitle>
               <div className="flex gap-2">
                 <Dialog>
                   <TooltipProvider>
@@ -189,16 +191,14 @@ export default function Dashboard() {
                         </DialogTrigger>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Create New Course</p>
+                        <p>Create New Class</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Create New Course</DialogTitle>
-                      <DialogDescription>
-                        Enter the details for the new course and import the student list via a CSV file.
-                      </DialogDescription>
+                      <DialogTitle>Create New Class</DialogTitle>
+                      <DialogDescription>Enter the details for the new course and import the student list via a CSV file.</DialogDescription>
                     </DialogHeader>
                     <NewClassForm />
                     <DialogClose asChild>
@@ -208,7 +208,7 @@ export default function Dashboard() {
                 </Dialog>
                 <Button asChild size="sm" className="gap-1">
                   <Link to="/Classes">
-                    Manage Courses
+                    Manage Classes
                     <ArrowUpRight className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -269,7 +269,12 @@ export default function Dashboard() {
             <div className="flex justify-between items-center">
               <CardTitle className="mb-2">Exam Board</CardTitle>
               <div className="flex gap-2">
-                <Dialog>
+                <Button size="sm" className="gap-1" >
+                <Link to={`/NewExam/defaultClassId`}>
+                  <Plus className="h-4 w-4" />
+                  </Link>
+                </Button>
+                {/* <Dialog>
                   <TooltipProvider>
                     <Tooltip delayDuration={0}>
                       <TooltipTrigger asChild>
@@ -296,7 +301,7 @@ export default function Dashboard() {
                       <Button variant="ghost">Close</Button>
                     </DialogClose>
                   </DialogContent>
-                </Dialog>
+                </Dialog> */}
                 <Button asChild size="sm" className="gap-1">
                   <Link to="/Examboard">
                     Manage Exams
@@ -328,13 +333,24 @@ export default function Dashboard() {
                 </TableHeader>
                 <TableBody>
                   {filteredExams.map((exam, index) => (
-                    <TableRow key={index} className={index}>
-                      <TableCell>
-                        <div className="font-medium">{exam.exam_title}</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">{exam.course_id}</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
-                    </TableRow>
+                    <TooltipProvider key={index}>
+                      <Tooltip delayDuration={0}>
+                        <TooltipTrigger asChild>
+                          <TableRow
+                            className="hover:bg-gray-100 cursor-pointer"
+                            onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}
+                          >
+                            <TableCell>
+                              <span className="font-bold">{exam.exam_title}</span>
+                            </TableCell>
+                            <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
+                          </TableRow>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Click for details</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   ))}
                 </TableBody>
               </Table>

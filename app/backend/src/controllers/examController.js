@@ -62,7 +62,7 @@ const getAveragePerExam = async (req, res, next) => {
   try {
     const averagePerExamData = await pool.query(
       `
-      SELECT e.exam_title AS "examTitle", AVG(sr.grade) AS "averageScore"
+      SELECT e.exam_title AS "examTitle", ROUND(AVG(sr.grade)::numeric, 1) AS "averageScore"
       FROM studentResults sr
       JOIN exam e ON sr.exam_id = e.exam_id
       JOIN classes c ON e.class_id = c.class_id
@@ -81,10 +81,10 @@ const getAveragePerExam = async (req, res, next) => {
 
 const getAveragePerCourse = async (req, res, next) => {
   const instructorId = req.auth.sub;
-    try {
+  try {
     const averagePerCourseData = await pool.query(
       `
-      SELECT c.course_name AS "courseName", AVG(sr.grade) AS "averageScore"
+      SELECT c.course_name AS "courseName", ROUND(AVG(sr.grade)::numeric, 1) AS "averageScore"
       FROM studentResults sr
       JOIN exam e ON sr.exam_id = e.exam_id
       JOIN classes c ON e.class_id = c.class_id
@@ -303,6 +303,44 @@ async function getCustomMarkingSchemes(exam_id) {
   return transformedSchemes;
 }
 
+// Fetch exam details by exam_id
+const getExamDetails = async (req, res, next) => {
+  const { exam_id } = req.params;
+
+  try {
+    const examQuery = `
+      SELECT e.exam_id, e.exam_title, e.total_questions, e.total_marks, e.mean, e.high, e.low, e.upper_quartile, e.lower_quartile, e.page_count, e.file_size, 
+             c.course_id, c.course_name
+      FROM exam e
+      JOIN classes c ON e.class_id = c.class_id
+      WHERE e.exam_id = $1
+    `;
+    const examResult = await pool.query(examQuery, [exam_id]);
+
+    if (examResult.rows.length === 0) {
+      return res.status(404).json({ message: "Exam not found" });
+    }
+
+    const ExamDetails = examResult.rows[0];
+
+    const studentResultsQuery = `
+      SELECT sr.student_id, s.name as student_name, sr.grade
+      FROM studentResults sr
+      JOIN student s ON sr.student_id = s.student_id
+      WHERE sr.exam_id = $1
+    `;
+    const studentResultsResult = await pool.query(studentResultsQuery, [exam_id]);
+
+    ExamDetails.studentResults = studentResultsResult.rows;
+
+    res.json(ExamDetails);
+  } catch (error) {
+    console.error("Error fetching exam details:", error);
+    res.status(500).json({ message: "Failed to fetch exam details" });
+  }
+};
+
+
 module.exports = {
   saveQuestions,
   newExam,
@@ -320,4 +358,5 @@ module.exports = {
   resetOMR,
   ensureDirectoryExistence,
   getCustomMarkingSchemes,
+  getExamDetails,
 };

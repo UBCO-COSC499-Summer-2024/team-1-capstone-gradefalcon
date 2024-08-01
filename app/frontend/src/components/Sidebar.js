@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ClipboardCheck, Home, BookOpen, Users, Settings } from "lucide-react";
+import { ClipboardCheck, Home, BookOpen, Users, Settings, Flag } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "./ui/dropdown-menu";
 
 export default function Sidebar({ handleLogout }) {
@@ -18,9 +18,13 @@ export default function Sidebar({ handleLogout }) {
           <BookOpen className="icon" />
           <span>Exam Board</span>
         </Link>
-        <Link to="/Classes" className="nav-item" data-tooltip="Courses">
+        <Link to="/Classes" className="nav-item" data-tooltip="Classes">
           <Users className="icon" />
-          <span>Courses</span>
+          <span>Classes</span>
+        </Link>
+        <Link to="/Reports" className="nav-item" data-tooltip="Reports">
+          <Flag className="icon" />
+          <span>Reports</span>
         </Link>
       </nav>
       <div className="mt-auto flex items-center gap-2">
@@ -28,7 +32,7 @@ export default function Sidebar({ handleLogout }) {
           <DropdownMenuTrigger asChild>
             <div className="nav-item" data-tooltip="My Account" data-testid="my-account-button">
               <Settings className="icon" />
-              <span>My Account</span>
+              <span>Account</span>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

@@ -7,6 +7,9 @@ import { ScrollArea } from "../../components/ui/scroll-area";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "../../components/ui/dialog";
 import NewClassForm from "../../components/NewClassForm";
 import { ArrowUpRight, MoreHorizontal } from "lucide-react";
+import { Checkbox } from "../../components/ui/checkbox";
+import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
+import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
 import { useAuth0 } from "@auth0/auth0-react";
 import { Badge } from "../../components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
@@ -20,8 +23,11 @@ import {
 const Classes = () => {
   const { getAccessTokenSilently } = useAuth0();
   const [classes, setClasses] = useState([]);
+  const [selectedClasses, setSelectedClasses] = useState([]);
+  const [allSelected, setAllSelected] = useState(false);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("active"); // Default tab is 'active'
+  const { toast } = useToast(); // Using the toast hook
 
   const fetchClasses = async () => {
     try {
@@ -178,8 +184,10 @@ const Classes = () => {
           </CardContent>
         </Card>
       </div>
+      <Toaster /> {/* Adding the Toaster component */}
     </main>
   );
 };
 
 export default Classes;
+
