@@ -20,19 +20,20 @@ const saveQuestions = async (req, res, next) => {
 
   try {
     const writeToExam = await pool.query(
-      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES ($1, $2, $3, $4) RETURNING exam_id",
-      [classID, examTitle, numQuestions, totalMarks]
+      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks, viewing_options) VALUES ($1, $2, $3, $4, $5) RETURNING exam_id",
+      [
+        classID,
+        examTitle,
+        numQuestions,
+        totalMarks,
+        JSON.stringify({ canViewExam: canViewExam, canViewAnswers: canViewAnswers }),
+      ]
     );
     const insertedRowId = writeToExam.rows[0].exam_id;
 
     const writeToSolution = await pool.query(
-      "INSERT INTO solution (exam_id, answers, marking_schemes, viewing_options) VALUES ($1, $2, $3, $4)",
-      [
-        insertedRowId,
-        questionsArray,
-        JSON.stringify(markingSchemes),
-        JSON.stringify({ canViewExam: canViewExam, canViewAnswers: canViewAnswers }),
-      ]
+      "INSERT INTO solution (exam_id, answers, marking_schemes) VALUES ($1, $2, $3)",
+      [insertedRowId, questionsArray, JSON.stringify(markingSchemes)]
     );
 
     res.status(200).json({ message: "Questions and marking schemes saved successfully." });
