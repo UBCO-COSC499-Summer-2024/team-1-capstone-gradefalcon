@@ -36,6 +36,8 @@ import ConfirmExamKey from "./pages/Instructor/ConfirmExamKey";
 import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
 import UploadExamKey from "./pages/Instructor/UploadExamKey";
 import UploadExams from "./pages/Instructor/UploadExams";
+import Reports from "./pages/Instructor/Reports"; 
+import ViewReport from "./pages/Instructor/ViewReport"; 
 // Student pages
 import ReviewExams from "./pages/Instructor/ReviewExams";
 import ViewExam from "./pages/Instructor/ViewExam";
@@ -71,18 +73,10 @@ function App() {
             <Route path="/OMRProcessingUpload" element={ <ProtectedRoute> <OMRProcessingUpload /> </ProtectedRoute> } /> {/* Add the new route */}
             <Route path="/ReviewExams" element={ <ProtectedRoute> <ReviewExams /> </ProtectedRoute> } />
             <Route path="/ViewExam" element={<ProtectedRoute><ViewExam /></ProtectedRoute>} />
-            <Route
-              path="/NotificationPreferences"
-              element={ <ProtectedRoute> <NotificationPreferences /> </ProtectedRoute> }
-            />
-            <Route
-              path= "/StudentDashboard"
-              element={
-                <ProtectedRoute>
-                  <StudentDashboard />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/NotificationPreferences" element={ <ProtectedRoute> <NotificationPreferences /> </ProtectedRoute> } />
+            <Route path= "/StudentDashboard" element={  <ProtectedRoute> <StudentDashboard /> </ProtectedRoute> } />
+            <Route path="/Reports" element={ <ProtectedRoute> <Reports /> </ProtectedRoute> } />
+            <Route path="/ViewReport" element={ <ProtectedRoute> <ViewReport /> </ProtectedRoute> } />
             <Route
               path="/StudentGradeReport"
               element={ <ProtectedRoute> <StudentGradeReport /> </ProtectedRoute> }
@@ -95,7 +89,6 @@ function App() {
               path="/StudentNotificationPreferences"
               element={ <ProtectedRoute> <StudentNotificationPreferences /> </ProtectedRoute> }
             />
-            {/* <Route path="/Schedule" element={<Schedule />} /> Schedule plugin is brocken ->will fix */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
