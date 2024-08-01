@@ -340,6 +340,27 @@ const getExamDetails = async (req, res, next) => {
   }
 };
 
+const getStudentExams = async (req, res, next) => {
+  const studentId = req.auth.sub; // Get the student ID from Auth0 token
+
+  try {
+    const exams = await pool.query(
+      `
+      SELECT e.exam_id, e.exam_title, c.course_id, c.course_name
+      FROM exam e
+      JOIN classes c ON e.class_id = c.class_id
+      JOIN enrollment en ON en.class_id = c.class_id
+      WHERE en.student_id = $1
+    `,
+      [studentId]
+    );
+
+    res.json({ exams: exams.rows });
+  } catch (err) {
+    console.error("Error fetching student exams:", err);
+    next(err);
+  }
+};
 
 module.exports = {
   saveQuestions,
@@ -359,4 +380,7 @@ module.exports = {
   ensureDirectoryExistence,
   getCustomMarkingSchemes,
   getExamDetails,
+  getStudentExams,
 };
+
+
