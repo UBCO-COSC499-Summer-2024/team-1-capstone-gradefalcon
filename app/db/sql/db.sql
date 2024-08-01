@@ -49,6 +49,7 @@ CREATE TABLE exam (
     lower_quartile double precision,
     page_count int,
     viewing_options JSONB,
+    graded boolean default false,
     foreign key (class_id) references classes(class_id)
 );
 

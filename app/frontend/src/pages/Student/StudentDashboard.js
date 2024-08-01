@@ -2,13 +2,31 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Bookmark, Search, ChevronRight } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "../../components/ui/card";
 import { ScrollArea } from "../../components/ui/scroll-area";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "../../components/ui/tooltip";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button"; // Correct import for Button
 import { useAuth0 } from "@auth0/auth0-react";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table"; // Add the correct import statement
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "../../components/ui/table"; // Add the correct import statement
 
 export default function StudentDashboard() {
   const { user, getAccessTokenSilently } = useAuth0();
@@ -25,16 +43,17 @@ export default function StudentDashboard() {
     const fetchCourses = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await fetch(`/api/student/${user.sub}/courses`, {
+        const response = await fetch(`/api/class/student/courses`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
+          console.log("data", data);
           setCourses(data);
           setFilteredCourses(data); // Initialize filteredCourses with the fetched data
         } else {
@@ -52,7 +71,7 @@ export default function StudentDashboard() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
         });
@@ -82,9 +101,7 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     setFilteredExams(
-      exams.filter((exam) =>
-        exam.exam_title?.toLowerCase().includes(examSearchTerm.toLowerCase())
-      )
+      exams.filter((exam) => exam.exam_title?.toLowerCase().includes(examSearchTerm.toLowerCase()))
     );
   }, [examSearchTerm, exams]);
 
@@ -187,10 +204,15 @@ export default function StudentDashboard() {
                               <TableCell>
                                 <span className="font-bold">{exam.exam_title}</span>
                               </TableCell>
-                              <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
+                              <TableCell className="hidden sm:table-cell">
+                                {exam.course_id}
+                              </TableCell>
                               <TableCell>{exam.status}</TableCell>
                               <TableCell>
-                                <Button onClick={() => navigate(`/ViewExamDetails`)} className="bg-primary text-white">
+                                <Button
+                                  onClick={() => navigate(`/ViewExamDetails`)}
+                                  className="bg-primary text-white"
+                                >
                                   <ChevronRight className="w-4 h-4 mr-1" />
                                   View Details
                                 </Button>
@@ -215,7 +237,10 @@ export default function StudentDashboard() {
                         <TableCell className="hidden sm:table-cell">No exams available</TableCell>
                         <TableCell>No exams available</TableCell>
                         <TableCell>
-                          <Button onClick={() => navigate('/ViewExamDetails')} className="bg-primary text-white">
+                          <Button
+                            onClick={() => navigate("/ViewExamDetails")}
+                            className="bg-primary text-white"
+                          >
                             <ChevronRight className="w-4 h-4 mr-1" />
                             View Details
                           </Button>
