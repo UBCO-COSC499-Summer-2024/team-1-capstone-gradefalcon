@@ -164,7 +164,6 @@ export default function StudentDashboard() {
                     <TableHead>Exam Name</TableHead>
                     <TableHead className="hidden sm:table-cell">Course</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -173,22 +172,23 @@ export default function StudentDashboard() {
                       <TooltipProvider key={index}>
                         <Tooltip delayDuration={0}>
                           <TooltipTrigger asChild>
-                            <TableRow className="hover:bg-gray-100 cursor-pointer" onClick={() => navigate(`/ViewExamDetails`)}>
+                            <TableRow
+                              className="hover:bg-gray-100 cursor-pointer"
+                              onClick={() => {
+                                if (exam.graded) {
+                                  navigate(`/ViewExamDetails`);
+                                }
+                              }}
+                            >
                               <TableCell>
                                 <span className="font-bold">{exam.exam_title}</span>
                               </TableCell>
                               <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
-                              <TableCell>{exam.status}</TableCell>
-                              <TableCell>
-                                <Button onClick={() => navigate(`/ViewExamDetails`)} className="bg-primary text-white">
-                                  <ChevronRight className="w-4 h-4 mr-1" />
-                                  View Details
-                                </Button>
-                              </TableCell>
+                              <TableCell>{exam.graded ? "Graded" : "Not graded"}</TableCell>
                             </TableRow>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Click for details</p>
+                            <p>{exam.graded ? "Click for details" : "Exam not graded yet"}</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>

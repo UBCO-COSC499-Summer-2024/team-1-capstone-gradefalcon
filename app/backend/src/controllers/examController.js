@@ -341,11 +341,11 @@ const getStudentExams = async (req, res, next) => {
   try {
     const exams = await pool.query(
       `
-      select exam_id, exam_title, course_id, course_name from exam 
-	join classes using (class_id)
-	join enrollment using (class_id)
-	join student using (student_id)
-	where auth0_id = $1
+      select exam_id, exam_title, course_id, course_name, graded from exam 
+	    join classes using (class_id)
+      join enrollment using (class_id)
+      join student using (student_id)
+      where auth0_id = $1
     `,
       [studentId]
     );
