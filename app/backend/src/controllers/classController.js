@@ -43,7 +43,7 @@ const getManagementApiAccessToken = async () => {
 const displayClasses = async (req, res, next) => {
   try {
     const instructorAuth0Id = req.auth.sub; // Get the instructor ID from the JWT
-    const result = await pool.query("SELECT * FROM classes WHERE instructor_id = $1", [instructorAuth0Id]);
+    const result = await pool.query("SELECT * FROM classes WHERE instructor_id = $1 ORDER BY active DESC", [instructorAuth0Id]);
     res.json(result.rows); // Send the list of classes as JSON
   } catch (err) {
     console.error("Error in displayClasses:", err); // Log any errors
@@ -119,7 +119,7 @@ const importClass = async (req, res) => {
 
     let classId;
     if (classQuery.rows.length === 0) {
-      const newClassQuery = await pool.query("INSERT INTO classes (course_id, instructor_id, course_name) VALUES ($1, $2, $3) RETURNING class_id", [courseId, instructorId, courseName]);
+      const newClassQuery = await pool.query("INSERT INTO classes (course_id, instructor_id, course_name, active) VALUES ($1, $2, $3, $4) RETURNING class_id", [courseId, instructorId, courseName, true]);
       classId = newClassQuery.rows[0].class_id;
     } else {
       classId = classQuery.rows[0].class_id;
@@ -195,5 +195,26 @@ const getAllCourses = async (req, res, next) => {
     next(err);
   }
 };
-module.exports = { displayClasses, displayClassManagement, importClass, getClassNameById, getAllCourses };
+const archiveCourse = async (req, res, next) => {
+  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
+  const { class_id } = req.body; // Get class ID from request body
+
+  try {
+    // Update the active status of the course to false (archived)
+    const result = await pool.query(
+      "UPDATE classes SET active = false WHERE class_id = $1 AND instructor_id = $2 RETURNING *",
+      [class_id, auth0_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Course not found or you do not have permission to archive this course." });
+    }
+
+    res.json({ message: "Course archived successfully", course: result.rows[0] });
+  } catch (err) {
+    console.error("Error archiving course:", err);
+    next(err);
+  }
+};
+module.exports = { displayClasses, displayClassManagement, importClass, getClassNameById, getAllCourses, archiveCourse };
 

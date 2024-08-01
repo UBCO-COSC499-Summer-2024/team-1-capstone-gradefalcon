@@ -1,29 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "../../css/App.css";
+import { Link } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "../../components/ui/dialog";
 import NewClassForm from "../../components/NewClassForm";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, MoreHorizontal } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Badge } from "../../components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "../../components/ui/dropdown-menu";
 
 const Classes = () => {
-  const navigate = useNavigate();
   const { getAccessTokenSilently } = useAuth0();
   const [classes, setClasses] = useState([]);
   const [error, setError] = useState(null);
+  const [filter, setFilter] = useState("active"); // Default tab is 'active'
 
   const fetchClasses = async () => {
     try {
-      const token = await getAccessTokenSilently(); // Get the token
+      const token = await getAccessTokenSilently();
       const response = await fetch("/api/class/classes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // Include the token in the request
+          Authorization: `Bearer ${token}`,
         },
         credentials: "include",
       });
@@ -42,78 +49,134 @@ const Classes = () => {
     fetchClasses();
   }, []);
 
+  const filteredClasses = classes.filter((classItem) => {
+    if (filter === "all") return true;
+    if (filter === "active") return classItem.active === null || classItem.active === true;
+    if (filter === "archived") return classItem.active === false;
+    return false;
+  });
+
+  const handleArchiveCourse = async (classId) => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await fetch(`/api/class/archive-course`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ class_id: classId }), // Send class_id in the request body
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to archive course");
+      }
+
+      // Refresh the list of classes after archiving
+      fetchClasses();
+    } catch (error) {
+      console.error("Error archiving course:", error);
+      setError("Error archiving course");
+    }
+  };
+
+  const handleDeleteCourse = (classId) => {
+    // Placeholder function for deleting a course
+    // Implement the API call here when ready
+    // fetch(`/api/class/delete/${classId}`, { method: "DELETE" });
+    console.log(`Delete course with ID: ${classId}`);
+  };
+
   return (
     <main className="flex flex-col gap-4">
       <div>
         <h1 className="text-3xl font-bold mb-4">Classes</h1>
-        <div className="grid gap-4 lg:grid-cols-1">
-          <Card className="bg-white border rounded">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <div>
-                <CardTitle className="mb-2">Your Classes</CardTitle>
-                <CardDescription>List of all your classes.</CardDescription>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="max-h-80">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Class Name</TableHead>
-                      <TableHead className="hidden sm:table-cell">Course ID</TableHead>
-                      <TableHead className="hidden sm:table-cell"></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {classes.map((classItem, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          <div className="font-medium">{classItem.course_name}</div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
-                        <TableCell className="hidden sm:table-cell">
-                          <Button asChild size="sm" className="ml-auto gap-1">
-                            <Link to={`/ClassManagement/${classItem.class_id}`}>
-                              Open Course
-                              <ArrowUpRight className="h-4 w-4 ml-1" />
-                            </Link>
-                          </Button>
-                        </TableCell>
+        <Tabs value={filter} onValueChange={setFilter} className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="active">Active</TabsTrigger>
+            <TabsTrigger value="archived">Archived</TabsTrigger>
+            <TabsTrigger value="all">All</TabsTrigger>
+          </TabsList>
+          <TabsContent value={filter}>
+            <Card className="bg-white border rounded">
+              <CardContent>
+                <ScrollArea className="max-h-80">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Class Name</TableHead>
+                        <TableHead className="hidden sm:table-cell">Course ID</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead className="hidden sm:table-cell"></TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-          <Card className="bg-white border rounded mt-6">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <div>
-                <CardTitle className="mb-2">Create a New Class</CardTitle>
-                <CardDescription>Import a CSV file containing the student names and their student IDs in your class.</CardDescription>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button size="sm">
-                    Create Class
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create New Class</DialogTitle>
-                    <DialogDescription>Enter the details for the new class and import the student list via a CSV file.</DialogDescription>
-                  </DialogHeader>
-                  <NewClassForm />
-                  <DialogClose asChild>
-                    <Button variant="ghost">Close</Button>
-                  </DialogClose>
-                </DialogContent>
-              </Dialog>
-            </CardContent>
-          </Card>
-        </div>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredClasses.map((classItem, index) => {
+                        const status = classItem.active === null || classItem.active === true ? "Active" : "Archived";
+                        const statusClass = classItem.active === null || classItem.active === true ? "text-green-600 border-green-600" : "text-gray-500 border-gray-500";
+                        return (
+                          <TableRow key={index}>
+                            <TableCell>
+                              <div className="font-medium">{classItem.course_name}</div>
+                            </TableCell>
+                            <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className={statusClass}>
+                                {status}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="hidden sm:table-cell flex justify-end">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="sm" className="flex items-center">
+                                    <MoreHorizontal className="h-5 w-5" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                  <DropdownMenuItem onSelect={() => handleArchiveCourse(classItem.class_id)}>
+                                    Archive Course
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem onSelect={() => handleDeleteCourse(classItem.class_id)}>
+                                    Delete Course
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+        <Card className="bg-white border rounded mt-6">
+          <CardHeader className="flex justify-between px-6 py-4">
+            <div>
+              <CardTitle className="mb-2">Create a New Class</CardTitle>
+              <CardDescription>Import a CSV file containing the student names and their student IDs in your class.</CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="sm">Create Class</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Create New Class</DialogTitle>
+                  <DialogDescription>Enter the details for the new class and import the student list via a CSV file.</DialogDescription>
+                </DialogHeader>
+                <NewClassForm />
+                <DialogClose asChild>
+                  <Button variant="ghost">Close</Button>
+                </DialogClose>
+              </DialogContent>
+            </Dialog>
+          </CardContent>
+        </Card>
       </div>
     </main>
   );

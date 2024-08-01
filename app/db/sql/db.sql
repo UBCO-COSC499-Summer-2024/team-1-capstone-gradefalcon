@@ -26,8 +26,8 @@ CREATE TABLE classes (
     instructor_id text,
     course_id text,
     course_name text,
-    unique (instructor_id, course_id),
-    foreign key (instructor_id) references instructor(auth0_id)
+    active boolean,
+    unique (instructor_id, course_id)
 );
 
 CREATE TABLE student (

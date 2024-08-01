@@ -42,15 +42,12 @@ export default function Dashboard() {
         });
         if (response.ok) {
           const data = await response.json();
-          // console.log("Session Info Data:", data);
           setUserName(data.userName);
         } else {
           console.error("Failed to fetch session info");
-          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching session info:", error);
-        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
@@ -61,22 +58,21 @@ export default function Dashboard() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
-          // console.log("Courses Data:", data);
-          setCourses(data);
-          setFilteredCourses(data); // Initialize filteredCourses with the fetched data
+          // Filter out archived courses
+          const activeCourses = data.filter(course => course.active !== false);
+          setCourses(activeCourses);
+          setFilteredCourses(activeCourses); // Initialize filteredCourses with the fetched data
         } else {
           console.error("Failed to fetch courses");
-          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching courses:", error);
-        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
@@ -87,22 +83,19 @@ export default function Dashboard() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
-          // console.log("Exams Data:", data);
           setExams(data.classes);
           setFilteredExams(data.classes); // Initialize filteredExams with the fetched data
         } else {
           console.error("Failed to fetch exams");
-          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching exams:", error);
-        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
@@ -119,15 +112,12 @@ export default function Dashboard() {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("Standard Average Data:", data);
           setStandardAverageData(data);
         } else {
           console.error("Failed to fetch standard average data");
-          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching standard average data:", error);
-        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
@@ -138,21 +128,18 @@ export default function Dashboard() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
-          // console.log("Performance Data:", data);
           setAverageCourseData(data);
         } else {
           console.error("Failed to fetch performance data");
-          // console.log("Authenticated:", isAuthenticated);
         }
       } catch (error) {
         console.error("Error fetching performance data:", error);
-        // console.log("Authenticated:", isAuthenticated);
       }
     };
 
@@ -182,6 +169,7 @@ export default function Dashboard() {
   const handleExamCreated = (newExam) => {
     setExams([...exams, newExam]);
   };
+
   return (
     <div className="flex flex-col gap-4 h-screen">
       <div className={`flex-1 ${filteredCourses.length === 0 ? "h-full" : ""}`}>
@@ -208,7 +196,9 @@ export default function Dashboard() {
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Create New Course</DialogTitle>
-                      <DialogDescription>Enter the details for the new course and import the student list via a CSV file.</DialogDescription>
+                      <DialogDescription>
+                        Enter the details for the new course and import the student list via a CSV file.
+                      </DialogDescription>
                     </DialogHeader>
                     <NewClassForm />
                     <DialogClose asChild>
@@ -272,7 +262,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-  
+
       <div className="flex-1">
         <Card className="bg-white border rounded h-full">
           <CardHeader className="flex justify-between px-6 py-4">
@@ -297,7 +287,9 @@ export default function Dashboard() {
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Create New Exam</DialogTitle>
-                      <DialogDescription>Enter the details for the new exam and upload the answer key.</DialogDescription>
+                      <DialogDescription>
+                        Enter the details for the new exam and upload the answer key.
+                      </DialogDescription>
                     </DialogHeader>
                     <NewExamForm setIsDialogOpen={setIsDialogOpen} onExamCreated={handleExamCreated} />
                     <DialogClose asChild>
@@ -350,7 +342,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
-  
+
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="bg-white border rounded">
           <CardHeader>
@@ -371,6 +363,4 @@ export default function Dashboard() {
       </div>
     </div>
   );
-  
 }
-
