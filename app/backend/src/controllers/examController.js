@@ -63,7 +63,7 @@ const getAveragePerExam = async (req, res, next) => {
   try {
     const averagePerExamData = await pool.query(
       `
-      SELECT e.exam_title AS "examTitle", AVG(sr.grade) AS "averageScore"
+      SELECT e.exam_title AS "examTitle", ROUND(AVG(sr.grade)::numeric, 1) AS "averageScore"
       FROM studentResults sr
       JOIN exam e ON sr.exam_id = e.exam_id
       JOIN classes c ON e.class_id = c.class_id
@@ -82,10 +82,10 @@ const getAveragePerExam = async (req, res, next) => {
 
 const getAveragePerCourse = async (req, res, next) => {
   const instructorId = req.auth.sub;
-    try {
+  try {
     const averagePerCourseData = await pool.query(
       `
-      SELECT c.course_name AS "courseName", AVG(sr.grade) AS "averageScore"
+      SELECT c.course_name AS "courseName", ROUND(AVG(sr.grade)::numeric, 1) AS "averageScore"
       FROM studentResults sr
       JOIN exam e ON sr.exam_id = e.exam_id
       JOIN classes c ON e.class_id = c.class_id

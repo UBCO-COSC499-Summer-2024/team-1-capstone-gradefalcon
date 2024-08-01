@@ -6,7 +6,7 @@ import Toast from "../../components/Toast";
 
 const ReviewExams = () => {
   const { getAccessTokenSilently } = useAuth0();
-  const [imageSrc, setImageSrc] = useState('');
+  const [imageSrc, setImageSrc] = useState("");
   const location = useLocation();
   const [toast, setToast] = useState(null);
   const [studentScores, setStudentScores] = useState([]);
@@ -26,7 +26,7 @@ const ReviewExams = () => {
           const token = await getAccessTokenSilently();
           const response = await fetch("/api/exam/preprocessingCSV", {
             headers: {
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           });
           if (!response.ok) {
@@ -41,7 +41,7 @@ const ReviewExams = () => {
           const token = await getAccessTokenSilently();
           const response = await fetch("/api/exam/studentScores", {
             headers: {
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           });
           if (!response.ok) {
@@ -57,7 +57,7 @@ const ReviewExams = () => {
           const token = await getAccessTokenSilently();
           const response = await fetch(`/api/exam/getScoreByExamId/${exam_id}`, {
             headers: {
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           });
           if (!response.ok) {
@@ -127,26 +127,51 @@ const ReviewExams = () => {
     });
   };
 
+  // test
+  const saveStudentExams = async (studentData) => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await fetch("/api/exam/saveStudentExams", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ exam_id: exam_id, data: studentData }),
+      });
+      if (!response.ok) {
+        throw new Error("saveExams Network response was not ok");
+      }
+      const data = await response.json();
+      console.log("saveStudentExams:", data);
+    } catch (error) {
+      console.error("Error saving student exams:", error);
+    }
+  };
+
   const saveResults = async () => {
     if (editStudentId !== null) {
       alert("Please save or cancel the current edit before saving all results.");
       return;
     }
     try {
+      saveStudentExams(studentScores);
+
       const token = await getAccessTokenSilently();
       const response = await fetch("/api/exam/saveResults", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ studentScores, exam_id }),
       });
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error("save results Network response was not ok");
       }
       const data = await response.json();
-      console.log(data);
+      console.log("saveResults:", data);
+
       setToast({ message: "Results saved! Redirecting...", type: "success" });
       setTimeout(() => {
         navigate("/GradeReport");

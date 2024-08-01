@@ -182,36 +182,36 @@ const ManualExamKey = () => {
   };
 
   return (
-    <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8 px-8 pb-8 pt-2 bg-gradient-to-r from-gradient-start to-gradient-end">
-      <div className="flex items-center gap-4">
-        <Button
-          variant="outline"
-          size="icon"
-          className="h-10 w-10"
-          onClick={() => window.history.back()}
-        >
-          <ChevronLeftIcon className="h-4 w-4" />
-          <span className="sr-only">Back</span>
+    <main className="flex flex-col gap-4 p-2">
+  <div className="w-full mx-auto flex items-center gap-8">
+    <Button
+      variant="outline"
+      size="icon"
+      className="h-10 w-10"
+      onClick={() => window.history.back()}
+    >
+      <ChevronLeftIcon className="h-4 w-4" />
+      <span className="sr-only">Back</span>
+    </Button>
+    <h1 className="flex-1 text-3xl font-semibold tracking-tight">Manual Exam Key</h1>
+    <div className="flex items-center gap-2 ml-auto">
+      <Link
+        to="/ExamControls"
+        state={{
+          classID: classID,
+          examTitle: examTitle,
+          questions: selectedOptions,
+          numQuestions: numQuestions,
+          totalMarks: totalMarks,
+          markingSchemes: markingSchemes,
+        }}
+      >
+        <Button size="icon" className="h-10 w-10">
+          <ChevronRightIcon className="h-4 w-4" />
         </Button>
-        <h1 className="flex-1 text-3xl font-semibold tracking-tight">Manual Exam Key</h1>
-        <div className="flex items-center gap-2 ml-auto">
-          <Link
-            to="/ExamControls"
-            state={{
-              classID: classID,
-              examTitle: examTitle,
-              questions: selectedOptions,
-              numQuestions: numQuestions,
-              totalMarks: totalMarks,
-              markingSchemes: markingSchemes,
-            }}
-          >
-            <Button size="icon" className="h-10 w-10">
-              <ChevronRightIcon className="h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
-      </div>
+      </Link>
+    </div>
+  </div>
 
       <div className="flex flex-row gap-8 w-full">
         <Card className="bg-white border rounded-lg p-6 w-full md:w-1/2">
@@ -256,7 +256,7 @@ const ManualExamKey = () => {
         <Card className="bg-white border rounded-lg w-full md:w-1/2 p-6">
           <CardHeader className="flex justify-between px-6 py-4">
             <CardTitle>Custom Marking Scheme</CardTitle>
-            <CardDescription>Set the marking scheme for your questions</CardDescription>
+            <CardDescription>Set the marking scheme for your questions. By default, the total mark match the number of questions. You can adjust the total mark manually below.</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
@@ -306,16 +306,6 @@ const ManualExamKey = () => {
                 ))}
               </TableBody>
             </Table>
-            <Label>
-              By default, the total marks for the exam is the same as the total number of questions.
-              You can set the total marks manually below:
-            </Label>
-            <Input
-              type="number"
-              value={totalMarks}
-              className="w-full"
-              onChange={(e) => setTotalMarks(e.target.value)}
-            />
           </CardContent>
           <CardFooter className="justify-center border-t p-4">
             <Button
@@ -328,6 +318,17 @@ const ManualExamKey = () => {
               Add Custom Marking Scheme
             </Button>
           </CardFooter>
+          <div className="mt-4"> 
+          <Label>
+            Total Marks
+          </Label>
+          <Input
+            type="number"
+            value={totalMarks}
+            className = "w-15"
+            onChange={(e) => setTotalMarks(e.target.value)}
+          />
+        </div>
         </Card>
       </div>
 
@@ -415,7 +416,7 @@ const ManualExamKey = () => {
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

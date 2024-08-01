@@ -191,7 +191,7 @@ export default function Dashboard() {
         <Card className="bg-white border rounded h-full">
           <CardHeader className="flex justify-between px-6 py-4">
             <div className="flex justify-between items-center">
-              <CardTitle className="mb-2">Your Courses</CardTitle>
+              <CardTitle className="mb-2">Your Classes</CardTitle>
               <div className="flex gap-2">
                 <Dialog>
                   <TooltipProvider>
@@ -204,13 +204,13 @@ export default function Dashboard() {
                         </DialogTrigger>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Create New Course</p>
+                        <p>Create New Class</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Create New Course</DialogTitle>
+                      <DialogTitle>Create New Class</DialogTitle>
                       <DialogDescription>Enter the details for the new course and import the student list via a CSV file.</DialogDescription>
                     </DialogHeader>
                     <NewClassForm />
@@ -221,7 +221,7 @@ export default function Dashboard() {
                 </Dialog>
                 <Button asChild size="sm" className="gap-1">
                   <Link to="/Classes">
-                    Manage Courses
+                    Manage Classes
                     <ArrowUpRight className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -282,7 +282,12 @@ export default function Dashboard() {
             <div className="flex justify-between items-center">
               <CardTitle className="mb-2">Exam Board</CardTitle>
               <div className="flex gap-2">
-                <Dialog>
+                <Button size="sm" className="gap-1" >
+                <Link to={`/NewExam/defaultClassId`}>
+                  <Plus className="h-4 w-4" />
+                  </Link>
+                </Button>
+                {/* <Dialog>
                   <TooltipProvider>
                     <Tooltip delayDuration={0}>
                       <TooltipTrigger asChild>
@@ -307,7 +312,7 @@ export default function Dashboard() {
                       <Button variant="ghost">Close</Button>
                     </DialogClose>
                   </DialogContent>
-                </Dialog>
+                </Dialog> */}
                 <Button asChild size="sm" className="gap-1">
                   <Link to="/Examboard">
                     Manage Exams
@@ -348,7 +353,6 @@ export default function Dashboard() {
                           >
                             <TableCell>
                               <span className="font-bold">{exam.exam_title}</span>
-                              <div className="hidden text-sm text-muted-foreground md:inline">{exam.course_id}</div>
                             </TableCell>
                             <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
                           </TableRow>

@@ -46,6 +46,7 @@ const ConfirmExamKey = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [markingSchemes, setMarkingSchemes] = useState([]);
+  const [totalMarks, setTotalMarks] = useState();
   const [showCustomSchemeModal, setShowCustomSchemeModal] = useState(false);
   const [customScheme, setCustomScheme] = useState({
     questions: [],
@@ -130,6 +131,7 @@ const ConfirmExamKey = () => {
   }, [numQuestions, numOptions]);
 
   useEffect(() => {
+    setTotalMarks(numQuestions);
     updateQuestions();
   }, [numQuestions, numOptions, updateQuestions]);
 
@@ -272,7 +274,8 @@ const ConfirmExamKey = () => {
   }, []);
 
   return (
-    <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8 px-8 pb-8 pt-2 bg-gradient-to-r from-gradient-start to-gradient-end">
+    <main className="flex flex-col gap-4 p-2">
+    <div className="w-full mx-auto grid flex-1 auto-rows-max gap-8">
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
@@ -345,7 +348,7 @@ const ConfirmExamKey = () => {
         <Card className="bg-white border rounded-lg w-full md:w-1/2 p-6">
           <CardHeader className="flex justify-between px-6 py-4">
             <CardTitle>Custom Marking Scheme</CardTitle>
-            <CardDescription>Set the marking scheme for your questions</CardDescription>
+            <CardDescription>Set the marking scheme for your questions. By default, the total mark match the number of questions. You can adjust the total mark manually below.</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
@@ -407,6 +410,17 @@ const ConfirmExamKey = () => {
               Add Custom Marking Scheme
             </Button>
           </CardFooter>
+          <div className="mt-4"> 
+          <Label>
+            Total Marks
+          </Label>
+          <Input
+            type="number"
+            value={totalMarks}
+            onChange={(e) => setTotalMarks(e.target.value)}
+            className= "w-15"
+          />
+        </div>
         </Card>
       </div>
 
@@ -497,6 +511,7 @@ const ConfirmExamKey = () => {
 
       <Toaster />
     </div>
+    </main>
   );
 };
 

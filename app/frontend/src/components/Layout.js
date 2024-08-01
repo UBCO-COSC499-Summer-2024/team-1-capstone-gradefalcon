@@ -37,7 +37,7 @@ const Layout = ({ children }) => {
   const generateBreadcrumbItems = () => {
     const pathnames = location.pathname.split('/').filter(x => x);
     // Always start with the dashboard breadcrumb item.
-    const breadcrumbItems = [{ href: "/dashboard", label: "Dashboard" }];
+    const breadcrumbItems = [{ href: "/dashboard", label: "" }];
     pathnames.forEach((value, index) => {
       const href = `/${pathnames.slice(0, index + 1).join('/')}`;
       const label = value.charAt(0).toUpperCase() + value.slice(1);
