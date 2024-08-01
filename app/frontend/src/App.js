@@ -63,13 +63,13 @@ function App() {
             <Route path="/New-Class" element={ <ProtectedRoute> <NewClass /> </ProtectedRoute> } />
             <Route path="/ClassManagement/:class_id" element={ <ProtectedRoute> <ClassManagement /> </ProtectedRoute> }/>
             <Route path="/ExamDetails/:exam_id" element={ <ProtectedRoute> <ExamDetails /> </ProtectedRoute> } />
-            <Route path="/NewExam/:class_id" element={ <ProtectedRoute> <NewExam /> </ProtectedRoute> } />
+            <Route path="/NewExam" element={ <ProtectedRoute> <NewExam /> </ProtectedRoute> } />
             <Route path="/ExamBoard" element={ <ProtectedRoute> <ExamBoard /> </ProtectedRoute> } />
             <Route path="/ExamControls" element={ <ProtectedRoute> <ExamControls /> </ProtectedRoute> } />
             <Route path="/ManualExamKey" element={ <ProtectedRoute> <ManualExamKey /> </ProtectedRoute> } />
             <Route path="/UploadExamKey" element={ <ProtectedRoute> <UploadExamKey /> </ProtectedRoute> } />
             <Route path="/ConfirmExamKey" element={ <ProtectedRoute> <ConfirmExamKey /> </ProtectedRoute> } />
-            <Route path="/UploadExams/:exam_id" element={ <ProtectedRoute> <UploadExams /> </ProtectedRoute> } />
+            <Route path="/UploadExams" element={ <ProtectedRoute> <UploadExams /> </ProtectedRoute> } />
             <Route path="/OMRProcessing" element={ <ProtectedRoute> <OMRProcessing /> </ProtectedRoute> } />
             <Route path="/OMRProcessingUpload" element={ <ProtectedRoute> <OMRProcessingUpload /> </ProtectedRoute> } /> {/* Add the new route */}
             <Route path="/ReviewExams" element={ <ProtectedRoute> <ReviewExams /> </ProtectedRoute> } />

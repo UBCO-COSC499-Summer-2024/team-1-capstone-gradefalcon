@@ -30,7 +30,7 @@ const { formatWithOptions } = require("util");
 const router = express.Router();
 
 router.post("/saveQuestions", checkJwt, checkPermissions(['create:exam']), saveQuestions);
-router.post("/NewExam/:class_id", checkJwt, checkPermissions(['create:exam']), newExam);
+router.post("/NewExam", checkJwt, checkPermissions(['create:exam']), newExam);
 router.post("/ExamBoard", checkJwt, checkPermissions(['read:exams']), examBoard);
 router.get("/average-per-exam", checkJwt, checkPermissions(['read:examAverageData']), getAveragePerExam);
 router.get("/average-per-course", checkJwt, checkPermissions(['read:courseAverageData']), getAveragePerCourse); // Updated route
