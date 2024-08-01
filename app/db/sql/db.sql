@@ -48,7 +48,7 @@ CREATE TABLE exam (
     upper_quartile double precision,
     lower_quartile double precision,
     page_count int,
-    file_size int,
+    viewing_options JSONB,
     foreign key (class_id) references classes(class_id)
 );
 

@@ -3,7 +3,16 @@ const fs = require("fs");
 const path = require("path");
 
 const saveQuestions = async (req, res, next) => {
-  const { questions, classID, examTitle, numQuestions, totalMarks, markingSchemes = {} } = req.body;
+  const {
+    questions,
+    classID,
+    examTitle,
+    numQuestions,
+    totalMarks,
+    markingSchemes = {},
+    canViewExam,
+    canViewAnswers,
+  } = req.body;
 
   const questionsArray = Object.entries(questions).map(
     ([key, value]) => `${value.question}:${value.option}`
@@ -17,8 +26,13 @@ const saveQuestions = async (req, res, next) => {
     const insertedRowId = writeToExam.rows[0].exam_id;
 
     const writeToSolution = await pool.query(
-      "INSERT INTO solution (exam_id, answers, marking_schemes) VALUES ($1, $2, $3)",
-      [insertedRowId, questionsArray, JSON.stringify(markingSchemes)]
+      "INSERT INTO solution (exam_id, answers, marking_schemes, viewing_options) VALUES ($1, $2, $3, $4)",
+      [
+        insertedRowId,
+        questionsArray,
+        JSON.stringify(markingSchemes),
+        JSON.stringify({ canViewExam: canViewExam, canViewAnswers: canViewAnswers }),
+      ]
     );
 
     res.status(200).json({ message: "Questions and marking schemes saved successfully." });
@@ -339,7 +353,6 @@ const getExamDetails = async (req, res, next) => {
     res.status(500).json({ message: "Failed to fetch exam details" });
   }
 };
-
 
 module.exports = {
   saveQuestions,
