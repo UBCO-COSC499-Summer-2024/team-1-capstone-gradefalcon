@@ -1,45 +1,43 @@
-import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
-import "./css/App.css";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './css/App.css';
 
 // Import components
-import Layout from '../src/components/Layout';
-import StudentLayout from '../src/components/StudentLayout';
-import ProtectedRoute from "./ProtectedRoute";
-import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
+import Layout from './components/Layout';
+import StudentLayout from './components/StudentLayout';
+import ProtectedRoute from './ProtectedRoute';
 
 // Import pages
 // Instructor pages
-import OMRProcessing from "../src/components/OMRProcessing";
-import OMRProcessingUpload from "../src/components/OMRProcessingUpload";
-import Dashboard from "./pages/Instructor/Dashboard";
-import NotFound from "./components/NotFound";
-import Login from "./pages/Login"; 
-import AccountSettings from "./pages/Instructor/AccountSettings";
-import Classes from "./pages/Instructor/Classes";
-import ClassManagement from "./pages/Instructor/ClassManagement";
-import ExamDetails from "./pages/Instructor/ExamDetails";
-import NewClass from "./pages/Instructor/NewClass";
-import NewExam from "./pages/Instructor/NewExam";
-import ExamBoard from "./pages/Instructor/Examboard";
-import ExamControls from "./pages/Instructor/ExamControls";
-import ManualExamKey from "./pages/Instructor/ManualExamKey";
-import ConfirmExamKey from "./pages/Instructor/ConfirmExamKey";
-import NotificationPreferences from "./pages/Instructor/NotificationPreferences";
-import UploadExamKey from "./pages/Instructor/UploadExamKey";
-import UploadExams from "./pages/Instructor/UploadExams";
-import ReviewExams from "./pages/Instructor/ReviewExams";
-import ViewExam from "./pages/Instructor/ViewExam";
+import OMRProcessing from './components/OMRProcessing';
+import OMRProcessingUpload from './components/OMRProcessingUpload';
+import Dashboard from './pages/Instructor/Dashboard';
+import NotFound from './components/NotFound';
+import Login from './pages/Login'; 
+import AccountSettings from './pages/Instructor/AccountSettings';
+import Classes from './pages/Instructor/Classes';
+import ClassManagement from './pages/Instructor/ClassManagement';
+import ExamDetails from './pages/Instructor/ExamDetails';
+import NewClass from './pages/Instructor/NewClass';
+import NewExam from './pages/Instructor/NewExam';
+import ExamBoard from './pages/Instructor/Examboard';
+import ExamControls from './pages/Instructor/ExamControls';
+import ManualExamKey from './pages/Instructor/ManualExamKey';
+import ConfirmExamKey from './pages/Instructor/ConfirmExamKey';
+import NotificationPreferences from './pages/Instructor/NotificationPreferences';
+import UploadExamKey from './pages/Instructor/UploadExamKey';
+import UploadExams from './pages/Instructor/UploadExams';
+import ReviewExams from './pages/Instructor/ReviewExams';
+import ViewExam from './pages/Instructor/ViewExam';
 
 // Student pages
-import StudentDashboard from "./pages/Student/StudentDashboard";
-import StudentAccountSettings from "./pages/Student/StudentAccountSettings";
-import StudentNotificationPreferences from "./pages/Student/StudentNotificationPreferences";
-import StudentGradeReport from "./pages/Student/StudentGradeReport";
+import StudentDashboard from './pages/Student/StudentDashboard';
+import StudentAccountSettings from './pages/Student/StudentAccountSettings';
+import StudentNotificationPreferences from './pages/Student/StudentNotificationPreferences';
+import StudentGradeReport from './pages/Student/StudentGradeReport';
+import ViewExamDetails from './pages/Student/ViewExamDetails';
+import ReportGradeStudent from './pages/Student/ReportGradeStudent';
+import StudentReportsSubmitted from './pages/Student/StudentReportsSubmitted'; // Import the new page
 
 function App() {
   return (
@@ -70,6 +68,9 @@ function App() {
           <Route path="/StudentGradeReport" element={<ProtectedRoute><StudentLayout><StudentGradeReport /></StudentLayout></ProtectedRoute>} />
           <Route path="/StudentAccountSettings" element={<ProtectedRoute><StudentLayout><StudentAccountSettings /></StudentLayout></ProtectedRoute>} />
           <Route path="/StudentNotificationPreferences" element={<ProtectedRoute><StudentLayout><StudentNotificationPreferences /></StudentLayout></ProtectedRoute>} />
+          <Route path="/ViewExamDetails" element={<ProtectedRoute><StudentLayout><ViewExamDetails /></StudentLayout></ProtectedRoute>} />
+          <Route path="/ReportGradeStudent" element={<ProtectedRoute><StudentLayout><ReportGradeStudent /></StudentLayout></ProtectedRoute>} />
+          <Route path="/StudentReportsSubmitted" element={<ProtectedRoute><StudentLayout><StudentReportsSubmitted /></StudentLayout></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

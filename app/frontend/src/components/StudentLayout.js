@@ -1,9 +1,8 @@
-// StudentLayout.js
 import React from 'react';
 import '@fontsource/inter/latin.css'; // Import the font
 import '../css/App.css'; // Import global styles
 import { useLocation, Link } from "react-router-dom";
-import { ClipboardCheck, Settings, LogOut } from "lucide-react";
+import { ClipboardCheck, Settings, LogOut, Flag } from "lucide-react"; // Import Flag icon
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -63,12 +62,18 @@ const StudentLayout = ({ children }) => {
         </div>
         <div className="flex items-center gap-4">
           <Link to="/StudentAccountSettings">
-            <Button variant="ghost" className="p-2 hover:bg-transparent text-white flex items-center">
+            <Button variant="ghost" className="p-2 hover:bg-transparent text-white flex items-center hover:text-white">
               <Settings className="h-6 w-6 text-white mr-2" />
               Account Settings
             </Button>
           </Link>
-          <Button onClick={handleLogout} variant="ghost" className="p-2 hover:bg-transparent text-white flex items-center">
+          <Link to="/StudentReportsSubmitted">
+            <Button variant="ghost" className="p-2 hover:bg-transparent text-white flex items-center hover:text-white">
+              <Flag className="h-6 w-6 text-white mr-2" />
+              Reports
+            </Button>
+          </Link>
+          <Button onClick={handleLogout} variant="ghost" className="p-2 hover:bg-transparent text-white flex items-center hover:text-white">
             <LogOut className="h-6 w-6 text-white mr-2" />
             Logout
           </Button>

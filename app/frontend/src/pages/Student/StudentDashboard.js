@@ -1,12 +1,14 @@
+// StudentDashboard.js
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Bookmark, Search } from "lucide-react";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
+import { Bookmark, Search, ChevronRight } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
 import { Input } from "../../components/ui/input";
-import { useAuth0 } from "@auth0/auth0-react"; 
+import { Button } from "../../components/ui/button"; // Correct import for Button
+import { useAuth0 } from "@auth0/auth0-react";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table"; // Add the correct import statement
 
 export default function StudentDashboard() {
   const { user, getAccessTokenSilently } = useAuth0();
@@ -23,7 +25,7 @@ export default function StudentDashboard() {
     const fetchCourses = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await fetch(`/api/class/student/courses`, {
+        const response = await fetch(`/api/student/${user.sub}/courses`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -46,7 +48,7 @@ export default function StudentDashboard() {
     const fetchExams = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await fetch(`/api/exam/student/exams`, {
+        const response = await fetch(`/api/student/${user.sub}/exams`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -162,28 +164,37 @@ export default function StudentDashboard() {
                 onChange={(e) => setExamSearchTerm(e.target.value)}
               />
             </div>
-            {filteredExams.length > 0 ? (
-              <ScrollArea className="h-80">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Exam Name</TableHead>
-                      <TableHead className="hidden sm:table-cell">Course</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredExams.map((exam, index) => (
+            <ScrollArea className="h-80">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Exam Name</TableHead>
+                    <TableHead className="hidden sm:table-cell">Course</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredExams.length > 0 ? (
+                    filteredExams.map((exam, index) => (
                       <TooltipProvider key={index}>
                         <Tooltip delayDuration={0}>
                           <TooltipTrigger asChild>
                             <TableRow
                               className="hover:bg-gray-100 cursor-pointer"
-                              onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}
+                              onClick={() => navigate(`/ViewExamDetails`)}
                             >
                               <TableCell>
                                 <span className="font-bold">{exam.exam_title}</span>
                               </TableCell>
                               <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
+                              <TableCell>{exam.status}</TableCell>
+                              <TableCell>
+                                <Button onClick={() => navigate(`/ViewExamDetails`)} className="bg-primary text-white">
+                                  <ChevronRight className="w-4 h-4 mr-1" />
+                                  View Details
+                                </Button>
+                              </TableCell>
                             </TableRow>
                           </TooltipTrigger>
                           <TooltipContent>
@@ -191,15 +202,30 @@ export default function StudentDashboard() {
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    ))}
-                  </TableBody>
-                </Table>
-              </ScrollArea>
-            ) : (
-              <div className="flex justify-center items-center h-full">
-                <p className="text-muted-foreground">No exams available.</p>
-              </div>
-            )}
+                    ))
+                  ) : (
+                    <>
+                      <TableRow>
+                        <TableCell colSpan={4} className="text-center text-muted-foreground">
+                          No exams available.
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>No exams available</TableCell>
+                        <TableCell className="hidden sm:table-cell">No exams available</TableCell>
+                        <TableCell>No exams available</TableCell>
+                        <TableCell>
+                          <Button onClick={() => navigate('/ViewExamDetails')} className="bg-primary text-white">
+                            <ChevronRight className="w-4 h-4 mr-1" />
+                            View Details
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  )}
+                </TableBody>
+              </Table>
+            </ScrollArea>
           </CardContent>
         </Card>
       </div>
