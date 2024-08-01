@@ -107,7 +107,7 @@ const ClassManagement = () => {
                 </Link>
               </TooltipTrigger>
               <TooltipContent>
-                Create New Course
+                Create New Exam
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

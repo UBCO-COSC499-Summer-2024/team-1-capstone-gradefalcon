@@ -157,7 +157,7 @@ const Classes = () => {
                         <TableCell>
                           <Button asChild size="sm" className="ml-auto gap-1">
                             <Link to={`/ClassManagement/${classItem.class_id}`}>
-                              Open Course
+                              Open Class
                               <ArrowUpRight className="h-4 w-4 ml-1" />
                             </Link>
                           </Button>

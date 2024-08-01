@@ -155,17 +155,6 @@ const ExamBoard = () => {
                   <TableHead>Course Name</TableHead>
                   <TableHead>Grade Exam</TableHead>
                   <TableHead>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem onClick={handleDeleteSelected}>Delete Selected</DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleArchiveSelected}>Archive Selected</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -217,7 +206,7 @@ const ExamBoard = () => {
           </CardContent>
         </Card>
       </div>
-      <Toaster /> {/* Adding the Toaster component */}
+      <Toaster /> 
     </main>
   );
 };
