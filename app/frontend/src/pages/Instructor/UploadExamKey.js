@@ -133,7 +133,8 @@ const UploadExamKey = () => {
   };
 
   return (
-    <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
+    <main className="flex flex-col gap-4 p-2">
+<div className="w-full mx-auto grid flex-1 auto-rows-max gap-8">
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
@@ -215,6 +216,7 @@ const UploadExamKey = () => {
       </div>
       <Toaster />
     </div>
+    </main>
   );
 };
 
