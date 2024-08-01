@@ -1,6 +1,6 @@
 const express = require('express');
 const { checkJwt, checkPermissions } = require('../auth0');
-const { displayClasses, displayClassManagement, importClass , getAllCourses, archiveCourse} = require('../controllers/classController');
+const { displayClasses, displayClassManagement, importClass , getAllCourses, archiveCourse, unarchiveCourse} = require('../controllers/classController');
 const router = express.Router();
 
 router.use((req, res, next) => {
@@ -27,10 +27,15 @@ router.post('/archive-course', checkJwt, (req, res, next) => {
   checkPermissions(['read:classes'])(req, res, next);
 }, archiveCourse);
 
+router.post('/unarchive-course', checkJwt, (req, res, next) => {
+  checkPermissions(['read:classes'])(req, res, next);
+}, unarchiveCourse); 
+
 router.param('class_id', (req, res, next, class_id) => {
   req.session.class_id = class_id;
   req.session.save();
   next();
+  
 });
 
 module.exports = router;

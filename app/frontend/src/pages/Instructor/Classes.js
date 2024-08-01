@@ -7,9 +7,6 @@ import { ScrollArea } from "../../components/ui/scroll-area";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "../../components/ui/dialog";
 import NewClassForm from "../../components/NewClassForm";
 import { ArrowUpRight, MoreHorizontal } from "lucide-react";
-import { Checkbox } from "../../components/ui/checkbox";
-import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
-import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
 import { useAuth0 } from "@auth0/auth0-react";
 import { Badge } from "../../components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
@@ -23,11 +20,8 @@ import {
 const Classes = () => {
   const { getAccessTokenSilently } = useAuth0();
   const [classes, setClasses] = useState([]);
-  const [selectedClasses, setSelectedClasses] = useState([]);
-  const [allSelected, setAllSelected] = useState(false);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("active"); // Default tab is 'active'
-  const { toast } = useToast(); // Using the toast hook
 
   const fetchClasses = async () => {
     try {
@@ -86,6 +80,30 @@ const Classes = () => {
     }
   };
 
+  const handleUnarchiveCourse = async (classId) => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await fetch(`/api/class/unarchive-course`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ class_id: classId }), // Send class_id in the request body
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to re-activate course");
+      }
+
+      // Refresh the list of classes after unarchiving
+      fetchClasses();
+    } catch (error) {
+      console.error("Error re-activating course:", error);
+      setError("Error re-activating course");
+    }
+  };
+
   const handleDeleteCourse = (classId) => {
     // Placeholder function for deleting a course
     // Implement the API call here when ready
@@ -139,9 +157,15 @@ const Classes = () => {
                                   </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                  <DropdownMenuItem onSelect={() => handleArchiveCourse(classItem.class_id)}>
-                                    Archive Course
-                                  </DropdownMenuItem>
+                                  {classItem.active ? (
+                                    <DropdownMenuItem onSelect={() => handleArchiveCourse(classItem.class_id)}>
+                                      Archive Course
+                                    </DropdownMenuItem>
+                                  ) : (
+                                    <DropdownMenuItem onSelect={() => handleUnarchiveCourse(classItem.class_id)}>
+                                      Re-activate Course
+                                    </DropdownMenuItem>
+                                  )}
                                   <DropdownMenuItem onSelect={() => handleDeleteCourse(classItem.class_id)}>
                                     Delete Course
                                   </DropdownMenuItem>
@@ -184,10 +208,8 @@ const Classes = () => {
           </CardContent>
         </Card>
       </div>
-      <Toaster /> {/* Adding the Toaster component */}
     </main>
   );
 };
 
 export default Classes;
-

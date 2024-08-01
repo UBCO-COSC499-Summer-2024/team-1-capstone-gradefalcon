@@ -216,5 +216,26 @@ const archiveCourse = async (req, res, next) => {
     next(err);
   }
 };
-module.exports = { displayClasses, displayClassManagement, importClass, getClassNameById, getAllCourses, archiveCourse };
+const unarchiveCourse = async (req, res, next) => {
+  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
+  const { class_id } = req.body; // Get class ID from request body
 
+  try {
+    // Update the active status of the course to true (unarchived)
+    const result = await pool.query(
+      "UPDATE classes SET active = true WHERE class_id = $1 AND instructor_id = $2 RETURNING *",
+      [class_id, auth0_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Course not found or you do not have permission to unarchive this course." });
+    }
+
+    res.json({ message: "Course unarchived successfully", course: result.rows[0] });
+  } catch (err) {
+    console.error("Error unarchiving course:", err);
+    next(err);
+  }
+};
+
+module.exports = { displayClasses, displayClassManagement, importClass, getClassNameById, getAllCourses, archiveCourse, unarchiveCourse };
