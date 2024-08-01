@@ -126,19 +126,6 @@ const Classes = () => {
                       <TableHead>Class Name</TableHead>
                       <TableHead className="hidden sm:table-cell">Course ID</TableHead>
                       <TableHead className="hidden sm:table-cell">Actions</TableHead>
-                      <TableHead>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <DropdownMenuItem onClick={handleDeleteSelected}>Delete Selected</DropdownMenuItem>
-                            <DropdownMenuItem onClick={handleArchiveSelected}>Archive Selected</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
