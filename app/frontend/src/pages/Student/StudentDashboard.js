@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Bookmark, Search } from "lucide-react";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
@@ -22,7 +23,7 @@ export default function StudentDashboard() {
     const fetchCourses = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await fetch(`/api/student/${user.sub}/courses`, {
+        const response = await fetch(`/api/class/student/courses`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -45,7 +46,7 @@ export default function StudentDashboard() {
     const fetchExams = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await fetch(`/api/student/${user.sub}/exams`, {
+        const response = await fetch(`/api/exam/student/exams`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

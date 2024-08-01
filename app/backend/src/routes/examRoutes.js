@@ -11,11 +11,12 @@ const {
   getScoreByExamId,
   getExamType,
   saveResults,
-  deleteAllFilesInDir,
   ensureDirectoryExistence,
   resetOMR,
   getCustomMarkingSchemes,
   getExamDetails,
+  getStudentExams,
+  deleteAllFilesInDir,
 
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
@@ -38,15 +39,10 @@ router.get(
   checkPermissions(["read:examAverageData"]),
   getAveragePerExam
 );
-router.get(
-  "/average-per-course",
-  checkJwt,
-  checkPermissions(["read:courseAverageData"]),
-  getAveragePerCourse
-); // Updated route
+router.get("/average-per-course", checkJwt, checkPermissions(["read:courseAverageData"]), getAveragePerCourse); // Updated route
 router.get("/grades/:studentId", checkJwt, checkPermissions(["read:grades"]), getStudentGrades);
 router.get("/getExamDetails/:exam_id", checkJwt, checkPermissions(["read:exams"]), getExamDetails);
-router.get('/student/:student_id/exams', checkJwt, checkPermissions(['read:exam_student']), getStudentExams);
+router.get('/student/exams', checkJwt, checkPermissions(["read:exam_student"]), getStudentExams);
 
 // Function to get the answer key for a specific exam
 

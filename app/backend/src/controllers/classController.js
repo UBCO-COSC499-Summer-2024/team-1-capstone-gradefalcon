@@ -199,14 +199,14 @@ const getAllCourses = async (req, res, next) => {
 // Fetch courses that a particular student is enrolled in
 const getStudentCourses = async (req, res, next) => {
   try {
-    const { student_id } = req.params;
-    console.log(`Fetching courses for student_id: ${student_id}`);
+    const studentAuth0Id = req.auth.sub; // Get the  ID from the JWT
+    console.log(`Fetching courses for student_id: ${studentAuth0Id}`);
     const result = await pool.query(`
       SELECT c.class_id, c.course_id, c.course_name
       FROM enrollment e
       JOIN classes c ON e.class_id = c.class_id
       WHERE e.student_id = $1
-    `, [student_id]);
+    `, [studentAuth0Id]);
     console.log(`Courses fetched: ${JSON.stringify(result.rows)}`);
     res.json(result.rows);
   } catch (err) {

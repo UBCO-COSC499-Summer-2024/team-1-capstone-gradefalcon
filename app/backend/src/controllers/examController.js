@@ -341,7 +341,7 @@ const getExamDetails = async (req, res, next) => {
 };
 
 const getStudentExams = async (req, res, next) => {
-  const { student_id } = req.params; // Get the student ID from the request parameters
+  const studentId = req.auth.sub; // Get the student ID from Auth0 token
 
   try {
     const exams = await pool.query(
@@ -352,7 +352,7 @@ const getStudentExams = async (req, res, next) => {
       JOIN enrollment en ON en.class_id = c.class_id
       WHERE en.student_id = $1
     `,
-      [student_id]
+      [studentId]
     );
 
     res.json({ exams: exams.rows });

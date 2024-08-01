@@ -23,7 +23,7 @@ router.get('/getAllCourses', checkJwt, (req, res, next) => {
   checkPermissions(['read:classes'])(req, res, next);
 }, getAllCourses);
 
-router.get('/student/:student_id/courses', checkJwt, (req, res, next) => {
+router.get('/student/courses', checkJwt, (req, res, next) => {
   checkPermissions(['read:courses_student'])(req, res, next);
 }, getStudentCourses);
 
