@@ -3,38 +3,22 @@ const fs = require("fs");
 const path = require("path");
 
 const saveQuestions = async (req, res, next) => {
-  const {
-    questions,
-    classID,
-    examTitle,
-    numQuestions,
-    totalMarks,
-    markingSchemes = {},
-    canViewExam,
-    canViewAnswers,
-  } = req.body;
+  const { questions, classID, examTitle, numQuestions, totalMarks, markingSchemes = {}, canViewExam, canViewAnswers } = req.body;
 
-  const questionsArray = Object.entries(questions).map(
-    ([key, value]) => `${value.question}:${value.option}`
-  );
+  const questionsArray = Object.entries(questions).map(([key, value]) => `${value.question}:${value.option}`);
 
   try {
     const writeToExam = await pool.query(
       "INSERT INTO exam (class_id, exam_title, total_questions, total_marks, viewing_options) VALUES ($1, $2, $3, $4, $5) RETURNING exam_id",
-      [
-        classID,
-        examTitle,
-        numQuestions,
-        totalMarks,
-        JSON.stringify({ canViewExam: canViewExam, canViewAnswers: canViewAnswers }),
-      ]
+      [classID, examTitle, numQuestions, totalMarks, JSON.stringify({ canViewExam: canViewExam, canViewAnswers: canViewAnswers })]
     );
     const insertedRowId = writeToExam.rows[0].exam_id;
 
-    const writeToSolution = await pool.query(
-      "INSERT INTO solution (exam_id, answers, marking_schemes) VALUES ($1, $2, $3)",
-      [insertedRowId, questionsArray, JSON.stringify(markingSchemes)]
-    );
+    const writeToSolution = await pool.query("INSERT INTO solution (exam_id, answers, marking_schemes) VALUES ($1, $2, $3)", [
+      insertedRowId,
+      questionsArray,
+      JSON.stringify(markingSchemes),
+    ]);
 
     res.status(200).json({ message: "Questions and marking schemes saved successfully." });
   } catch (error) {
@@ -48,10 +32,11 @@ const newExam = async (req, res, next) => {
   const { exam_id, student_id, grade } = req.body;
 
   try {
-    const result = await pool.query(
-      "INSERT INTO studentResults (exam_id, student_id, grade) VALUES ($1, $2, $3) RETURNING *",
-      [exam_id, student_id, grade]
-    );
+    const result = await pool.query("INSERT INTO studentResults (exam_id, student_id, grade) VALUES ($1, $2, $3) RETURNING *", [
+      exam_id,
+      student_id,
+      grade,
+    ]);
     res.json(result.rows[0]);
   } catch (err) {
     next(err);
@@ -145,9 +130,7 @@ const getStudentGrades = async (req, res, next) => {
 
 const getAnswerKeyForExam = async (exam_id) => {
   try {
-    const solutionResult = await pool.query("SELECT answers FROM solution WHERE exam_id = $1", [
-      exam_id,
-    ]);
+    const solutionResult = await pool.query("SELECT answers FROM solution WHERE exam_id = $1", [exam_id]);
 
     if (solutionResult.rows.length === 0) {
       throw new Error("Solution not found");
@@ -186,9 +169,7 @@ const getStudentNameById = async (studentId) => {
 
 const getExamType = async (exam_id) => {
   try {
-    const result = await pool.query("SELECT total_questions FROM exam WHERE exam_id = $1", [
-      exam_id,
-    ]);
+    const result = await pool.query("SELECT total_questions FROM exam WHERE exam_id = $1", [exam_id]);
 
     if (result.rows.length === 0) {
       return "No scores found for this exam";
@@ -227,10 +208,11 @@ const saveResults = async (req, res, next) => {
     for (const score of studentScores) {
       if (score.StudentName !== "Unknown student") {
         // Assuming studentResults is your table/model name and it has a method to insert data
-        const result = await pool.query(
-          "INSERT INTO studentresults (student_id, exam_id, grade) VALUES ($1,$2,$3)",
-          [score.StudentID, exam_id, parseInt(score.Score, 10)]
-        );
+        const result = await pool.query("INSERT INTO studentresults (student_id, exam_id, grade) VALUES ($1,$2,$3)", [
+          score.StudentID,
+          exam_id,
+          parseInt(score.Score, 10),
+        ]);
       }
     }
     res.send({ message: "Scores saved successfully" });
@@ -292,9 +274,7 @@ const deleteAllFilesInDir = (dirPath) => {
 };
 
 async function getCustomMarkingSchemes(exam_id) {
-  const result = await pool.query("SELECT marking_schemes FROM solution WHERE exam_id = $1", [
-    exam_id,
-  ]);
+  const result = await pool.query("SELECT marking_schemes FROM solution WHERE exam_id = $1", [exam_id]);
 
   if (result.rows.length === 0) {
     throw new Error(`No marking schemes found for exam_id ${exam_id}`);
@@ -361,11 +341,11 @@ const getStudentExams = async (req, res, next) => {
   try {
     const exams = await pool.query(
       `
-      SELECT e.exam_id, e.exam_title, c.course_id, c.course_name
-      FROM exam e
-      JOIN classes c ON e.class_id = c.class_id
-      JOIN enrollment en ON en.class_id = c.class_id
-      WHERE en.student_id = $1
+      select exam_id, exam_title, course_id, course_name from exam 
+	join classes using (class_id)
+	join enrollment using (class_id)
+	join student using (student_id)
+	where auth0_id = $1
     `,
       [studentId]
     );

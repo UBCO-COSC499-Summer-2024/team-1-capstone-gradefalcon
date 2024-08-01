@@ -43,9 +43,7 @@ const getManagementApiAccessToken = async () => {
 const displayClasses = async (req, res, next) => {
   try {
     const instructorAuth0Id = req.auth.sub; // Get the instructor ID from the JWT
-    const result = await pool.query("SELECT * FROM classes WHERE instructor_id = $1", [
-      instructorAuth0Id,
-    ]);
+    const result = await pool.query("SELECT * FROM classes WHERE instructor_id = $1", [instructorAuth0Id]);
     res.json(result.rows); // Send the list of classes as JSON
   } catch (err) {
     console.error("Error in displayClasses:", err); // Log any errors
@@ -58,9 +56,7 @@ const getClassNameById = async (req, res, next) => {
   try {
     const { classId } = req.params; // Get the class ID from the request parameters
 
-    const result = await pool.query("SELECT course_name FROM classes WHERE class_id = $1", [
-      classId,
-    ]);
+    const result = await pool.query("SELECT course_name FROM classes WHERE class_id = $1", [classId]);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ error: "Class not found" });
@@ -76,31 +72,23 @@ const getClassNameById = async (req, res, next) => {
 const displayClassManagement = async (req, res, next) => {
   try {
     const { class_id } = req.params; // Get the class ID from the request parameters
-    const result = await pool.query(
-      "SELECT student_id, name FROM enrollment JOIN student USING (student_id) WHERE class_id = $1",
-      [class_id]
-    );
+    const result = await pool.query("SELECT student_id, name FROM enrollment JOIN student USING (student_id) WHERE class_id = $1", [
+      class_id,
+    ]);
     const classData = result.rows;
 
     const examResults = classData.map((student) =>
-      pool
-        .query("SELECT exam_id, grade FROM studentResults WHERE student_id = $1", [
-          student.student_id,
-        ])
-        .then((result) => ({
-          student_id: student.student_id,
-          name: student.name,
-          exams: result.rows, // This will be an array of exam results
-        }))
+      pool.query("SELECT exam_id, grade FROM studentResults WHERE student_id = $1", [student.student_id]).then((result) => ({
+        student_id: student.student_id,
+        name: student.name,
+        exams: result.rows, // This will be an array of exam results
+      }))
     );
 
     // Wait for all promises to resolve
     const combinedResults = await Promise.all(examResults);
     // Now let's get the course code and course name given class_id
-    const courseQuery = await pool.query(
-      "SELECT course_id, course_name FROM classes WHERE class_id = $1",
-      [class_id]
-    );
+    const courseQuery = await pool.query("SELECT course_id, course_name FROM classes WHERE class_id = $1", [class_id]);
     const courseDetails = courseQuery.rows;
     // Combine the students info and course details
     res.json({ studentInfo: combinedResults, courseDetails });
@@ -125,10 +113,10 @@ const importClass = async (req, res) => {
   try {
     const managementApiToken = await getManagementApiAccessToken();
 
-    let classQuery = await pool.query(
-      "SELECT class_id FROM classes WHERE course_id = $1 AND instructor_id = $2",
-      [courseId, instructorId]
-    );
+    let classQuery = await pool.query("SELECT class_id FROM classes WHERE course_id = $1 AND instructor_id = $2", [
+      courseId,
+      instructorId,
+    ]);
 
     let classId;
     if (classQuery.rows.length === 0) {
@@ -161,30 +149,24 @@ const importClass = async (req, res) => {
         });
         auth0User = userResponse.data;
       } catch (error) {
-        console.error(
-          `Error creating user ${student.studentEmail}:`,
-          error.response.data || error.message
-        );
-        const existingUsersResponse = await axios.get(
-          `https://${auth0Domain}/api/v2/users-by-email`,
-          {
-            params: { email: student.studentEmail },
-            headers: { Authorization: `Bearer ${managementApiToken}` },
-          }
-        );
+        console.error(`Error creating user ${student.studentEmail}:`, error.response.data || error.message);
+        const existingUsersResponse = await axios.get(`https://${auth0Domain}/api/v2/users-by-email`, {
+          params: { email: student.studentEmail },
+          headers: { Authorization: `Bearer ${managementApiToken}` },
+        });
 
         auth0User = existingUsersResponse.data[0];
         if (!auth0User) return null;
       }
 
-      const studentQuery = await pool.query("SELECT * FROM student WHERE student_id = $1", [
-        student.studentID,
-      ]);
+      const studentQuery = await pool.query("SELECT * FROM student WHERE student_id = $1", [student.studentID]);
       if (studentQuery.rows.length === 0) {
-        await pool.query(
-          "INSERT INTO student (student_id, auth0_id, email, name) VALUES ($1, $2, $3, $4)",
-          [student.studentID, auth0User.user_id, student.studentEmail, student.studentName]
-        );
+        await pool.query("INSERT INTO student (student_id, auth0_id, email, name) VALUES ($1, $2, $3, $4)", [
+          student.studentID,
+          auth0User.user_id,
+          student.studentEmail,
+          student.studentName,
+        ]);
       }
 
       return { ...student, auth0_id: auth0User.user_id };
@@ -197,15 +179,12 @@ const importClass = async (req, res) => {
 
     // Insert enrollments
     const enrollmentPromises = successfulUsers.map(async (student) => {
-      const enrollmentQuery = await pool.query(
-        "SELECT * FROM enrollment WHERE class_id = $1 AND student_id = $2",
-        [classId, student.studentID]
-      );
+      const enrollmentQuery = await pool.query("SELECT * FROM enrollment WHERE class_id = $1 AND student_id = $2", [
+        classId,
+        student.studentID,
+      ]);
       if (enrollmentQuery.rows.length === 0) {
-        return pool.query("INSERT INTO enrollment (class_id, student_id) VALUES ($1, $2)", [
-          classId,
-          student.studentID,
-        ]);
+        return pool.query("INSERT INTO enrollment (class_id, student_id) VALUES ($1, $2)", [classId, student.studentID]);
       }
       return null;
     });
@@ -222,10 +201,7 @@ const importClass = async (req, res) => {
 const getAllCourses = async (req, res, next) => {
   const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
   try {
-    const result = await pool.query(
-      "SELECT class_id, course_id, course_name FROM classes WHERE instructor_id = $1",
-      [auth0_id]
-    );
+    const result = await pool.query("SELECT class_id, course_id, course_name FROM classes WHERE instructor_id = $1", [auth0_id]);
     res.json(result.rows);
   } catch (err) {
     next(err);
@@ -247,7 +223,6 @@ const getStudentCourses = async (req, res, next) => {
     `,
       [studentAuth0Id]
     );
-    console.log("result", result);
     console.log(`Courses fetched: ${JSON.stringify(result.rows)}`);
     res.json(result.rows);
   } catch (err) {
