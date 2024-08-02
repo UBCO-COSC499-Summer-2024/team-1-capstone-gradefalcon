@@ -277,6 +277,7 @@ router.post(
   async function (req, res) {
     const template = req.params.examType;
     console.log("template", template);
+
     if (template === "100mcq") {
       //only one page
       const destinationDir = "/code/omr/inputs";
@@ -350,7 +351,7 @@ router.post(
       // only template for the second page
       // we can just store it straight in the inputs folder since it's just 1 page
       const filePath = "/code/omr/inputs";
-      const templatePath = path.join(__dirname, "../assets/100mcq_page_2.json");
+      const templatePath = path.join(__dirname, "../assets/templates/100mcq_page_2.json");
       const destinationTemplatePath = path.join(filePath, "template.json");
 
       ensureDirectoryExistence(filePath);
@@ -367,8 +368,8 @@ router.post(
       // template for both ID and question page
       const filePath_1 = "/code/omr/inputs/page_1";
       const filePath_2 = "/code/omr/inputs/page_2";
-      const templatePath_1 = path.join(__dirname, `../assets/${examType}_page_1.json`);
-      const templatePath_2 = path.join(__dirname, `../assets/${examType}_page_2.json`);
+      const templatePath_1 = path.join(__dirname, `../assets/templates/${examType}_page_1.json`);
+      const templatePath_2 = path.join(__dirname, `../assets/templates/${examType}_page_2.json`);
       const destinationTemplatePath1 = path.join(filePath_1, "template.json");
       const destinationTemplatePath2 = path.join(filePath_2, "template.json");
 

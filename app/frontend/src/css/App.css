@@ -81,6 +81,7 @@
   z-index: 1;
   left: 0;
   transition: width 0.3s;
+  box-shadow: var(--shadow-md); /* Adding shadow for light mode */
 }
 
 .sidebar:hover {

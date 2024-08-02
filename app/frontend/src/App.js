@@ -41,7 +41,7 @@ import ViewReport from "./pages/Instructor/ViewReport";
 // Student pages
 import ReviewExams from "./pages/Instructor/ReviewExams";
 import ViewExam from "./pages/Instructor/ViewExam";
-import CustomBubbleSheet from "./pages/Instructor/CustomBubbleSheet";
+import CustomBubbleSheet from "./components/CustomBubbleSheet";
 // Student pages
 import StudentDashboard from "./pages/Student/StudentDashboard";
 import StudentAccountSettings from "./pages/Student/StudentAccountSettings";

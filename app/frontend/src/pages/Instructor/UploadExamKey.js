@@ -11,10 +11,9 @@ const UploadExamKey = () => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
-  const [template, setTemplate] = useState("100mcq");
   const fileInputRef = useRef(null);
   const location = useLocation();
-  const { examTitle, classID } = location.state || {};
+  const { examTitle, classID, template } = location.state || {};
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -57,10 +56,6 @@ const UploadExamKey = () => {
     toast({ title: "Reset", description: "File upload has been reset." });
   };
 
-  const handleTemplateChange = (event) => {
-    setTemplate(event.target.value);
-  };
-
   const sendToBackend = async () => {
     if (!file) {
       toast({ title: "No File", description: "No file selected to upload." });
@@ -86,6 +81,7 @@ const UploadExamKey = () => {
     // formData.append("examID", examID);
     formData.append("examTitle", examTitle);
     formData.append("classID", classID);
+    formData.append("template", template);
 
     try {
       const token = await getAccessTokenSilently(); // Get the token
@@ -149,27 +145,6 @@ const UploadExamKey = () => {
           Upload Exam Key
         </h1>
         <div className="hidden items-center gap-2 md:ml-auto md:flex"></div>
-      </div>
-      <label>Exam Template:</label>
-      <div>
-        <label>
-          <input
-            type="radio"
-            value="100mcq"
-            checked={template === "100mcq"}
-            onChange={handleTemplateChange}
-          />
-          100 MCQ
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="200mcq"
-            checked={template === "200mcq"}
-            onChange={handleTemplateChange}
-          />
-          200 MCQ
-        </label>
       </div>
 
       <div className="flex flex-col items-center gap-4 w-full">

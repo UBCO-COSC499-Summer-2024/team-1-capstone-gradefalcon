@@ -1,38 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../css/App.css";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { Select, SelectItem, SelectContent, SelectValue, SelectTrigger } from "../../components/ui/select";
-import { ChevronLeftIcon, ExclamationCircleIcon } from "@heroicons/react/20/solid";
-import { Form } from "../../components/ui/form";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs";
+import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
+import { ChevronRightIcon, ChevronLeftIcon, ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { useAuth0 } from "@auth0/auth0-react";
+import CustomBubbleSheet from "../../components/CustomBubbleSheet";  // Importing the CustomBubbleSheet component
 
 const NewExam = () => {
   const { getAccessTokenSilently } = useAuth0();
   const [examTitle, setExamTitle] = useState("");
   const [courseId, setCourseId] = useState("");
+  const [selectedClassId, setSelectedClassId] = useState(""); 
   const [template, setTemplate] = useState("100mcq");
-  const [classes, setClasses] = useState([]); // State to store fetched classes
-  const [selectedClass, setSelectedClass] = useState(""); // State to store the selected class
-  const [showAlert, setShowAlert] = useState(false); // State to manage alert visibility
-  const [error, setError] = useState(null); // State to handle errors
-  const params = useParams();
+  const [classes, setClasses] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [error, setError] = useState(null);
+  const [isCustomTemplate, setIsCustomTemplate] = useState(false);
+  const [currentTab, setCurrentTab] = useState("details"); // Track current tab
   const navigate = useNavigate();
-  const location = useLocation();
-  const class_id = params.class_id || "defaultClassId"; // Set default class_id if not provided
+
+  useEffect(() => {
+    fetchClasses(); // Fetch classes when component mounts
+  }, []);
 
   const fetchClasses = async () => {
     try {
-      const token = await getAccessTokenSilently(); // Get the token
+      const token = await getAccessTokenSilently();
       const response = await fetch("/api/class/classes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // Include the token in the request
+          "Authorization": `Bearer ${token}`,
         },
         credentials: "include",
       });
@@ -47,27 +52,32 @@ const NewExam = () => {
     }
   };
 
-  useEffect(() => {
-    fetchClasses(); // Fetch classes when component mounts
-  }, []);
-
   const handleInputChange = (event) => {
-    const value = event.target.value;
-    const sanitizedValue = value.replace(/[^a-zA-Z0-9\s.,!?-]/g, "");
-    setExamTitle(sanitizedValue);
+    setExamTitle(event.target.value.replace(/[^a-zA-Z0-9\s.,!?-]/g, ""));
   };
 
-  const handleTemplateChange = (event) => {
-    setTemplate(event.target.value);
+  const handleTemplateChange = (value) => {
+    setTemplate(value);
+    setIsCustomTemplate(value === "custom");
   };
 
   const handleClassChange = (value) => {
-    setSelectedClass(value);
-    setCourseId(value); // Set course ID based on selected class
+    setSelectedClassId(value);
+    setCourseId(value);
   };
 
   const isFormValid = () => {
-    return examTitle.trim() !== "" && selectedClass !== ""; // Simple validation check
+    return examTitle.trim() !== "" && courseId !== "" && template !== "";
+  };
+
+  const handleNext = () => {
+    if (currentTab === "details") setCurrentTab("template");
+    if (currentTab === "template") setCurrentTab("upload");
+  };
+
+  const handleBack = () => {
+    if (currentTab === "upload") setCurrentTab("template");
+    else if (currentTab === "template") setCurrentTab("details");
   };
 
   const handleButtonClick = (event) => {
@@ -78,13 +88,6 @@ const NewExam = () => {
       setShowAlert(false);
     }
   };
-
-  useEffect(() => {
-    if (location.state) {
-      setCourseId(location.state.courseID); // Set courseID from state
-      setTemplate(location.state.template); // Set template from state
-    }
-  }, [location.state]);
 
   return (
     <main className="flex flex-col gap-4 p-2">
@@ -98,11 +101,13 @@ const NewExam = () => {
           <ChevronLeftIcon className="h-4 w-4" />
           <span className="sr-only">Back</span>
         </Button>
-        <h1 className="flex-1 text-3xl font-semibold tracking-tight">
+        <h1 className="text-3xl font-semibold">
           Create Exam
         </h1>
-        <div className="hidden items-center gap-2 md:ml-auto md:flex"></div>
       </div>
+
+      <Tabs defaultValue={currentTab} value={currentTab} onValueChange={setCurrentTab}>
+      <div className="w-full text-center">
 
       {showAlert && (
         <Alert className="mb-4">
@@ -120,100 +125,136 @@ const NewExam = () => {
         </Alert>
       )}
 
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-        <div className="grid auto-rows-max items-start gap-8">
-          <Card className="bg-white border rounded-lg p-6">
-            <CardHeader>
-              <CardTitle>Exam Details</CardTitle>
-              <CardDescription>The following details will define the exam's configuration</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-6">
-                <div className="grid gap-3">
-                  <Label htmlFor="exam-title">Exam Name</Label>
-                  <Input
-                    id="exam-title"
-                    type="text"
-                    className="w-full"
-                    placeholder="Enter exam title"
-                    value={examTitle}
-                    onChange={handleInputChange}
-                    data-testid="exam-title-input"
-                    required
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-          <Card className="bg-white border rounded md:w-2/3">
-            <CardHeader>
-              <CardTitle>Select Class</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-6">
-                <div className="grid gap-3">
-                  <Label htmlFor="Class">Class</Label>
-                  <Select onValueChange={handleClassChange}>
-                    <SelectTrigger id="class" aria-label="Select class">
-                      <SelectValue placeholder="Select class" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {classes.map((cls) => (
-                        <SelectItem key={cls.class_id} value={cls.class_id}>
-                          {cls.course_name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <TabsList className="inline-block">
+          <TabsTrigger value="details">Exam Details</TabsTrigger>
+          <TabsTrigger value="template">Select Template</TabsTrigger>
+          <TabsTrigger value="upload">Upload Exam Key</TabsTrigger>
+        </TabsList>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-        <div className="grid auto-rows-max items-start gap-8">
-          <Card className="bg-white border rounded-lg p-6">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <CardTitle className="mb-2">Upload Exam Options</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Form>
-                <div className="grid gap-6">
-                  <div className="grid gap-3">
-                    <Label htmlFor="answer-key">Answer Key</Label>
-                    <div className="flex gap-4 mt-1">
-                      <Button asChild size="sm">
-                        <Link
-                          to={isFormValid() ? "/UploadExamKey" : "#"}
-                          state={{ examTitle: examTitle, classID: selectedClass }} // Pass examTitle and selected class ID as state
-                          data-testid="upload-answer-key-btn"
-                          onClick={handleButtonClick}
-                        >
-                          Upload Answer Key
-                        </Link>
-                      </Button>
-                      <Button asChild size="sm">
-                        <Link
-                          to={isFormValid() ? "/ManualExamKey" : "#"}
-                          state={{ examTitle: examTitle, classID: selectedClass }}
-                          data-testid="manual-answer-key-btn"
-                          onClick={handleButtonClick}
-                        >
-                          Manually Select Answers
-                        </Link>
-                      </Button>
+        {/* Exam Details Tab */}
+          <TabsContent value="details">
+          <div className="w-full flex justify-center">
+          <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-1 max-w-2xl"> 
+              <Card className="bg-white border rounded-lg p-8">
+                <CardHeader>
+                  <CardTitle>Exam Details</CardTitle>
+                  <CardDescription>Set the name of the exam and select the course</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-6">
+                    <div className="grid gap-3">
+                      <Label htmlFor="exam-title">Exam Name</Label>
+                      <Input
+                        id="exam-title"
+                        type="text"
+                        className="w-full"
+                        placeholder="Enter exam title"
+                        value={examTitle}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="class">Class</Label>
+                      <Select onValueChange={handleClassChange}>
+                        <SelectTrigger id="class" aria-label="Select class">
+                          <SelectValue placeholder="Select class" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {classes.map((cls) => (
+                            <SelectItem key={cls.class_id} value={cls.class_id}>
+                              {cls.course_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* Select Template Tab */}
+        <TabsContent value="template">
+        <div className="w-full flex justify-center">
+        <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-1 w-2/3"> 
+          <Card className="bg-white border rounded-lg p-6 w-full">
+              <CardHeader>
+                <CardTitle>Select Template</CardTitle>
+                <CardDescription>Select a template for the exam. You have the option of choosing the default templates or creating a custom template.</CardDescription>
+              </CardHeader>
+              <CardContent>
+              <RadioGroup defaultValue="100mcq" onValueChange={handleTemplateChange}>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="100mcq" id="r1" />
+                  <Label htmlFor="r1">100 MCQ</Label>
                 </div>
-              </Form>
-            </CardContent>
-          </Card>
-        </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="200mcq" id="r2" />
+                  <Label htmlFor="r2">200 MCQ</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="custom" id="r3" />
+                  <Label htmlFor="r3">Custom Template</Label>
+                </div>
+              </RadioGroup>
+                {isCustomTemplate && (
+                  <CustomBubbleSheet  courseId={courseId} examTitle={examTitle} classId= {selectedClassId} />  // Display the CustomBubbleSheet component if custom template is selected
+                )}
+              </CardContent>
+            </Card>
+          </div>
+          </div>
+        </TabsContent>
+
+        {/* Upload Exam Key Tab */}
+        <TabsContent value="upload">
+        <div className="w-full flex justify-center">
+        <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-1 w-1/3">
+             <Card className="bg-white border rounded-lg p-6 w-full">
+              <CardHeader className="flex justify-between px-6 py-4">
+                <CardTitle className="mb-2">Upload Exam Key</CardTitle>
+                <CardDescription>Choose how you would like to create the exam key</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-3">
+                  <Button asChild size="sm" className="px-2 py-1">
+                    <Link
+                      to={isFormValid() ? "/ManualExamKey" : "#"}
+                      state={{ examTitle: examTitle, classID: courseId, template }}
+                      onClick={handleButtonClick}
+                    >
+                      Manually Select Answers
+                    </Link>
+                  </Button>
+                  <Button asChild size="sm" variant= "secondary" className="px-2 py-1">
+                    <Link
+                      to={isFormValid() ? "/UploadExamKey" : "#"}
+                      state={{ examTitle: examTitle, classID: courseId, template }}
+                      onClick={handleButtonClick}
+                    >
+                      Upload Answer Key
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      {/* Navigation Buttons */}
+      <div className="w-full flex justify-center p-4 gap-x-80">
+        <Button onClick={handleBack} variant="outline" disabled={currentTab === "details"}>
+          <ChevronLeftIcon className="h-4 w-4" />
+        </Button>
+        <Button onClick={handleNext} disabled={currentTab === "upload"}>
+          <ChevronRightIcon className="h-4 w-4" />
+        </Button>
       </div>
     </main>
   );

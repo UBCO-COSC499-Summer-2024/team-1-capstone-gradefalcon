@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "./ui/card";
 
-const CustomBubbleSheet = () => {
+const CustomBubbleSheet = ({ courseId, classId, examTitle }) => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(4);
@@ -19,7 +19,7 @@ const CustomBubbleSheet = () => {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`, // Include the token in the request
         },
-        body: JSON.stringify({ numQuestions, numOptions }),
+        body: JSON.stringify({ classId, courseId, examTitle, numQuestions, numOptions }),
       });
 
       if (!response.ok) {
@@ -30,7 +30,7 @@ const CustomBubbleSheet = () => {
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "custom_bubble_sheet.pdf");
+      link.setAttribute("download", `${courseId}_${examTitle}.pdf`);
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);

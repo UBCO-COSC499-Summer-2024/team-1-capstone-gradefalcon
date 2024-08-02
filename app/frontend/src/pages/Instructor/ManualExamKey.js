@@ -36,7 +36,7 @@ import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 
 const ManualExamKey = () => {
   const location = useLocation();
-  const { examTitle, classID } = location.state || {};
+  const { examTitle, classID, template } = location.state || {};
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(5);
   const [totalMarks, setTotalMarks] = useState();
@@ -204,6 +204,7 @@ const ManualExamKey = () => {
           numQuestions: numQuestions,
           totalMarks: totalMarks,
           markingSchemes: markingSchemes,
+          template: template,
         }}
       >
         <Button size="icon" className="h-10 w-10">

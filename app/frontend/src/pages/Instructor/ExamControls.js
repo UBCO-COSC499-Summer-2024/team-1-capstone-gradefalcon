@@ -24,6 +24,7 @@ const ExamControls = () => {
     questions,
     numQuestions,
     totalMarks,
+    template,
     markingSchemes = [],
   } = location.state || {};
   const { toast } = useToast();
@@ -45,6 +46,7 @@ const ExamControls = () => {
           numQuestions: numQuestions,
           totalMarks: totalMarks,
           markingSchemes: markingSchemes,
+          template: template,
         }),
       });
       console.log(response);

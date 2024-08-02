@@ -4,7 +4,7 @@ const path = require("path");
 const { exec } = require('child_process');
 
 const saveQuestions = async (req, res, next) => {
-  const { questions, classID, examTitle, numQuestions, totalMarks, markingSchemes = {} } = req.body;
+  const { questions, classID, examTitle, numQuestions, totalMarks, markingSchemes, template = {} } = req.body;
 
   const questionsArray = Object.entries(questions).map(
     ([key, value]) => `${value.question}:${value.option}`
@@ -12,8 +12,8 @@ const saveQuestions = async (req, res, next) => {
 
   try {
     const writeToExam = await pool.query(
-      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES ($1, $2, $3, $4) RETURNING exam_id",
-      [classID, examTitle, numQuestions, totalMarks]
+      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks, template) VALUES ($1, $2, $3, $4, $5) RETURNING exam_id",
+      [classID, examTitle, numQuestions, totalMarks, template]
     );
     const insertedRowId = writeToExam.rows[0].exam_id;
 
@@ -212,7 +212,6 @@ const saveResults = async (req, res, next) => {
     // Assuming you have a database connection established and a model for studentResults
     for (const score of studentScores) {
       if (score.StudentName !== "Unknown student") {
-        // Assuming studentResults is your table/model name and it has a method to insert data
         const result = await pool.query(
           "INSERT INTO studentresults (student_id, exam_id, grade) VALUES ($1,$2,$3)",
           [score.StudentID, exam_id, parseInt(score.Score, 10)]
@@ -304,7 +303,7 @@ async function getCustomMarkingSchemes(exam_id) {
   return transformedSchemes;
 }
 
-async function generateLatexDocument(questions, options) {
+async function generateLatexDocument(questions, options, courseId, examTitle) {
   const questionTemplate = `
     \\noindent
     \\begin{minipage}[t]{\\linewidth}
@@ -341,7 +340,7 @@ async function generateLatexDocument(questions, options) {
                 \\node[shape=circle,draw,inner sep=2.2pt] (char) {#1};}}
     \\begin{document}
     \\begin{center}
-        \\Large{\\textbf{Answer sheet}}
+       \\Large{\\textbf{${courseId}: ${examTitle}}}
     \\end{center}
     \\textit{Please follow the directions on the exam question sheet. Fill in the entire circle that corresponds to your answer for each question on the exam. Erase marks completely to make a change.}
     \\vspace{5mm}
@@ -368,15 +367,15 @@ async function generateLatexDocument(questions, options) {
   `;
 }
 async function generateCustomBubbleSheet(req, res) {
-  const { numQuestions, numOptions } = req.body;
+  const { numQuestions, numOptions, courseId, examTitle, classId } = req.body;
 
-  if (!numQuestions || !numOptions) {
-    return res.status(400).send("Missing number of questions or options.");
+  if (!numQuestions || !numOptions || !courseId || !examTitle || !classId) {
+    return res.status(400).send("Missing number of questions, options, courseId, examTitle, or classId.");
   }
 
-  const latexDocument = await generateLatexDocument(numQuestions, numOptions);
-  const latexFilePath = path.join(__dirname, '../assets/bubble_sheet.tex');
-  const pdfFilePath = path.join(__dirname, '../assets/bubble_sheet.pdf');
+  const latexDocument = await generateLatexDocument(numQuestions, numOptions, courseId, examTitle);
+  const latexFilePath = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}.tex`);
+  const pdfFilePath = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}.pdf`);
 
   fs.writeFileSync(latexFilePath, latexDocument);
 
@@ -386,14 +385,15 @@ async function generateCustomBubbleSheet(req, res) {
       return res.status(500).send("Failed to generate PDF.");
     }
 
-    res.setHeader('Content-Disposition', 'attachment; filename="custom_bubble_sheet.pdf"');
+    res.setHeader('Content-Disposition', `attachment; filename="${courseId}_${examTitle}_${classId}.pdf"`);
     res.setHeader('Content-Type', 'application/pdf');
-    fs.createReadStream(pdfFilePath).pipe(res);
-     // Clean up auxiliary files after the PDF has been sent
-     pdfStream.on('close', () => {
-      // Delete the auxiliary files
-      const auxFilePath = path.join(assetsDir, 'bubble_sheet.aux');
-      const logFilePath = path.join(assetsDir, 'bubble_sheet.log');
+    const pdfStream = fs.createReadStream(pdfFilePath);
+    pdfStream.pipe(res);
+
+    // Clean up auxiliary files after the PDF has been sent
+    pdfStream.on('close', () => {
+      const auxFilePath = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}.aux`);
+      const logFilePath = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}.log`);
       const texFilePath = latexFilePath;
 
       fs.unlink(auxFilePath, (err) => {
@@ -408,6 +408,8 @@ async function generateCustomBubbleSheet(req, res) {
     });
   });
 }
+
+
 // Fetch exam details by exam_id
 const getExamDetails = async (req, res, next) => {
   const { exam_id } = req.params;
