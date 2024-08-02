@@ -243,7 +243,7 @@ router.post("/saveStudentExams", checkJwt, checkPermissions(["upload:file"]), as
       const front_page_dest = path.join(destFilePath, "front_page.png");
       console.log("front_page_dest", front_page_dest);
 
-      const back_page_dest = path.join(destFilePath, " back_page.png");
+      const back_page_dest = path.join(destFilePath, "back_page.png");
       console.log("back_page_dest", back_page_dest);
 
       ensureDirectoryExistence(destFilePath);
@@ -590,6 +590,8 @@ router.post("/fetchImage", checkJwt, checkPermissions(["read:image"]), async fun
   console.log(req.body.file_name);
   try {
     // Send the image file
+    const filename = 'back_page.png';
+    // imagesFolderPath = path.resolve(__dirname, `../../uploads/Students/exam_id_5/student_id_1/${filename}`);
     res.sendFile(imagesFolderPath);
   } catch (error) {
     console.error("Error fetching image:", error);

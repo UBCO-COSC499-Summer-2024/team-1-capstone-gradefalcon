@@ -7,7 +7,7 @@ const ViewExam = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const location = useLocation();
   const navigate = useNavigate();
-  const { student_id, exam_id, front_page, back_page } = location.state || {};
+  let { student_id, exam_id, front_page, back_page } = location.state || {};
   const [examFileId, setExamFileId] = useState("");
   const [frontSrc, setFrontSrc] = useState("");
   const [backSrc, setBackSrc] = useState("");
@@ -24,13 +24,11 @@ const ViewExam = () => {
         return;
       }
       try {
-        // const response = await fetch(`/api/exam/searchExam/${student_id}`);
-        // if (!response.ok) {
-        //   throw new Error(`Error: ${response.statusText}`);
-        // }
-        // // console.log("response", response);
-        // const data = await response.json();
-
+        if(front_page === undefined || back_page === undefined) {
+          // This means we are viewing the exam from the examboard, not after the results have been read
+          front_page = `../../../../../uploads/Students/exam_id_${exam_id}/student_id_${student_id}/front_page.png`;
+          back_page = `../../../../../uploads/Students/exam_id_${exam_id}/student_id_${student_id}/back_page.png`;
+        }
         const back_page_response = await fetch("/api/exam/fetchImage", {
           method: "POST",
           headers: {

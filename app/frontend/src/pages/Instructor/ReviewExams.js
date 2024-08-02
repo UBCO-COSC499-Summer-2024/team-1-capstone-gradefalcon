@@ -174,7 +174,7 @@ const ReviewExams = () => {
 
       setToast({ message: "Results saved! Redirecting...", type: "success" });
       setTimeout(() => {
-        navigate("/GradeReport");
+        navigate("/Examboard");
       }, 2000);
     } catch (error) {
       console.error("Error saving results:", error);
