@@ -189,8 +189,8 @@ const NewClassForm = ({ setIsDialogOpen }) => {
             />
           </div>
           <p className="mb-3 text-sm">Import a CSV file containing the student names, their student IDs, and student emails in your class.</p>
-          <div className="file-input-container">
-            <label className="file-input-button text-sm">
+          <div className="file-input-container mb-3">
+            <label className="file-input-button text-sm cursor-pointer inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               Choose File
               <input
                 type="file"
@@ -203,7 +203,7 @@ const NewClassForm = ({ setIsDialogOpen }) => {
             </label>
             <span className="file-input-label text-sm">no file selected</span>
           </div>
-          <div className="flex gap-2 mt-3">
+          <div className="flex gap-2">
             <Button size="sm" onClick={handleFileUpload} data-testid="uploadButton">
               <span>Import</span>
             </Button>
