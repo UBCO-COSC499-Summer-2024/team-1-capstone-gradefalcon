@@ -9,6 +9,7 @@ import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button"; // Correct import for Button
 import { useAuth0 } from "@auth0/auth0-react";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table"; // Add the correct import statement
+import { Badge } from "../../components/ui/badge"; // Import the Badge component
 
 export default function StudentDashboard() {
   const { user, getAccessTokenSilently } = useAuth0();
@@ -80,6 +81,17 @@ export default function StudentDashboard() {
   useEffect(() => {
     setFilteredExams(exams.filter((exam) => exam.exam_title?.toLowerCase().includes(examSearchTerm.toLowerCase())));
   }, [examSearchTerm, exams]);
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Graded":
+        return "bg-[hsl(var(--primary))]"; // Using the theme color for Graded
+      case "Not graded":
+        return "bg-red-500";
+      default:
+        return "bg-gray-500";
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4 h-screen">
@@ -186,7 +198,11 @@ export default function StudentDashboard() {
                                 <span className="font-bold">{exam.exam_title}</span>
                               </TableCell>
                               <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
-                              <TableCell>{exam.graded ? "Graded" : "Not graded"}</TableCell>
+                              <TableCell>
+                                <Badge className={`text-white ${getStatusColor(exam.graded ? "Graded" : "Not graded")}`}>
+                                  {exam.graded ? "Graded" : "Not graded"}
+                                </Badge>
+                              </TableCell>
                             </TableRow>
                           </TooltipTrigger>
                           <TooltipContent>
@@ -198,7 +214,7 @@ export default function StudentDashboard() {
                   ) : (
                     <>
                       <TableRow>
-                        <TableCell colSpan={4} className="text-center text-muted-foreground">
+                        <TableCell colSpan={3} className="text-center text-muted-foreground">
                           No exams available.
                         </TableCell>
                       </TableRow>
