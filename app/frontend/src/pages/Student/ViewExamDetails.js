@@ -15,6 +15,7 @@ export default function ViewExamDetails() {
   });
   const [canViewExam, setCanViewExam] = useState(false);
   const [canViewAnswers, setCanViewAnswers] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState(null); // State to store the uploaded image
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -47,6 +48,17 @@ export default function ViewExamDetails() {
 
     fetchStudentExamDetails();
   }, [getAccessTokenSilently, user.sub, exam_id]);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setUploadedImage(reader.result); // Set the uploaded image URL to state
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4 h-screen">
@@ -83,33 +95,42 @@ export default function ViewExamDetails() {
             </div>
           </CardContent>
         </Card>
-        <div className="w-1/2 flex flex-col gap-4">
-          <Card className="bg-white border rounded h-1/2">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <CardTitle className="mb-2">Correct Solution Key</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1">
-              <AspectRatio ratio={16 / 9}>
-                <div className="bg-gray-200 flex items-center justify-center">
-                  {/* Placeholder content for the solution key */}
-                  Correct Solution Key Content
-                </div>
-              </AspectRatio>
-            </CardContent>
-          </Card>
-          <Card className="bg-white border rounded h-1/2">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <CardTitle className="mb-2">Student's Attempt</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1">
-              <AspectRatio ratio={16 / 9}>
-                <div className="bg-gray-200 flex items-center justify-center">
-                  {/* Placeholder content for the student's attempt */}
-                  Student's Attempt Content
-                </div>
-              </AspectRatio>
-            </CardContent>
-          </Card>
+        <div className="w-1/2 flex flex-col gap-2"> {/* Adjusted gap to 2 to reduce space */}
+          <div>
+            <h2 className="px-6 py-4 text-lg font-bold">Viewing Option 1: Correct Solution</h2>
+            <Card className="bg-white border rounded">
+              <CardHeader className="flex justify-between px-6 py-4">
+                <CardTitle className="mb-2">Correct Solution Key</CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1">
+                <AspectRatio ratio={16 / 9}>
+                  <div className="bg-gray-200 flex items-center justify-center">
+                    {/* Placeholder content for the solution key */}
+                    <textarea className="w-full h-full p-4 border rounded" placeholder="Enter correct solution key here..."></textarea>
+                  </div>
+                </AspectRatio>
+              </CardContent>
+            </Card>
+          </div>
+          <div>
+            <h2 className="px-6 py-4 text-lg font-bold">Viewing Option 2: Student's Exam</h2>
+            <Card className="bg-white border rounded overflow-hidden"> {/* Added overflow-hidden */}
+              <CardHeader className="flex justify-between px-6 py-4">
+                <CardTitle className="mb-2">Student's Attempt</CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1">
+                <AspectRatio ratio={16 / 9}>
+                  <div className="bg-gray-200 flex items-center justify-center">
+                    {uploadedImage ? (
+                      <img src={uploadedImage} alt="Uploaded" className="w-full h-full object-contain" />
+                    ) : (
+                      <input type="file" className="w-full h-full p-4 border rounded" accept="image/*" onChange={handleImageUpload} />
+                    )}
+                  </div>
+                </AspectRatio>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
