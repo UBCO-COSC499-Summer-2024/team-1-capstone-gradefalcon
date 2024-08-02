@@ -1,3 +1,4 @@
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './css/App.css';
@@ -6,14 +7,14 @@ import './css/App.css';
 import Layout from './components/Layout';
 import StudentLayout from './components/StudentLayout';
 import ProtectedRoute from './ProtectedRoute';
-
-// Import pages
-// Instructor pages
+import NotFound from './components/NotFound';
+import Unauthorized from './pages/Unauthorized';
+import Login from './pages/Login';
 import OMRProcessing from './components/OMRProcessing';
 import OMRProcessingUpload from './components/OMRProcessingUpload';
+
+// Import Instructor pages
 import Dashboard from './pages/Instructor/Dashboard';
-import NotFound from './components/NotFound';
-import Login from './pages/Login'; 
 import AccountSettings from './pages/Instructor/AccountSettings';
 import Classes from './pages/Instructor/Classes';
 import ClassManagement from './pages/Instructor/ClassManagement';
@@ -30,14 +31,14 @@ import UploadExams from './pages/Instructor/UploadExams';
 import ReviewExams from './pages/Instructor/ReviewExams';
 import ViewExam from './pages/Instructor/ViewExam';
 
-// Student pages
+// Import Student pages
 import StudentDashboard from './pages/Student/StudentDashboard';
 import StudentAccountSettings from './pages/Student/StudentAccountSettings';
 import StudentNotificationPreferences from './pages/Student/StudentNotificationPreferences';
 import StudentGradeReport from './pages/Student/StudentGradeReport';
 import ViewExamDetails from './pages/Student/ViewExamDetails';
 import ReportGradeStudent from './pages/Student/ReportGradeStudent';
-import StudentReportsSubmitted from './pages/Student/StudentReportsSubmitted'; // Import the new page
+import StudentReportsSubmitted from './pages/Student/StudentReportsSubmitted';
 
 function App() {
   return (
@@ -45,32 +46,40 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/Login" element={<Login />} />
-          <Route path="/" element={<ProtectedRoute><Layout><Dashboard/></Layout></ProtectedRoute>} />
-          <Route path="/Dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
-          <Route path="/AccountSettings" element={<ProtectedRoute><Layout><AccountSettings /></Layout></ProtectedRoute>} />
-          <Route path="/Classes" element={<ProtectedRoute><Layout><Classes /></Layout></ProtectedRoute>} />
-          <Route path="/New-Class" element={<ProtectedRoute><Layout><NewClass /></Layout></ProtectedRoute>} />
-          <Route path="/ClassManagement/:class_id" element={<ProtectedRoute><Layout><ClassManagement /></Layout></ProtectedRoute>} />
-          <Route path="/ExamDetails/:exam_id" element={<ProtectedRoute><Layout><ExamDetails /></Layout></ProtectedRoute>} />
-          <Route path="/NewExam/:class_id" element={<ProtectedRoute><Layout><NewExam /></Layout></ProtectedRoute>} />
-          <Route path="/ExamBoard" element={<ProtectedRoute><Layout><ExamBoard /></Layout></ProtectedRoute>} />
-          <Route path="/ExamControls" element={<ProtectedRoute><Layout><ExamControls /></Layout></ProtectedRoute>} />
-          <Route path="/ManualExamKey" element={<ProtectedRoute><Layout><ManualExamKey /></Layout></ProtectedRoute>} />
-          <Route path="/UploadExamKey" element={<ProtectedRoute><Layout><UploadExamKey /></Layout></ProtectedRoute>} />
-          <Route path="/ConfirmExamKey" element={<ProtectedRoute><Layout><ConfirmExamKey /></Layout></ProtectedRoute>} />
-          <Route path="/UploadExams/:exam_id" element={<ProtectedRoute><Layout><UploadExams /></Layout></ProtectedRoute>} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          {/* Role-based Redirect */}
+          <Route path="/" element={<ProtectedRoute />} />
+
+          {/* Instructor Routes */}
+          <Route path="/Dashboard" element={<ProtectedRoute roles={['Instructor']}><Layout><Dashboard /></Layout></ProtectedRoute>} />
+          <Route path="/AccountSettings" element={<ProtectedRoute roles={['Instructor']}><Layout><AccountSettings /></Layout></ProtectedRoute>} />
+          <Route path="/Classes" element={<ProtectedRoute roles={['Instructor']}><Layout><Classes /></Layout></ProtectedRoute>} />
+          <Route path="/ClassManagement/:class_id" element={<ProtectedRoute roles={['Instructor']}><Layout><ClassManagement /></Layout></ProtectedRoute>} />
+          <Route path="/ExamDetails/:exam_id" element={<ProtectedRoute roles={['Instructor']}><Layout><ExamDetails /></Layout></ProtectedRoute>} />
+          <Route path="/New-Class" element={<ProtectedRoute roles={['Instructor']}><Layout><NewClass /></Layout></ProtectedRoute>} />
+          <Route path="/NewExam/:class_id" element={<ProtectedRoute roles={['Instructor']}><Layout><NewExam /></Layout></ProtectedRoute>} />
+          <Route path="/ExamBoard" element={<ProtectedRoute roles={['Instructor']}><Layout><ExamBoard /></Layout></ProtectedRoute>} />
+          <Route path="/ExamControls" element={<ProtectedRoute roles={['Instructor']}><Layout><ExamControls /></Layout></ProtectedRoute>} />
+          <Route path="/ManualExamKey" element={<ProtectedRoute roles={['Instructor']}><Layout><ManualExamKey /></Layout></ProtectedRoute>} />
+          <Route path="/UploadExamKey" element={<ProtectedRoute roles={['Instructor']}><Layout><UploadExamKey /></Layout></ProtectedRoute>} />
+          <Route path="/ConfirmExamKey" element={<ProtectedRoute roles={['Instructor']}><Layout><ConfirmExamKey /></Layout></ProtectedRoute>} />
+          <Route path="/UploadExams/:exam_id" element={<ProtectedRoute roles={['Instructor']}><Layout><UploadExams /></Layout></ProtectedRoute>} />
           <Route path="/OMRProcessing" element={<ProtectedRoute><Layout><OMRProcessing /></Layout></ProtectedRoute>} />
           <Route path="/OMRProcessingUpload" element={<ProtectedRoute><Layout><OMRProcessingUpload /></Layout></ProtectedRoute>} />
-          <Route path="/ReviewExams" element={<ProtectedRoute><Layout><ReviewExams /></Layout></ProtectedRoute>} />
-          <Route path="/ViewExam" element={<ProtectedRoute><Layout><ViewExam /></Layout></ProtectedRoute>} />
-          <Route path="/NotificationPreferences" element={<ProtectedRoute><Layout><NotificationPreferences /></Layout></ProtectedRoute>} />
-          <Route path="/StudentDashboard" element={<ProtectedRoute><StudentLayout><StudentDashboard /></StudentLayout></ProtectedRoute>} />
-          <Route path="/StudentGradeReport" element={<ProtectedRoute><StudentLayout><StudentGradeReport /></StudentLayout></ProtectedRoute>} />
-          <Route path="/StudentAccountSettings" element={<ProtectedRoute><StudentLayout><StudentAccountSettings /></StudentLayout></ProtectedRoute>} />
-          <Route path="/StudentNotificationPreferences" element={<ProtectedRoute><StudentLayout><StudentNotificationPreferences /></StudentLayout></ProtectedRoute>} />
-          <Route path="/ViewExamDetails" element={<ProtectedRoute><StudentLayout><ViewExamDetails /></StudentLayout></ProtectedRoute>} />
-          <Route path="/ReportGradeStudent" element={<ProtectedRoute><StudentLayout><ReportGradeStudent /></StudentLayout></ProtectedRoute>} />
-          <Route path="/StudentReportsSubmitted" element={<ProtectedRoute><StudentLayout><StudentReportsSubmitted /></StudentLayout></ProtectedRoute>} />
+          <Route path="/ReviewExams" element={<ProtectedRoute roles={['Instructor']}><Layout><ReviewExams /></Layout></ProtectedRoute>} />
+          <Route path="/ViewExam" element={<ProtectedRoute roles={['Instructor']}><Layout><ViewExam /></Layout></ProtectedRoute>} />
+          <Route path="/NotificationPreferences" element={<ProtectedRoute roles={['Instructor']}><Layout><NotificationPreferences /></Layout></ProtectedRoute>} />
+
+          {/* Student Routes */}
+          <Route path="/StudentDashboard" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentDashboard /></StudentLayout></ProtectedRoute>} />
+          <Route path="/StudentGradeReporg" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentGradeReport /></StudentLayout></ProtectedRoute>} />
+          <Route path="/StudentAccountSettings" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentAccountSettings /></StudentLayout></ProtectedRoute>} />
+          <Route path="/StudentNotificationPreferences" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentNotificationPreferences /></StudentLayout></ProtectedRoute>} />
+          <Route path="/ViewExamDetails" element={<ProtectedRoute roles={['Student']}><StudentLayout><ViewExamDetails /></StudentLayout></ProtectedRoute>} />
+          <Route path="ReportGradeStudent" element={<ProtectedRoute roles={['Student']}><StudentLayout><ReportGradeStudent /></StudentLayout></ProtectedRoute>} />
+          <Route path="/StudentReportsSubmitted" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentReportsSubmitted /></StudentLayout></ProtectedRoute>} />
+
+          {/* Fallback for unmatched routes */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

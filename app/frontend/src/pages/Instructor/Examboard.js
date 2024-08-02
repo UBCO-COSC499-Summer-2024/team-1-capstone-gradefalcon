@@ -3,27 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowUpRight, Plus, MoreVertical } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableHead,
-  TableCell,
-} from "../../components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "../../components/ui/dropdown-menu";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../../components/ui/table";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "../../components/ui/dropdown-menu";
 import { Checkbox } from "../../components/ui/checkbox";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from "../../components/ui/tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
 import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
 import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
 import { useAuth0 } from "@auth0/auth0-react";
@@ -90,9 +73,7 @@ const ExamBoard = () => {
 
   const handleDeleteSelected = () => {
     setClassData((prevData) => {
-      const updatedClasses = prevData.classes.filter(
-        (exam) => !selectedExams.includes(exam.exam_id)
-      );
+      const updatedClasses = prevData.classes.filter((exam) => !selectedExams.includes(exam.exam_id));
       return { ...prevData, classes: updatedClasses };
     });
     setSelectedExams([]);
@@ -117,9 +98,7 @@ const ExamBoard = () => {
     if (allSelected) {
       setSelectedExams([]);
     } else {
-      const allExamIds = Object.values(groupedExams).flatMap(({ exams }) =>
-        exams.map((exam) => exam.exam_id)
-      );
+      const allExamIds = Object.values(groupedExams).flatMap(({ exams }) => exams.map((exam) => exam.exam_id));
       setSelectedExams(allExamIds);
     }
     setAllSelected(!allSelected);
@@ -178,44 +157,53 @@ const ExamBoard = () => {
               <TableBody>
                 {Object.entries(groupedExams).map(([courseId, { course_name, class_id, exams }]) =>
                   exams.map((exam, index) => (
-                    <TableRow key={`${courseId}-${exam.exam_id}`}>
-                      <TableCell>
-                        <Checkbox
-                          checked={selectedExams.includes(exam.exam_id)}
-                          onCheckedChange={() => handleSelectExam(exam.exam_id)}
-                        />
-                      </TableCell>
-                      <TableCell>{exam.exam_title}</TableCell>
-                      <TableCell>{course_name}</TableCell>
-                      <TableCell>
-                        <Button asChild size="sm" className="ml-auto gap-1">
-                          <Link to={`/UploadExams/${exam.exam_id}`}>
-                            Grade Exam
-                            <ArrowUpRight className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => handleDeleteFromBoard(exam.exam_id)}>
-                              Delete
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>Archive</DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}
-                            >
-                              View Results
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
+                    <TooltipProvider key={index}>
+                      <Tooltip delayDuration={0}>
+                        <TooltipTrigger asChild>
+                          <TableRow
+                            // key={`${courseId}-${exam.exam_id}`}
+                            // className="hover:bg-gray-100 cursor-pointer"
+                            // onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}
+                          >
+                            <TableCell>
+                              <Checkbox
+                                checked={selectedExams.includes(exam.exam_id)}
+                                onCheckedChange={() => handleSelectExam(exam.exam_id)}
+                              />
+                            </TableCell>
+                            <TableCell>{exam.exam_title}</TableCell>
+                            <TableCell>{course_name}</TableCell>
+                            <TableCell>
+                              <Button asChild size="sm" className="ml-auto gap-1">
+                                <Link to={`/UploadExams/${exam.exam_id}`}>
+                                  Grade Exam
+                                  <ArrowUpRight className="h-4 w-4" />
+                                </Link>
+                              </Button>
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon">
+                                    <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                  <DropdownMenuItem onClick={() => handleDeleteFromBoard(exam.exam_id)}>Delete</DropdownMenuItem>
+                                  <DropdownMenuItem>Archive</DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}>
+                                    View Results
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>View Exam</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   ))
                 )}
               </TableBody>

@@ -215,6 +215,9 @@ const saveResults = async (req, res, next) => {
         ]);
       }
     }
+    // Update the "graded" status in the exams table
+    await pool.query("UPDATE exam SET graded = true WHERE exam_id = $1", [exam_id]);
+
     res.send({ message: "Scores saved successfully" });
     resetOMR();
   } catch (error) {
@@ -381,6 +384,51 @@ const getStudentAttempt = async (req, res, next) => {
   }
 };
 
+const fetchStudentExam = async (req, res, next) => {
+  const auth0_id = req.auth.sub; // Get the student ID from Auth0 token
+  const exam_id = parseInt(req.params.exam_id, 10);
+  const file_name = req.body.page;
+  console.log("file_name", file_name);
+  try {
+    const exams = await pool.query(
+      `
+      SELECT student_id
+      FROM student
+      WHERE auth0_id = $1
+    `,
+      [auth0_id]
+    );
+    const student_id = exams.rows[0].student_id;
+    const folderPath = path.join(__dirname, `../../uploads/Students/exam_id_${exam_id}/student_id_${student_id}/${file_name}`);
+    console.log("folderPath", folderPath);
+    res.sendFile(folderPath);
+  } catch (err) {
+    console.error("Error fetching student exams:", err);
+    next(err);
+  }
+};
+
+const fetchSolution = async (req, res, next) => {
+  const exam_id = req.params.exam_id;
+  try {
+    const solutionResult = await pool.query("SELECT answers FROM solution WHERE exam_id = $1", [exam_id]);
+
+    if (solutionResult.rows.length === 0) {
+      throw new Error("Solution not found");
+    }
+
+    const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
+
+    // Extract the answers in order
+    const answersInOrder = answersArray.map((answer) => answer.split(":")[1]);
+
+    res.json(answersInOrder);
+  } catch (error) {
+    console.error("Error fetching solution:", error);
+    res.status(500).json({ message: "Failed to fetch solution" });
+  }
+};
+
 module.exports = {
   saveQuestions,
   newExam,
@@ -401,4 +449,6 @@ module.exports = {
   getExamDetails,
   getStudentExams,
   getStudentAttempt,
+  fetchStudentExam,
+  fetchSolution,
 };

@@ -41,7 +41,12 @@
     background-color: #f8f9fa;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading;
   }
 
@@ -54,7 +59,8 @@
 .logo {
   text-align: left;
   margin-bottom: 20px;
-  font-size: 24px; /* Adjusted font size */
+  font-size: 24px;
+  /* Adjusted font size */
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -71,7 +77,8 @@
 .sidebar {
   width: 80px;
   height: 100%;
-  background-color: hsl(var(--primary)); /* Adjusted color to match the theme */
+  background-color: hsl(var(--primary));
+  /* Adjusted color to match the theme */
   color: hsl(var(--primary-foreground));
   display: flex;
   flex-direction: column;
@@ -101,45 +108,54 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 40px; /* Increased margin to separate logo from nav items */
+  margin-bottom: 40px;
+  /* Increased margin to separate logo from nav items */
 }
 
 .sidebar .nav-container {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Additional gap to create space between logo and nav items */
+  gap: 20px;
+  /* Additional gap to create space between logo and nav items */
 }
 
 .sidebar .nav-item {
   position: relative;
   width: 100%;
-  padding: 15px 20px; /* Increased padding */
+  padding: 15px 20px;
+  /* Increased padding */
   display: flex;
   align-items: center;
-  gap: 10px; /* Adjusted gap for better spacing */
-  margin-bottom: 15px; /* Added margin to space out items */
+  gap: 10px;
+  /* Adjusted gap for better spacing */
+  margin-bottom: 15px;
+  /* Added margin to space out items */
   transition: background-color 0.3s, padding 0.3s;
 }
 
 .sidebar .nav-item .icon {
   font-size: 20px;
-  margin-right: 5px; /* Added margin to space out icon */
+  margin-right: 5px;
+  /* Added margin to space out icon */
   margin-left: 5px;
 }
 
 .sidebar .nav-item span,
 .sidebar .nav-item .nav-text {
-  display: none; /* Hide text when sidebar is collapsed */
+  display: none;
+  /* Hide text when sidebar is collapsed */
   white-space: nowrap;
 }
 
 .sidebar:hover .nav-item span,
 .sidebar:hover .nav-item .nav-text {
-  display: inline; /* Show text when sidebar is expanded */
+  display: inline;
+  /* Show text when sidebar is expanded */
 }
 
 .sidebar .nav-item:hover {
-  background-color: #167938;; 
+  background-color: #167938;
+  ;
 }
 
 
@@ -149,12 +165,12 @@
   transition: margin-left 0.3s;
 }
 
-.sidebar:hover + .main-content {
+.sidebar:hover+.main-content {
   margin-left: 250px;
 }
 
 
-.sidebar:hover + .breadcrumb-container {
+.sidebar:hover+.breadcrumb-container {
   margin-left: 250px;
 }
 
@@ -230,4 +246,7 @@
   border-top-color: lightgray;
 }
 
-
+.image-container {
+  display: flex;
+  justify-content: space-between;
+}
