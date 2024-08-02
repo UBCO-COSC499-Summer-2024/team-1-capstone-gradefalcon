@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
-import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
+import { AspectRatio } from "../../components/ui/aspect-ratio"; // Import the AspectRatio component
 
 export default function ViewExamDetails() {
   const { user, getAccessTokenSilently } = useAuth0();
@@ -20,15 +20,11 @@ export default function ViewExamDetails() {
   const location = useLocation();
   const { exam_id } = location.state;
 
-  // NOTE FOR FRONTEND:
-  // You can access canViewExam and canViewAnswers states so that
-  // you can conditionally render the exam and answers based on the values.
-
   useEffect(() => {
     const fetchStudentExamDetails = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await fetch(`/api/exam//getStudentAttempt/${exam_id}`, {
+        const response = await fetch(`/api/exam/getStudentAttempt/${exam_id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -59,8 +55,8 @@ export default function ViewExamDetails() {
           <ChevronLeft className="w-4 h-4" />
         </Button>
       </div>
-      <div className="flex-1">
-        <Card className="bg-white border rounded h-full">
+      <div className="flex-1 flex gap-4">
+        <Card className="bg-white border rounded h-full w-1/2">
           <CardHeader className="flex justify-between px-6 py-4">
             <CardTitle className="mb-2">Exam Details</CardTitle>
           </CardHeader>
@@ -71,24 +67,50 @@ export default function ViewExamDetails() {
                 Report
               </Button>
             </div>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Exam Name</TableHead>
-                  <TableHead>Course Name</TableHead>
-                  <TableHead>Grade</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>{examDetails.exam_title}</TableCell>
-                  <TableCell>{examDetails.course_name}</TableCell>
-                  <TableCell>{examDetails.grade}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+            <div className="space-y-4">
+              <div>
+                <CardDescription>Exam Name:</CardDescription>
+                <div>{examDetails.exam_title}</div>
+              </div>
+              <div>
+                <CardDescription>Course Name:</CardDescription>
+                <div>{examDetails.course_name}</div>
+              </div>
+              <div>
+                <CardDescription>Grade:</CardDescription>
+                <div>{examDetails.grade}</div>
+              </div>
+            </div>
           </CardContent>
         </Card>
+        <div className="w-1/2 flex flex-col gap-4">
+          <Card className="bg-white border rounded h-1/2">
+            <CardHeader className="flex justify-between px-6 py-4">
+              <CardTitle className="mb-2">Correct Solution Key</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1">
+              <AspectRatio ratio={16 / 9}>
+                <div className="bg-gray-200 flex items-center justify-center">
+                  {/* Placeholder content for the solution key */}
+                  Correct Solution Key Content
+                </div>
+              </AspectRatio>
+            </CardContent>
+          </Card>
+          <Card className="bg-white border rounded h-1/2">
+            <CardHeader className="flex justify-between px-6 py-4">
+              <CardTitle className="mb-2">Student's Attempt</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1">
+              <AspectRatio ratio={16 / 9}>
+                <div className="bg-gray-200 flex items-center justify-center">
+                  {/* Placeholder content for the student's attempt */}
+                  Student's Attempt Content
+                </div>
+              </AspectRatio>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
