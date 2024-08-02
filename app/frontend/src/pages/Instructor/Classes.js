@@ -16,12 +16,17 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "../../components/ui/dropdown-menu";
+import { Label } from "../../components/ui/label";
+import { CheckboxRed } from "../../components/ui/checkbox";
 
 const Classes = () => {
   const { getAccessTokenSilently } = useAuth0();
   const [classes, setClasses] = useState([]);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("active"); // Default tab is 'active'
+  const [confirmDelete, setConfirmDelete] = useState(false); // State for checkbox
+  const [dialogOpen, setDialogOpen] = useState(false); // State for dialog open
+  const [selectedClass, setSelectedClass] = useState(null); // State for selected class
 
   const fetchClasses = async () => {
     try {
@@ -109,6 +114,8 @@ const Classes = () => {
     // Implement the API call here when ready
     // fetch(`/api/class/delete/${classId}`, { method: "DELETE" });
     console.log(`Delete course with ID: ${classId}`);
+    setDialogOpen(false); // Close dialog after confirmation
+    setConfirmDelete(false); // Reset checkbox
   };
 
   return (
@@ -166,7 +173,12 @@ const Classes = () => {
                                       Re-activate Course
                                     </DropdownMenuItem>
                                   )}
-                                  <DropdownMenuItem onSelect={() => handleDeleteCourse(classItem.class_id)}>
+                                  <DropdownMenuItem
+                                    onSelect={() => {
+                                      setSelectedClass(classItem);
+                                      setDialogOpen(true);
+                                    }}
+                                  >
                                     Delete Course
                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
@@ -208,6 +220,46 @@ const Classes = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-w-md mx-auto">
+          <DialogHeader>
+            <DialogTitle>Delete Course</DialogTitle>
+            <DialogDescription>
+              {selectedClass && (
+                <>
+                  <p>Course Name: {selectedClass.course_name}</p>
+                  <p>Course ID: {selectedClass.course_id}</p>
+                  <p className="mt-4 text-red-600 font-bold">Warning: Deleting a course will delete all exams and classlists from this course.</p>
+                </>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <CheckboxRed
+                id="confirm-delete"
+                checked={confirmDelete}
+                onCheckedChange={setConfirmDelete}
+              />
+              <Label htmlFor="confirm-delete" className="text-red-600">
+                I understand the consequences
+              </Label>
+            </div>
+            <Button
+              variant="destructive"
+              disabled={!confirmDelete}
+              onClick={() => handleDeleteCourse(selectedClass.class_id)}
+            >
+              Confirm
+            </Button>
+            <DialogClose asChild>
+              <Button variant="ghost" onClick={() => setDialogOpen(false)}>Cancel</Button>
+            </DialogClose>
+          </div>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 };
