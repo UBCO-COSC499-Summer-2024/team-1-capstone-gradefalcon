@@ -6,10 +6,10 @@ import "../../css/App.css";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const ViewExam = () => {
-  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const location = useLocation();
   const navigate = useNavigate();
-  const { student_id, exam_id, front_page, back_page } = location.state || {};
+  const { student_id, front_page, back_page } = location.state || {};
   const [frontSrc, setFrontSrc] = useState("");
   const [backSrc, setBackSrc] = useState("");
   const [loadingProgress, setLoadingProgress] = useState({ front: 0, back: 0 });
@@ -27,39 +27,18 @@ const ViewExam = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify({ side, file_name }),
           });
 
-        const back_page_response = await fetch("/api/exam/fetchImage", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-          body: JSON.stringify({ side: "back", file_name: back_page }),
-        });
-        // const data2 = await responseImage.json();
-        // console.log(data2);
-        let blob = await back_page_response.blob();
-        let url = URL.createObjectURL(blob);
-        setBackSrc(url);
+          let blob = await response.blob();
+          let url = URL.createObjectURL(blob);
 
-        const front_page_response = await fetch("/api/exam/fetchImage", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-          body: JSON.stringify({ side: "front", file_name: front_page }),
-        });
-        // const data2 = await responseImage.json();
-        // console.log(data2);
-        blob = await front_page_response.blob();
-        url = URL.createObjectURL(blob);
-        setFrontSrc(url);
+          const image = new Image();
+          image.src = url;
 
-          img.onload = () => {
+          image.onload = () => {
             setSrc(url);
             setLoadingProgress((prev) => ({
               ...prev,
@@ -67,7 +46,7 @@ const ViewExam = () => {
             }));
           };
 
-          img.onerror = () => {
+          image.onerror = () => {
             console.error(`Failed to load ${side} image.`);
           };
 
@@ -105,12 +84,12 @@ const ViewExam = () => {
     };
 
     fetchExam();
-  }, [student_id, examFileId, getAccessTokenSilently, isAuthenticated]);
+  }, [student_id, front_page, back_page, getAccessTokenSilently, isAuthenticated]);
 
   return (
     <div className="App">
       <div className="main-content">
-        <div className="flex flex-col items-center mt-8 space-y-8"> {/* Adjusted margin-top and space between items */}
+        <div className="flex flex-col items-center mt-8 space-y-8">
           {!frontSrc && (
             <div className="flex flex-col items-center">
               <p>Loading front page...</p>
@@ -157,3 +136,5 @@ const ViewExam = () => {
 };
 
 export default ViewExam;
+
+
