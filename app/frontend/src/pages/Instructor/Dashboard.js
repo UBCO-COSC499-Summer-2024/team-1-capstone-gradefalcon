@@ -16,7 +16,7 @@ import { Input } from "../../components/ui/input";
 
 export default function Dashboard() {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
-  const roles = user[`${process.env.REACT_APP_AUTH0_AUDIENCE}/roles`] || [];
+  //const roles = user[`${process.env.REACT_APP_AUTH0_MYAPP}/role`] || [];
   const [userName, setUserName] = useState("");
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
