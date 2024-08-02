@@ -1,6 +1,68 @@
 # Personal Log
 Ahmad Saleem Mirza
 
+## Friday (July 31 - Aug 2)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/July31-Aug2.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Ensuring bulk upload of files
+  * #2: Setup viewing options for instructor
+  * #3: Displaying results on student view
+  * #4: Maintain a changelog of grade changes
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Ensuring bulk upload of files
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Setup viewing options for instructor
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>  
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Maintain a changelog of grade changes
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>  
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Displaying results on instructor view later
+        </td>
+        <!-- Status -->
+        <td>In progress
+        </td>
+    </tr>  
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+The exams are now successfully being stored locally and are easily retrievable as well. I am just about to get done with setting up grabbing them to display on the instructor's side. This week mainly involved resolving a lot more PRs than before and fixing merge conflicts, because all of us wanted to make sure that we were on the same branch. Because of a small, miniscule detail I missed in the my code, I could not figure out a bug, where it seemingly copied files as folders instead of the actual file itself, so that slowed me down, but I was able to get it working. Additionally, I fixed a bunch of small bugs that were littered throughout the website, mainly as a result of faulty merges. 
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Displaying and changing results as an instructor after they've been saved and created a changelog of what result was changed and why.
+
+
 ## Wednesday (July 26 - 31)
 
 ### Timesheet
