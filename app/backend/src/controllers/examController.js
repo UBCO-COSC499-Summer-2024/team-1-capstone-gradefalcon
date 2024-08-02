@@ -304,8 +304,9 @@ const getExamDetails = async (req, res, next) => {
 
   try {
     const examQuery = `
-      SELECT e.exam_id, e.exam_title, e.total_questions, e.total_marks, e.mean, e.high, e.low, e.upper_quartile, e.lower_quartile, e.page_count, e.file_size, 
-             c.course_id, c.course_name
+      SELECT e.exam_id, e.exam_title, e.total_questions, e.total_marks, e.mean, e.high, e.low, 
+      e.upper_quartile, e.lower_quartile, e.page_count, e.viewing_options, graded,
+      c.course_id, c.course_name
       FROM exam e
       JOIN classes c ON e.class_id = c.class_id
       WHERE e.exam_id = $1
@@ -373,7 +374,6 @@ const getStudentAttempt = async (req, res, next) => {
     `,
       [studentId, examId]
     );
-    console.log("exam:", exam);
     res.json({ exam: exam.rows[0] });
   } catch (err) {
     console.error("Error fetching student exams:", err);
