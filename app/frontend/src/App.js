@@ -64,6 +64,8 @@ function App() {
           <Route path="/UploadExamKey" element={<ProtectedRoute roles={['Instructor']}><Layout><UploadExamKey /></Layout></ProtectedRoute>} />
           <Route path="/ConfirmExamKey" element={<ProtectedRoute roles={['Instructor']}><Layout><ConfirmExamKey /></Layout></ProtectedRoute>} />
           <Route path="/UploadExams/:exam_id" element={<ProtectedRoute roles={['Instructor']}><Layout><UploadExams /></Layout></ProtectedRoute>} />
+          <Route path="/OMRProcessing" element={<ProtectedRoute><Layout><OMRProcessing /></Layout></ProtectedRoute>} />
+          <Route path="/OMRProcessingUpload" element={<ProtectedRoute><Layout><OMRProcessingUpload /></Layout></ProtectedRoute>} />
           <Route path="/ReviewExams" element={<ProtectedRoute roles={['Instructor']}><Layout><ReviewExams /></Layout></ProtectedRoute>} />
           <Route path="/ViewExam" element={<ProtectedRoute roles={['Instructor']}><Layout><ViewExam /></Layout></ProtectedRoute>} />
           <Route path="/NotificationPreferences" element={<ProtectedRoute roles={['Instructor']}><Layout><NotificationPreferences /></Layout></ProtectedRoute>} />

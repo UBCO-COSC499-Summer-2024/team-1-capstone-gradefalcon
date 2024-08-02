@@ -161,9 +161,9 @@ const ExamBoard = () => {
                       <Tooltip delayDuration={0}>
                         <TooltipTrigger asChild>
                           <TableRow
-                            key={`${courseId}-${exam.exam_id}`}
-                            className="hover:bg-gray-100 cursor-pointer"
-                            onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}
+                            // key={`${courseId}-${exam.exam_id}`}
+                            // className="hover:bg-gray-100 cursor-pointer"
+                            // onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}
                           >
                             <TableCell>
                               <Checkbox

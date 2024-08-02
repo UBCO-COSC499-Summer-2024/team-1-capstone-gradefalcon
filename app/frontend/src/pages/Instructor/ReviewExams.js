@@ -26,8 +26,24 @@ const ReviewExams = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = await getAccessTokenSilently();
+        // Preprocess the data
+        const preprocessData = async () => {
+          const token = await getAccessTokenSilently();
+          const response = await fetch("/api/exam/preprocessingCSV", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          console.log("preprocessData", data);
+        };
+
+        // Fetch student scores for the exam
         const fetchStudentScores = async () => {
+          const token = await getAccessTokenSilently();
           const response = await fetch("/api/exam/studentScores", {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -37,10 +53,13 @@ const ReviewExams = () => {
             throw new Error("Network response was not ok");
           }
           const data = await response.json();
+          console.log("data", data);
           setStudentScores(data);
         };
 
+        // Fetch the max marks for the exam
         const fetchTotalScore = async () => {
+          const token = await getAccessTokenSilently();
           const response = await fetch(`/api/exam/getScoreByExamId/${exam_id}`, {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -53,8 +72,10 @@ const ReviewExams = () => {
           setTotalMarks(data.scores[0]);
         };
 
+        await preprocessData();
         await fetchStudentScores();
         await fetchTotalScore();
+
         setResultsCombined(true);
       } catch (error) {
         console.error("Error:", error);
@@ -107,6 +128,27 @@ const ReviewExams = () => {
     });
   };
 
+  const saveStudentExams = async (studentData) => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await fetch("/api/exam/saveStudentExams", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ exam_id: exam_id, data: studentData }),
+      });
+      if (!response.ok) {
+        throw new Error("saveExams Network response was not ok");
+      }
+      const data = await response.json();
+      console.log("saveStudentExams:", data);
+    } catch (error) {
+      console.error("Error saving student exams:", error);
+    }
+  };
+
   const saveResults = async () => {
     if (editStudentId !== null) {
       toast({
@@ -115,6 +157,8 @@ const ReviewExams = () => {
       return;
     }
     try {
+      saveStudentExams(studentScores);
+
       const token = await getAccessTokenSilently();
       const response = await fetch("/api/exam/saveResults", {
         method: "POST",
