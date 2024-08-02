@@ -1,4 +1,74 @@
 # Personal Log
+## Friday (7/30-8/02)
+
+### Timesheet
+Clockify report
+![time](../Clockify/Omar/Time18.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Refactor NewExam Page**
+   - Refactored the `NewExam` page to integrate the custom bubble sheet generation flow. Implemented a tab-based interface where instructors can select an exam template, upload an exam key, and configure other exam details. The refactor ensures that custom templates can be seamlessly generated, downloaded, and stored with proper naming conventions.
+
+2. **Custom Templates Support**
+   - Implemented logic to support custom templates in the exam creation pipeline. This included creating JSON templates for bubble sheets based on the number of questions, modifying backend routes to process these templates, and ensuring that exams with over 100 questions are correctly split across multiple pages. The integration was tested to ensure that the appropriate template is selected and applied based on the number of questions.
+
+3. **UI Improvements and the UI for Report Pages**
+   - Enhanced the UI for the newly introduced ReportView and Report pages, making them more intuitive and user-friendly. The UI improvements also included consistent use of cards across the grid layout, refined chart labels for better readability, and various other styling adjustments across the frontend for a more cohesive user experience.
+
+---
+
+### Progress Update (since 7/16/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </tr>
+    <tr>
+        <td>#17-User Story: Custom Bubble Sheet Support
+        </td>
+        <td>In Progress
+        </td>
+    </tr>
+    <tr>
+        <td>#250-Report pages UI & UI fixes and enhancements
+        </td>
+        <td>Completed
+        </td>
+    </tr>
+</table> 
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - The frontend is much more polished, providing a better user experience.
+  - Custom marking features are progressing well, particularly with the integration of custom bubble sheets.
+
+- **What Was Done:**
+  - Completed the UI for the report pages.
+  - Implemented custom template support and refactored the NewExam page to handle custom bubble sheets.
+  - Improved various UI components, such as breadcrumbs, total marks editing, and card layouts.
+
+- **What Didn't Go Well:**
+  - The custom marking backend logic proved to be challenging, requiring multiple refactors.
+  - Integration of custom bubble sheets required significant adjustments, leading to more refactoring than initially planned.
+
+- **Retrospective:**
+  - The integration of custom bubble sheets into the NewExam page is a significant step forward. Despite the challenges, the process is progressing well, and the system is becoming more robust with each iteration.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **Custom Bubble Sheets**
+   - Finalize the integration and ensure the system handles various edge cases and scenarios for custom exams.
+   
+2. **Display Statistics for Each Question**
+   - Implement detailed statistics and analytics for each question in an exam, allowing instructors to gain insights into student performance.
+
+3. **Continue Polishing the Frontend**
+   - Further refine the frontend to enhance usability, responsiveness, and overall design consistency across all pages.
+
 
 ## Wednesday (7/26-7/30)
 
@@ -28,7 +98,6 @@ Clockify report
     </tr>
     <tr>
         <td>#228-User Story: Custom Marking/Evaluation
-
         </td>
         <td>Completed
         </td>
