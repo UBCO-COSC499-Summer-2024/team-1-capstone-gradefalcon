@@ -19,9 +19,9 @@ const ProtectedRoute = ({ children, roles = [] }) => {
   console.log(userRoles);
 
   // Log the user's roles for debugging
-  
+
   // Check if the user has any of the required roles
-  const hasRequiredRole = roles.length === 0 || roles.some(role => userRoles.includes(role));
+  const hasRequiredRole = roles.length === 0 || roles.some((role) => userRoles.includes(role));
 
   if (!hasRequiredRole) {
     // Redirect the user to an unauthorized page if they do not have the necessary role
@@ -29,9 +29,9 @@ const ProtectedRoute = ({ children, roles = [] }) => {
   }
 
   // Navigate based on roles if there are no specific child components to render
-  if (userRoles.includes('Student') && !children) {
-    return <Navigate to="/student-dashboard" />;
-  } else if (userRoles.includes('Instructor') && !children) {
+  if (userRoles.includes("Student") && !children) {
+    return <Navigate to="/studentDashboard" />;
+  } else if (userRoles.includes("Instructor") && !children) {
     return <Navigate to="/dashboard" />;
   }
   return children;
