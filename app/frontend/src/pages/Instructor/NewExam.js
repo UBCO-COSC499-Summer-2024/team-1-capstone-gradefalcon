@@ -24,6 +24,7 @@ const NewExam = () => {
   const [error, setError] = useState(null);
   const [isCustomTemplate, setIsCustomTemplate] = useState(false);
   const [currentTab, setCurrentTab] = useState("details"); // Track current tab
+  const [numQuestions, setNumQuestions] = useState(100); // Default to 100 MCQs
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,8 +60,13 @@ const NewExam = () => {
   const handleTemplateChange = (value) => {
     setTemplate(value);
     setIsCustomTemplate(value === "custom");
+  
+    if (value === "100mcq") {
+      setNumQuestions(100);
+    } else if (value === "200mcq") {
+      setNumQuestions(200);
+    } // For custom, the number of questions will be set in the CustomBubbleSheet component
   };
-
   const handleClassChange = (value) => {
     setSelectedClassId(value);
     setCourseId(value);
@@ -110,19 +116,27 @@ const NewExam = () => {
       <div className="w-full text-center">
 
       {showAlert && (
+        <div className="w-full flex justify-center">
+          <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-1 max-w-2xl"> 
         <Alert className="mb-4">
           <ExclamationCircleIcon className="h-4 w-4" />
           <AlertTitle>Heads up!</AlertTitle>
           <AlertDescription>Please fill in all required fields before proceeding.</AlertDescription>
         </Alert>
+        </div>
+        </div>
       )}
 
       {error && (
+        <div className="w-full flex justify-center">
+          <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-1 max-w-2xl"> 
         <Alert className="mb-4">
           <ExclamationCircleIcon className="h-4 w-4" />
           <AlertTitle>Error!</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
+        </div>
+        </div>
       )}
 
         <TabsList className="inline-block">
@@ -202,7 +216,13 @@ const NewExam = () => {
                 </div>
               </RadioGroup>
                 {isCustomTemplate && (
-                  <CustomBubbleSheet  courseId={courseId} examTitle={examTitle} classId= {selectedClassId} />  // Display the CustomBubbleSheet component if custom template is selected
+                  <CustomBubbleSheet
+                  courseId={courseId}
+                  examTitle={examTitle}
+                  classId={selectedClassId}
+                  onQuestionsChange={(questions) => setNumQuestions(questions)} // Update numQuestions in NewExam
+                />
+                // Display the CustomBubbleSheet component if custom template is selected
                 )}
               </CardContent>
             </Card>
@@ -221,24 +241,24 @@ const NewExam = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid gap-3">
-                  <Button asChild size="sm" className="px-2 py-1">
-                    <Link
-                      to={isFormValid() ? "/ManualExamKey" : "#"}
-                      state={{ examTitle: examTitle, classID: courseId, template }}
-                      onClick={handleButtonClick}
-                    >
-                      Manually Select Answers
-                    </Link>
-                  </Button>
-                  <Button asChild size="sm" variant= "secondary" className="px-2 py-1">
-                    <Link
-                      to={isFormValid() ? "/UploadExamKey" : "#"}
-                      state={{ examTitle: examTitle, classID: courseId, template }}
-                      onClick={handleButtonClick}
-                    >
-                      Upload Answer Key
-                    </Link>
-                  </Button>
+                <Button asChild size="sm" className="px-2 py-1">
+                      <Link
+                        to={isFormValid() ? "/ManualExamKey" : "#"}
+                        state={{ examTitle: examTitle, classID: courseId, template, numQuestions }}
+                        onClick={handleButtonClick}
+                      >
+                        Manually Select Answers
+                      </Link>
+                    </Button>
+                    <Button asChild size="sm" variant="secondary" className="px-2 py-1">
+                      <Link
+                        to={isFormValid() ? "/UploadExamKey" : "#"}
+                        state={{ examTitle: examTitle, classID: courseId, template, numQuestions }}
+                        onClick={handleButtonClick}
+                      >
+                        Upload Answer Key
+                      </Link>
+                    </Button>
                 </div>
               </CardContent>
             </Card>

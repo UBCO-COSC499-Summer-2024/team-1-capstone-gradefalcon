@@ -303,6 +303,7 @@ async function getCustomMarkingSchemes(exam_id) {
   return transformedSchemes;
 }
 
+//helper function to generate the latex document
 async function generateLatexDocument(questions, options, courseId, examTitle) {
   const questionTemplate = `
     \\noindent
@@ -366,6 +367,97 @@ async function generateLatexDocument(questions, options, courseId, examTitle) {
     \\end{document}
   `;
 }
+
+//helper function to generate the custom json template
+async function generateCustomJsonTemplate(questions, options, courseId, examTitle, classId) {
+  const columns = 4; // Number of columns in the template
+  const questionsPerPage = 100; // Questions per page threshold
+  const pages = questions > questionsPerPage ? 2 : 1; // Determine if the exam will span 1 or 2 pages
+
+  for (let page = 1; page <= pages; page++) {
+    const currentPageQuestions = page === 1
+      ? Math.min(questions, questionsPerPage)
+      : questions - questionsPerPage;
+    
+    const questionsPerColumn = Math.ceil(currentPageQuestions / columns); // Calculate questions per column
+
+    let template = {
+      templateDimensions: [950, 1250],
+      bubbleDimensions: [26, 26],
+      fieldBlocks: {},
+      preProcessors: [
+        {
+          name: "BorderPreprocessor",
+          options: {
+            border_size: 2,
+            border_color: [0, 0, 0],
+          },
+        },
+      ],
+    };
+
+    for (let col = 1; col <= columns; col++) {
+      let blockLabel = `MCQBlock${col}`;
+      let startQuestion = (page === 1 ? 0 : questionsPerPage) + (col - 1) * questionsPerColumn + 1;
+      let endQuestion = Math.min(startQuestion + questionsPerColumn - 1, page === 1 ? questionsPerPage : questions);
+
+      let labels = [];
+      for (let q = startQuestion; q <= endQuestion; q++) {
+        labels.push(`q${q}`);
+      }
+
+      if (labels.length > 0) {
+        template.fieldBlocks[blockLabel] = {
+          fieldType: `QTYPE_MCQ${options}`,
+          origin: calculateOrigin(col, page), // Custom function to determine origin
+          fieldLabels: labels,
+          bubblesGap: options === 4 ? 24.9 : 20, // Adjust bubble gap for different options
+          labelsGap: 29.7,
+        };
+      }
+    }
+
+    // Save the template to a separate file for each page
+    const outputDir = path.join(__dirname, '../assets', `${courseId}_${examTitle}_${classId}`);
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+    
+    const jsonFilePath = path.join(outputDir, `custom_page_${page}.json`);
+    fs.writeFileSync(jsonFilePath, JSON.stringify({ [`custom_page_${page}`]: template }, null, 2));
+  }
+}
+
+function calculateOrigin(column, page) {
+  // Define fixed origins based on column and page
+  const originsPage1 = [
+    [160, 395],
+    [350, 395],
+    [540, 395],
+    [730, 395],
+  ];
+  const originsPage2 = [
+    [160, 19],
+    [350, 19],
+    [540, 19],
+    [730, 19],
+  ];
+
+  if (page === 1) {
+    return originsPage1[column - 1];
+  } else if (page === 2) {
+    return originsPage2[column - 1];
+  }
+}
+
+
+// Generate a custom bubble sheet for a given exam  
+const path = require('path');
+const fs = require('fs');
+const { exec } = require('child_process');
+
+// Assuming generateJsonTemplate and generateLatexDocument are already defined functions
+
 async function generateCustomBubbleSheet(req, res) {
   const { numQuestions, numOptions, courseId, examTitle, classId } = req.body;
 
@@ -373,18 +465,30 @@ async function generateCustomBubbleSheet(req, res) {
     return res.status(400).send("Missing number of questions, options, courseId, examTitle, or classId.");
   }
 
+  // Create the directory if it doesn't exist
+  const outputDir = path.join(__dirname, '../assets', `${courseId}_${examTitle}_${classId}`);
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+
+  // Generate LaTeX document and save to file
   const latexDocument = await generateLatexDocument(numQuestions, numOptions, courseId, examTitle);
-  const latexFilePath = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}.tex`);
-  const pdfFilePath = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}.pdf`);
+  const latexFilePath = path.join(outputDir, `${courseId}_${examTitle}_${classId}.tex`);
+  const pdfFilePath = path.join(outputDir, `${courseId}_${examTitle}_${classId}.pdf`);
 
   fs.writeFileSync(latexFilePath, latexDocument);
 
-  exec(`pdflatex -output-directory=${path.join(__dirname, '../assets/custom')} ${latexFilePath}`, (error, stdout, stderr) => {
+  // Generate and save JSON templates
+  await generateCustomJsonTemplate(numQuestions, numOptions, courseId, examTitle, classId);
+
+  // Compile the LaTeX file into a PDF
+  exec(`pdflatex -output-directory=${outputDir} ${latexFilePath}`, (error, stdout, stderr) => {
     if (error) {
       console.error('Error compiling LaTeX:', stderr);
       return res.status(500).send("Failed to generate PDF.");
     }
 
+    // Set response headers and stream the PDF file
     res.setHeader('Content-Disposition', `attachment; filename="${courseId}_${examTitle}_${classId}.pdf"`);
     res.setHeader('Content-Type', 'application/pdf');
     const pdfStream = fs.createReadStream(pdfFilePath);
@@ -392,9 +496,8 @@ async function generateCustomBubbleSheet(req, res) {
 
     // Clean up auxiliary files after the PDF has been sent
     pdfStream.on('close', () => {
-      const auxFilePath = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}.aux`);
-      const logFilePath = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}.log`);
-      const texFilePath = latexFilePath;
+      const auxFilePath = path.join(outputDir, `${courseId}_${examTitle}_${classId}.aux`);
+      const logFilePath = path.join(outputDir, `${courseId}_${examTitle}_${classId}.log`);
 
       fs.unlink(auxFilePath, (err) => {
         if (err) console.error(`Error deleting ${auxFilePath}:`, err);
@@ -402,8 +505,8 @@ async function generateCustomBubbleSheet(req, res) {
       fs.unlink(logFilePath, (err) => {
         if (err) console.error(`Error deleting ${logFilePath}:`, err);
       });
-      fs.unlink(texFilePath, (err) => {
-        if (err) console.error(`Error deleting ${texFilePath}:`, err);
+      fs.unlink(latexFilePath, (err) => {
+        if (err) console.error(`Error deleting ${latexFilePath}:`, err);
       });
     });
   });

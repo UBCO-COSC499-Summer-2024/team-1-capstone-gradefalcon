@@ -57,10 +57,7 @@ router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
 
 // Add this route to the examRoutes.js file
 
-router.get(
-  "/studentScores",
-  checkJwt,
-  checkPermissions(["read:grades"]),
+router.get( "/studentScores", checkJwt, checkPermissions(["read:grades"]),
   async function (req, res) {
     const filePath = path.join(__dirname, "../../omr/outputs/combined.csv");
     const results = []; // Array to hold student number and score
@@ -275,11 +272,12 @@ router.post(
   checkJwt,
   checkPermissions(["upload:file"]),
   async function (req, res) {
-    const template = req.params.examType;
-    console.log("template", template);
+    const examType = req.params.examType;
+    const numQuestions = req.body.numQuestions; // Assuming you pass numQuestions in the request body
+    console.log("Exam Type:", examType);
 
-    if (template === "100mcq") {
-      //only one page
+    if (examType === "100mcq") {
+      // Only one page
       const destinationDir = "/code/omr/inputs";
       const upload = createUploadMiddleware(destinationDir);
       upload.single("examKey")(req, res, function (err) {
@@ -289,16 +287,13 @@ router.post(
         console.log(req.file);
         res.send(JSON.stringify("File uploaded successfully"));
       });
-    } else {
-      // template === "200mcq"
-      // 2 pages
-      // WILL COME BACK TO THIS LATER
-
+    } else if (examType === "200mcq" || (examType === "custom" && numQuestions > 100)) {
+      // Handle 200mcq or custom templates with more than 100 questions (2 pages)
       const upload = multer({ dest: "uploads/" }).single("examKey");
 
       upload(req, res, async function (err) {
         if (err) {
-          return res.status(500).send("Error uploading 200mcq key.");
+          return res.status(500).send("Error uploading exam key.");
         }
         const { path: tempFilePath } = req.file;
         const destinationDir1 = "/code/omr/inputs/page_1";
@@ -326,77 +321,123 @@ router.post(
 
           fs.unlinkSync(tempFilePath); // Clean up the temporary file
 
-          res.json({ message: "200mcq key uploaded and split successfully" });
+          res.json({ message: "200mcq or custom key uploaded and split successfully" });
         } catch (error) {
           console.error("Error processing PDF file:", error);
           res.status(500).send("Error processing PDF file");
         }
       });
+    } else if (examType === "custom" && numQuestions <= 100) {
+      // Handle custom templates with 100 or fewer questions (1 page)
+      const destinationDir = "/code/omr/inputs";
+      const upload = createUploadMiddleware(destinationDir);
+      upload.single("examKey")(req, res, function (err) {
+        if (err) {
+          return res.status(500).send("Error uploading file.");
+        }
+        console.log(req.file);
+        res.send(JSON.stringify("File uploaded successfully"));
+      });
+    } else {
+      return res.status(400).send("Invalid exam type or number of questions.");
     }
   }
 );
 
+
 // Copy the template JSON file to the shared volume
-router.post(
-  "/copyTemplate",
-  checkJwt,
-  checkPermissions(["upload:file"]),
-  async function (req, res) {
+router.post("/copyTemplate", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
     console.log("copyTemplate");
     const examType = req.body.examType;
     const keyOrExam = req.body.keyOrExam;
+    const numQuestions = req.body.numQuestions; // Assuming the number of questions is provided in the request
+
+    const filePath_1 = "/code/omr/inputs/page_1";
+    const filePath_2 = "/code/omr/inputs/page_2";
+
+    let templatePath_1, templatePath_2;
 
     if (examType === "100mcq" && keyOrExam === "key") {
-      // copying template for the key
-      // only template for the second page
-      // we can just store it straight in the inputs folder since it's just 1 page
+      // For 100mcq key, only copy the second page template
       const filePath = "/code/omr/inputs";
-      const templatePath = path.join(__dirname, "../assets/templates/100mcq_page_2.json");
+      templatePath_2 = path.join(__dirname, "../assets/templates/100mcq_page_2.json");
       const destinationTemplatePath = path.join(filePath, "template.json");
 
       ensureDirectoryExistence(filePath);
 
       try {
-        fs.copyFileSync(templatePath, destinationTemplatePath);
-        console.log("Template.json copied successfully");
-      } catch (error) {}
-
-      res.send(JSON.stringify("File copied successfully"));
-    } else {
-      // keyOrExam === "exam"
-      // copying template for the exam
-      // template for both ID and question page
-      const filePath_1 = "/code/omr/inputs/page_1";
-      const filePath_2 = "/code/omr/inputs/page_2";
-      const templatePath_1 = path.join(__dirname, `../assets/templates/${examType}_page_1.json`);
-      const templatePath_2 = path.join(__dirname, `../assets/templates/${examType}_page_2.json`);
-      const destinationTemplatePath1 = path.join(filePath_1, "template.json");
-      const destinationTemplatePath2 = path.join(filePath_2, "template.json");
-
-      ensureDirectoryExistence(filePath_1);
-      ensureDirectoryExistence(filePath_2);
-
-      try {
-        fs.copyFileSync(templatePath_1, destinationTemplatePath1);
-        console.log("First template.json copied successfully");
-        fs.copyFileSync(templatePath_2, destinationTemplatePath2);
-        console.log("Second template.json copied successfully");
-        res.send(JSON.stringify("Files copied successfully"));
+        fs.copyFileSync(templatePath_2, destinationTemplatePath);
+        console.log("Template.json copied successfully for 100mcq key");
+        return res.send(JSON.stringify("File copied successfully"));
       } catch (error) {
         console.error("Error copying template.json:", error);
         return res.status(500).send("Error copying template.json");
       }
     }
+
+    if (examType === "200mcq" || (examType === "custom" && numQuestions > 100)) {
+      // For 200mcq or custom with more than 100 questions, copy both page templates
+      templatePath_1 = path.join(__dirname, `../assets/templates/${examType}_page_1.json`);
+      templatePath_2 = path.join(__dirname, `../assets/templates/${examType}_page_2.json`);
+
+      ensureDirectoryExistence(filePath_1);
+      ensureDirectoryExistence(filePath_2);
+
+      try {
+        fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
+        console.log("First template.json copied successfully");
+        fs.copyFileSync(templatePath_2, path.join(filePath_2, "template.json"));
+        console.log("Second template.json copied successfully");
+        return res.send(JSON.stringify("Files copied successfully"));
+      } catch (error) {
+        console.error("Error copying template.json:", error);
+        return res.status(500).send("Error copying template.json");
+      }
+    }
+
+    if (examType === "custom" && numQuestions <= 100) {
+      // For custom template with 100 or fewer questions, copy only the first page template
+      templatePath_1 = path.join(__dirname, "../assets/templates/custom_page_1.json");
+      ensureDirectoryExistence(filePath_1);
+
+      try {
+        fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
+        console.log("Custom template.json for page 1 copied successfully");
+        return res.send(JSON.stringify("File copied successfully"));
+      } catch (error) {
+        console.error("Error copying template.json:", error);
+        return res.status(500).send("Error copying template.json");
+      }
+    }
+
+    // Handle 100mcq exam case, which also requires both pages
+    if (examType === "100mcq" && keyOrExam === "exam") {
+      templatePath_1 = path.join(__dirname, `../assets/templates/100mcq_page_1.json`);
+      templatePath_2 = path.join(__dirname, `../assets/templates/100mcq_page_2.json`);
+
+      ensureDirectoryExistence(filePath_1);
+      ensureDirectoryExistence(filePath_2);
+
+      try {
+        fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
+        console.log("First template.json copied successfully for 100mcq exam");
+        fs.copyFileSync(templatePath_2, path.join(filePath_2, "template.json"));
+        console.log("Second template.json copied successfully for 100mcq exam");
+        return res.send(JSON.stringify("Files copied successfully"));
+      } catch (error) {
+        console.error("Error copying template.json:", error);
+        return res.status(500).send("Error copying template.json");
+      }
+    }
+
+    // Fallback if the conditions above are not met
+    return res.status(400).send("Invalid request parameters.");
   }
 );
-
 // Generate the evaluation JSON for an exam
-router.post(
-  "/GenerateEvaluation",
-  checkJwt,
-  checkPermissions(["create:evaluation"]),
+router.post( "/GenerateEvaluation", checkJwt, checkPermissions(["create:evaluation"]),
   async function (req, res) {
-    const { examType, exam_id } = req.body;
+    const { examType, exam_id, numQuestions } = req.body; // Add numQuestions to the request body
 
     try {
       if (!exam_id) {
@@ -421,101 +462,15 @@ router.post(
         };
       }
 
-      if (examType === "200mcq") {
-        // Split questions into two groups: 1-100 and 101-200
+      if (examType === "200mcq" || (examType === "custom" && numQuestions > 100)) {
+        // Handle 200mcq or custom template with more than 100 questions
         const firstHalfQuestions = answerKey.slice(0, 100);
         const secondHalfQuestions = answerKey.slice(100);
-        console.log("First half questions:", firstHalfQuestions);
-        console.log("Second half questions:", secondHalfQuestions);
-        // Create evaluation.json for the first half
-        const evaluationJsonPage1 = {
-          source_type: "custom",
-          options: {
-            questions_in_order: Array.from(
-              { length: firstHalfQuestions.length },
-              (_, i) => `q${i + 1}`
-            ),
-            answers_in_order: firstHalfQuestions,
-          },
-          outputs_configuration: {
-            should_explain_scoring: true,
-            draw_score: {
-              enabled: true,
-              position: [600, 1100],
-              size: 1.5,
-            },
-            draw_answers_summary: {
-              enabled: true,
-              position: [300, 1200],
-              size: 1.0,
-            },
-            draw_question_verdicts: {
-              enabled: true,
-              verdict_colors: {
-                correct: "#00ff00",
-                neutral: "#ff0000",
-                incorrect: "#ff0000",
-              },
-              verdict_symbol_colors: {
-                positive: "#000000",
-                neutral: "#000000",
-                negative: "#000000",
-              },
-              draw_answer_groups: {
-                enabled: true,
-              },
-            },
-            draw_detected_bubble_texts: {
-              enabled: false,
-            },
-          },
-          marking_schemes: markingSchemes,
-        };
 
+        // Create evaluation.json for the first half
+        const evaluationJsonPage1 = createEvaluationJson(firstHalfQuestions, markingSchemes, 1);
         // Create evaluation.json for the second half
-        const evaluationJsonPage2 = {
-          source_type: "custom",
-          options: {
-            questions_in_order: Array.from(
-              { length: secondHalfQuestions.length },
-              (_, i) => `q${i + 101}`
-            ),
-            answers_in_order: secondHalfQuestions,
-          },
-          outputs_configuration: {
-            should_explain_scoring: true,
-            draw_score: {
-              enabled: true,
-              position: [600, 1100],
-              size: 1.5,
-            },
-            draw_answers_summary: {
-              enabled: true,
-              position: [300, 1200],
-              size: 1.0,
-            },
-            draw_question_verdicts: {
-              enabled: true,
-              verdict_colors: {
-                correct: "#00ff00",
-                neutral: "#ff0000",
-                incorrect: "#ff0000",
-              },
-              verdict_symbol_colors: {
-                positive: "#000000",
-                neutral: "#000000",
-                negative: "#000000",
-              },
-              draw_answer_groups: {
-                enabled: true,
-              },
-            },
-            draw_detected_bubble_texts: {
-              enabled: false,
-            },
-          },
-          marking_schemes: markingSchemes,
-        };
+        const evaluationJsonPage2 = createEvaluationJson(secondHalfQuestions, markingSchemes, 101);
 
         // Ensure directories exist
         const destinationDirPage1 = `/code/omr/inputs/page_1`;
@@ -524,61 +479,23 @@ router.post(
         ensureDirectoryExistence(destinationDirPage2);
 
         // Write JSON files
-        const evaluationFilePathPage1 = path.join(destinationDirPage1, "evaluation.json");
-        const evaluationFilePathPage2 = path.join(destinationDirPage2, "evaluation.json");
-        fs.writeFileSync(evaluationFilePathPage1, JSON.stringify(evaluationJsonPage1, null, 2));
-        fs.writeFileSync(evaluationFilePathPage2, JSON.stringify(evaluationJsonPage2, null, 2));
+        fs.writeFileSync(path.join(destinationDirPage1, "evaluation.json"), JSON.stringify(evaluationJsonPage1, null, 2));
+        fs.writeFileSync(path.join(destinationDirPage2, "evaluation.json"), JSON.stringify(evaluationJsonPage2, null, 2));
 
-        res.json({ message: "evaluation.json files created successfully for 200mcq" });
-      } else {
-        // Create evaluation.json for other exam types
-        const evaluationJson = {
-          source_type: "custom",
-          options: {
-            questions_in_order: Array.from({ length: answerKey.length }, (_, i) => `q${i + 1}`),
-            answers_in_order: answerKey,
-          },
-          outputs_configuration: {
-            should_explain_scoring: true,
-            draw_score: {
-              enabled: true,
-              position: [600, 1100],
-              size: 1.5,
-            },
-            draw_answers_summary: {
-              enabled: true,
-              position: [300, 1200],
-              size: 1.0,
-            },
-            draw_question_verdicts: {
-              enabled: true,
-              verdict_colors: {
-                correct: "#00ff00",
-                neutral: "#ff0000",
-                incorrect: "#ff0000",
-              },
-              verdict_symbol_colors: {
-                positive: "#000000",
-                neutral: "#000000",
-                negative: "#000000",
-              },
-              draw_answer_groups: {
-                enabled: true,
-              },
-            },
-            draw_detected_bubble_texts: {
-              enabled: false,
-            },
-          },
-          marking_schemes: markingSchemes,
-        };
+        res.json({ message: "evaluation.json files created successfully for 200mcq or custom with more than 100 questions" });
+      } else if (examType === "100mcq" || (examType === "custom" && numQuestions <= 100)) {
+        // Handle 100mcq or custom template with 100 or fewer questions
+        const evaluationJson = createEvaluationJson(answerKey, markingSchemes, 1);
 
         const destinationDir = `/code/omr/inputs/page_2`;
         ensureDirectoryExistence(destinationDir);
-        const evaluationFilePath = path.join(destinationDir, "evaluation.json");
-        fs.writeFileSync(evaluationFilePath, JSON.stringify(evaluationJson, null, 2));
 
-        res.json({ message: "evaluation.json created successfully" });
+        // Write JSON file
+        fs.writeFileSync(path.join(destinationDir, "evaluation.json"), JSON.stringify(evaluationJson, null, 2));
+
+        res.json({ message: "evaluation.json created successfully for 100mcq or custom with 100 or fewer questions" });
+      } else {
+        res.status(400).send("Invalid exam type.");
       }
     } catch (error) {
       console.error("Error in /GenerateEvaluation:", error);
@@ -586,6 +503,49 @@ router.post(
     }
   }
 );
+
+function createEvaluationJson(questions, markingSchemes, questionStartIndex) {
+  return {
+    source_type: "custom",
+    options: {
+      questions_in_order: Array.from({ length: questions.length }, (_, i) => `q${i + questionStartIndex}`),
+      answers_in_order: questions,
+    },
+    outputs_configuration: {
+      should_explain_scoring: true,
+      draw_score: {
+        enabled: true,
+        position: [600, 1100],
+        size: 1.5,
+      },
+      draw_answers_summary: {
+        enabled: true,
+        position: [300, 1200],
+        size: 1.0,
+      },
+      draw_question_verdicts: {
+        enabled: true,
+        verdict_colors: {
+          correct: "#00ff00",
+          neutral: "#ff0000",
+          incorrect: "#ff0000",
+        },
+        verdict_symbol_colors: {
+          positive: "#000000",
+          neutral: "#000000",
+          negative: "#000000",
+        },
+        draw_answer_groups: {
+          enabled: true,
+        },
+      },
+      draw_detected_bubble_texts: {
+        enabled: false,
+      },
+    },
+    marking_schemes: markingSchemes,
+  };
+}
 
 // Call the OMR processing service
 router.post("/callOMR", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {

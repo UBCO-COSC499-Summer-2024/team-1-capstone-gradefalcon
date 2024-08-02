@@ -1,0 +1,43 @@
+{
+    "templateDimensions": [ 950, 1250 ],
+    "bubbleDimensions": [ 26, 26 ],
+    "fieldBlocks": {
+      "MCQBlock1": {
+        "fieldType": "QTYPE_MCQ4",
+        "origin": [ 160, 19 ],
+        "fieldLabels": ["q1", "q2", "q3"],
+        "bubblesGap": 26,
+        "labelsGap": 29.7
+      },
+      "MCQBlock2": {
+        "fieldType": "QTYPE_MCQ4",
+        "origin": [ 350, 19 ],
+        "fieldLabels": ["q4", "q5", "q6"],
+        "bubblesGap": 24.9,
+        "labelsGap": 29.7
+      },
+      "MCQBlock3": {
+        "fieldType": "QTYPE_MCQ4",
+        "origin": [ 540, 19 ],
+        "fieldLabels": ["q7", "q8", "q9"],
+        "bubblesGap": 24.9,
+        "labelsGap": 29.7
+      },
+      "MCQBlock4": {
+        "fieldType": "QTYPE_MCQ4",
+        "origin": [ 730, 19 ],
+        "fieldLabels": ["q10"],
+        "bubblesGap": 24.9,
+        "labelsGap": 29.7
+      }
+    },
+    "preProcessors": [
+  {
+    "name": "BorderPreprocessor",
+    "options": {
+      "border_size": 2,
+      "border_color": [0, 0, 0]
+    }
+  }
+]
+}
