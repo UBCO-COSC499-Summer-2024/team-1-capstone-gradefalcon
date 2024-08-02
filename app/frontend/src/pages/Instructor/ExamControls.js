@@ -128,7 +128,7 @@ const ExamControls = () => {
           </div>
         </div>
       </main>
-      <Toaster /> {/* Adding the Toaster component */}
+      <Toaster />
     </>
   );
 };

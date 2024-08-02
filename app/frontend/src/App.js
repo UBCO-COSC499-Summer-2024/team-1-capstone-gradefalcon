@@ -69,7 +69,7 @@ function App() {
             <Route path="/ManualExamKey" element={ <ProtectedRoute> <ManualExamKey /> </ProtectedRoute> } />
             <Route path="/UploadExamKey" element={ <ProtectedRoute> <UploadExamKey /> </ProtectedRoute> } />
             <Route path="/ConfirmExamKey" element={ <ProtectedRoute> <ConfirmExamKey /> </ProtectedRoute> } />
-            <Route path="/UploadExams" element={ <ProtectedRoute> <UploadExams /> </ProtectedRoute> } />
+            <Route path="/UploadExams/:exam_id" element={ <ProtectedRoute> <UploadExams /> </ProtectedRoute> } />
             <Route path="/OMRProcessing" element={ <ProtectedRoute> <OMRProcessing /> </ProtectedRoute> } />
             <Route path="/OMRProcessingUpload" element={ <ProtectedRoute> <OMRProcessingUpload /> </ProtectedRoute> } /> {/* Add the new route */}
             <Route path="/ReviewExams" element={ <ProtectedRoute> <ReviewExams /> </ProtectedRoute> } />

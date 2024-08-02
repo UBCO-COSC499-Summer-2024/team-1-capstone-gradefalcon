@@ -9,7 +9,7 @@ import "../css/App.css";
 const OMRProcessing = () => {
   const location = useLocation();
   const [progress, setProgress] = useState(0); // Initial progress value for visibility
-  const { examTitle, classID, template } = location.state || {};
+  const { examTitle, classID, template, numOptions, numQuestions } = location.state || {};
   const navigate = useNavigate();
   const { toast } = useToast();
   const { getAccessTokenSilently } = useAuth0(); // Get the token
@@ -46,6 +46,8 @@ const OMRProcessing = () => {
             examTitle: examTitle,
             classID: classID,
             template: template,
+            numOptions: numOptions,
+            numQuestions: numQuestions
           },
         });
       }, 2000);

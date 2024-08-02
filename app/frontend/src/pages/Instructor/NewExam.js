@@ -25,6 +25,7 @@ const NewExam = () => {
   const [isCustomTemplate, setIsCustomTemplate] = useState(false);
   const [currentTab, setCurrentTab] = useState("details"); // Track current tab
   const [numQuestions, setNumQuestions] = useState(100); // Default to 100 MCQs
+  const [numOptions, setNumOptions] = useState(5); // Default to 5 options
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,8 +64,10 @@ const NewExam = () => {
   
     if (value === "100mcq") {
       setNumQuestions(100);
+      setNumOptions(5);
     } else if (value === "200mcq") {
       setNumQuestions(200);
+      setNumOptions(5);
     } // For custom, the number of questions will be set in the CustomBubbleSheet component
   };
   const handleClassChange = (value) => {
@@ -221,6 +224,7 @@ const NewExam = () => {
                   examTitle={examTitle}
                   classId={selectedClassId}
                   onQuestionsChange={(questions) => setNumQuestions(questions)} // Update numQuestions in NewExam
+                  onOptionsChange={(options) => setNumOptions(options)} // Update numOptions in NewExam
                 />
                 // Display the CustomBubbleSheet component if custom template is selected
                 )}
@@ -244,7 +248,7 @@ const NewExam = () => {
                 <Button asChild size="sm" className="px-2 py-1">
                       <Link
                         to={isFormValid() ? "/ManualExamKey" : "#"}
-                        state={{ examTitle: examTitle, classID: courseId, template, numQuestions }}
+                        state={{ examTitle: examTitle, classID: courseId, template, numQuestions, numOptions }}
                         onClick={handleButtonClick}
                       >
                         Manually Select Answers
@@ -253,7 +257,7 @@ const NewExam = () => {
                     <Button asChild size="sm" variant="secondary" className="px-2 py-1">
                       <Link
                         to={isFormValid() ? "/UploadExamKey" : "#"}
-                        state={{ examTitle: examTitle, classID: courseId, template, numQuestions }}
+                        state={{ examTitle: examTitle, classID: courseId, template, numQuestions, numOptions }}
                         onClick={handleButtonClick}
                       >
                         Upload Answer Key

@@ -13,7 +13,7 @@ const UploadExamKey = () => {
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const location = useLocation();
-  const { examTitle, classID, template } = location.state || {};
+  const { examTitle, classID, template, numQuestions, numOptions } = location.state || {};
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -82,6 +82,8 @@ const UploadExamKey = () => {
     formData.append("examTitle", examTitle);
     formData.append("classID", classID);
     formData.append("template", template);
+    formData.append("numQuestions", numQuestions);
+
 
     try {
       const token = await getAccessTokenSilently(); // Get the token
@@ -100,7 +102,7 @@ const UploadExamKey = () => {
             "Authorization": `Bearer ${token}`, // Include the token in the request
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ examType: template, keyOrExam: "key" }),
+          body: JSON.stringify({ examType: template, keyOrExam: "key", numQuestions: numQuestions }),
         }),
       ]);
 
@@ -120,6 +122,8 @@ const UploadExamKey = () => {
           examTitle: examTitle,
           classID: classID,
           template: template,
+          numOptions: numOptions, 
+          numQuestions: numQuestions,
         },
       });
     } catch (error) {

@@ -9,7 +9,7 @@ const {
   getStudentGrades,
   getStudentNameById,
   getScoreByExamId,
-  getExamType,
+  getExamQuestionDetails,
   saveResults,
   deleteAllFilesInDir,
   ensureDirectoryExistence,
@@ -610,19 +610,19 @@ router.get(
   }
 );
 
-router.get("/getExamType/:exam_id", checkJwt, checkPermissions(["read:exam"]), async (req, res) => {
+router.get("/getExamQuestionDetails/:exam_id", checkJwt, checkPermissions(["read:exam"]), async (req, res) => {
   try {
     const exam_id = parseInt(req.params.exam_id, 10);
     if (isNaN(exam_id)) {
       return res.status(400).send("Invalid exam_id");
     }
-    const exam_type = await getExamType(exam_id);
+    const exam_type = await getExamQuestionDetails(exam_id);
     if (exam_type.length === 0) {
       return res.status(404).send("No exam type found for this exam");
     }
     res.json({ exam_type });
   } catch (error) {
-    console.error("Error in /getExamType:", error);
+    console.error("Error in /getExamQuestionDetails:", error);
     res.status(500).send("Error retrieving scores");
   }
 });

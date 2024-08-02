@@ -170,7 +170,9 @@ const getStudentNameById = async (studentId) => {
   }
 };
 
-const getExamType = async (exam_id) => {
+
+//get Total Questions and Exam type (formally named getExamType)
+const getExamQuestionDetails = async (exam_id) => {
   try {
     const result = await pool.query("SELECT total_questions FROM exam WHERE exam_id = $1", [
       exam_id,
@@ -181,12 +183,18 @@ const getExamType = async (exam_id) => {
     }
 
     const totalQuestions = result.rows[0].total_questions;
-    return totalQuestions > 100 ? "200mcq" : "100mcq";
+    const examType = totalQuestions > 100 ? "200mcq" : "100mcq";
+
+    return {
+      totalQuestions,
+      examType,
+    };
   } catch (error) {
-    console.error("Error getting scores by exam ID:", error);
+    console.error("Error getting exam question details:", error);
     throw error;
   }
 };
+
 
 const getScoreByExamId = async (exam_id) => {
   try {
@@ -368,7 +376,6 @@ async function generateLatexDocument(questions, options, courseId, examTitle) {
   `;
 }
 
-//helper function to generate the custom json template
 async function generateCustomJsonTemplate(questions, options, courseId, examTitle, classId) {
   const columns = 4; // Number of columns in the template
   const questionsPerPage = 100; // Questions per page threshold
@@ -378,8 +385,10 @@ async function generateCustomJsonTemplate(questions, options, courseId, examTitl
     const currentPageQuestions = page === 1
       ? Math.min(questions, questionsPerPage)
       : questions - questionsPerPage;
-    
-    const questionsPerColumn = Math.ceil(currentPageQuestions / columns); // Calculate questions per column
+
+    const baseQuestionsPerColumn = Math.ceil(currentPageQuestions / columns); // Base number of questions per column
+    const remainder = currentPageQuestions % columns; // Questions that won't be evenly distributed
+    const lastColumnQuestions = remainder === 0 ? baseQuestionsPerColumn : currentPageQuestions - (baseQuestionsPerColumn * (columns - 1));
 
     let template = {
       templateDimensions: [950, 1250],
@@ -396,10 +405,33 @@ async function generateCustomJsonTemplate(questions, options, courseId, examTitl
       ],
     };
 
+        // Add Student ID block and custom label to the first page
+        if (page === 1) {
+          template.customLabels = {
+            StudentID: ["roll1..8"]
+          };
+          template.fieldBlocks.StudentID = {
+            fieldType: "QTYPE_ID",
+            origin: [363, 169],
+            fieldLabels: ["roll1..8"],
+            bubblesGap: 31,
+            labelsGap: 22,
+          };
+        }
+    
+
+    let startQuestion = page === 1 ? 1 : 101;
+
     for (let col = 1; col <= columns; col++) {
-      let blockLabel = `MCQBlock${col}`;
-      let startQuestion = (page === 1 ? 0 : questionsPerPage) + (col - 1) * questionsPerColumn + 1;
-      let endQuestion = Math.min(startQuestion + questionsPerColumn - 1, page === 1 ? questionsPerPage : questions);
+      let questionsInThisColumn;
+
+      if (col < columns) {
+        questionsInThisColumn = baseQuestionsPerColumn;
+      } else {
+        questionsInThisColumn = lastColumnQuestions;
+      }
+
+      const endQuestion = startQuestion + questionsInThisColumn - 1;
 
       let labels = [];
       for (let q = startQuestion; q <= endQuestion; q++) {
@@ -407,7 +439,7 @@ async function generateCustomJsonTemplate(questions, options, courseId, examTitl
       }
 
       if (labels.length > 0) {
-        template.fieldBlocks[blockLabel] = {
+        template.fieldBlocks[`MCQBlock${col}`] = {
           fieldType: `QTYPE_MCQ${options}`,
           origin: calculateOrigin(col, page), // Custom function to determine origin
           fieldLabels: labels,
@@ -415,6 +447,8 @@ async function generateCustomJsonTemplate(questions, options, courseId, examTitl
           labelsGap: 29.7,
         };
       }
+
+      startQuestion = endQuestion + 1; // Update the start question for the next column
     }
 
     // Save the template to a separate file for each page
@@ -422,7 +456,7 @@ async function generateCustomJsonTemplate(questions, options, courseId, examTitl
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
-    
+
     const jsonFilePath = path.join(outputDir, `custom_page_${page}.json`);
     fs.writeFileSync(jsonFilePath, JSON.stringify({ [`custom_page_${page}`]: template }, null, 2));
   }
@@ -450,13 +484,6 @@ function calculateOrigin(column, page) {
   }
 }
 
-
-// Generate a custom bubble sheet for a given exam  
-const path = require('path');
-const fs = require('fs');
-const { exec } = require('child_process');
-
-// Assuming generateJsonTemplate and generateLatexDocument are already defined functions
 
 async function generateCustomBubbleSheet(req, res) {
   const { numQuestions, numOptions, courseId, examTitle, classId } = req.body;
@@ -563,7 +590,7 @@ module.exports = {
   getStudentNameById,
   getScoreByExamId,
   saveResults,
-  getExamType,
+  getExamQuestionDetails,
   deleteAllFilesInDir,
   resetOMR,
   ensureDirectoryExistence,

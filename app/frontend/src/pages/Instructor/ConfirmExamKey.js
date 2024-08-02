@@ -40,9 +40,9 @@ import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 const ConfirmExamKey = () => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
   const location = useLocation();
-  const { examTitle, classID, template } = location.state || {};
-  const [numQuestions, setNumQuestions] = useState(10);
-  const [numOptions, setNumOptions] = useState(5);
+  const { examTitle, classID, template, numQuestions: initialNumQuestions, numOptions: initialNumOptions } = location.state || {};
+  const [numQuestions, setNumQuestions] = useState(initialNumQuestions);
+  const [numOptions, setNumOptions] = useState(initialNumOptions);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [markingSchemes, setMarkingSchemes] = useState([]);

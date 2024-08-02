@@ -5,7 +5,7 @@ import { Label } from "./ui/label";
 import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "./ui/card";
 
-const CustomBubbleSheet = ({ courseId, classId, examTitle, onQuestionsChange }) => {
+const CustomBubbleSheet = ({ courseId, classId, examTitle, onQuestionsChange, onOptionsChange }) => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(4);
@@ -16,6 +16,13 @@ const CustomBubbleSheet = ({ courseId, classId, examTitle, onQuestionsChange }) 
       onQuestionsChange(numQuestions);
     }
   }, [numQuestions, onQuestionsChange]);
+
+  useEffect(() => {
+    // Pass the numOptions back to the parent component whenever it changes
+    if (onOptionsChange) {
+      onOptionsChange(numOptions);
+    }
+  }, [numOptions, onOptionsChange]);
 
   const handleGeneratePDF = async () => {
     try {

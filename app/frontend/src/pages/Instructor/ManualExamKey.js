@@ -36,8 +36,8 @@ import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 
 const ManualExamKey = () => {
   const location = useLocation();
-  const { examTitle, classID, template } = location.state || {};
-  const [numQuestions, setNumQuestions] = useState(10);
+  const { examTitle, classID, template, numQuestions: initialNumQuestions } = location.state || {};  // Extract numQuestions
+  const [numQuestions, setNumQuestions] = useState(initialNumQuestions || 10);
   const [numOptions, setNumOptions] = useState(5);
   const [totalMarks, setTotalMarks] = useState();
   const [selectedOptions, setSelectedOptions] = useState([]);
