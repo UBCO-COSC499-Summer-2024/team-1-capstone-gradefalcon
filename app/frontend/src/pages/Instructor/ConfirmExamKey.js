@@ -123,24 +123,13 @@ const ConfirmExamKey = () => {
           question: i,
           option: optionSpan.innerText,
         });
-        // Check if this option is selected and apply styles
-        if (
-          selectedOptions.some(
-            (question) =>
-              question.question === i && question.option === optionSpan.innerText
-          )
-        ) {
-          optionSpan.classList.add("selected");
-          optionSpan.style.backgroundColor = "hsl(var(--primary))";
-          optionSpan.style.color = "white";
-        }
 
         optionsDiv.appendChild(optionSpan);
       }
 
       bubbleGrid.appendChild(questionDiv);
     }
-  }, [numQuestions, numOptions, selectedOptions]);
+  }, [numQuestions, numOptions]);
 
   useEffect(() => {
     setTotalMarks(numQuestions);
