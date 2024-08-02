@@ -1,7 +1,104 @@
 
 # Personal Log
 
-## Friday ( 26/7 - 30/7)
+## Wednesday ( 31/7 - 02/08 )
+
+### Timesheet 
+
+clockify report
+User Story: Improve Instructor User Interface and Experience #241
+
+![Time17](https://github.com/user-attachments/assets/df9c1bf4-d511-4057-9f4f-b16db4c5e63c)
+
+
+
+### Current Tasks (Provide Details):
+- #1 : User Story: Enhance Course and Exam Management #207
+- #2 : User Story: Download Results #18
+- #3: Student Dashboard - to display the courses and the exams for each student individually
+- #4 : 5-point summary analysis for the instructor
+- #5: User Story: Enhance Exam Stastics and Grade Edit #243
+- #6: User Story: Improve Instructor User Interface and Experience #241
+  
+  
+### Progress Update (since 31/7/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Download Results #18
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Improve Dashboard Functionality
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Revamp Student Dashboard UI - to display the courses and the exams for each student individually
+        </td>
+        <!-- Status -->
+        <td>Completed 
+        </td>
+  </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>5-point summary analysis for the instructor
+        </td>
+        <!-- Status -->
+        <td>Completed 
+        </td>
+  </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Enhance Course and Exam Management #207
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Enhance Exam Stastics and Grade Edit #243
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Improve Instructor User Interface and Experience #241
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+As we moved frward from the last cycle , a large portion of my due taaks were completed , approved and merged into the development branch. I added the feature of downloading the exam and course results as a csv file for the instructor as well as the instructor dashboard functionality has been improved with the help of adding the checkboxes and delete/archive button which were further worked on to make it functional. The 5 point summary analysis plots the data on a box plot perfectly and in a detailed manner. This cycle I completely revamped the student view and design, it has now been given a new and consistent look as well as the courses and the exam for that particular student are displayed. I further picked up on the minor details and features left for the system as major portion has been done by us as a team. I will be moving forward towards the next cycle working on the UI changes as those are our main goals for the week.
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- User Story: Enhance Course and Exam Management #207
+- User Story: Enhance Exam Stastics and Grade Edit #243
+- User Story: Improve Instructor User Interface and Experience #241
+  
+
+
+## Wednesday ( 26/7 - 30/7)
 
 ### Timesheet 
 
