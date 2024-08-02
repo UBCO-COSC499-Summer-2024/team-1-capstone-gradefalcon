@@ -360,12 +360,13 @@ const getStudentExams = async (req, res, next) => {
 const getStudentAttempt = async (req, res, next) => {
   const studentId = req.auth.sub; // Get the student ID from Auth0 token
   const examId = parseInt(req.params.exam_id, 10);
-  console.log("examID", examId);
 
   try {
     const exam = await pool.query(
       `
-      SELECT exam_id, student_id, grade, exam_title, course_id, course_name from studentResults join student using (student_id) 
+      SELECT exam_id, student_id, grade, exam_title, course_id, course_name, viewing_options 
+      from studentResults 
+      join student using (student_id) 
 	    join exam using (exam_id)
 	    join classes using (class_id)
       where auth0_id = $1 and exam_id = $2

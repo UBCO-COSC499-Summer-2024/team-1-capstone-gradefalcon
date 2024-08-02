@@ -131,11 +131,11 @@ INSERT INTO classes (instructor_id, course_id, course_name) VALUES
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST100', 'Database Test'),
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST200', 'Database Test 2');
 
-INSERT INTO exam (class_id, exam_title, total_questions, total_marks, graded) VALUES
-    (1,'Midterm', 50, 50, true),
-    (1, 'Final', 5, 100, true),
-    (2, 'Midterm - 200', 50, 50, true),  -- Exams for TEST200
-    (2, 'Final - 200', 100, 100, true);  -- Exams for TEST200
+INSERT INTO exam (class_id, exam_title, total_questions, total_marks, graded, viewing_options) VALUES
+    (1,'Midterm', 50, 50, true, '{"canViewExam": true, "canViewAnswers": false}'),
+    (1, 'Final', 5, 100, true, '{"canViewExam": false, "canViewAnswers": false}'),
+    (2, 'Midterm - 200', 50, 50, true, '{"canViewExam": false, "canViewAnswers": true}'),  -- Exams for TEST200
+    (2, 'Final - 200', 100, 100, true, '{"canViewExam": true, "canViewAnswers": true}');  -- Exams for TEST200
 
 INSERT INTO solution (exam_id) VALUES
     (1),

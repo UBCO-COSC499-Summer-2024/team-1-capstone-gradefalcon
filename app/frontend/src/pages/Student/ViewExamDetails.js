@@ -13,10 +13,16 @@ export default function ViewExamDetails() {
     course_name: "Sample Course",
     grade: 89,
   });
+  const [canViewExam, setCanViewExam] = useState(false);
+  const [canViewAnswers, setCanViewAnswers] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
   const { exam_id } = location.state;
+
+  // NOTE FOR FRONTEND:
+  // You can access canViewExam and canViewAnswers states so that
+  // you can conditionally render the exam and answers based on the values.
 
   useEffect(() => {
     const fetchStudentExamDetails = async () => {
@@ -32,8 +38,9 @@ export default function ViewExamDetails() {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log(data.exam);
           setExamDetails(data.exam);
+          setCanViewExam(data.exam.viewing_options.canViewExam);
+          setCanViewAnswers(data.exam.viewing_options.canViewAnswers);
         } else {
           console.error("Failed to fetch exam details");
         }
