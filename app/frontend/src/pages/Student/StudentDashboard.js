@@ -25,11 +25,11 @@ export default function StudentDashboard() {
     const fetchCourses = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await fetch(`/api/student/${user.sub}/courses`, {
+        const response = await fetch(`/api/class/student/courses`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
         });
@@ -48,16 +48,17 @@ export default function StudentDashboard() {
     const fetchExams = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await fetch(`/api/student/${user.sub}/exams`, {
+        const response = await fetch(`/api/exam/student/exams`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
+          console.log("data", data);
           setExams(data.exams);
           setFilteredExams(data.exams); // Initialize filteredExams with the fetched data
         } else {
@@ -73,19 +74,11 @@ export default function StudentDashboard() {
   }, [getAccessTokenSilently, user.sub]);
 
   useEffect(() => {
-    setFilteredCourses(
-      courses.filter((course) =>
-        course.course_name?.toLowerCase().includes(courseSearchTerm.toLowerCase())
-      )
-    );
+    setFilteredCourses(courses.filter((course) => course.course_name?.toLowerCase().includes(courseSearchTerm.toLowerCase())));
   }, [courseSearchTerm, courses]);
 
   useEffect(() => {
-    setFilteredExams(
-      exams.filter((exam) =>
-        exam.exam_title?.toLowerCase().includes(examSearchTerm.toLowerCase())
-      )
-    );
+    setFilteredExams(exams.filter((exam) => exam.exam_title?.toLowerCase().includes(examSearchTerm.toLowerCase())));
   }, [examSearchTerm, exams]);
 
   return (
@@ -171,7 +164,6 @@ export default function StudentDashboard() {
                     <TableHead>Exam Name</TableHead>
                     <TableHead className="hidden sm:table-cell">Course</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -182,23 +174,21 @@ export default function StudentDashboard() {
                           <TooltipTrigger asChild>
                             <TableRow
                               className="hover:bg-gray-100 cursor-pointer"
-                              onClick={() => navigate(`/ViewExamDetails`)}
+                              onClick={() => {
+                                if (exam.graded) {
+                                  navigate(`/ViewExamDetails`);
+                                }
+                              }}
                             >
                               <TableCell>
                                 <span className="font-bold">{exam.exam_title}</span>
                               </TableCell>
                               <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
-                              <TableCell>{exam.status}</TableCell>
-                              <TableCell>
-                                <Button onClick={() => navigate(`/ViewExamDetails`)} className="bg-primary text-white">
-                                  <ChevronRight className="w-4 h-4 mr-1" />
-                                  View Details
-                                </Button>
-                              </TableCell>
+                              <TableCell>{exam.graded ? "Graded" : "Not graded"}</TableCell>
                             </TableRow>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Click for details</p>
+                            <p>{exam.graded ? "Click for details" : "Exam not graded yet"}</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -215,7 +205,7 @@ export default function StudentDashboard() {
                         <TableCell className="hidden sm:table-cell">No exams available</TableCell>
                         <TableCell>No exams available</TableCell>
                         <TableCell>
-                          <Button onClick={() => navigate('/ViewExamDetails')} className="bg-primary text-white">
+                          <Button onClick={() => navigate("/ViewExamDetails")} className="bg-primary text-white">
                             <ChevronRight className="w-4 h-4 mr-1" />
                             View Details
                           </Button>

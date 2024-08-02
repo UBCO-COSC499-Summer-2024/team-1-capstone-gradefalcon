@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "../../css/App.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const ViewExam = () => {
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const location = useLocation();
   const navigate = useNavigate();
   const { student_id, exam_id, front_page, back_page } = location.state || {};
@@ -16,6 +18,7 @@ const ViewExam = () => {
 
   useEffect(() => {
     const fetchExam = async () => {
+      const token = await getAccessTokenSilently(); // Get the token
       if (!student_id) {
         console.log("Student ID is missing");
         return;
@@ -32,6 +35,7 @@ const ViewExam = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify({ side: "back", file_name: back_page }),
         });
@@ -45,6 +49,7 @@ const ViewExam = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify({ side: "front", file_name: front_page }),
         });
@@ -61,7 +66,7 @@ const ViewExam = () => {
     };
 
     fetchExam();
-  }, [student_id, examFileId]);
+  }, [student_id, examFileId, getAccessTokenSilently, isAuthenticated]);
 
   return (
     <div className="App">

@@ -26,6 +26,7 @@ CREATE TABLE classes (
     instructor_id text,
     course_id text,
     course_name text,
+    active boolean,
     unique (instructor_id, course_id)
 );
 
@@ -48,7 +49,8 @@ CREATE TABLE exam (
     upper_quartile double precision,
     lower_quartile double precision,
     page_count int,
-    file_size int,
+    viewing_options JSONB,
+    graded boolean default false,
     foreign key (class_id) references classes(class_id)
 );
 
@@ -130,11 +132,11 @@ INSERT INTO classes (instructor_id, course_id, course_name) VALUES
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST100', 'Database Test'),
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST200', 'Database Test 2');
 
-INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES
-    (1,'Midterm', 50, 50),
-    (1, 'Final', 5, 100),
-    (2, 'Midterm - 200', 50, 50),  -- Exams for TEST200
-    (2, 'Final - 200', 100, 100);  -- Exams for TEST200
+INSERT INTO exam (class_id, exam_title, total_questions, total_marks, graded) VALUES
+    (1,'Midterm', 50, 50, true),
+    (1, 'Final', 5, 100, true),
+    (2, 'Midterm - 200', 50, 50, true),  -- Exams for TEST200
+    (2, 'Final - 200', 100, 100, true);  -- Exams for TEST200
 
 INSERT INTO solution (exam_id) VALUES
     (1),
