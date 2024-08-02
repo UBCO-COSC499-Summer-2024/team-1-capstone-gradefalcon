@@ -176,7 +176,9 @@ export default function StudentDashboard() {
                               className="hover:bg-gray-100 cursor-pointer"
                               onClick={() => {
                                 if (exam.graded) {
-                                  navigate(`/ViewExamDetails`);
+                                  navigate(`/ViewExamDetails`, {
+                                    state: { exam_id: exam.exam_id },
+                                  });
                                 }
                               }}
                             >

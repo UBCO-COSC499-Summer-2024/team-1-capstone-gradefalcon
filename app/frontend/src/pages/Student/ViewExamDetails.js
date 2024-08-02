@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 
 export default function ViewExamDetails() {
+  const { user, getAccessTokenSilently } = useAuth0();
   const [examDetails, setExamDetails] = useState({
     exam_title: "Sample Exam",
     course_name: "Sample Course",
@@ -13,14 +15,40 @@ export default function ViewExamDetails() {
   });
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const { exam_id } = location.state;
+
+  useEffect(() => {
+    const fetchStudentExamDetails = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const response = await fetch(`/api/exam//getStudentAttempt/${exam_id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data.exam);
+          setExamDetails(data.exam);
+        } else {
+          console.error("Failed to fetch exam details");
+        }
+      } catch (err) {
+        console.error("Error fetching exam details:", err);
+      }
+    };
+
+    fetchStudentExamDetails();
+  }, [getAccessTokenSilently, user.sub, exam_id]);
 
   return (
     <div className="flex flex-col gap-4 h-screen">
       <div className="flex justify-between items-center w-full mb-4">
-        <Button
-          className="bg-primary text-white flex items-center"
-          onClick={() => navigate(-1)}
-        >
+        <Button className="bg-primary text-white flex items-center" onClick={() => navigate(-1)}>
           <ChevronLeft className="w-4 h-4" />
         </Button>
       </div>
@@ -31,10 +59,7 @@ export default function ViewExamDetails() {
           </CardHeader>
           <CardContent className="flex-1">
             <div className="flex justify-end mb-4">
-              <Button
-                onClick={() => navigate('/ReportGradeStudent')}
-                className="bg-primary text-white flex items-center"
-              >
+              <Button onClick={() => navigate("/ReportGradeStudent")} className="bg-primary text-white flex items-center">
                 <ChevronRight className="w-4 h-4 mr-1" />
                 Report
               </Button>
