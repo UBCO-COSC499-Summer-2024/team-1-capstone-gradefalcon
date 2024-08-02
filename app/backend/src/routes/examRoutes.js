@@ -15,7 +15,9 @@ const {
   ensureDirectoryExistence,
   resetOMR,
   getCustomMarkingSchemes,
-  getExamDetails
+  getExamDetails,
+  getExamsFromClassID,
+  getStudentsByExamID
 } = require("../controllers/examController");
 const {  createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const { checkJwt, checkPermissions, checkRole } = require('../auth0'); // Importing from auth.js
@@ -35,6 +37,9 @@ router.get("/average-per-exam", checkJwt, checkPermissions(['read:examAverageDat
 router.get("/average-per-course", checkJwt, checkPermissions(['read:courseAverageData']), getAveragePerCourse); // Updated route
 router.get('/grades/:studentId', checkJwt, checkPermissions(['read:grades']), getStudentGrades);
 router.get("/getExamDetails/:exam_id", checkJwt, checkPermissions(['read:exams']), getExamDetails);
+router.get("/getExamsFromClassID/:class_id", checkJwt, checkPermissions(['read:exams']), getExamsFromClassID);
+router.get("/getStudentsByExamID/:exam_id", checkJwt, checkPermissions(['read:exams']), getStudentsByExamID);
+
 
 
 // Function to get the answer key for a specific exam
@@ -52,6 +57,8 @@ router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
     res.status(500).send("Error getting answer key");
   }
 });
+
+
 
 // Add this route to the examRoutes.js file
 

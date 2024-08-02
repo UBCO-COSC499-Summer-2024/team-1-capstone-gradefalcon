@@ -1,6 +1,6 @@
 const express = require('express');
 const { checkJwt, checkPermissions } = require('../auth0');
-const { displayClasses, displayClassManagement, importClass , getAllCourses} = require('../controllers/classController');
+const { displayClasses, displayClassManagement, importClass , getAllCourses, displayClassWithExams, getUnreadMessages} = require('../controllers/classController');
 const router = express.Router();
 
 router.use((req, res, next) => {
@@ -10,6 +10,14 @@ router.use((req, res, next) => {
 router.post('/classes', checkJwt, (req, res, next) => {
   checkPermissions(['read:classes'])(req, res, next);
 }, displayClasses);
+
+router.post('/classWithExams/:class_id', checkJwt, (req, res, next) => {
+  checkPermissions(['read:classManagement'])(req, res, next);
+}, displayClassWithExams);
+
+router.get('/unreadMessages', checkJwt, (req, res, next) => {
+  checkPermissions(['read:messages'])(req, res, next);
+},getUnreadMessages);
 
 router.post('/classManagement/:class_id', checkJwt, (req, res, next) => {
   checkPermissions(['read:classManagement'])(req, res, next);

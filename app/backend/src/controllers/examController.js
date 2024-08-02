@@ -340,6 +340,32 @@ const getExamDetails = async (req, res, next) => {
   }
 };
 
+// Get exams for a specific class
+const getExamsFromClassID = async (req, res) => {
+  const { class_id } = req.params;
+  try {
+    const result = await pool.query("SELECT * FROM exam WHERE class_id = $1", [class_id]);
+    res.json({ exams: result.rows || [] }); // Always respond with an array
+  } catch (err) {
+    console.error("Error fetching exams:", err);
+    res.status(500).json({ message: "Failed to fetch exams" });
+  }
+};
+
+const getStudentsByExamID = async (req, res) => {
+  const { exam_id } = req.params;
+  try {
+    const result = await pool.query(
+      "SELECT s.student_id, s.name FROM studentResults sr JOIN student s ON sr.student_id = s.student_id WHERE sr.exam_id = $1",
+      [exam_id]
+    );
+    res.json({ students: result.rows || [] }); // Always respond with an array
+  } catch (err) {
+    console.error("Error fetching students:", err);
+    res.status(500).json({ message: "Failed to fetch students" });
+  }
+};
+
 
 module.exports = {
   saveQuestions,
@@ -359,4 +385,6 @@ module.exports = {
   ensureDirectoryExistence,
   getCustomMarkingSchemes,
   getExamDetails,
+  getExamsFromClassID,
+  getStudentsByExamID
 };

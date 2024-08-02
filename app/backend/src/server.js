@@ -11,6 +11,7 @@ const userRoutes = require('./routes/userRoutes');
 const examRoutes = require('./routes/examRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const courseRoutes = require('./routes/courseRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
 
@@ -79,6 +80,7 @@ app.use('/exam', checkJwt,  examRoutes);
 app.use('/users', checkJwt,  userRoutes);
 app.use('/upload', checkJwt,  uploadRoutes);
 app.use('/courses', checkJwt,  courseRoutes);
+app.use('/reports', reportRoutes);
 
 app.get('/healthz', (req, res) => {
   res.send('I am happy and healthy\n');
