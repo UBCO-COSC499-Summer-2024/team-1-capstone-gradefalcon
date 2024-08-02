@@ -43,7 +43,7 @@ const getManagementApiAccessToken = async () => {
 const displayClasses = async (req, res, next) => {
   try {
     const instructorAuth0Id = req.auth.sub; // Get the instructor ID from the JWT
-    const result = await pool.query("SELECT * FROM classes WHERE instructor_id = $1", [instructorAuth0Id]);
+    const result = await pool.query("SELECT * FROM classes WHERE instructor_id = $1 ORDER BY active DESC", [instructorAuth0Id]);
     res.json(result.rows); // Send the list of classes as JSON
   } catch (err) {
     console.error("Error in displayClasses:", err); // Log any errors
@@ -120,10 +120,7 @@ const importClass = async (req, res) => {
 
     let classId;
     if (classQuery.rows.length === 0) {
-      const newClassQuery = await pool.query(
-        "INSERT INTO classes (course_id, instructor_id, course_name) VALUES ($1, $2, $3) RETURNING class_id",
-        [courseId, instructorId, courseName]
-      );
+      const newClassQuery = await pool.query("INSERT INTO classes (course_id, instructor_id, course_name, active) VALUES ($1, $2, $3, $4) RETURNING class_id", [courseId, instructorId, courseName, true]);
       classId = newClassQuery.rows[0].class_id;
     } else {
       classId = classQuery.rows[0].class_id;
@@ -197,6 +194,7 @@ const importClass = async (req, res) => {
     res.status(500).json({ message: "Error importing class" });
   }
 };
+
 // Fetch all courses
 const getAllCourses = async (req, res, next) => {
   const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
@@ -204,6 +202,118 @@ const getAllCourses = async (req, res, next) => {
     const result = await pool.query("SELECT class_id, course_id, course_name FROM classes WHERE instructor_id = $1", [auth0_id]);
     res.json(result.rows);
   } catch (err) {
+    next(err);
+  }
+};
+
+const archiveCourse = async (req, res, next) => {
+  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
+  const { class_id } = req.body; // Get class ID from request body
+
+  try {
+    // Update the active status of the course to false (archived)
+    const result = await pool.query(
+      "UPDATE classes SET active = false WHERE class_id = $1 AND instructor_id = $2 RETURNING *",
+      [class_id, auth0_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Course not found or you do not have permission to archive this course." });
+    }
+
+    res.json({ message: "Course archived successfully", course: result.rows[0] });
+  } catch (err) {
+    console.error("Error archiving course:", err);
+    next(err);
+  }
+};
+
+const unarchiveCourse = async (req, res, next) => {
+  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
+  const { class_id } = req.body; // Get class ID from request body
+
+  try {
+    // Update the active status of the course to true (unarchived)
+    const result = await pool.query(
+      "UPDATE classes SET active = true WHERE class_id = $1 AND instructor_id = $2 RETURNING *",
+      [class_id, auth0_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Course not found or you do not have permission to unarchive this course." });
+    }
+
+    res.json({ message: "Course unarchived successfully", course: result.rows[0] });
+  } catch (err) {
+    console.error("Error unarchiving course:", err);
+    next(err);
+  }
+};
+
+const deleteCourse = async (req, res, next) => {
+  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
+  const { class_id } = req.body; // Get class ID from request body
+
+  try {
+    // Verify that the instructor owns the course
+    const courseVerificationResult = await pool.query(
+      "SELECT class_id FROM classes WHERE class_id = $1 AND instructor_id = $2",
+      [class_id, auth0_id]
+    );
+
+    if (courseVerificationResult.rowCount === 0) {
+      return res.status(403).json({ message: "Course not found or you do not have permission to delete this course." });
+    }
+
+    // Start a transaction to ensure atomicity
+    await pool.query('BEGIN');
+
+    // Delete from enrollment
+    await pool.query("DELETE FROM enrollment WHERE class_id = $1", [class_id]);
+
+    // Delete from studentResults
+    await pool.query(`
+      DELETE FROM studentResults 
+      WHERE exam_id IN (SELECT exam_id FROM exam WHERE class_id = $1)`, 
+      [class_id]
+    );
+
+    // Delete from scannedExam
+    await pool.query(`
+      DELETE FROM scannedExam 
+      WHERE exam_id IN (SELECT exam_id FROM exam WHERE class_id = $1)`, 
+      [class_id]
+    );
+
+    // Delete from solutions
+    await pool.query(`
+      DELETE FROM solution 
+      WHERE exam_id IN (SELECT exam_id FROM exam WHERE class_id = $1)`, 
+      [class_id]
+    );
+
+    // Delete exams
+    await pool.query("DELETE FROM exam WHERE class_id = $1", [class_id]);
+
+    // Delete class
+    const classDeleteResult = await pool.query(
+      "DELETE FROM classes WHERE class_id = $1 AND instructor_id = $2 RETURNING *",
+      [class_id, auth0_id]
+    );
+
+    if (classDeleteResult.rowCount === 0) {
+      throw new Error("Course not found or you do not have permission to delete this course.");
+    }
+
+    // Commit the transaction
+    await pool.query('COMMIT');
+
+    res.json({ message: "Course and related exams deleted successfully" });
+
+  } catch (err) {
+    // Rollback transaction in case of error
+    await pool.query('ROLLBACK');
+    console.error("Error deleting course:", err);
     next(err);
   }
 };
@@ -237,5 +347,8 @@ module.exports = {
   importClass,
   getClassNameById,
   getAllCourses,
-  getStudentCourses,
+  archiveCourse,
+  unarchiveCourse,
+  deleteCourse,
+  getStudentCourses
 };

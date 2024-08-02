@@ -26,6 +26,7 @@ CREATE TABLE classes (
     instructor_id text,
     course_id text,
     course_name text,
+    active boolean,
     unique (instructor_id, course_id)
 );
 
