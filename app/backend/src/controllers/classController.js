@@ -251,56 +251,73 @@ const unarchiveCourse = async (req, res, next) => {
 };
 
 const deleteCourse = async (req, res, next) => {
-  const { class_id } = req.body; // Get class_id from the request body
-  const auth0_id = req.auth.sub; // Get the instructor ID from the JWT
+  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
+  const { class_id } = req.body; // Get class ID from request body
 
-
-  /***********************************************************/
-  //NOTE : using CASCADE in the delete stateent would be more simple, it is 
-  //expanded for clarity of other developers at this time
-  /***********************************************************/
   try {
-    // Check if the course belongs to the instructor
-    const courseQuery = await pool.query(
+    // Verify that the instructor owns the course
+    const courseVerificationResult = await pool.query(
       "SELECT class_id FROM classes WHERE class_id = $1 AND instructor_id = $2",
       [class_id, auth0_id]
     );
 
-    if (courseQuery.rows.length === 0) {
-      return res.status(404).json({ message: "Course not found or you do not have permission to delete this course." });
+    if (courseVerificationResult.rowCount === 0) {
+      return res.status(403).json({ message: "Course not found or you do not have permission to delete this course." });
     }
 
-    // Delete student results for all exams in this course
-    await pool.query(
-      "DELETE FROM studentResults WHERE exam_id IN (SELECT exam_id FROM exam WHERE class_id = $1)",
+    // Start a transaction to ensure atomicity
+    await pool.query('BEGIN');
+
+    // Delete from enrollment
+    await pool.query("DELETE FROM enrollment WHERE class_id = $1", [class_id]);
+
+    // Delete from studentResults
+    await pool.query(`
+      DELETE FROM studentResults 
+      WHERE exam_id IN (SELECT exam_id FROM exam WHERE class_id = $1)`, 
       [class_id]
     );
 
-    // Delete enrollments for this class
-    await pool.query(
-      "DELETE FROM enrollment WHERE class_id = $1",
+    // Delete from scannedExam
+    await pool.query(`
+      DELETE FROM scannedExam 
+      WHERE exam_id IN (SELECT exam_id FROM exam WHERE class_id = $1)`, 
       [class_id]
     );
 
-    // Delete exams associated with this class
-    await pool.query(
-      "DELETE FROM exam WHERE class_id = $1",
+    // Delete from solutions
+    await pool.query(`
+      DELETE FROM solution 
+      WHERE exam_id IN (SELECT exam_id FROM exam WHERE class_id = $1)`, 
       [class_id]
     );
 
-    // Delete the class itself
-    await pool.query(
-      "DELETE FROM classes WHERE class_id = $1",
-      [class_id]
+    // Delete exams
+    await pool.query("DELETE FROM exam WHERE class_id = $1", [class_id]);
+
+    // Delete class
+    const classDeleteResult = await pool.query(
+      "DELETE FROM classes WHERE class_id = $1 AND instructor_id = $2 RETURNING *",
+      [class_id, auth0_id]
     );
 
-    res.status(200).json({ message: "Course and associated exams deleted successfully." });
+    if (classDeleteResult.rowCount === 0) {
+      throw new Error("Course not found or you do not have permission to delete this course.");
+    }
+
+    // Commit the transaction
+    await pool.query('COMMIT');
+
+    res.json({ message: "Course and related exams deleted successfully" });
+
   } catch (err) {
+    // Rollback transaction in case of error
+    await pool.query('ROLLBACK');
     console.error("Error deleting course:", err);
-    res.status(500).json({ message: "Error deleting course" });
     next(err);
   }
 };
+
 // Fetch courses that a particular student is enrolled in
 const getStudentCourses = async (req, res, next) => {
   try {

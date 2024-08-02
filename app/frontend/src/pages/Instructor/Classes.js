@@ -109,13 +109,30 @@ const Classes = () => {
     }
   };
 
-  const handleDeleteCourse = (classId) => {
-    // Placeholder function for deleting a course
-    // Implement the API call here when ready
-    // fetch(`/api/class/delete/${classId}`, { method: "DELETE" });
-    console.log(`Delete course with ID: ${classId}`);
-    setDialogOpen(false); // Close dialog after confirmation
-    setConfirmDelete(false); // Reset checkbox
+  const handleDeleteCourse = async (classId) => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await fetch(`/api/class/delete-course`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ class_id: classId }), // Send class_id in the request body
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to delete course");
+      }
+  
+      // Refresh the list of classes after deletion
+      fetchClasses();
+      setDialogOpen(false); // Close dialog after confirmation
+      setConfirmDelete(false); // Reset checkbox
+    } catch (error) {
+      console.error("Error deleting course:", error);
+      setError("Error deleting course");
+    }
   };
 
   return (
