@@ -18,6 +18,8 @@ const {
   getStudentExams,
   deleteAllFilesInDir,
   getStudentAttempt,
+  fetchStudentExam,
+  fetchSolution,
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const { checkJwt, checkPermissions, checkRole } = require("../auth0"); // Importing from auth.js
@@ -589,8 +591,6 @@ router.post("/fetchImage", checkJwt, checkPermissions(["read:image"]), async fun
   }
   console.log(req.body.file_name);
   try {
-    // Send the image file
-    const filename = 'back_page.png';
     // imagesFolderPath = path.resolve(__dirname, `../../uploads/Students/exam_id_5/student_id_1/${filename}`);
     res.sendFile(imagesFolderPath);
   } catch (error) {
@@ -735,6 +735,10 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
       res.status(500).json("Error reading front_page.csv");
     });
 });
+
+router.post("/fetchStudentExam/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchStudentExam);
+
+router.post("/fetchSolution/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchSolution);
 
 //test routes
 router.post("/test", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
