@@ -3,8 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Progress } from "../../components/ui/progress"; // Importing the Progress component from Shadcn UI
 import { Button } from "../../components/ui/button"; // Importing the Button component from Shadcn UI
 import "../../css/App.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const ViewExam = () => {
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const location = useLocation();
   const navigate = useNavigate();
   const { student_id, exam_id, front_page, back_page } = location.state || {};
@@ -14,6 +16,7 @@ const ViewExam = () => {
 
   useEffect(() => {
     const fetchExam = async () => {
+      const token = await getAccessTokenSilently(); // Get the token
       if (!student_id) {
         console.log("Student ID is missing");
         return;
@@ -28,11 +31,33 @@ const ViewExam = () => {
             body: JSON.stringify({ side, file_name }),
           });
 
-          const blob = await response.blob();
-          const url = URL.createObjectURL(blob);
+        const back_page_response = await fetch("/api/exam/fetchImage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify({ side: "back", file_name: back_page }),
+        });
+        // const data2 = await responseImage.json();
+        // console.log(data2);
+        let blob = await back_page_response.blob();
+        let url = URL.createObjectURL(blob);
+        setBackSrc(url);
 
-          const img = new Image();
-          img.src = url;
+        const front_page_response = await fetch("/api/exam/fetchImage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify({ side: "front", file_name: front_page }),
+        });
+        // const data2 = await responseImage.json();
+        // console.log(data2);
+        blob = await front_page_response.blob();
+        url = URL.createObjectURL(blob);
+        setFrontSrc(url);
 
           img.onload = () => {
             setSrc(url);
@@ -80,7 +105,7 @@ const ViewExam = () => {
     };
 
     fetchExam();
-  }, [student_id, front_page, back_page]);
+  }, [student_id, examFileId, getAccessTokenSilently, isAuthenticated]);
 
   return (
     <div className="App">

@@ -609,7 +609,7 @@ router.post("/callOMR", checkJwt, checkPermissions(["upload:file"]), async funct
 });
 
 // Route to fetch the first PNG image in the folder
-router.get("/fetchImage", checkJwt, checkPermissions(["read:image"]), async function (req, res) {
+router.post("/fetchImage", checkJwt, checkPermissions(["read:image"]), async function (req, res) {
   let imagesFolderPath;
   if (req.body.side === "back") {
     imagesFolderPath = path.join(
