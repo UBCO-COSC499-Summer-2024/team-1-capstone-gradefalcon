@@ -1,5 +1,51 @@
 # Personal Log
 
+## Thursday (7/31 - 8/01)
+
+## TimeSheet
+Clockify report
+![alt text](../Clockify/Bennett/07_31_2024-08_01_2024.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Archive and Delete courses+exams 
+  * #2: Restricting access to pages based on user roles
+
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>COMPLETED
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>2
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * completed and merged the archive/delete courses and exams feature on the frontend and backend, it was fairly uneventfull and went good, now moving onto restricting acess to pages based on roles
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Going to finish restricting acess to pages based on roles, then after fridays testing presentation will quickly sort out any bugs, defects or recommended changes based on feedback, after that a reveiw of feature testing will be carried out (i.e unit testing)
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Personal Log
+
 ## Tuesday (7/26 - 7/30)
 
 ## TimeSheet
