@@ -215,6 +215,9 @@ const saveResults = async (req, res, next) => {
         ]);
       }
     }
+    // Update the "graded" status in the exams table
+    await pool.query("UPDATE exam SET graded = true WHERE exam_id = $1", [exam_id]);
+
     res.send({ message: "Scores saved successfully" });
     resetOMR();
   } catch (error) {
