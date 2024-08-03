@@ -1,3 +1,85 @@
+## Wednesday (31/7- 2/8)
+
+### Timesheet
+Clockify report
+![Clockify report](../Clockify/aug2_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Writing Account settings
+  * #2: Storing user metadata on token and reading token
+  * #3: Students make report on Exam, Instructor Reviews Report
+  * #4: Students make report on Exam, Instructor Reviews Report and change result
+  * #5: CheckRole From token using Protected Route For increased RBAC Merging with Bennet
+
+    
+### Progress Update (since 31/7/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Writing Account settings
+        </td>
+        <!-- Status -->
+        <td> Complete
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Storing user metadata on token and reading token
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Students make report on Exam, Instructor Reviews Report and change result
+        </td>
+        <!-- Status -->
+        <td> In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>CheckRole From token using Protected Route For increased RBAC Merging with Bennet
+        </td>
+        <!-- Status -->
+        <td> In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+### Summary
+This week, my primary focus was on completing the account settings feature, integrating student reporting, and enhancing role-based access control (RBAC) using Auth0. Implementing the account settings allowed users to change their username, email, and password. While updating this information in the database was straightforward, making these changes on Auth0 required more effort than anticipated. However, the end result is a secure and efficient system that I believe outperforms other account settings implementations. For password resets, an email with a reset link is sent, refreshing the token and forcing the user to log in again. Email and username changes are handled securely using Auth0 functions.
+
+In terms of student reporting, significant progress was made. Students can now submit reports on exams, which trigger a notification for instructors. Instructors can view, organize, and respond to these reports, and even adjust grades if necessary. Most functionalities are complete, with some final adjustments needed to display new reports in the instructor's interface.
+
+For RBAC, I added roles to the Auth0 token and securely extracted this information on the backend to enforce protected routes. This ensures users can only access pages their role permits. Bennett's approach to this differed, and combining our methods should result in a highly secure and innovative RBAC implementation.
+
+#### In Progress:
+- **Displaying new reports on the instructor side**: In Progress
+- **Merging RBAC implementations with Bennett**: In Progress
+
+### Reflections and Lessons Learned:
+This cycle underscored the importance of thorough testing and secure coding practices. Successfully implementing Auth0 and solving related challenges strengthened the project's infrastructure. The focus on security, especially with RBAC, highlighted the need for continuous improvement and collaboration. 
+
+On a personal note, this cycle has been incredibly demanding. I felt extremely busy, having not slept for two days due to multiple assignments, exams, and project deadlines. This left me feeling slow and unproductive while coding, which likely contributed to not finishing all the work I intended on time. Despite these challenges, I recognize the importance of resilience and adaptability. Moving forward, better communication and regular updates with my team are essential. I aim to complete the remaining tasks, ensure comprehensive test coverage, and maintain a collaborative environment.
+
+### Adjustments and Future Plans:
+- Merge and refine RBAC implementations for enhanced security.
+- Enhance test coverage
+- Implement logging for grade changes, including displaying instructor comments on student side.
+
+
+
+
 ## Wednesday (25/7- 30/7)
 
 ### Timesheet
