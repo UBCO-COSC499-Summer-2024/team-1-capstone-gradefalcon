@@ -123,6 +123,7 @@ const ConfirmExamKey = () => {
           question: i,
           option: optionSpan.innerText,
         });
+
         optionsDiv.appendChild(optionSpan);
       }
 

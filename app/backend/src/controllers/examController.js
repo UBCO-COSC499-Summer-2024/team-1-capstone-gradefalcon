@@ -215,6 +215,9 @@ const saveResults = async (req, res, next) => {
         ]);
       }
     }
+    // Update the "graded" status in the exams table
+    await pool.query("UPDATE exam SET graded = true WHERE exam_id = $1", [exam_id]);
+
     res.send({ message: "Scores saved successfully" });
     resetOMR();
   } catch (error) {
@@ -304,8 +307,9 @@ const getExamDetails = async (req, res, next) => {
 
   try {
     const examQuery = `
-      SELECT e.exam_id, e.exam_title, e.total_questions, e.total_marks, e.mean, e.high, e.low, e.upper_quartile, e.lower_quartile, e.page_count, e.file_size, 
-             c.course_id, c.course_name
+      SELECT e.exam_id, e.exam_title, e.total_questions, e.total_marks, e.mean, e.high, e.low, 
+      e.upper_quartile, e.lower_quartile, e.page_count, e.viewing_options, graded,
+      c.course_id, c.course_name
       FROM exam e
       JOIN classes c ON e.class_id = c.class_id
       WHERE e.exam_id = $1
@@ -357,6 +361,74 @@ const getStudentExams = async (req, res, next) => {
   }
 };
 
+const getStudentAttempt = async (req, res, next) => {
+  const studentId = req.auth.sub; // Get the student ID from Auth0 token
+  const examId = parseInt(req.params.exam_id, 10);
+
+  try {
+    const exam = await pool.query(
+      `
+      SELECT exam_id, student_id, grade, exam_title, course_id, course_name, viewing_options 
+      from studentResults 
+      join student using (student_id) 
+	    join exam using (exam_id)
+	    join classes using (class_id)
+      where auth0_id = $1 and exam_id = $2
+    `,
+      [studentId, examId]
+    );
+    res.json({ exam: exam.rows[0] });
+  } catch (err) {
+    console.error("Error fetching student exams:", err);
+    next(err);
+  }
+};
+
+const fetchStudentExam = async (req, res, next) => {
+  const auth0_id = req.auth.sub; // Get the student ID from Auth0 token
+  const exam_id = parseInt(req.params.exam_id, 10);
+  const file_name = req.body.page;
+  console.log("file_name", file_name);
+  try {
+    const exams = await pool.query(
+      `
+      SELECT student_id
+      FROM student
+      WHERE auth0_id = $1
+    `,
+      [auth0_id]
+    );
+    const student_id = exams.rows[0].student_id;
+    const folderPath = path.join(__dirname, `../../uploads/Students/exam_id_${exam_id}/student_id_${student_id}/${file_name}`);
+    console.log("folderPath", folderPath);
+    res.sendFile(folderPath);
+  } catch (err) {
+    console.error("Error fetching student exams:", err);
+    next(err);
+  }
+};
+
+const fetchSolution = async (req, res, next) => {
+  const exam_id = req.params.exam_id;
+  try {
+    const solutionResult = await pool.query("SELECT answers FROM solution WHERE exam_id = $1", [exam_id]);
+
+    if (solutionResult.rows.length === 0) {
+      throw new Error("Solution not found");
+    }
+
+    const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
+
+    // Extract the answers in order
+    const answersInOrder = answersArray.map((answer) => answer.split(":")[1]);
+
+    res.json(answersInOrder);
+  } catch (error) {
+    console.error("Error fetching solution:", error);
+    res.status(500).json({ message: "Failed to fetch solution" });
+  }
+};
+
 module.exports = {
   saveQuestions,
   newExam,
@@ -376,4 +448,7 @@ module.exports = {
   getCustomMarkingSchemes,
   getExamDetails,
   getStudentExams,
+  getStudentAttempt,
+  fetchStudentExam,
+  fetchSolution,
 };

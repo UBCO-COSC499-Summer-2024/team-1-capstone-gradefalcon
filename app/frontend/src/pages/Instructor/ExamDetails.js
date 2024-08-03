@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Plot from 'react-plotly.js';
+import { useParams, useNavigate } from "react-router-dom";
+import Plot from "react-plotly.js";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
@@ -27,6 +27,8 @@ const ExamDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchExamData = async () => {
       try {
@@ -35,11 +37,11 @@ const ExamDetails = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
         });
-  
+
         if (response.ok) {
           const data = await response.json();
           setExamData(data);
@@ -52,7 +54,7 @@ const ExamDetails = () => {
         setLoading(false);
       }
     };
-  
+
     fetchExamData();
   }, [exam_id, getAccessTokenSilently]);
 
@@ -84,8 +86,8 @@ const ExamDetails = () => {
     return <div>{error}</div>;
   }
 
-  const grades = examData.studentResults.map(result => result.grade);
-  const darkGreenColor = '#006400'; // Darker green color hex code
+  const grades = examData.studentResults.map((result) => result.grade);
+  const darkGreenColor = "#006400"; // Darker green color hex code
   const minGrade = Math.min(...grades);
   const maxGrade = Math.max(...grades);
   const meanGrade = (grades.reduce((a, b) => a + b, 0) / grades.length).toFixed(2);
@@ -96,52 +98,52 @@ const ExamDetails = () => {
   const layout = {
     width: 400,
     height: 300,
-    title: 'Box Plot of Exam Grades',
+    title: "Box Plot of Exam Grades",
     yaxis: {
       showticklabels: false,
     },
     xaxis: {
-      title: 'Grades',
+      title: "Grades",
       zeroline: false,
     },
     shapes: [
       {
-        type: 'line',
+        type: "line",
         y0: 0,
         y1: 1,
-        yref: 'paper',
+        yref: "paper",
         x0: minGrade,
         x1: minGrade,
         line: {
-          color: 'blue',
+          color: "blue",
           width: 2,
-          dash: 'dot',
+          dash: "dot",
         },
       },
       {
-        type: 'line',
+        type: "line",
         y0: 0,
         y1: 1,
-        yref: 'paper',
+        yref: "paper",
         x0: maxGrade,
         x1: maxGrade,
         line: {
-          color: 'blue',
+          color: "blue",
           width: 2,
-          dash: 'dot',
+          dash: "dot",
         },
       },
       {
-        type: 'line',
+        type: "line",
         y0: 0,
         y1: 1,
-        yref: 'paper',
+        yref: "paper",
         x0: meanGrade,
         x1: meanGrade,
         line: {
-          color: 'blue',
+          color: "blue",
           width: 2,
-          dash: 'dot',
+          dash: "dot",
         },
       },
     ],
@@ -149,8 +151,8 @@ const ExamDetails = () => {
       {
         y: 1,
         x: minGrade,
-        yref: 'paper',
-        xref: 'x',
+        yref: "paper",
+        xref: "x",
         text: `Min: ${minGrade}`,
         showarrow: true,
         arrowhead: 7,
@@ -161,8 +163,8 @@ const ExamDetails = () => {
       {
         y: 1,
         x: maxGrade,
-        yref: 'paper',
-        xref: 'x',
+        yref: "paper",
+        xref: "x",
         text: `Max: ${maxGrade}`,
         showarrow: true,
         arrowhead: 7,
@@ -173,8 +175,8 @@ const ExamDetails = () => {
       {
         y: 1,
         x: meanGrade,
-        yref: 'paper',
-        xref: 'x',
+        yref: "paper",
+        xref: "x",
         text: `Mean: ${meanGrade}`,
         showarrow: true,
         arrowhead: 7,
@@ -192,9 +194,7 @@ const ExamDetails = () => {
           <ChevronLeftIcon className="h-4 w-4" />
           <span className="sr-only">Back</span>
         </Button>
-        <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-          {examData.exam_title}
-        </h1>
+        <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">{examData.exam_title}</h1>
         <div className="flex items-center gap-2 ml-auto">
           <TooltipProvider>
             <Tooltip delayDuration={0}>
@@ -204,15 +204,13 @@ const ExamDetails = () => {
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Export</span>
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
-                Export results as a CSV file.
-              </TooltipContent>
+              <TooltipContent>Export results as a CSV file.</TooltipContent>
             </Tooltip>
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
                 <Drawer>
                   <DrawerTrigger asChild>
-                    <Button size="sm" className="h-8 gap-1 text-white" style={{ backgroundColor: 'hsl(var(--primary))' }}>
+                    <Button size="sm" className="h-8 gap-1 text-white" style={{ backgroundColor: "hsl(var(--primary))" }}>
                       <BarChartIcon className="h-4 w-4" />
                     </Button>
                   </DrawerTrigger>
@@ -227,8 +225,8 @@ const ExamDetails = () => {
                           data={[
                             {
                               x: grades,
-                              type: 'box',
-                              boxpoints: 'all',
+                              type: "box",
+                              boxpoints: "all",
                               jitter: 0.3,
                               pointpos: -1.8,
                               marker: { color: darkGreenColor },
@@ -236,10 +234,10 @@ const ExamDetails = () => {
                               whiskerwidth: 1,
                               boxmean: true,
                               meanline: {
-                                color: 'blue',
+                                color: "blue",
                                 width: 2,
                               },
-                              hoverinfo: 'x',
+                              hoverinfo: "x",
                             },
                           ]}
                           layout={layout}
@@ -254,9 +252,7 @@ const ExamDetails = () => {
                   </DrawerContent>
                 </Drawer>
               </TooltipTrigger>
-              <TooltipContent>
-                View analysis of exam results.
-              </TooltipContent>
+              <TooltipContent>View analysis of exam results.</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
@@ -280,11 +276,27 @@ const ExamDetails = () => {
               </TableHeader>
               <TableBody>
                 {examData.studentResults.map((result) => (
-                  <TableRow key={result.student_id}>
-                    <TableCell>{result.student_id}</TableCell>
-                    <TableCell>{result.student_name}</TableCell>
-                    <TableCell>{result.grade}</TableCell>
-                  </TableRow>
+                  <TooltipProvider key={result.student_id}>
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        <TableRow
+                          onClick={() => {
+                            navigate(`/ViewExam`, {
+                              state: { student_id: result.student_id, exam_id: exam_id },
+                            });
+                          }}
+                          key={result.student_id}
+                        >
+                          <TableCell>{result.student_id}</TableCell>
+                          <TableCell>{result.student_name}</TableCell>
+                          <TableCell>{result.grade}</TableCell>
+                        </TableRow>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Click for details</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 ))}
               </TableBody>
             </Table>

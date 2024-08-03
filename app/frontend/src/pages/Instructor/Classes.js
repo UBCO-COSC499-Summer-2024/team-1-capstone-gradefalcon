@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Added useNavigate
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
@@ -10,17 +10,14 @@ import { ArrowUpRight, MoreHorizontal } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Badge } from "../../components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "../../components/ui/dropdown-menu";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "../../components/ui/dropdown-menu";
 import { Label } from "../../components/ui/label";
 import { CheckboxRed } from "../../components/ui/checkbox";
 
 const Classes = () => {
   const { getAccessTokenSilently } = useAuth0();
+  const navigate = useNavigate(); // Defined useNavigate
   const [classes, setClasses] = useState([]);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("active"); // Default tab is 'active'
@@ -163,45 +160,57 @@ const Classes = () => {
                         const status = classItem.active === null || classItem.active === true ? "Active" : "Archived";
                         const statusClass = classItem.active === null || classItem.active === true ? "text-green-600 border-green-600" : "text-gray-500 border-gray-500";
                         return (
-                          <TableRow key={index}>
-                            <TableCell>
-                              <div className="font-medium">{classItem.course_name}</div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
-                            <TableCell>
-                              <Badge variant="outline" className={statusClass}>
-                                {status}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell flex justify-end">
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="sm" className="flex items-center">
-                                    <MoreHorizontal className="h-5 w-5" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                  {classItem.active ? (
-                                    <DropdownMenuItem onSelect={() => handleArchiveCourse(classItem.class_id)}>
-                                      Archive Course
-                                    </DropdownMenuItem>
-                                  ) : (
-                                    <DropdownMenuItem onSelect={() => handleUnarchiveCourse(classItem.class_id)}>
-                                      Re-activate Course
-                                    </DropdownMenuItem>
-                                  )}
-                                  <DropdownMenuItem
-                                    onSelect={() => {
-                                      setSelectedClass(classItem);
-                                      setDialogOpen(true);
-                                    }}
-                                  >
-                                    Delete Course
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </TableCell>
-                          </TableRow>
+                          <TooltipProvider key={index}>
+                            <Tooltip delayDuration={0}>
+                              <TooltipTrigger asChild>
+                                <TableRow
+                                  className="hover:bg-gray-100 cursor-pointer"
+                                  onClick={() => navigate(`/ClassManagement/${classItem.class_id}`)}
+                                >
+                                  <TableCell>
+                                    <div className="font-medium">{classItem.course_name}</div>
+                                  </TableCell>
+                                  <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
+                                  <TableCell>
+                                    <Badge variant="outline" className={statusClass}>
+                                      {status}
+                                    </Badge>
+                                  </TableCell>
+                                  <TableCell className="hidden sm:table-cell flex justify-end">
+                                    <DropdownMenu>
+                                      <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="sm" className="flex items-center">
+                                          <MoreHorizontal className="h-5 w-5" />
+                                        </Button>
+                                      </DropdownMenuTrigger>
+                                      <DropdownMenuContent>
+                                        {classItem.active ? (
+                                          <DropdownMenuItem onSelect={() => handleArchiveCourse(classItem.class_id)}>
+                                            Archive Course
+                                          </DropdownMenuItem>
+                                        ) : (
+                                          <DropdownMenuItem onSelect={() => handleUnarchiveCourse(classItem.class_id)}>
+                                            Re-activate Course
+                                          </DropdownMenuItem>
+                                        )}
+                                        <DropdownMenuItem
+                                          onSelect={() => {
+                                            setSelectedClass(classItem);
+                                            setDialogOpen(true);
+                                          }}
+                                        >
+                                          Delete Course
+                                        </DropdownMenuItem>
+                                      </DropdownMenuContent>
+                                    </DropdownMenu>
+                                  </TableCell>
+                                </TableRow>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Click to view course</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         );
                       })}
                     </TableBody>

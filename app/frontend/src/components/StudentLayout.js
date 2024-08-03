@@ -2,6 +2,7 @@ import React from 'react';
 import '@fontsource/inter/latin.css'; // Import the font
 import '../css/App.css'; // Import global styles
 import { useLocation, Link } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { ClipboardCheck, Settings, LogOut, Flag } from "lucide-react"; // Import Flag icon
 import {
   Breadcrumb,
@@ -10,23 +11,34 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
 } from '../components/ui/breadcrumb';
+import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "../components/ui/button";
 
 const StudentLayout = ({ children }) => {
   const location = useLocation();
-
+  const navigate = useNavigate();
+  const { logout } = useAuth0();
   const handleLogout = async () => {
+    // try {
+    //   const response = await fetch("/api/auth/logout", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //   });
+    //   if (response.ok) {
+    //     alert("Logged out");
+    //     window.location.href = "/";
+    //   } else {
+    //     console.error("Logout failed");
+    //   }
+    // } catch (error) {
+    //   console.error("Error:", error);
+    // }
     try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (response.ok) {
-        alert("Logged out");
-        window.location.href = "/";
-      } else {
-        console.error("Logout failed");
-      }
+      // Perform the Auth0 logout
+      logout({ logoutParams: { returnTo: window.location.origin } });
+
+      // Optionally navigate to a different page after logout
+      navigate("/");
     } catch (error) {
       console.error("Error:", error);
     }

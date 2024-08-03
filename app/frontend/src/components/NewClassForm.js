@@ -153,90 +153,90 @@ const NewClassForm = ({ setIsDialogOpen }) => {
 
   return (
     <ToastProvider>
-    <form>
-      <Card className="p-3">
-        <CardHeader>
-          <CardTitle className="text-lg">Create New Class</CardTitle>
-          <CardDescription className="text-sm">
-            Enter the details for the new class and upload the student list.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-3">
-            <Label htmlFor="course-name" className="block text-sm font-medium text-gray-700">
-              Course Name:
-            </Label>
-            <Input
-              type="text"
-              id="course-name"
-              data-testid="courseName"
-              className="input-field mt-1 block w-full"
-              value={courseName}
-              onChange={(e) => setCourseName(e.target.value)}
-            />
-          </div>
-          <div className="mb-3">
-            <Label htmlFor="course-id" className="block text-sm font-medium text-gray-700">
-              Course ID:
-            </Label>
-            <Input
-              type="text"
-              id="course-id"
-              data-testid="courseId"
-              className="input-field mt-1 block w-full"
-              value={courseId}
-              onChange={(e) => setCourseId(e.target.value)}
-            />
-          </div>
-          <p className="mb-3 text-sm">Import a CSV file containing the student names, their student IDs, and student emails in your class.</p>
-          <div className="file-input-container">
-            <label className="file-input-button text-sm">
-              Choose File
-              <input
-                type="file"
-                accept=".csv"
-                ref={fileInputRef}
-                data-testid="csvFile"
-                className="hidden"
-                onChange={handleFileChange}
+      <form>
+        <Card className="p-3">
+          <CardHeader>
+            <CardTitle className="text-lg">Create New Class</CardTitle>
+            <CardDescription className="text-sm">
+              Enter the details for the new class and upload the student list.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-3">
+              <Label htmlFor="course-name" className="block text-sm font-medium text-gray-700">
+                Course Name:
+              </Label>
+              <Input
+                type="text"
+                id="course-name"
+                data-testid="courseName"
+                className="input-field mt-1 block w-full"
+                value={courseName}
+                onChange={(e) => setCourseName(e.target.value)}
               />
-            </label>
-            <span className="file-input-label text-sm">no file selected</span>
-          </div>
-          <div className="flex gap-2 mt-3">
-            <Button size="sm" onClick={handleFileUpload} data-testid="uploadButton">
-              <span>Import</span>
-            </Button>
-          </div>
-          {col.length > 0 && (
-            <Table className="mt-3 w-full border-collapse text-sm">
-              <TableHead>
-                <TableRow>
-                  {col.map((col, i) => (
-                    <TableCell key={i} className="border-b py-2 text-left">
-                      {col}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody data-testid="TableBody">
-                {val.map((row, i) => (
-                  <TableRow key={i}>
-                    {row.map((cell, j) => (
-                      <TableCell key={j} className="border-b py-2">
-                        {cell}
+            </div>
+            <div className="mb-3">
+              <Label htmlFor="course-id" className="block text-sm font-medium text-gray-700">
+                Course ID:
+              </Label>
+              <Input
+                type="text"
+                id="course-id"
+                data-testid="courseId"
+                className="input-field mt-1 block w-full"
+                value={courseId}
+                onChange={(e) => setCourseId(e.target.value)}
+              />
+            </div>
+            <p className="mb-3 text-sm">Import a CSV file containing the student names, their student IDs, and student emails in your class.</p>
+            <div className="file-input-container mb-3">
+              <label className="file-input-button text-sm cursor-pointer inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[hsl(var(--primary))]">
+                Choose File
+                <input
+                  type="file"
+                  accept=".csv"
+                  ref={fileInputRef}
+                  data-testid="csvFile"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </label>
+              <span className="file-input-label text-sm">no file selected</span>
+            </div>
+            <div className="flex gap-2">
+              <Button size="sm" onClick={handleFileUpload} data-testid="uploadButton">
+                <span>Import</span>
+              </Button>
+            </div>
+            {col.length > 0 && (
+              <Table className="mt-3 w-full border-collapse text-sm">
+                <TableHead>
+                  <TableRow>
+                    {col.map((col, i) => (
+                      <TableCell key={i} className="border-b py-2 text-left">
+                        {col}
                       </TableCell>
                     ))}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
-      <ToastViewport />
-    </form>
-  </ToastProvider>
+                </TableHead>
+                <TableBody data-testid="TableBody">
+                  {val.map((row, i) => (
+                    <TableRow key={i}>
+                      {row.map((cell, j) => (
+                        <TableCell key={j} className="border-b py-2">
+                          {cell}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+        <ToastViewport />
+      </form>
+    </ToastProvider>
   );
 };
 
