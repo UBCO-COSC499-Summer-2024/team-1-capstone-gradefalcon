@@ -48,7 +48,7 @@
 
 ## Burn-up Chart (Velocity):
 
-- ![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](../BurnUpCharts/BurnUpChart19.png)
+- ![docs/weekly logs/Burn Up Charts/[Burn Up Chart Image]](../BurnUpCharts/BurnUpCharts19.png)
 
 ## Times for Team/Individual:
 
