@@ -31,7 +31,7 @@
 
 ### Alternatively, include image of the project board with tasks and status:
 
-- ![Backlog](../Backlog/31July-2Aug-Backlog.png)
+- ![Backlog](../Backlog/31july-2aug-Backlog.png)
 
 ## Tasks for Next Cycle:
 
@@ -60,7 +60,7 @@
 | Nelson Ngumo   | 47:05:00   |
 | Bennett Witt   | 65:15:00     |
 
-- ![docs/weekly logs/Clockify/[Time Tracking Image]](../Clockify/Time19.png)
+- ![docs/weekly logs/Clockify/[Time Tracking Image]](../Clockify/Time18.png)
 
 ## Completed Tasks:
 
