@@ -26,6 +26,7 @@ const ExamDetails = () => {
   const [examData, setExamData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [answers, setAnswers] = useState([]);
 
   const navigate = useNavigate();
 
@@ -47,6 +48,21 @@ const ExamDetails = () => {
           setExamData(data);
         } else {
           setError("Failed to fetch exam data");
+        }
+
+        const answersResponse = await fetch(`/api/exam/fetchSolution/${exam_id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        });
+
+        if (answersResponse.ok) {
+          const data = await answersResponse.json();
+          setAnswers(data);
+          console.log("answers", data);
         }
       } catch (error) {
         setError("Error fetching exam data");
@@ -258,51 +274,81 @@ const ExamDetails = () => {
         </div>
       </div>
 
-      <Card className="bg-white border rounded">
-        <CardHeader className="flex justify-between px-6 py-4">
-          <div>
-            <CardTitle className="mb-2">Student Results</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-80">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Student ID</TableHead>
-                  <TableHead>Student Name</TableHead>
-                  <TableHead>Grade</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {examData.studentResults.map((result) => (
-                  <TooltipProvider key={result.student_id}>
-                    <Tooltip delayDuration={0}>
-                      <TooltipTrigger asChild>
-                        <TableRow
-                          onClick={() => {
-                            navigate(`/ViewExam`, {
-                              state: { student_id: result.student_id, exam_id: exam_id },
-                            });
-                          }}
-                          key={result.student_id}
-                        >
-                          <TableCell>{result.student_id}</TableCell>
-                          <TableCell>{result.student_name}</TableCell>
-                          <TableCell>{result.grade}</TableCell>
-                        </TableRow>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Click for details</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                ))}
-              </TableBody>
-            </Table>
-          </ScrollArea>
-        </CardContent>
-      </Card>
+      <div className="flex space-x-4">
+        <Card className="bg-white border rounded w-1/2">
+          <CardHeader className="flex justify-between px-6 py-4">
+            <div>
+              <CardTitle className="mb-2">Student Results</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-80">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Student ID</TableHead>
+                    <TableHead>Student Name</TableHead>
+                    <TableHead>Grade</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {examData.studentResults.map((result) => (
+                    <TooltipProvider key={result.student_id}>
+                      <Tooltip delayDuration={0}>
+                        <TooltipTrigger asChild>
+                          <TableRow
+                            onClick={() => {
+                              navigate(`/ViewExam`, {
+                                state: { student_id: result.student_id, exam_id: exam_id },
+                              });
+                            }}
+                            key={result.student_id}
+                          >
+                            <TableCell>{result.student_id}</TableCell>
+                            <TableCell>{result.student_name}</TableCell>
+                            <TableCell>{result.grade}</TableCell>
+                          </TableRow>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Click for details</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))}
+                </TableBody>
+              </Table>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-white border rounded w-1/2">
+          <CardHeader className="flex justify-between px-6 py-4">
+            <div>
+              <CardTitle className="mb-2">Answer Key</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-80">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Question</TableHead>
+                    <TableHead>Answer</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {answers.map((answer, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{answer}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
