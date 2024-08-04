@@ -47,7 +47,7 @@ const examBoard = async (req, res, next) => {
   const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
     const classes = await pool.query(
-      "SELECT exam_id, classes.class_id, exam_title, course_id, course_name FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
+      "SELECT exam_id, classes.class_id, exam_title, course_id, course_name, graded FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
       [instructorId]
     );
 

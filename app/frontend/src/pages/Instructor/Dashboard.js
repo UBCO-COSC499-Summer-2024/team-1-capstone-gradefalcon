@@ -329,6 +329,7 @@ export default function Dashboard() {
                   <TableRow>
                     <TableHead>Exam Name</TableHead>
                     <TableHead className="hidden sm:table-cell">Course</TableHead>
+                    <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -344,6 +345,7 @@ export default function Dashboard() {
                               <span className="font-bold">{exam.exam_title}</span>
                             </TableCell>
                             <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
+                            <TableCell>{exam.graded ? "Graded" : "Not graded"}</TableCell>
                           </TableRow>
                         </TooltipTrigger>
                         <TooltipContent>
