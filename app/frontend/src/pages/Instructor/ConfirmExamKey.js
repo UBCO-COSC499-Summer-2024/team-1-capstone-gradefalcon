@@ -264,6 +264,7 @@ const ConfirmExamKey = () => {
                 questions: selectedOptions,
                 numQuestions: numQuestions,
                 markingSchemes: markingSchemes,
+                totalMarks: totalMarks,
               }}
             >
               <Button size="icon" className="h-10 w-10">

@@ -68,7 +68,9 @@ const ReviewExams = () => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
+          console.log("exam_id", exam_id);
           const data = await response.json();
+          console.log("totalMarks", data);
           setTotalMarks(data.scores[0]);
         };
 
@@ -99,9 +101,7 @@ const ReviewExams = () => {
   const handleScoreChange = (e, studentId) => {
     const newScore = e.target.value;
     setStudentScores((currentScores) =>
-      currentScores.map((score) =>
-        score.StudentID === studentId ? { ...score, Score: newScore } : score
-      )
+      currentScores.map((score) => (score.StudentID === studentId ? { ...score, Score: newScore } : score))
     );
   };
 
@@ -116,9 +116,7 @@ const ReviewExams = () => {
 
   const handleCancel = (studentId) => {
     setStudentScores((currentScores) =>
-      currentScores.map((score) =>
-        score.StudentID === studentId ? { ...score, Score: originalScores[studentId] } : score
-      )
+      currentScores.map((score) => (score.StudentID === studentId ? { ...score, Score: originalScores[studentId] } : score))
     );
     setEditStudentId(null);
     setOriginalScores((prevScores) => {
@@ -238,13 +236,7 @@ const ReviewExams = () => {
                       )}
                     </TableCell>
                     <TableCell>
-                      <Button
-                        onClick={() =>
-                          handleViewClick(student.StudentID, student.front_page, student.back_page)
-                        }
-                      >
-                        View
-                      </Button>
+                      <Button onClick={() => handleViewClick(student.StudentID, student.front_page, student.back_page)}>View</Button>
                     </TableCell>
                   </TableRow>
                 ))}
