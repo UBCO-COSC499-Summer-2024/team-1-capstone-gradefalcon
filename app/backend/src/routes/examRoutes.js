@@ -239,14 +239,21 @@ router.post("/saveStudentExams", checkJwt, checkPermissions(["upload:file"]), as
 
       const front_page_path = path.join(__dirname, `../../omr/outputs/page_1/CheckedOMRs/colored/${student.front_page}`);
       console.log("front_page_path", front_page_path);
+      const original_front_page_path = path.join(__dirname, `../../omr/inputs/page_1/${student.front_page}`);
+      console.log("original front page path", original_front_page_path);
       const back_page_path = path.join(__dirname, `../../omr/outputs/page_2/CheckedOMRs/colored/${student.back_page}`);
       console.log("back_page_path", back_page_path);
+      const original_back_page_path = path.join(__dirname, `../../omr/inputs/page_2/${student.back_page}`);
+      console.log("original back page path", original_back_page_path);
 
       const front_page_dest = path.join(destFilePath, "front_page.png");
       console.log("front_page_dest", front_page_dest);
-
+      const original_front_page_dest = path.join(destFilePath, "original_front_page.png");
+      console.log("original_front_page_dest", original_front_page_dest);
       const back_page_dest = path.join(destFilePath, "back_page.png");
       console.log("back_page_dest", back_page_dest);
+      const original_back_page_dest = path.join(destFilePath, "original_back_page.png");
+      console.log("original_back_page_dest", original_back_page_dest);
 
       ensureDirectoryExistence(destFilePath);
 
@@ -257,6 +264,10 @@ router.post("/saveStudentExams", checkJwt, checkPermissions(["upload:file"]), as
         console.log("First page copied successfully");
         fs.copyFileSync(back_page_path, back_page_dest);
         console.log("Second page copied successfully");
+        fs.copyFileSync(original_front_page_path, original_front_page_dest);
+        console.log("Original First page copied successfully");
+        fs.copyFileSync(original_back_page_path, original_back_page_dest);
+        console.log("Original Second page copied successfully");
       } catch (error) {
         console.log("Error copying files:", error);
       }
