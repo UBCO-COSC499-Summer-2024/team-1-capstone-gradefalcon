@@ -20,6 +20,8 @@ const {
   getStudentAttempt,
   fetchStudentExam,
   fetchSolution,
+  changeGrade,
+  getGradeChangeLog,
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const { checkJwt, checkPermissions, checkRole } = require("../auth0"); // Importing from auth.js
@@ -159,6 +161,8 @@ router.post("/UploadExam", checkJwt, checkPermissions(["upload:file"]), async fu
   });
 });
 
+router.post("/fetchChangelog", checkJwt, checkPermissions(["read:grades"]), getGradeChangeLog);
+
 router.post("/getResults", checkJwt, checkPermissions(["read:grades"]), async function (req, res) {
   const singlePage = req.body.singlePage;
   const inputDirPath = path.join(__dirname, "../../omr/inputs");
@@ -239,14 +243,21 @@ router.post("/saveStudentExams", checkJwt, checkPermissions(["upload:file"]), as
 
       const front_page_path = path.join(__dirname, `../../omr/outputs/page_1/CheckedOMRs/colored/${student.front_page}`);
       console.log("front_page_path", front_page_path);
+      const original_front_page_path = path.join(__dirname, `../../omr/inputs/page_1/${student.front_page}`);
+      console.log("original front page path", original_front_page_path);
       const back_page_path = path.join(__dirname, `../../omr/outputs/page_2/CheckedOMRs/colored/${student.back_page}`);
       console.log("back_page_path", back_page_path);
+      const original_back_page_path = path.join(__dirname, `../../omr/inputs/page_2/${student.back_page}`);
+      console.log("original back page path", original_back_page_path);
 
       const front_page_dest = path.join(destFilePath, "front_page.png");
       console.log("front_page_dest", front_page_dest);
-
+      const original_front_page_dest = path.join(destFilePath, "original_front_page.png");
+      console.log("original_front_page_dest", original_front_page_dest);
       const back_page_dest = path.join(destFilePath, "back_page.png");
       console.log("back_page_dest", back_page_dest);
+      const original_back_page_dest = path.join(destFilePath, "original_back_page.png");
+      console.log("original_back_page_dest", original_back_page_dest);
 
       ensureDirectoryExistence(destFilePath);
 
@@ -257,6 +268,10 @@ router.post("/saveStudentExams", checkJwt, checkPermissions(["upload:file"]), as
         console.log("First page copied successfully");
         fs.copyFileSync(back_page_path, back_page_dest);
         console.log("Second page copied successfully");
+        fs.copyFileSync(original_front_page_path, original_front_page_dest);
+        console.log("Original First page copied successfully");
+        fs.copyFileSync(original_back_page_path, original_back_page_dest);
+        console.log("Original Second page copied successfully");
       } catch (error) {
         console.log("Error copying files:", error);
       }
@@ -583,12 +598,8 @@ router.post("/callOMR", checkJwt, checkPermissions(["upload:file"]), async funct
 
 // Route to fetch the first PNG image in the folder
 router.post("/fetchImage", checkJwt, checkPermissions(["read:image"]), async function (req, res) {
-  let imagesFolderPath;
-  if (req.body.side === "back") {
-    imagesFolderPath = path.join(__dirname, `../../omr/outputs/page_2/CheckedOMRs/colored/${req.body.file_name}`);
-  } else {
-    imagesFolderPath = path.join(__dirname, `../../omr/outputs/page_1/CheckedOMRs/colored/${req.body.file_name}`);
-  }
+  const imagesFolderPath = path.join(__dirname, req.body.file_name);
+  console.log(imagesFolderPath);
   console.log(req.body.file_name);
   try {
     // imagesFolderPath = path.resolve(__dirname, `../../uploads/Students/exam_id_5/student_id_1/${filename}`);
@@ -739,6 +750,8 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
 router.post("/fetchStudentExam/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchStudentExam);
 
 router.post("/fetchSolution/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchSolution);
+
+router.post("/changeGrade", checkJwt, checkPermissions(["read:exam_student"]), changeGrade);
 
 //test routes
 router.post("/test", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
