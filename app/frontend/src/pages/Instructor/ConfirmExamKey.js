@@ -2,10 +2,16 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, Link } from "react-router-dom";
 import "../../css/App.css";
 import { Button } from "../../components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "../../components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+  CardFooter,
+} from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import {
-  ChevronLeftIcon,
   ChevronRightIcon,
   PlusCircleIcon,
   TrashIcon,
@@ -16,12 +22,20 @@ import {
 import { Label } from "../../components/ui/label";
 import { Form } from "../../components/ui/form";
 import { ScrollArea } from "../../components/ui/scroll-area";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "../../components/ui/table";
 import { MultiSelect } from "../../components/ui/multi-select";
 import { useToast } from "../../components/ui/use-toast";
 import { Toaster } from "../../components/ui/toaster";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
+
 
 const ConfirmExamKey = () => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
@@ -30,7 +44,6 @@ const ConfirmExamKey = () => {
   const [numQuestions, setNumQuestions] = useState(10);
   const [numOptions, setNumOptions] = useState(5);
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [result, setResult] = useState({});
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [markingSchemes, setMarkingSchemes] = useState([]);
   const [totalMarks, setTotalMarks] = useState();
@@ -51,7 +64,9 @@ const ConfirmExamKey = () => {
 
   const removeQuestion = (questionNumber, option) => {
     setSelectedOptions((prevOptions) =>
-      prevOptions.filter((question) => question.question !== questionNumber || question.option !== option)
+      prevOptions.filter(
+        (question) => question.question !== questionNumber || question.option !== option
+      )
     );
   };
 
@@ -64,7 +79,12 @@ const ConfirmExamKey = () => {
         if (!Array.isArray(prevOptions)) {
           prevOptions = [];
         }
-        if (!prevOptions.some((question) => question.question === selection.question && question.option === selection.option)) {
+        if (
+          !prevOptions.some(
+            (question) =>
+              question.question === selection.question && question.option === selection.option
+          )
+        ) {
           return [...prevOptions, selection];
         } else {
           return prevOptions;
@@ -75,7 +95,8 @@ const ConfirmExamKey = () => {
       event.target.style.color = "";
       setSelectedOptions((prevOptions) => {
         const newOptions = prevOptions.filter(
-          (question) => question.question !== selection.question || question.option !== selection.option
+          (question) =>
+            question.question !== selection.question || question.option !== selection.option
         );
         return newOptions;
       });
@@ -108,8 +129,7 @@ const ConfirmExamKey = () => {
 
       bubbleGrid.appendChild(questionDiv);
     }
-    clickAnswersForQuestions(result);
-  }, [numQuestions, numOptions, result]);
+  }, [numQuestions, numOptions]);
 
   useEffect(() => {
     setTotalMarks(numQuestions);
@@ -176,7 +196,7 @@ const ConfirmExamKey = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Include the token in the request
+          "Authorization": `Bearer ${token}`, // Include the token in the request
         },
         credentials: "include",
         body: JSON.stringify({ singlePage: template === "100mcq" }),
@@ -188,7 +208,6 @@ const ConfirmExamKey = () => {
       console.log("dataCsv", dataCsv);
       setNumQuestions(getQuestionCount(getFilledQs(dataCsv)));
       clickAnswersForQuestions(getFilledQs(dataCsv));
-      setResult(getFilledQs(dataCsv));
     } catch (error) {
       console.error("Error downloading CSV: ", error);
       toast({
@@ -206,7 +225,9 @@ const ConfirmExamKey = () => {
   }
 
   function getFilledQs(data) {
-    const filteredEntries = Object.entries(data).filter(([key, value]) => value !== undefined && value !== "");
+    const filteredEntries = Object.entries(data).filter(
+      ([key, value]) => value !== undefined && value !== ""
+    );
 
     const sortedEntries = filteredEntries.sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
 
@@ -217,7 +238,10 @@ const ConfirmExamKey = () => {
 
     const entriesAfterSkipping = sortedEntries.slice(sliceIndex);
 
-    const transformedEntries = entriesAfterSkipping.map(([key, value]) => [Number(key.substring(1)), value]);
+    const transformedEntries = entriesAfterSkipping.map(([key, value]) => [
+      Number(key.substring(1)),
+      value,
+    ]);
     const result = Object.fromEntries(transformedEntries);
     return result;
   }
@@ -227,13 +251,17 @@ const ConfirmExamKey = () => {
   }
 
   function toggleQuestionAnswer(questionNumber, answer) {
-    const questionDiv = document.querySelector(`.bubble-grid .question:nth-child(${questionNumber})`);
+    const questionDiv = document.querySelector(
+      `.bubble-grid .question:nth-child(${questionNumber})`
+    );
     if (!questionDiv) {
       console.error(`Question ${questionNumber} not found.`);
       return;
     }
 
-    const optionSpan = Array.from(questionDiv.querySelectorAll(".option")).find((span) => span.innerText === answer);
+    const optionSpan = Array.from(questionDiv.querySelectorAll(".option")).find(
+      (span) => span.innerText === answer
+    );
     if (!optionSpan) {
       console.error(`Option ${answer} in question ${questionNumber} not found.`);
       return;
@@ -250,10 +278,6 @@ const ConfirmExamKey = () => {
     <main className="flex flex-col gap-4 p-2">
       <div className="w-full mx-auto grid flex-1 auto-rows-max gap-8">
         <div className="flex items-center gap-4">
-          <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
-            <ChevronLeftIcon className="h-4 w-4" />
-            <span className="sr-only">Back</span>
-          </Button>
           <h1 className="flex-1 text-3xl font-semibold tracking-tight">Confirm Exam Key</h1>
           <div className="flex items-center gap-2 ml-auto">
             <Link
@@ -264,7 +288,6 @@ const ConfirmExamKey = () => {
                 questions: selectedOptions,
                 numQuestions: numQuestions,
                 markingSchemes: markingSchemes,
-                totalMarks: totalMarks,
               }}
             >
               <Button size="icon" className="h-10 w-10">
@@ -318,8 +341,8 @@ const ConfirmExamKey = () => {
             <CardHeader className="flex justify-between px-6 py-4">
               <CardTitle>Custom Marking Scheme</CardTitle>
               <CardDescription>
-                Set the marking scheme for your questions. By default, the total mark match the number of questions. You can adjust the
-                total mark manually below.
+                Set the marking scheme for your questions. By default, the total mark match the
+                number of questions. You can adjust the total mark manually below.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -362,7 +385,11 @@ const ConfirmExamKey = () => {
                         />
                       </TableCell>
                       <TableCell>
-                        <Button size="icon" variant="ghost" onClick={() => handleDeleteScheme(index)}>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => handleDeleteScheme(index)}
+                        >
                           <TrashIcon className="h-5 w-5" />
                         </Button>
                       </TableCell>
@@ -372,14 +399,24 @@ const ConfirmExamKey = () => {
               </Table>
             </CardContent>
             <CardFooter className="justify-center border-t p-4">
-              <Button size="sm" variant="ghost" className="gap-1" onClick={() => setShowCustomSchemeModal(true)}>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="gap-1"
+                onClick={() => setShowCustomSchemeModal(true)}
+              >
                 <PlusCircleIcon className="h-3.5 w-3.5" />
                 Add Custom Marking Scheme
               </Button>
             </CardFooter>
             <div className="mt-4">
               <Label>Total Marks</Label>
-              <Input type="number" value={totalMarks} onChange={(e) => setTotalMarks(e.target.value)} className="w-15" />
+              <Input
+                type="number"
+                value={totalMarks}
+                onChange={(e) => setTotalMarks(e.target.value)}
+                className="w-15"
+              />
             </div>
           </Card>
         </div>
