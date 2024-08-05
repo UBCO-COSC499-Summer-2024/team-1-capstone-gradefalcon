@@ -301,7 +301,12 @@ const ExamDetails = () => {
                             <TableRow
                               onClick={() => {
                                 navigate(`/ViewExam`, {
-                                  state: { student_id: result.student_id, exam_id: exam_id },
+                                  state: {
+                                    student_id: result.student_id,
+                                    exam_id: exam_id,
+                                    student_name: result.student_name,
+                                    grade: result.grade,
+                                  },
                                 });
                               }}
                               key={result.student_id}

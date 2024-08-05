@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/App.css";
-import { Card, CardContent } from "../../components/ui/card";
-import { Label } from "../../components/ui/label";
-import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group";
-
+import ExamViewDialog from "../../components/ExamViewDialog";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const ViewExam = () => {
@@ -16,6 +13,12 @@ const ViewExam = () => {
   const [backSrc, setBackSrc] = useState("");
   const [imageLinks, setImageLinks] = useState([]);
   const [originalBack, setOriginalBack] = useState("");
+
+  const ViewExam = ({ frontSrc, backSrc, buttonText }) => (
+    <div>
+      <ExamViewDialog frontSrc={frontSrc} backSrc={backSrc} buttonText={buttonText} />
+    </div>
+  );
 
   useEffect(() => {
     const fetchExam = async () => {
@@ -64,42 +67,11 @@ const ViewExam = () => {
     <div className="App">
       <div className="main-content">
         <h1>View Exam</h1>
-        <div className="w-full">
-          <Card className="bg-white border rounded">
-            <CardContent>
-              <div className="flex space-x-4">
-                {frontSrc ? (
-                  <img
-                    src={frontSrc}
-                    alt="Student ID"
-                    style={{
-                      maxWidth: "40%",
-                      height: "auto",
-                    }}
-                  />
-                ) : (
-                  <p>Loading image...</p>
-                )}
-                {backSrc ? (
-                  <img
-                    src={backSrc}
-                    alt="Student Answers"
-                    style={{
-                      maxWidth: "40%",
-                      height: "auto",
-                    }}
-                  />
-                ) : (
-                  <p>Loading image...</p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-          <div>
-            <button className="save-changes-btn" onClick={() => navigate(-1)}>
-              Go Back
-            </button>
-          </div>
+        {ViewExam({ frontSrc, backSrc, buttonText: "View Scanned Exam" })}
+        <div>
+          <button className="save-changes-btn" onClick={() => navigate(-1)}>
+            Go Back
+          </button>
         </div>
       </div>
     </div>
