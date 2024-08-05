@@ -20,6 +20,7 @@ const {
   getStudentAttempt,
   fetchStudentExam,
   fetchSolution,
+  changeGrade,
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const { checkJwt, checkPermissions, checkRole } = require("../auth0"); // Importing from auth.js
@@ -746,6 +747,8 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
 router.post("/fetchStudentExam/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchStudentExam);
 
 router.post("/fetchSolution/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchSolution);
+
+router.post("/changeGrade", checkJwt, checkPermissions(["read:exam_student"]), changeGrade);
 
 //test routes
 router.post("/test", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {

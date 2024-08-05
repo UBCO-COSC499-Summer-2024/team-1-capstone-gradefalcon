@@ -2,17 +2,38 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/App.css";
 import ExamViewDialog from "../../components/ExamViewDialog";
+import { ChevronLeftIcon } from "@heroicons/react/20/solid";
+import { Button } from "../../components/ui/button";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { useToast } from "../../components/ui/use-toast";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../../components/ui/alert-dialog";
 
 const ViewExam = () => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const location = useLocation();
   const navigate = useNavigate();
-  let { student_id, exam_id, front_page, back_page, original_front_page, original_back_page } = location.state || {};
+  let { student_id, exam_id, front_page, back_page, original_front_page, original_back_page, student_name, grade, total_marks } =
+    location.state || {};
   const [frontSrc, setFrontSrc] = useState("");
   const [backSrc, setBackSrc] = useState("");
   const [originalBack, setOriginalBack] = useState("");
   const [originalFront, setOriginalFront] = useState("");
+  const [editableGrade, setEditableGrade] = useState(grade);
+  const [displayGrade, setDisplayGrade] = useState(grade);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchExam = async () => {
@@ -92,17 +113,61 @@ const ViewExam = () => {
     fetchExam();
   }, [student_id, getAccessTokenSilently, isAuthenticated]);
 
+  const handleSave = async () => {
+    if (editableGrade < 0 || editableGrade > total_marks) {
+      setError(`Grade must be between 0 and ${total_marks}`);
+      return;
+    }
+
+    const token = await getAccessTokenSilently();
+    const response = await fetch("/api/exam/changeGrade", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ student_id: student_id, exam_id: exam_id, grade: editableGrade }),
+    });
+    const data = await response.json();
+    console.log("Data:", data);
+    console.log("Saved grade:", editableGrade);
+    setDisplayGrade(editableGrade);
+  };
+
   return (
     <div className="App">
       <div className="main-content">
+        <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
+          <ChevronLeftIcon className="h-4 w-4" />
+          <span className="sr-only">Back</span>
+        </Button>
         <h1>View Exam</h1>
+        <p>Name: {student_name}</p>
+        <p>ID: {student_id}</p>
+        <p>Grade: {displayGrade}</p>
         <ExamViewDialog frontSrc={frontSrc} backSrc={backSrc} buttonText={"View Scanned Exams"} />
         <ExamViewDialog frontSrc={originalFront} backSrc={originalBack} buttonText={"View Original Exams"} />
-        <div>
-          <button className="save-changes-btn" onClick={() => navigate(-1)}>
-            Go Back
-          </button>
-        </div>
+
+        <AlertDialog>
+          <AlertDialogTrigger>
+            <Button variant="destructive">Change score</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Changing grade</AlertDialogTitle>
+              <AlertDialogDescription>
+                You are now changing the grade for {student_name} with ID: {student_id}. This will be recorded.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <Input type="number" value={editableGrade} onChange={(e) => setEditableGrade(e.target.value)} min={0} max={total_marks} />
+            {error && <p style={{ color: "red" }}>{error}</p>}
+            {/* Still need to add some frontend validation to make this prettier though it still works */}
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleSave}>Save</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );

@@ -198,6 +198,23 @@ const getScoreByExamId = async (exam_id) => {
   }
 };
 
+const changeGrade = async (req, res, next) => {
+  try {
+    const result = await pool.query("UPDATE studentResults SET grade = $1 WHERE student_id = $2 AND exam_id = $3", [
+      req.body.grade,
+      req.body.student_id,
+      req.body.exam_id,
+    ]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Student or exam not found" });
+    }
+    res.status(200).json({ message: "Grade updated successfully" });
+  } catch (error) {
+    console.error("Error changing grade:", error);
+    next(error);
+  }
+};
+
 const saveResults = async (req, res, next) => {
   const { studentScores, exam_id } = req.body;
   console.log(studentScores);
@@ -451,4 +468,5 @@ module.exports = {
   getStudentAttempt,
   fetchStudentExam,
   fetchSolution,
+  changeGrade,
 };

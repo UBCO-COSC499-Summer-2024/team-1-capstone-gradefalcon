@@ -281,6 +281,7 @@ const ExamDetails = () => {
             <CardHeader className="flex justify-between px-6 py-4">
               <div>
                 <CardTitle className="mb-2">Student Results</CardTitle>
+                <h1>Total marks: {examData.total_marks}</h1>
               </div>
             </CardHeader>
             <CardContent>
@@ -306,6 +307,7 @@ const ExamDetails = () => {
                                     exam_id: exam_id,
                                     student_name: result.student_name,
                                     grade: result.grade,
+                                    total_marks: examData.total_marks,
                                   },
                                 });
                               }}
