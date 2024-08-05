@@ -42,11 +42,11 @@ export default function Dashboard() {
   const getStatusColor = (status) => {
     switch (status) {
       case true:
-        return "bg-[hsl(var(--primary))]"; // Using the theme color for Approved
+        return "default";
       case false:
-        return "bg-red-500";
+        return "destructive";
       default:
-        return "bg-gray-500";
+        return "secondary";
     }
   };
 
@@ -360,7 +360,7 @@ export default function Dashboard() {
                             </TableCell>
                             <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
                             <TableCell>
-                              <Badge className={`text-white ${getStatusColor(exam.graded)}`}>
+                              <Badge variant = {getStatusColor(exam.graded)}>
                                 {exam.graded ? "Graded" : "Not graded"}
                               </Badge>
                             </TableCell>
