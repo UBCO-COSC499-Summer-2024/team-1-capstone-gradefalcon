@@ -9,6 +9,7 @@ import { Checkbox } from "../../components/ui/checkbox";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
 import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
 import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
+import { Badge } from "../../components/ui/badge"; // Import the Badge component
 import { useAuth0 } from "@auth0/auth0-react";
 import "../../css/App.css";
 
@@ -20,6 +21,17 @@ const ExamBoard = () => {
   const [error, setError] = useState(null);
   const { toast } = useToast(); // Using the toast hook
   const navigate = useNavigate(); // Using the navigate hook
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case true:
+        return "bg-[hsl(var(--primary))]"; // Using the theme color for Approved
+      case false:
+        return "bg-red-500";
+      default:
+        return "bg-gray-500";
+    }
+  };
 
   useEffect(() => {
     const fetchClassData = async () => {
@@ -173,7 +185,9 @@ const ExamBoard = () => {
                       </TableCell>
                       <TableCell>{exam.exam_title}</TableCell>
                       <TableCell>{course_name}</TableCell>
-                      <TableCell>{exam.graded ? "Graded" : "Not graded"}</TableCell>
+                      <TableCell>
+                        <Badge className={`text-white ${getStatusColor(exam.graded)}`}>{exam.graded ? "Graded" : "Not graded"}</Badge>
+                      </TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
