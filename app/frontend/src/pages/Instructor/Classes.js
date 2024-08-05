@@ -1,3 +1,4 @@
+//classes.js:
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Added useNavigate
 import { Button } from "../../components/ui/button";
@@ -74,7 +75,6 @@ const Classes = () => {
         throw new Error("Failed to archive course");
       }
 
-      // Refresh the list of classes after archiving
       fetchClasses();
     } catch (error) {
       console.error("Error archiving course:", error);
@@ -98,7 +98,6 @@ const Classes = () => {
         throw new Error("Failed to re-activate course");
       }
 
-      // Refresh the list of classes after unarchiving
       fetchClasses();
     } catch (error) {
       console.error("Error re-activating course:", error);
@@ -117,12 +116,11 @@ const Classes = () => {
         },
         body: JSON.stringify({ class_id: classId }), // Send class_id in the request body
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to delete course");
       }
-  
-      // Refresh the list of classes after deletion
+
       fetchClasses();
       setDialogOpen(false); // Close dialog after confirmation
       setConfirmDelete(false); // Reset checkbox
@@ -164,7 +162,7 @@ const Classes = () => {
                             <Tooltip delayDuration={0}>
                               <TooltipTrigger asChild>
                                 <TableRow
-                                  className="hover:bg-gray-100 cursor-pointer"
+                                  className="cursor-pointer"
                                   onClick={() => navigate(`/ClassManagement/${classItem.class_id}`)}
                                 >
                                   <TableCell>
@@ -172,7 +170,7 @@ const Classes = () => {
                                   </TableCell>
                                   <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
                                   <TableCell>
-                                    <Badge variant="outline" className={statusClass}>
+                                    <Badge variant="outline" className={`status-badge ${statusClass}`}>
                                       {status}
                                     </Badge>
                                   </TableCell>
