@@ -21,6 +21,7 @@ const {
   fetchStudentExam,
   fetchSolution,
   changeGrade,
+  getGradeChangeLog,
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const { checkJwt, checkPermissions, checkRole } = require("../auth0"); // Importing from auth.js
@@ -159,6 +160,8 @@ router.post("/UploadExam", checkJwt, checkPermissions(["upload:file"]), async fu
     }
   });
 });
+
+router.post("/fetchChangelog", checkJwt, checkPermissions(["read:grades"]), getGradeChangeLog);
 
 router.post("/getResults", checkJwt, checkPermissions(["read:grades"]), async function (req, res) {
   const singlePage = req.body.singlePage;

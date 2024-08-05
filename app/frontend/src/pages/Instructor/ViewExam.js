@@ -8,7 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { useToast } from "../../components/ui/use-toast";
-
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,6 +34,7 @@ const ViewExam = () => {
   const [editableGrade, setEditableGrade] = useState(grade);
   const [displayGrade, setDisplayGrade] = useState(grade);
   const [error, setError] = useState("");
+  const [gradeChangelog, setGradeChangelog] = useState([]);
 
   useEffect(() => {
     const fetchExam = async () => {
@@ -111,7 +112,23 @@ const ViewExam = () => {
     };
 
     fetchExam();
+    fetchChangelog();
   }, [student_id, getAccessTokenSilently, isAuthenticated]);
+
+  const fetchChangelog = async () => {
+    const token = await getAccessTokenSilently();
+    const response = await fetch("/api/exam/fetchChangelog", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ student_id: student_id, exam_id: exam_id }),
+    });
+    const data = await response.json();
+    setGradeChangelog(data.grade_changelog);
+    console.log("Changelog:", data);
+  };
 
   const handleSave = async () => {
     if (editableGrade < 0 || editableGrade > total_marks) {
@@ -132,6 +149,8 @@ const ViewExam = () => {
     console.log("Data:", data);
     console.log("Saved grade:", editableGrade);
     setDisplayGrade(editableGrade);
+
+    fetchChangelog();
   };
 
   return (
@@ -168,6 +187,29 @@ const ViewExam = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        <div className="grade-changelog">
+          {gradeChangelog && gradeChangelog.length === 0 ? (
+            <p>No changes to this grade have been made</p>
+          ) : (
+            gradeChangelog && (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Changelog</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {gradeChangelog.map((log, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{log}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )
+          )}
+        </div>
       </div>
     </div>
   );
