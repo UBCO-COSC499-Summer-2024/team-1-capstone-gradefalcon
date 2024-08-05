@@ -150,6 +150,14 @@ const UploadExamKey = () => {
           Upload Exam Key
         </h1>
         <div className="hidden items-center gap-2 md:ml-auto md:flex"></div>
+        <div className="flex items-center gap-2 ml-auto">
+        <Button size="sm" variant="outline" onClick={resetUpload}>
+            Reset
+          </Button>
+          <Button size="sm" className="gap-1" onClick={sendToBackend}>
+            Import
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col items-center gap-4 w-full">
@@ -184,14 +192,6 @@ const UploadExamKey = () => {
               ></iframe>
             </div>
           )}
-        </div>
-        <div className="flex gap-2 w-full mt-4">
-          <Button size="sm" className="gap-1" onClick={sendToBackend}>
-            Import
-          </Button>
-          <Button size="sm" variant="outline" onClick={resetUpload}>
-            Reset
-          </Button>
         </div>
       </div>
       <Toaster />

@@ -4,6 +4,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "./ui/card";
+import {ArrowDownIcon} from "@heroicons/react/20/solid";
 
 const CustomBubbleSheet = ({ courseId, classId, examTitle, onQuestionsChange, onOptionsChange }) => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
@@ -92,6 +93,7 @@ const CustomBubbleSheet = ({ courseId, classId, examTitle, onQuestionsChange, on
             </div>
             <Button onClick={handleGeneratePDF} className="mt-4">
               Generate PDF
+              <ArrowDownIcon className="h-4 w-4 ml-2" />
             </Button>
           </div>
         </CardContent>
