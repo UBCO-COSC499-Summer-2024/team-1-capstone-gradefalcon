@@ -171,7 +171,7 @@ const ViewExam = () => {
     <main className="mx-auto grid max-w-[100rem] flex-1 auto-rows-max gap-8 p-2">
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
   {/* Student Details */}
-  <div className="grid auto-rows-max items-start gap-8 lg:col-span-1">
+  <div className="grid auto-rows-max items-start gap-8 lg:col-span-2">
     <Card className="bg-white border rounded-lg p-6">
       <CardHeader className="flex justify-between px-6 py-4">
         <CardTitle>Student Details</CardTitle>
@@ -194,7 +194,7 @@ const ViewExam = () => {
   </div>
 
   {/* Grade Changelog */}
-  <div className="grid auto-rows-max items-start gap-8 lg:col-span-2">
+  <div className="grid auto-rows-max items-start gap-8 lg:col-span-1">
     <Card className="bg-white border rounded-lg p-6 h-full">
       <CardHeader className="flex justify-between px-6 py-4">
         <CardTitle>Grade Changelog</CardTitle>
@@ -229,7 +229,7 @@ const ViewExam = () => {
   </div>
 </div>
 
-<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-8">
   {/* Edit Grade */}
   <div className="grid auto-rows-max items-start gap-8 lg:col-span-3">
     <Card className="bg-white border rounded-lg p-6">
