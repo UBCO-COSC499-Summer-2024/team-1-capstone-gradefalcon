@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/App.css";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Button } from "../../components/ui/button";
+import { ChevronLeftIcon } from "@heroicons/react/20/solid"; 
 
 const ViewExam = () => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -55,42 +57,48 @@ const ViewExam = () => {
   }, [student_id, getAccessTokenSilently, isAuthenticated]);
 
   return (
-    <div className="App">
-      <div className="main-content">
-        <h1>View Exam</h1>
-        <div className="image-container">
+    <main className="flex flex-col gap-4 p-2">
+      <div className="w-full mx-auto flex items-center gap-8">
+        <Button
+          variant="outline"
+          size="icon"
+          className="h-10 w-10"
+          onClick={() => navigate(-1)}
+        >
+          <ChevronLeftIcon className="h-4 w-4" />
+          <span className="sr-only">Back</span>
+        </Button>
+        <h1 className="flex-1 text-3xl font-semibold tracking-tight">View Exam</h1>
+      </div>
+      <div className="main-content flex justify-center">
+        <div className="image-container flex flex-col items-center gap-4">
           {frontSrc ? (
             <img
               src={frontSrc}
-              alt="Student ID"
+              alt="Front Page"
               style={{
                 maxWidth: "30%",
                 height: "auto",
               }}
             />
           ) : (
-            <p>Loading image...</p>
+            <p>Loading front page image...</p>
           )}
           {backSrc ? (
             <img
               src={backSrc}
-              alt="Student Answers"
+              alt="Back Page"
               style={{
                 maxWidth: "30%",
                 height: "auto",
               }}
             />
           ) : (
-            <p>Loading image...</p>
+            <p>Loading back page image...</p>
           )}
         </div>
-        <div>
-          <button className="save-changes-btn" onClick={() => navigate(-1)}>
-            Go Back
-          </button>
-        </div>
       </div>
-    </div>
+    </main>
   );
 };
 

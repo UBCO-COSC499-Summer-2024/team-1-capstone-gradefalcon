@@ -136,7 +136,7 @@ export default function ViewExamDetails() {
           </CardHeader>
           <CardContent className="flex-1">
             <div className="flex justify-end mb-4">
-              <Button onClick={() => navigate("/ReportGradeStudent")} className="bg-primary text-white flex items-center">
+              <Button onClick={() => navigate("/SubmitReport")} className="bg-primary text-white flex items-center">
                 <ChevronRight className="w-4 h-4 mr-1" />
                 Report
               </Button>

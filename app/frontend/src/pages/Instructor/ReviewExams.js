@@ -6,6 +6,7 @@ import { Card, CardContent } from "../../components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../../components/ui/table";
 import { Input } from "../../components/ui/input";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
+import {EyeIcon} from "@heroicons/react/24/solid";
 import { useToast } from "../../components/ui/use-toast";
 import { Toaster } from "../../components/ui/toaster";
 import "../../css/App.css";
@@ -16,7 +17,6 @@ const ReviewExams = () => {
   const [studentScores, setStudentScores] = useState([]);
   const [totalMarks, setTotalMarks] = useState();
   const [editStudentId, setEditStudentId] = useState(null);
-  const [originalScores, setOriginalScores] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [resultsCombined, setResultsCombined] = useState(false);
   const { exam_id } = location.state || {};
@@ -105,28 +105,6 @@ const ReviewExams = () => {
     );
   };
 
-  const handleEdit = (studentId) => {
-    setEditStudentId(studentId);
-    const studentScore = studentScores.find((s) => s.StudentID === studentId).Score;
-    setOriginalScores((prevScores) => ({
-      ...prevScores,
-      [studentId]: studentScore,
-    }));
-  };
-
-  const handleCancel = (studentId) => {
-    setStudentScores((currentScores) =>
-      currentScores.map((score) =>
-        score.StudentID === studentId ? { ...score, Score: originalScores[studentId] } : score
-      )
-    );
-    setEditStudentId(null);
-    setOriginalScores((prevScores) => {
-      const newScores = { ...prevScores };
-      delete newScores[studentId];
-      return newScores;
-    });
-  };
 
   const saveStudentExams = async (studentData) => {
     try {
@@ -150,12 +128,7 @@ const ReviewExams = () => {
   };
 
   const saveResults = async () => {
-    if (editStudentId !== null) {
-      toast({
-        title: "Please save or cancel the current edit before saving all results.",
-      });
-      return;
-    }
+
     try {
       saveStudentExams(studentScores);
 
@@ -187,78 +160,66 @@ const ReviewExams = () => {
     ? studentScores.filter((student) => student.StudentID.toString().includes(searchQuery))
     : studentScores;
 
-  return (
-    <main className="flex flex-col gap-4 p-6">
-      <div className="flex justify-between items-center w-full mb-4">
-        <h1 className="text-2xl font-semibold">Review Exams</h1>
-        <Input
-          type="text"
-          placeholder="Search by Student ID..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="max-w-xs"
-        />
-      </div>
-      <div className="w-full">
-        <Card className="bg-white border rounded">
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Student Name</TableHead>
-                  <TableHead>Student ID</TableHead>
-                  <TableHead>Score/{totalMarks}</TableHead>
-                  <TableHead>View Exam</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredScores.map((student, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{student.StudentName}</TableCell>
-                    <TableCell>{student.StudentID}</TableCell>
-                    <TableCell>
-                      {editStudentId === student.StudentID ? (
+    return (
+      <main className="flex flex-col gap-4 p-6">
+        <div className="flex justify-between items-center w-full mb-4">
+          <h1 className="text-2xl font-semibold">Review Exams</h1>
+          <Input
+            type="text"
+            placeholder="Search by Student ID..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="max-w-xs"
+          />
+        </div>
+        <div className="w-full">
+          <Card className="bg-white border rounded">
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Student Name</TableHead>
+                    <TableHead>Student ID</TableHead>
+                    <TableHead>Score/ {totalMarks}</TableHead>
+                    <TableHead>View Exam</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredScores.map((student, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{student.StudentName}</TableCell>
+                      <TableCell>{student.StudentID}</TableCell>
+                      <TableCell>
                         <Input
                           type="number"
                           value={student.Score}
                           max={totalMarks}
                           min="0"
                           onChange={(e) => handleScoreChange(e, student.StudentID)}
+                          className="w-14 px-2 py-1"
                         />
-                      ) : (
-                        student.Score
-                      )}
-                      {editStudentId === student.StudentID ? (
-                        <>
-                          <Button onClick={() => setEditStudentId(null)}>Save</Button>
-                          <Button onClick={() => handleCancel(student.StudentID)}>Cancel</Button>
-                        </>
-                      ) : (
-                        <Button onClick={() => handleEdit(student.StudentID)}>Edit</Button>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        onClick={() =>
-                          handleViewClick(student.StudentID, student.front_page, student.back_page)
-                        }
-                      >
-                        View
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
-      <Button onClick={() => saveResults()} className="mt-4 self-end">
-        Save Results
-      </Button>
-      <Toaster />
-    </main>
-  );
-};
+                      </TableCell>
+                      <TableCell>
+                        <Button size="icon" variant="ghost" className="flex items-center justify-center hover:text-primary"
+                          onClick={() =>handleViewClick(student.StudentID, student.front_page, student.back_page)}
+                          >
+                            <EyeIcon className="h-6 w-6" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </div>
+        <Button onClick={saveResults} className="mt-4 self-end">
+          Save Results
+        </Button>
+        <Toaster />
+      </main>
+    );
+  };
+  
 
 export default ReviewExams;
