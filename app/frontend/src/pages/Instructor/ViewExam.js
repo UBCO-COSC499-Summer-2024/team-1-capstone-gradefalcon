@@ -9,6 +9,9 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { useToast } from "../../components/ui/use-toast";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
+import { ScrollArea } from "../../components/ui/scroll-area";
+import GradeRadialChart from "../../components/GradeRadialChart";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../../components/ui/alert-dialog";
+import { Badge } from "../../components/ui/badge";
 
 const ViewExam = () => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -164,69 +168,116 @@ const ViewExam = () => {
   };
 
   return (
-    <div className="App">
-      <div className="main-content">
+    <main className="mx-auto grid max-w-[100rem] flex-1 auto-rows-max gap-8 p-2">
+      <div className="flex items-center gap-4">
         <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
           <ChevronLeftIcon className="h-4 w-4" />
           <span className="sr-only">Back</span>
         </Button>
-        <h1>View Exam</h1>
-        <p>Name: {student_name}</p>
-        <p>ID: {student_id}</p>
-        <p>Grade: {displayGrade}</p>
-        <ExamViewDialog frontSrc={frontSrc} backSrc={backSrc} buttonText={"View Scanned Exams"} />
-        <ExamViewDialog frontSrc={originalFront} backSrc={originalBack} buttonText={"View Original Exams"} />
+        <h1 className="flex-1 text-3xl font-semibold tracking-tight">View Exam</h1>
+      </div>
 
-        {!reviewExams && (
-          <AlertDialog>
-            <AlertDialogTrigger>
-              <Button variant="destructive">Change score</Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Changing grade</AlertDialogTitle>
-                <AlertDialogDescription>
-                  You are now changing the grade for {student_name} with ID: {student_id}. This will be recorded.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <Input
-                type="number"
-                value={editableGrade}
-                onChange={(e) => setEditableGrade(e.target.value)}
-                min={0}
-                max={total_marks}
-              />
-              {error && <p style={{ color: "red" }}>{error}</p>}
-              {/* Still need to add some frontend validation to make this prettier though it still works */}
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleSave}>Save</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        )}
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+        {/* Student Details */}
+        <div className="grid auto-rows-max items-start gap-8 lg:col-span-2">
+          <Card className="bg-white border rounded-lg p-6">
+            <CardHeader className="flex justify-between px-6 py-4">
+              <CardTitle>Student Details</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-4">
+                <p className="font-bold">Name</p>
+                <p>{student_name}</p>
+              </div>
+              <div className="mb-4">
+                <p className="font-bold">ID</p>
+                <p>{student_id}</p>
+              </div>
+              <div>
+                <p className="font-bold">Grade</p>
+              </div>
+              <GradeRadialChart grade={displayGrade} totalMarks={total_marks} />
+            </CardContent>
+          </Card>
+        </div>
 
-        <div className="grade-changelog">
-          {gradeChangelog && gradeChangelog.length === 0 ? (
-            <p>No changes to this grade have been made</p>
-          ) : (
-            gradeChangelog && (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Changelog</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {gradeChangelog.map((log, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{log}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )
-          )}
+        {/* Grade Changelog */}
+        <div className="grid auto-rows-max items-start gap-8 lg:col-span-3">
+          <Card className="bg-white border rounded-lg p-6 h-full">
+            <CardHeader className="flex justify-between px-6 py-4">
+              <CardTitle>Grade Changelog</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {gradeChangelog && gradeChangelog.length === 0 ? (
+                <p>No changes to this grade have been made</p>
+              ) : (
+                gradeChangelog && (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Changelog</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {gradeChangelog.map((log, index) => (
+                        <TableRow key={index}>
+                          <TableCell>
+                            <Badge variant="secondary" className="text-base">
+                              {log}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      <div className="grid gap-8 lg:grid-cols-5">
+        <div className="grid auto-rows-max items-start gap-8 lg:col-span-3 lg:col-start-3">
+          {/* Edit Grade */}
+          <Card className="bg-white border rounded-lg p-6  mt-[-12rem]">
+            <CardHeader className="flex justify-between px-4 py-4">
+              <CardTitle>Edit Grade</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {!reviewExams && (
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    <Button variant="default">Change score</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Changing grade</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        You are now changing the grade for {student_name} with ID: {student_id}. This will be recorded.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <Input
+                      type="number"
+                      value={editableGrade}
+                      onChange={(e) => setEditableGrade(e.target.value)}
+                      min={0}
+                      max={total_marks}
+                    />
+                    {error && <p style={{ color: "red" }}>{error}</p>}
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleSave}>Save</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+              <div className="mt-4 flex gap-2">
+                <ExamViewDialog frontSrc={frontSrc} backSrc={backSrc} buttonText={"View Scanned Exams"} />
+                <ExamViewDialog frontSrc={originalFront} backSrc={originalBack} buttonText={"View Original Exams"} />
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </main>

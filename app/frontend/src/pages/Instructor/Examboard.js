@@ -25,11 +25,11 @@ const ExamBoard = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case true:
-        return "bg-[hsl(var(--primary))]"; // Using the theme color for Approved
+        return "default"; // Using the theme color for Approved
       case false:
-        return "bg-red-500";
+        return "destructive";
       default:
-        return "bg-gray-500";
+        return "secondary";
     }
   };
 
@@ -186,7 +186,7 @@ const ExamBoard = () => {
                       <TableCell>{exam.exam_title}</TableCell>
                       <TableCell>{course_name}</TableCell>
                       <TableCell>
-                        <Badge className={`text-white ${getStatusColor(exam.graded)}`}>{exam.graded ? "Graded" : "Not graded"}</Badge>
+                        <Badge variant = {getStatusColor(exam.graded)}>{exam.graded ? "Graded" : "Not graded"}</Badge>
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>
