@@ -2,12 +2,18 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Navigate } from "react-router-dom";
+import logo from "../src/assets/logo.png";
 
 const ProtectedRoute = ({ children, roles = [] }) => {
   const { isAuthenticated, isLoading, user } = useAuth0();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+        <img src={logo} alt="loading" style={{ width: "25%" }} />
+        <h2>Crunching bird seed...</h2>
+      </div>
+    );
   }
 
   if (!isAuthenticated) {
