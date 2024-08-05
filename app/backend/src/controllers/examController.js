@@ -460,7 +460,7 @@ async function generateCustomJsonTemplate(questions, options, courseId, examTitl
     }
 
     const jsonFilePath = path.join(outputDir, `custom_page_${page}.json`);
-    fs.writeFileSync(jsonFilePath, JSON.stringify({ [`custom_page_${page}`]: template }, null, 2));
+    fs.writeFileSync(jsonFilePath, JSON.stringify(template, null, 2));
   }
 }
 

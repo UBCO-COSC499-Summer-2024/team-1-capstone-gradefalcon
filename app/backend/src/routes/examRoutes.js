@@ -281,33 +281,28 @@ router.post("/saveExamKey/:examType", checkJwt, checkPermissions(["upload:file"]
         return res.status(500).send("Error uploading file.");
       }
 
-      console.log("Request Body:", req.body);  // contain the form fields
-      console.log("Uploaded File:", req.files); //show the uploaded file
+      console.log("Request Body:", req.body);  // This should now contain the form fields
+      console.log("Uploaded File:", req.files); // This should show the uploaded file
 
       const examType = req.params.examType;
       const numQuestions = parseInt(req.body.numQuestions, 10); // Ensure numQuestions is a number
       console.log("Exam Type:", examType);
 
-    if (examType === "100mcq") {
-      // Only one page
-      const destinationDir = "/code/omr/inputs";
-      const upload = createUploadMiddleware(destinationDir);
-      upload.single("examKey")(req, res, function (err) {
-        if (err) {
-          return res.status(500).send("Error uploading file.");
-        }
-        console.log(req.file);
-        res.send(JSON.stringify("File uploaded successfully"));
-      });
-    } else if (examType === "200mcq" || (examType === "custom" && numQuestions > 100)) {
-      // Handle 200mcq or custom templates with more than 100 questions (2 pages)
-      const upload = multer({ dest: "uploads/" }).single("examKey");
+      if (examType === "100mcq" || (examType === "custom" && numQuestions <= 100)) {
+        // Handle 100mcq or custom templates with 100 or fewer questions (1 page)
+        const destinationDir = "/code/omr/inputs";
+        const upload = createUploadMiddleware(destinationDir);
 
-      upload(req, res, async function (err) {
-        if (err) {
-          return res.status(500).send("Error uploading exam key.");
-        }
-        const { path: tempFilePath } = req.file;
+        upload.single("examKey")(req, res, function (err) {
+          if (err) {
+            return res.status(500).send("Error uploading file.");
+          }
+          console.log(req.file);
+          res.send(JSON.stringify("File uploaded successfully"));
+        });
+      } else if (examType === "200mcq" || (examType === "custom" && numQuestions > 100)) {
+        // Handle 200mcq or custom templates with more than 100 questions (2 pages)
+        const existingPdfBytes = req.files.examKey[0].buffer; // Use the buffer directly
         const destinationDir1 = "/code/omr/inputs/page_1";
         const destinationDir2 = "/code/omr/inputs/page_2";
 
@@ -315,7 +310,6 @@ router.post("/saveExamKey/:examType", checkJwt, checkPermissions(["upload:file"]
         ensureDirectoryExistence(destinationDir2);
 
         try {
-          const existingPdfBytes = fs.readFileSync(tempFilePath);
           const keyPDF = await PDFDocument.load(existingPdfBytes);
 
           const key_page_1 = await PDFDocument.create();
@@ -331,29 +325,15 @@ router.post("/saveExamKey/:examType", checkJwt, checkPermissions(["upload:file"]
           const key_page_2_Bytes = await key_page_2.save();
           fs.writeFileSync(path.join(destinationDir2, "page_2.pdf"), key_page_2_Bytes);
 
-          fs.unlinkSync(tempFilePath); // Clean up the temporary file
-
           res.json({ message: "200mcq or custom key uploaded and split successfully" });
         } catch (error) {
           console.error("Error processing PDF file:", error);
           res.status(500).send("Error processing PDF file");
         }
-      });
-    } else if (examType === "custom" && numQuestions <= 100) {
-      // Handle custom templates with 100 or fewer questions (1 page)
-      const destinationDir = "/code/omr/inputs";
-      const upload = createUploadMiddleware(destinationDir);
-      upload.single("examKey")(req, res, function (err) {
-        if (err) {
-          return res.status(500).send("Error uploading file.");
-        }
-        console.log(req.file);
-        res.send(JSON.stringify("File uploaded successfully"));
-      });
-    } else {
-      return res.status(400).send("Invalid exam type or number of questions.");
-    }
-  });
+      } else {
+        return res.status(400).send("Invalid exam type or number of questions.");
+      }
+    });
   }
 );
 
@@ -398,7 +378,7 @@ router.post("/copyTemplate", checkJwt, checkPermissions(["upload:file"]), async 
     }
 
     if (examType === "custom" && numQuestions <= 100) {
-      templatePath_1 = path.join(__dirname, "../assets/templates/custom_page_1.json");
+      templatePath_1 = path.join(__dirname, `../assets/custom/${courseId}_${examTitle}_${classID}/custom_page_1.json`);
       ensureDirectoryExistence(filePath_1);
       fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
       console.log("Custom template.json for page 1 copied successfully");
