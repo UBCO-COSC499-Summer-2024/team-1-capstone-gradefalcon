@@ -87,7 +87,7 @@ const ReviewExams = () => {
     fetchData();
   }, [getAccessTokenSilently, exam_id]);
 
-  const handleViewClick = (studentId, front_page, back_page, original_front_page, original_back_page) => {
+  const handleViewClick = (studentId, front_page, back_page, student_name, grade) => {
     navigate("/ViewExam", {
       state: {
         student_id: studentId,
@@ -96,6 +96,10 @@ const ReviewExams = () => {
         back_page: `../../omr/outputs/page_2/CheckedOMRs/colored/${back_page}`,
         original_front_page: `../../omr/inputs/page_1/${front_page}`,
         original_back_page: `../../omr/inputs/page_2/${back_page}`,
+        student_name: student_name,
+        grade: grade,
+        total_marks: totalMarks,
+        reviewExams: true,
       },
     });
   };
@@ -238,7 +242,13 @@ const ReviewExams = () => {
                       )}
                     </TableCell>
                     <TableCell>
-                      <Button onClick={() => handleViewClick(student.StudentID, student.front_page, student.back_page)}>View</Button>
+                      <Button
+                        onClick={() =>
+                          handleViewClick(student.StudentID, student.front_page, student.back_page, student.StudentName, student.Score)
+                        }
+                      >
+                        View
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}

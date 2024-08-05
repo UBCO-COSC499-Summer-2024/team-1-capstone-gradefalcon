@@ -25,8 +25,18 @@ const ViewExam = () => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const location = useLocation();
   const navigate = useNavigate();
-  let { student_id, exam_id, front_page, back_page, original_front_page, original_back_page, student_name, grade, total_marks } =
-    location.state || {};
+  let {
+    student_id,
+    exam_id,
+    front_page,
+    back_page,
+    original_front_page,
+    original_back_page,
+    student_name,
+    grade,
+    total_marks,
+    reviewExams,
+  } = location.state || {};
   const [frontSrc, setFrontSrc] = useState("");
   const [backSrc, setBackSrc] = useState("");
   const [originalBack, setOriginalBack] = useState("");
@@ -167,26 +177,34 @@ const ViewExam = () => {
         <ExamViewDialog frontSrc={frontSrc} backSrc={backSrc} buttonText={"View Scanned Exams"} />
         <ExamViewDialog frontSrc={originalFront} backSrc={originalBack} buttonText={"View Original Exams"} />
 
-        <AlertDialog>
-          <AlertDialogTrigger>
-            <Button variant="destructive">Change score</Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Changing grade</AlertDialogTitle>
-              <AlertDialogDescription>
-                You are now changing the grade for {student_name} with ID: {student_id}. This will be recorded.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <Input type="number" value={editableGrade} onChange={(e) => setEditableGrade(e.target.value)} min={0} max={total_marks} />
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            {/* Still need to add some frontend validation to make this prettier though it still works */}
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleSave}>Save</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        {!reviewExams && (
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button variant="destructive">Change score</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Changing grade</AlertDialogTitle>
+                <AlertDialogDescription>
+                  You are now changing the grade for {student_name} with ID: {student_id}. This will be recorded.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <Input
+                type="number"
+                value={editableGrade}
+                onChange={(e) => setEditableGrade(e.target.value)}
+                min={0}
+                max={total_marks}
+              />
+              {error && <p style={{ color: "red" }}>{error}</p>}
+              {/* Still need to add some frontend validation to make this prettier though it still works */}
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleSave}>Save</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
 
         <div className="grade-changelog">
           {gradeChangelog && gradeChangelog.length === 0 ? (
