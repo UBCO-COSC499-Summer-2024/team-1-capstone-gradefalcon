@@ -11,12 +11,15 @@ const UploadExam = () => {
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
   const [examType, setExamType] = useState(null);
-  const [numQuestions, setNumQuestions] = useState(null); // New state for numQuestions
+  const [numQuestions, setNumQuestions] = useState(null);
+  const [examTitle, setExamTitle] = useState(null);
+  const [courseId, setCourseId] = useState(null);
+  const [classId, setClassId] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchExamDetails = async () => {
+    const fetchQuestionExamDetails = async () => {
       try {
         const token = await getAccessTokenSilently(); // Get the token
         const response = await fetch(`/api/exam/getExamQuestionDetails/${exam_id}`, {
@@ -38,7 +41,30 @@ const UploadExam = () => {
       }
     };
 
+    const fetchExamDetails = async () => {
+      try {
+        const token = await getAccessTokenSilently(); // Get the token
+        const response = await fetch(`/api/exam/getExamDetails/${exam_id}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`, // Include the token in the request
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("API Response Data:", data); // Log the entire response data
+        setExamTitle(data.exam_title);
+        setCourseId(data.course_id);
+        setClassId(data.class_id);
+      } catch (error) {
+        console.error("Error fetching exam details:", error);
+      }
+    };
+
     fetchExamDetails();
+    fetchQuestionExamDetails();
 
     const handleFileSelect = (event) => {
       const file = event.target.files[0];
@@ -100,7 +126,7 @@ const UploadExam = () => {
             "Authorization": `Bearer ${token}`, // Include the token in the request
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ examType, keyOrExam: "exam", numQuestions }), // Pass numQuestions
+          body: JSON.stringify({examType, keyOrExam: "exam", numQuestions, examTitle, courseId, classID: classId }), // Pass numQuestions
         }),
       ]);
   

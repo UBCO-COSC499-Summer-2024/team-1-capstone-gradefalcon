@@ -50,6 +50,7 @@ router.post("/generateCustomBubbleSheet", checkJwt, checkPermissions(['create:ex
 router.get("/getExamDetails/:exam_id", checkJwt, checkPermissions(['read:exams']), getExamDetails);
 router.get("/student/exams", checkJwt, checkPermissions(["read:exam_student"]), getStudentExams);
 router.get("/getStudentAttempt/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), getStudentAttempt);
+router.get("/getExamQuestionDetails/:exam_id", checkJwt, checkPermissions(["read:exam"]), getExamQuestionDetails);
 
 
 // Function to get the answer key for a specific exam
@@ -340,7 +341,7 @@ router.post("/saveExamKey/:examType", checkJwt, checkPermissions(["upload:file"]
       }
     });
   }
-});
+);
 
 
 // Copy the template JSON file to the shared volume

@@ -199,7 +199,7 @@ const ConfirmExamKey = () => {
           "Authorization": `Bearer ${token}`, // Include the token in the request
         },
         credentials: "include",
-        body: JSON.stringify({ singlePage: template === "100mcq" }),
+        body: JSON.stringify({ singlePage: template === "100mcq" || (template === "custom" && numQuestions <= 100) }),
       });
 
       const data = await response.json();
@@ -297,6 +297,8 @@ const ConfirmExamKey = () => {
               questions: selectedOptions,
               numQuestions: numQuestions,
               markingSchemes: markingSchemes,
+              template: template,
+              totalMarks: totalMarks,
             }}
           >
             <Button size="icon" className="h-10 w-10">

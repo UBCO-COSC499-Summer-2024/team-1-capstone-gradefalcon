@@ -9,7 +9,7 @@ import StudentLayout from './components/StudentLayout';
 import ProtectedRoute from './ProtectedRoute';
 import NotFound from './components/NotFound';
 import Unauthorized from './pages/Unauthorized';
-import Login from './pages/Login';
+import Home from './pages/Home';
 import OMRProcessing from './components/OMRProcessing';
 import OMRProcessingUpload from './components/OMRProcessingUpload';
 
@@ -45,7 +45,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/Login" element={<Login />} />
+          <Route path="/Home" element={<Home />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           {/* Role-based Redirect */}
           <Route path="/" element={<ProtectedRoute />} />

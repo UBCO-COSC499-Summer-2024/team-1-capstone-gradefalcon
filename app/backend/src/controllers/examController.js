@@ -4,14 +4,26 @@ const path = require("path");
 const { exec } = require('child_process');
 
 const saveQuestions = async (req, res, next) => {
-  const { questions, classID, examTitle, numQuestions, totalMarks, markingSchemes, template = {}, canViewExam, canViewAnswers } = req.body;
+  const { questions, classID, examTitle, numQuestions, totalMarks, markingSchemes, template, canViewExam, canViewAnswers } = req.body;
+
+  console.log("Received data:", {
+    questions,
+    classID,
+    examTitle,
+    numQuestions,
+    totalMarks,
+    markingSchemes,
+    template,
+    canViewExam,
+    canViewAnswers,
+  });
 
   const questionsArray = Object.entries(questions).map(([key, value]) => `${value.question}:${value.option}`);
 
   try {
     const writeToExam = await pool.query(
-      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks, template viewing_options) VALUES ($1, $2, $3, $4, $5, $6) RETURNING exam_id",
-      [classID, examTitle, numQuestions, totalMarks, JSON.stringify({ canViewExam: canViewExam, canViewAnswers: canViewAnswers })]
+      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks, template, viewing_options) VALUES ($1, $2, $3, $4, $5, $6) RETURNING exam_id",
+      [classID, examTitle, numQuestions, totalMarks, template, JSON.stringify({ canViewExam: canViewExam, canViewAnswers: canViewAnswers })]
     );
     const insertedRowId = writeToExam.rows[0].exam_id;
 
@@ -170,26 +182,31 @@ const getStudentNameById = async (studentId) => {
 
 
 //get Total Questions and Exam type (formally named getExamType)
-const getExamQuestionDetails = async (exam_id) => {
+const getExamQuestionDetails = async (req, res) => {
+  const { exam_id } = req.params;
+
   try {
-    const result = await pool.query("SELECT total_questions, template FROM exam WHERE exam_id = $1", [exam_id] );
+    const result = await pool.query(
+      "SELECT total_questions, template FROM exam WHERE exam_id = $1",
+      [exam_id]
+    );
 
     if (result.rows.length === 0) {
-      return "No scores found for this exam";
+      return res.status(404).json({ message: "No scores found for this exam" });
     }
 
-    const totalQuestions = result.rows[0].total_questions;
-    const examType = result.rows[0].template;
+    const { total_questions: totalQuestions, template: examType } = result.rows[0];
 
-    return {
+    return res.status(200).json({
       totalQuestions,
       examType,
-    };
+    });
   } catch (error) {
     console.error("Error getting exam question details:", error);
-    throw error;
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 
 
@@ -548,7 +565,7 @@ const getExamDetails = async (req, res, next) => {
     const examQuery = `
       SELECT e.exam_id, e.exam_title, e.total_questions, e.total_marks, e.mean, e.high, e.low, 
       e.upper_quartile, e.lower_quartile, e.page_count, e.viewing_options, graded,
-      c.course_id, c.course_name
+      c.course_id, c.course_name, e.class_id
       FROM exam e
       JOIN classes c ON e.class_id = c.class_id
       WHERE e.exam_id = $1
