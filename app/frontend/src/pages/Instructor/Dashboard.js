@@ -1,3 +1,4 @@
+//dashboard.js:
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -6,17 +7,8 @@ import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import { ScrollArea } from "../../components/ui/scroll-area";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from "../../components/ui/dialog";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "../../components/ui/dialog";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
-import { Badge } from "../../components/ui/badge"; // Import the Badge component
 import AverageperExamChart from "../../components/AverageperExamChart";
 import AverageperCourseChart from "../../components/AverageperCourseChart";
 import NewClassForm from "../../components/NewClassForm";
@@ -25,7 +17,6 @@ import { Input } from "../../components/ui/input";
 
 export default function Dashboard() {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
-  //const roles = user[`${process.env.REACT_APP_AUTH0_MYAPP}/role`] || [];
   const [userName, setUserName] = useState("");
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
@@ -39,17 +30,6 @@ export default function Dashboard() {
 
   const navigate = useNavigate();
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case true:
-        return "default";
-      case false:
-        return "destructive";
-      default:
-        return "secondary";
-    }
-  };
-
   useEffect(() => {
     const fetchSessionInfo = async () => {
       try {
@@ -58,7 +38,7 @@ export default function Dashboard() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
           },
           credentials: "include", // This ensures cookies are included in the request
         });
@@ -87,7 +67,7 @@ export default function Dashboard() {
         if (response.ok) {
           const data = await response.json();
           // Filter out archived courses
-          const activeCourses = data.filter((course) => course.active !== false);
+          const activeCourses = data.filter(course => course.active !== false);
           setCourses(activeCourses);
           setFilteredCourses(activeCourses); // Initialize filteredCourses with the fetched data
         } else {
@@ -128,7 +108,7 @@ export default function Dashboard() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
           },
           credentials: "include",
         });
@@ -173,11 +153,19 @@ export default function Dashboard() {
   }, [getAccessTokenSilently, isAuthenticated]);
 
   useEffect(() => {
-    setFilteredCourses(courses.filter((course) => course.course_name?.toLowerCase().includes(courseSearchTerm.toLowerCase())));
+    setFilteredCourses(
+      courses.filter((course) =>
+        course.course_name?.toLowerCase().includes(courseSearchTerm.toLowerCase())
+      )
+    );
   }, [courseSearchTerm, courses]);
 
   useEffect(() => {
-    setFilteredExams(exams.filter((exam) => exam.exam_title?.toLowerCase().includes(examSearchTerm.toLowerCase())));
+    setFilteredExams(
+      exams.filter((exam) =>
+        exam.exam_title?.toLowerCase().includes(examSearchTerm.toLowerCase())
+      )
+    );
   }, [examSearchTerm, exams]);
 
   const handleExamCreated = (newExam) => {
@@ -210,9 +198,7 @@ export default function Dashboard() {
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Create New Class</DialogTitle>
-                      <DialogDescription>
-                        Enter the details for the new course and import the student list via a CSV file.
-                      </DialogDescription>
+                      <DialogDescription>Enter the details for the new course and import the student list via a CSV file.</DialogDescription>
                     </DialogHeader>
                     <NewClassForm />
                     <DialogClose asChild>
@@ -249,7 +235,7 @@ export default function Dashboard() {
                       <Tooltip delayDuration={0}>
                         <TooltipTrigger asChild>
                           <Link to={`/ClassManagement/${course.class_id}`}>
-                            <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md max-w-md mx-auto h-30">
+                            <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md max-w-md mx-auto h-30 hover:bg-gray-100 transition-colors duration-300">
                               <div className="flex items-center justify-between mb-4">
                                 <CardDescription>{course.course_name}</CardDescription>
                                 <Bookmark className="h-6 w-6 text-muted-foreground" />
@@ -283,39 +269,11 @@ export default function Dashboard() {
             <div className="flex justify-between items-center">
               <CardTitle className="mb-2">Exam Board</CardTitle>
               <div className="flex gap-2">
-                <Button size="sm" className="gap-1">
-                  <Link to={`/NewExam/defaultClassId`}>
-                    <Plus className="h-4 w-4" />
+                <Button size="sm" className="gap-1" >
+                <Link to={`/NewExam/defaultClassId`}>
+                  <Plus className="h-4 w-4" />
                   </Link>
                 </Button>
-                {/* <Dialog>
-                  <TooltipProvider>
-                    <Tooltip delayDuration={0}>
-                      <TooltipTrigger asChild>
-                        <DialogTrigger asChild>
-                          <Button size="sm" className="gap-1" onClick={() => setIsDialogOpen(true)}>
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                        </DialogTrigger>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Create New Exam</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Create New Exam</DialogTitle>
-                      <DialogDescription>
-                        Enter the details for the new exam and upload the answer key.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <NewExamForm setIsDialogOpen={setIsDialogOpen} onExamCreated={handleExamCreated} />
-                    <DialogClose asChild>
-                      <Button variant="ghost">Close</Button>
-                    </DialogClose>
-                  </DialogContent>
-                </Dialog> */}
                 <Button asChild size="sm" className="gap-1">
                   <Link to="/Examboard">
                     Manage Exams
@@ -343,7 +301,6 @@ export default function Dashboard() {
                   <TableRow>
                     <TableHead>Exam Name</TableHead>
                     <TableHead className="hidden sm:table-cell">Course</TableHead>
-                    <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -359,11 +316,6 @@ export default function Dashboard() {
                               <span className="font-bold">{exam.exam_title}</span>
                             </TableCell>
                             <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
-                            <TableCell>
-                              <Badge variant = {getStatusColor(exam.graded)}>
-                                {exam.graded ? "Graded" : "Not graded"}
-                              </Badge>
-                            </TableCell>
                           </TableRow>
                         </TooltipTrigger>
                         <TooltipContent>
