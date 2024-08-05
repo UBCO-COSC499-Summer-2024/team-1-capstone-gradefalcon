@@ -200,14 +200,28 @@ const getScoreByExamId = async (exam_id) => {
 
 const changeGrade = async (req, res, next) => {
   try {
-    const result = await pool.query("UPDATE studentResults SET grade = $1 WHERE student_id = $2 AND exam_id = $3", [
-      req.body.grade,
+    // Retrieve the current grade
+    const currentGradeResult = await pool.query("SELECT grade FROM studentResults WHERE student_id = $1 AND exam_id = $2", [
       req.body.student_id,
       req.body.exam_id,
     ]);
+
+    if (currentGradeResult.rowCount === 0) {
+      return res.status(404).json({ message: "Student or exam not found" });
+    }
+
+    const currentGrade = currentGradeResult.rows[0].grade;
+
+    // Update the grade and append to changelog
+    const result = await pool.query(
+      "UPDATE studentResults SET grade = $1, grade_changelog = array_append(grade_changelog, $2) WHERE student_id = $3 AND exam_id = $4",
+      [req.body.grade, `Grade was changed from ${currentGrade} to ${req.body.grade}`, req.body.student_id, req.body.exam_id]
+    );
+
     if (result.rowCount === 0) {
       return res.status(404).json({ message: "Student or exam not found" });
     }
+
     res.status(200).json({ message: "Grade updated successfully" });
   } catch (error) {
     console.error("Error changing grade:", error);
