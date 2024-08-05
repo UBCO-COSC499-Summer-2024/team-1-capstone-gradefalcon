@@ -6,6 +6,7 @@ import { Card, CardContent } from "../../components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../../components/ui/table";
 import { Input } from "../../components/ui/input";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
+import { EyeIcon } from "@heroicons/react/24/solid";
 import { useToast } from "../../components/ui/use-toast";
 import { Toaster } from "../../components/ui/toaster";
 import "../../css/App.css";
@@ -16,7 +17,6 @@ const ReviewExams = () => {
   const [studentScores, setStudentScores] = useState([]);
   const [totalMarks, setTotalMarks] = useState();
   const [editStudentId, setEditStudentId] = useState(null);
-  const [originalScores, setOriginalScores] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [resultsCombined, setResultsCombined] = useState(false);
   const { exam_id } = location.state || {};
@@ -111,27 +111,6 @@ const ReviewExams = () => {
     );
   };
 
-  const handleEdit = (studentId) => {
-    setEditStudentId(studentId);
-    const studentScore = studentScores.find((s) => s.StudentID === studentId).Score;
-    setOriginalScores((prevScores) => ({
-      ...prevScores,
-      [studentId]: studentScore,
-    }));
-  };
-
-  const handleCancel = (studentId) => {
-    setStudentScores((currentScores) =>
-      currentScores.map((score) => (score.StudentID === studentId ? { ...score, Score: originalScores[studentId] } : score))
-    );
-    setEditStudentId(null);
-    setOriginalScores((prevScores) => {
-      const newScores = { ...prevScores };
-      delete newScores[studentId];
-      return newScores;
-    });
-  };
-
   const saveStudentExams = async (studentData) => {
     try {
       const token = await getAccessTokenSilently();
@@ -154,12 +133,6 @@ const ReviewExams = () => {
   };
 
   const saveResults = async () => {
-    if (editStudentId !== null) {
-      toast({
-        title: "Please save or cancel the current edit before saving all results.",
-      });
-      return;
-    }
     try {
       saveStudentExams(studentScores);
 
@@ -211,7 +184,7 @@ const ReviewExams = () => {
                 <TableRow>
                   <TableHead>Student Name</TableHead>
                   <TableHead>Student ID</TableHead>
-                  <TableHead>Score/{totalMarks}</TableHead>
+                  <TableHead>Score/ {totalMarks}</TableHead>
                   <TableHead>View Exam</TableHead>
                 </TableRow>
               </TableHeader>
@@ -221,33 +194,25 @@ const ReviewExams = () => {
                     <TableCell>{student.StudentName}</TableCell>
                     <TableCell>{student.StudentID}</TableCell>
                     <TableCell>
-                      {editStudentId === student.StudentID ? (
-                        <Input
-                          type="number"
-                          value={student.Score}
-                          max={totalMarks}
-                          min="0"
-                          onChange={(e) => handleScoreChange(e, student.StudentID)}
-                        />
-                      ) : (
-                        student.Score
-                      )}
-                      {editStudentId === student.StudentID ? (
-                        <>
-                          <Button onClick={() => setEditStudentId(null)}>Save</Button>
-                          <Button onClick={() => handleCancel(student.StudentID)}>Cancel</Button>
-                        </>
-                      ) : (
-                        <Button onClick={() => handleEdit(student.StudentID)}>Edit</Button>
-                      )}
+                      <Input
+                        type="number"
+                        value={student.Score}
+                        max={totalMarks}
+                        min="0"
+                        onChange={(e) => handleScoreChange(e, student.StudentID)}
+                        className="w-14 px-2 py-1"
+                      />
                     </TableCell>
                     <TableCell>
                       <Button
+                        size="icon"
+                        variant="ghost"
+                        className="flex items-center justify-center hover:text-primary"
                         onClick={() =>
                           handleViewClick(student.StudentID, student.front_page, student.back_page, student.StudentName, student.Score)
                         }
                       >
-                        View
+                        <EyeIcon className="h-6 w-6" />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -257,7 +222,7 @@ const ReviewExams = () => {
           </CardContent>
         </Card>
       </div>
-      <Button onClick={() => saveResults()} className="mt-4 self-end">
+      <Button onClick={saveResults} className="mt-4 self-end">
         Save Results
       </Button>
       <Toaster />

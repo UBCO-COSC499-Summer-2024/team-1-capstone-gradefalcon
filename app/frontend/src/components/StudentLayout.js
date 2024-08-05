@@ -3,7 +3,7 @@ import '@fontsource/inter/latin.css'; // Import the font
 import '../css/App.css'; // Import global styles
 import { useLocation, Link } from "react-router-dom";
 import { useNavigate} from "react-router-dom";
-import { ClipboardCheck, Settings, LogOut, Flag } from "lucide-react"; // Import Flag icon
+import { ClipboardCheck, Settings, LogOut, Flag, Home } from "lucide-react"; // Import Flag icon
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -73,19 +73,25 @@ const StudentLayout = ({ children }) => {
           <span className="font-bold text-2xl text-white">GradeFalcon</span>
         </div>
         <div className="flex items-center gap-4">
-          <Link to="/StudentAccountSettings">
-            <Button variant="ghost" className="p-2 hover:bg-transparent text-white flex items-center hover:text-white">
-              <Settings className="h-6 w-6 text-white mr-2" />
-              Account Settings
+        <Link to="/StudentDashboard">
+            <Button variant="ghost" className="p-2 hover:bg-[#167938] text-white flex items-center hover:text-white">
+              <Home className="h-6 w-6 text-white mr-2" />
+              Dashboard
             </Button>
           </Link>
-          <Link to="/StudentReportsSubmitted">
-            <Button variant="ghost" className="p-2 hover:bg-transparent text-white flex items-center hover:text-white">
+          <Link to="/StudentReportsDashboard">
+            <Button variant="ghost" className="p-2 hover:bg-[#167938] text-white flex items-center hover:text-white">
               <Flag className="h-6 w-6 text-white mr-2" />
               Reports
             </Button>
           </Link>
-          <Button onClick={handleLogout} variant="ghost" className="p-2 hover:bg-transparent text-white flex items-center hover:text-white">
+          <Link to="/StudentAccountSettings">
+            <Button variant="ghost" className="p-2 hover:bg-[#167938] text-white flex items-center hover:text-white">
+              <Settings className="h-6 w-6 text-white mr-2" />
+              Account Settings
+            </Button>
+          </Link>
+          <Button onClick={handleLogout} variant="ghost" className="p-2 hover:bg-[#167938] text-white flex items-center hover:text-white">
             <LogOut className="h-6 w-6 text-white mr-2" />
             Logout
           </Button>

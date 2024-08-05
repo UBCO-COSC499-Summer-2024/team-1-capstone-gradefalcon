@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/ca
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge"; // Import the Badge component
 
-export default function StudentReportsSubmitted() {
+export default function StudentReportsDashboard() {
   const [submittedReports, setSubmittedReports] = useState([
     { exam_name: "Sample Exam 1", course_name: "Sample Course 1", status: "Approved" },
     { exam_name: "Sample Exam 2", course_name: "Sample Course 2", status: "Pending" },
@@ -18,13 +18,13 @@ export default function StudentReportsSubmitted() {
   const getStatusColor = (status) => {
     switch (status) {
       case "Approved":
-        return "bg-[hsl(var(--primary))]"; // Using the theme color for Approved
+        return  "default";
       case "Pending":
-        return "bg-yellow-500";
+        return "secondary";
       case "Declined":
-        return "bg-red-500";
+        return "destructive";
       default:
-        return "bg-gray-500";
+        return "default";
     }
   };
 
@@ -58,7 +58,7 @@ export default function StudentReportsSubmitted() {
                     <TableCell>{report.exam_name}</TableCell>
                     <TableCell>{report.course_name}</TableCell>
                     <TableCell>
-                      <Badge className={`text-white ${getStatusColor(report.status)}`}>
+                      <Badge variant={`${getStatusColor(report.status)}`}>
                         {report.status}
                       </Badge>
                     </TableCell>

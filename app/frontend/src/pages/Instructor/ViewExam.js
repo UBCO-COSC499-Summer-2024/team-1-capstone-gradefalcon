@@ -50,6 +50,8 @@ const ViewExam = () => {
   const [error, setError] = useState("");
   const [gradeChangelog, setGradeChangelog] = useState([]);
 
+  console.log("displayGrade", displayGrade);
+
   useEffect(() => {
     const fetchExam = async () => {
       const token = await getAccessTokenSilently();
@@ -169,15 +171,11 @@ const ViewExam = () => {
 
   return (
     <main className="mx-auto grid max-w-[100rem] flex-1 auto-rows-max gap-8 p-2">
-      <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
-          <ChevronLeftIcon className="h-4 w-4" />
-          <span className="sr-only">Back</span>
-        </Button>
-        <h1 className="flex-1 text-3xl font-semibold tracking-tight">View Exam</h1>
-      </div>
-
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+      <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
+        <ChevronLeftIcon className="h-4 w-4" />
+        <span className="sr-only">Back</span>
+      </Button>
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {/* Student Details */}
         <div className="grid auto-rows-max items-start gap-8 lg:col-span-2">
           <Card className="bg-white border rounded-lg p-6">
@@ -202,7 +200,7 @@ const ViewExam = () => {
         </div>
 
         {/* Grade Changelog */}
-        <div className="grid auto-rows-max items-start gap-8 lg:col-span-3">
+        <div className="grid auto-rows-max items-start gap-8 lg:col-span-1">
           <Card className="bg-white border rounded-lg p-6 h-full">
             <CardHeader className="flex justify-between px-6 py-4">
               <CardTitle>Grade Changelog</CardTitle>
@@ -237,10 +235,11 @@ const ViewExam = () => {
         </div>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-5">
-        <div className="grid auto-rows-max items-start gap-8 lg:col-span-3 lg:col-start-3">
-          {/* Edit Grade */}
-          <Card className="bg-white border rounded-lg p-6  mt-[-12rem]">
+
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-8">
+        {/* Edit Grade */}
+        <div className="grid auto-rows-max items-start gap-8 lg:col-span-3">
+          <Card className="bg-white border rounded-lg p-6">
             <CardHeader className="flex justify-between px-4 py-4">
               <CardTitle>Edit Grade</CardTitle>
             </CardHeader>
