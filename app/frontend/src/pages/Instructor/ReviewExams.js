@@ -53,7 +53,7 @@ const ReviewExams = () => {
             throw new Error("Network response was not ok");
           }
           const data = await response.json();
-          console.log("data", data);
+          console.log("setStudentScores data", data);
           setStudentScores(data);
         };
 
@@ -87,13 +87,15 @@ const ReviewExams = () => {
     fetchData();
   }, [getAccessTokenSilently, exam_id]);
 
-  const handleViewClick = (studentId, front_page, back_page) => {
+  const handleViewClick = (studentId, front_page, back_page, original_front_page, original_back_page) => {
     navigate("/ViewExam", {
       state: {
         student_id: studentId,
         exam_id: exam_id,
-        front_page: front_page,
-        back_page: back_page,
+        front_page: `../../omr/outputs/page_1/CheckedOMRs/colored/${front_page}`,
+        back_page: `../../omr/outputs/page_2/CheckedOMRs/colored/${back_page}`,
+        original_front_page: `../../omr/inputs/page_1/${front_page}`,
+        original_back_page: `../../omr/inputs/page_2/${back_page}`,
       },
     });
   };

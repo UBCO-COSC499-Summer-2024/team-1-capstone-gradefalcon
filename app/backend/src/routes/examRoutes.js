@@ -594,12 +594,8 @@ router.post("/callOMR", checkJwt, checkPermissions(["upload:file"]), async funct
 
 // Route to fetch the first PNG image in the folder
 router.post("/fetchImage", checkJwt, checkPermissions(["read:image"]), async function (req, res) {
-  let imagesFolderPath;
-  if (req.body.side === "back") {
-    imagesFolderPath = path.join(__dirname, `../../omr/outputs/page_2/CheckedOMRs/colored/${req.body.file_name}`);
-  } else {
-    imagesFolderPath = path.join(__dirname, `../../omr/outputs/page_1/CheckedOMRs/colored/${req.body.file_name}`);
-  }
+  const imagesFolderPath = path.join(__dirname, req.body.file_name);
+  console.log(imagesFolderPath);
   console.log(req.body.file_name);
   try {
     // imagesFolderPath = path.resolve(__dirname, `../../uploads/Students/exam_id_5/student_id_1/${filename}`);
