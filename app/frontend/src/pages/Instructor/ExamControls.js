@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/App.css";
 import { Button } from "../../components/ui/button";
@@ -29,6 +29,10 @@ const ExamControls = () => {
   } = location.state || {};
   const { toast } = useToast();
 
+  // State variables for toggle buttons
+  const [canViewExam, setCanViewExam] = useState(false);
+  const [canViewAnswers, setCanViewAnswers] = useState(false);
+
   const handleConfirm = async (event) => {
     event.preventDefault();
     try {
@@ -37,7 +41,7 @@ const ExamControls = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // Include the token in the request
+          Authorization: `Bearer ${token}`, // Include the token in the request
         },
         body: JSON.stringify({
           classID: classID,
@@ -47,6 +51,8 @@ const ExamControls = () => {
           totalMarks: totalMarks,
           markingSchemes: markingSchemes,
           template: template,
+          canViewExam: canViewExam,
+          canViewAnswers: canViewAnswers,
         }),
       });
       console.log(response);
@@ -99,15 +105,21 @@ const ExamControls = () => {
                 <div className="controls">
                   <div className="control-item flex justify-between items-center mb-4">
                     <span>Students can view their exam</span>
-                    <Switch id="toggle-view-exam" data-testid="toggle-view-exam" />
+                    <Switch
+                      id="toggle-view-exam"
+                      data-testid="toggle-view-exam"
+                      checked={canViewExam}
+                      onCheckedChange={setCanViewExam}
+                    />
                   </div>
                   <div className="control-item flex justify-between items-center mb-4">
                     <span>Students can view correct answers</span>
-                    <Switch id="toggle-view-answers" data-testid="toggle-view-answers" />
-                  </div>
-                  <div className="control-item flex justify-between items-center mb-4">
-                    <span>Students can see exam statistics</span>
-                    <Switch id="toggle-view-stats" data-testid="toggle-view-stats" />
+                    <Switch
+                      id="toggle-view-answers"
+                      data-testid="toggle-view-answers"
+                      checked={canViewAnswers}
+                      onCheckedChange={setCanViewAnswers}
+                    />
                   </div>
                 </div>
                 <div className="flex justify-between mt-4">

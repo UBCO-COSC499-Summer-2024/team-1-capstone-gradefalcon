@@ -10,7 +10,7 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../
 import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
 import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
 import { useAuth0 } from "@auth0/auth0-react";
-import '../../css/App.css';
+import "../../css/App.css";
 
 const ExamBoard = () => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
@@ -29,7 +29,7 @@ const ExamBoard = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`, // Include the token in the request
+            Authorization: `Bearer ${token}`, // Include the token in the request
           },
           credentials: "include",
         });
@@ -62,24 +62,24 @@ const ExamBoard = () => {
   }, {});
 
   const handleDeleteFromBoard = (examId) => {
-    setClassData(prevData => {
-      const updatedClasses = prevData.classes.filter(exam => exam.exam_id !== examId);
+    setClassData((prevData) => {
+      const updatedClasses = prevData.classes.filter((exam) => exam.exam_id !== examId);
       return { ...prevData, classes: updatedClasses };
     });
     toast({
-      title: 'Deleted successfully',
+      title: "Deleted successfully",
     });
   };
 
   const handleDeleteSelected = () => {
-    setClassData(prevData => {
-      const updatedClasses = prevData.classes.filter(exam => !selectedExams.includes(exam.exam_id));
+    setClassData((prevData) => {
+      const updatedClasses = prevData.classes.filter((exam) => !selectedExams.includes(exam.exam_id));
       return { ...prevData, classes: updatedClasses };
     });
     setSelectedExams([]);
     setAllSelected(false);
     toast({
-      title: 'Deleted selected exams successfully',
+      title: "Deleted selected exams successfully",
     });
   };
 
@@ -90,7 +90,7 @@ const ExamBoard = () => {
     setSelectedExams([]);
     setAllSelected(false);
     toast({
-      title: 'Archived selected exams successfully',
+      title: "Archived selected exams successfully",
     });
   };
 
@@ -98,7 +98,7 @@ const ExamBoard = () => {
     if (allSelected) {
       setSelectedExams([]);
     } else {
-      const allExamIds = Object.values(groupedExams).flatMap(({ exams }) => exams.map(exam => exam.exam_id));
+      const allExamIds = Object.values(groupedExams).flatMap(({ exams }) => exams.map((exam) => exam.exam_id));
       setSelectedExams(allExamIds);
     }
     setAllSelected(!allSelected);
@@ -106,7 +106,7 @@ const ExamBoard = () => {
 
   const handleSelectExam = (examId) => {
     if (selectedExams.includes(examId)) {
-      setSelectedExams(selectedExams.filter(id => id !== examId));
+      setSelectedExams(selectedExams.filter((id) => id !== examId));
     } else {
       setSelectedExams([...selectedExams, examId]);
     }
@@ -146,67 +146,72 @@ const ExamBoard = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>
-                    <Checkbox
-                      checked={allSelected}
-                      onCheckedChange={handleSelectAll}
-                    />
+                    <Checkbox checked={allSelected} onCheckedChange={handleSelectAll} />
                   </TableHead>
                   <TableHead>Exam Name</TableHead>
                   <TableHead>Course Name</TableHead>
                   <TableHead>Grade Exam</TableHead>
-                  <TableHead>
-                  </TableHead>
+                  <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {Object.entries(groupedExams).map(
-                  ([courseId, { course_name, class_id, exams }]) => (
-                    exams.map((exam, index) => (
-                      <TableRow key={`${courseId}-${exam.exam_id}`}>
-                        <TableCell>
-                          <Checkbox
-                            checked={selectedExams.includes(exam.exam_id)}
-                            onCheckedChange={() => handleSelectExam(exam.exam_id)}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          {exam.exam_title}
-                        </TableCell>
-                        <TableCell>
-                          {course_name}
-                        </TableCell>
-                        <TableCell>
-                          <Button asChild size="sm" className="ml-auto gap-1">
-                            <Link to={`/UploadExams/${exam.exam_id}`}>
-                              Grade Exam
-                              <ArrowUpRight className="h-4 w-4" />
-                            </Link>
-                          </Button>
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <MoreVertical className="h-4 w-4" />
+                {Object.entries(groupedExams).map(([courseId, { course_name, class_id, exams }]) =>
+                  exams.map((exam, index) => (
+                    <TooltipProvider key={index}>
+                      <Tooltip delayDuration={0}>
+                        <TooltipTrigger asChild>
+                          <TableRow
+                            // key={`${courseId}-${exam.exam_id}`}
+                            // className="hover:bg-gray-100 cursor-pointer"
+                            // onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}
+                          >
+                            <TableCell>
+                              <Checkbox
+                                checked={selectedExams.includes(exam.exam_id)}
+                                onCheckedChange={() => handleSelectExam(exam.exam_id)}
+                              />
+                            </TableCell>
+                            <TableCell>{exam.exam_title}</TableCell>
+                            <TableCell>{course_name}</TableCell>
+                            <TableCell>
+                              <Button asChild size="sm" className="ml-auto gap-1">
+                                <Link to={`/UploadExams/${exam.exam_id}`}>
+                                  Grade Exam
+                                  <ArrowUpRight className="h-4 w-4" />
+                                </Link>
                               </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                              <DropdownMenuItem onClick={() => handleDeleteFromBoard(exam.exam_id)}>Delete</DropdownMenuItem>
-                              <DropdownMenuItem>Archive</DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}>View Results</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon">
+                                    <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                  <DropdownMenuItem onClick={() => handleDeleteFromBoard(exam.exam_id)}>Delete</DropdownMenuItem>
+                                  <DropdownMenuItem>Archive</DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}>
+                                    View Results
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>View Exam</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))
                 )}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
       </div>
-      <Toaster /> 
+      <Toaster />
     </main>
   );
 };

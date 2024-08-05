@@ -4,23 +4,22 @@ const path = require("path");
 const { exec } = require('child_process');
 
 const saveQuestions = async (req, res, next) => {
-  const { questions, classID, examTitle, numQuestions, totalMarks, markingSchemes, template = {} } = req.body;
+  const { questions, classID, examTitle, numQuestions, totalMarks, markingSchemes, template = {}, canViewExam, canViewAnswers } = req.body;
 
-  const questionsArray = Object.entries(questions).map(
-    ([key, value]) => `${value.question}:${value.option}`
-  );
+  const questionsArray = Object.entries(questions).map(([key, value]) => `${value.question}:${value.option}`);
 
   try {
     const writeToExam = await pool.query(
-      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks, template) VALUES ($1, $2, $3, $4, $5) RETURNING exam_id",
-      [classID, examTitle, numQuestions, totalMarks, template]
+      "INSERT INTO exam (class_id, exam_title, total_questions, total_marks, template viewing_options) VALUES ($1, $2, $3, $4, $5, $6) RETURNING exam_id",
+      [classID, examTitle, numQuestions, totalMarks, JSON.stringify({ canViewExam: canViewExam, canViewAnswers: canViewAnswers })]
     );
     const insertedRowId = writeToExam.rows[0].exam_id;
 
-    const writeToSolution = await pool.query(
-      "INSERT INTO solution (exam_id, answers, marking_schemes) VALUES ($1, $2, $3)",
-      [insertedRowId, questionsArray, JSON.stringify(markingSchemes)]
-    );
+    const writeToSolution = await pool.query("INSERT INTO solution (exam_id, answers, marking_schemes) VALUES ($1, $2, $3)", [
+      insertedRowId,
+      questionsArray,
+      JSON.stringify(markingSchemes),
+    ]);
 
     res.status(200).json({ message: "Questions and marking schemes saved successfully." });
   } catch (error) {
@@ -34,10 +33,11 @@ const newExam = async (req, res, next) => {
   const { exam_id, student_id, grade } = req.body;
 
   try {
-    const result = await pool.query(
-      "INSERT INTO studentResults (exam_id, student_id, grade) VALUES ($1, $2, $3) RETURNING *",
-      [exam_id, student_id, grade]
-    );
+    const result = await pool.query("INSERT INTO studentResults (exam_id, student_id, grade) VALUES ($1, $2, $3) RETURNING *", [
+      exam_id,
+      student_id,
+      grade,
+    ]);
     res.json(result.rows[0]);
   } catch (err) {
     next(err);
@@ -131,9 +131,7 @@ const getStudentGrades = async (req, res, next) => {
 
 const getAnswerKeyForExam = async (exam_id) => {
   try {
-    const solutionResult = await pool.query("SELECT answers FROM solution WHERE exam_id = $1", [
-      exam_id,
-    ]);
+    const solutionResult = await pool.query("SELECT answers FROM solution WHERE exam_id = $1", [exam_id]);
 
     if (solutionResult.rows.length === 0) {
       throw new Error("Solution not found");
@@ -174,10 +172,7 @@ const getStudentNameById = async (studentId) => {
 //get Total Questions and Exam type (formally named getExamType)
 const getExamQuestionDetails = async (exam_id) => {
   try {
-    const result = await pool.query(
-      "SELECT total_questions, template FROM exam WHERE exam_id = $1",
-      [exam_id]
-    );
+    const result = await pool.query("SELECT total_questions, template FROM exam WHERE exam_id = $1", [exam_id] );
 
     if (result.rows.length === 0) {
       return "No scores found for this exam";
@@ -222,12 +217,17 @@ const saveResults = async (req, res, next) => {
     // Assuming you have a database connection established and a model for studentResults
     for (const score of studentScores) {
       if (score.StudentName !== "Unknown student") {
-        const result = await pool.query(
-          "INSERT INTO studentresults (student_id, exam_id, grade) VALUES ($1,$2,$3)",
-          [score.StudentID, exam_id, parseInt(score.Score, 10)]
-        );
+        // Assuming studentResults is your table/model name and it has a method to insert data
+        const result = await pool.query("INSERT INTO studentresults (student_id, exam_id, grade) VALUES ($1,$2,$3)", [
+          score.StudentID,
+          exam_id,
+          parseInt(score.Score, 10),
+        ]);
       }
     }
+    // Update the "graded" status in the exams table
+    await pool.query("UPDATE exam SET graded = true WHERE exam_id = $1", [exam_id]);
+
     res.send({ message: "Scores saved successfully" });
     resetOMR();
   } catch (error) {
@@ -287,9 +287,7 @@ const deleteAllFilesInDir = (dirPath) => {
 };
 
 async function getCustomMarkingSchemes(exam_id) {
-  const result = await pool.query("SELECT marking_schemes FROM solution WHERE exam_id = $1", [
-    exam_id,
-  ]);
+  const result = await pool.query("SELECT marking_schemes FROM solution WHERE exam_id = $1", [exam_id]);
 
   if (result.rows.length === 0) {
     throw new Error(`No marking schemes found for exam_id ${exam_id}`);
@@ -548,8 +546,9 @@ const getExamDetails = async (req, res, next) => {
 
   try {
     const examQuery = `
-      SELECT e.exam_id, e.exam_title, e.total_questions, e.total_marks, e.mean, e.high, e.low, e.upper_quartile, e.lower_quartile, e.page_count, e.file_size, 
-             c.course_id, c.course_name
+      SELECT e.exam_id, e.exam_title, e.total_questions, e.total_marks, e.mean, e.high, e.low, 
+      e.upper_quartile, e.lower_quartile, e.page_count, e.viewing_options, graded,
+      c.course_id, c.course_name
       FROM exam e
       JOIN classes c ON e.class_id = c.class_id
       WHERE e.exam_id = $1
@@ -579,6 +578,95 @@ const getExamDetails = async (req, res, next) => {
   }
 };
 
+const getStudentExams = async (req, res, next) => {
+  const studentId = req.auth.sub; // Get the student ID from Auth0 token
+
+  try {
+    const exams = await pool.query(
+      `
+      select exam_id, exam_title, course_id, course_name, graded from exam 
+	    join classes using (class_id)
+      join enrollment using (class_id)
+      join student using (student_id)
+      where auth0_id = $1
+    `,
+      [studentId]
+    );
+
+    res.json({ exams: exams.rows });
+  } catch (err) {
+    console.error("Error fetching student exams:", err);
+    next(err);
+  }
+};
+
+const getStudentAttempt = async (req, res, next) => {
+  const studentId = req.auth.sub; // Get the student ID from Auth0 token
+  const examId = parseInt(req.params.exam_id, 10);
+
+  try {
+    const exam = await pool.query(
+      `
+      SELECT exam_id, student_id, grade, exam_title, course_id, course_name, viewing_options 
+      from studentResults 
+      join student using (student_id) 
+	    join exam using (exam_id)
+	    join classes using (class_id)
+      where auth0_id = $1 and exam_id = $2
+    `,
+      [studentId, examId]
+    );
+    res.json({ exam: exam.rows[0] });
+  } catch (err) {
+    console.error("Error fetching student exams:", err);
+    next(err);
+  }
+};
+
+const fetchStudentExam = async (req, res, next) => {
+  const auth0_id = req.auth.sub; // Get the student ID from Auth0 token
+  const exam_id = parseInt(req.params.exam_id, 10);
+  const file_name = req.body.page;
+  console.log("file_name", file_name);
+  try {
+    const exams = await pool.query(
+      `
+      SELECT student_id
+      FROM student
+      WHERE auth0_id = $1
+    `,
+      [auth0_id]
+    );
+    const student_id = exams.rows[0].student_id;
+    const folderPath = path.join(__dirname, `../../uploads/Students/exam_id_${exam_id}/student_id_${student_id}/${file_name}`);
+    console.log("folderPath", folderPath);
+    res.sendFile(folderPath);
+  } catch (err) {
+    console.error("Error fetching student exams:", err);
+    next(err);
+  }
+};
+
+const fetchSolution = async (req, res, next) => {
+  const exam_id = req.params.exam_id;
+  try {
+    const solutionResult = await pool.query("SELECT answers FROM solution WHERE exam_id = $1", [exam_id]);
+
+    if (solutionResult.rows.length === 0) {
+      throw new Error("Solution not found");
+    }
+
+    const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
+
+    // Extract the answers in order
+    const answersInOrder = answersArray.map((answer) => answer.split(":")[1]);
+
+    res.json(answersInOrder);
+  } catch (error) {
+    console.error("Error fetching solution:", error);
+    res.status(500).json({ message: "Failed to fetch solution" });
+  }
+};
 
 module.exports = {
   saveQuestions,
@@ -599,4 +687,8 @@ module.exports = {
   getCustomMarkingSchemes,
   generateCustomBubbleSheet,
   getExamDetails,
+  getStudentExams,
+  getStudentAttempt,
+  fetchStudentExam,
+  fetchSolution,
 };

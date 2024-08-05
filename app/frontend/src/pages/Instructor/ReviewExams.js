@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent } from "../../components/ui/card";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../../components/ui/table";
+import { Input } from "../../components/ui/input";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
+import { useToast } from "../../components/ui/use-toast";
+import { Toaster } from "../../components/ui/toaster";
 import "../../css/App.css";
-import Toast from "../../components/Toast";
 
 const ReviewExams = () => {
   const { getAccessTokenSilently } = useAuth0();
-  const [imageSrc, setImageSrc] = useState("");
   const location = useLocation();
-  const [toast, setToast] = useState(null);
   const [studentScores, setStudentScores] = useState([]);
   const [totalMarks, setTotalMarks] = useState();
   const [editStudentId, setEditStudentId] = useState(null);
@@ -17,6 +21,7 @@ const ReviewExams = () => {
   const [resultsCombined, setResultsCombined] = useState(false);
   const { exam_id } = location.state || {};
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +85,6 @@ const ReviewExams = () => {
     fetchData();
   }, [getAccessTokenSilently, exam_id]);
 
-  // Function to handle view button click
   const handleViewClick = (studentId, front_page, back_page) => {
     navigate("/ViewExam", {
       state: {
@@ -92,7 +96,6 @@ const ReviewExams = () => {
     });
   };
 
-  // Function to handle manually changing the score
   const handleScoreChange = (e, studentId) => {
     const newScore = e.target.value;
     setStudentScores((currentScores) =>
@@ -102,7 +105,6 @@ const ReviewExams = () => {
     );
   };
 
-  // Function to handle editing the student score
   const handleEdit = (studentId) => {
     setEditStudentId(studentId);
     const studentScore = studentScores.find((s) => s.StudentID === studentId).Score;
@@ -112,22 +114,20 @@ const ReviewExams = () => {
     }));
   };
 
-  // Function to handle canceling an edit
   const handleCancel = (studentId) => {
     setStudentScores((currentScores) =>
       currentScores.map((score) =>
         score.StudentID === studentId ? { ...score, Score: originalScores[studentId] } : score
       )
     );
-    setEditStudentId(null); // Exit edit mode
+    setEditStudentId(null);
     setOriginalScores((prevScores) => {
       const newScores = { ...prevScores };
-      delete newScores[studentId]; // Remove the original score as it's no longer needed
+      delete newScores[studentId];
       return newScores;
     });
   };
 
-  // test
   const saveStudentExams = async (studentData) => {
     try {
       const token = await getAccessTokenSilently();
@@ -151,7 +151,9 @@ const ReviewExams = () => {
 
   const saveResults = async () => {
     if (editStudentId !== null) {
-      alert("Please save or cancel the current edit before saving all results.");
+      toast({
+        title: "Please save or cancel the current edit before saving all results.",
+      });
       return;
     }
     try {
@@ -170,11 +172,11 @@ const ReviewExams = () => {
         throw new Error("save results Network response was not ok");
       }
       const data = await response.json();
-      console.log("saveResults:", data);
-
-      setToast({ message: "Results saved! Redirecting...", type: "success" });
+      toast({
+        title: "Results saved! Redirecting...",
+      });
       setTimeout(() => {
-        navigate("/GradeReport");
+        navigate("/Examboard");
       }, 2000);
     } catch (error) {
       console.error("Error saving results:", error);
@@ -186,78 +188,76 @@ const ReviewExams = () => {
     : studentScores;
 
   return (
-    <>
-      <div className="App">
-        <div className="main-content">
-          {toast && (
-            <>
-              <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
-            </>
-          )}
-          <header>
-            <h2>Review Exams</h2>
-            <input
-              type="text"
-              placeholder="Search by Student ID..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </header>
-          <table>
-            <thead>
-              <tr>
-                <th>Student Name</th>
-                <th>Student ID</th>
-                <th>Score/{totalMarks}</th>
-                <th>View Exam</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredScores.map((student, index) => (
-                <tr key={index}>
-                  <td>{student.StudentName}</td>
-                  <td>{student.StudentID}</td>
-                  <td>
-                    {editStudentId === student.StudentID ? (
-                      <input
-                        type="number"
-                        value={student.Score}
-                        max={totalMarks}
-                        min="0"
-                        onChange={(e) => handleScoreChange(e, student.StudentID)}
-                      />
-                    ) : (
-                      student.Score
-                    )}
-
-                    {editStudentId === student.StudentID ? (
-                      <>
-                        <button onClick={() => setEditStudentId(null)}>Save</button>
-                        <button onClick={() => handleCancel(student.StudentID)}>Cancel</button>
-                      </>
-                    ) : (
-                      <button onClick={() => handleEdit(student.StudentID)}>Edit</button>
-                    )}
-                  </td>
-                  <td>
-                    <button
-                      onClick={() =>
-                        handleViewClick(student.StudentID, student.front_page, student.back_page)
-                      }
-                    >
-                      View
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <button className="save-changes-btn" onClick={() => saveResults()}>
-            Save Results
-          </button>
-        </div>
+    <main className="flex flex-col gap-4 p-6">
+      <div className="flex justify-between items-center w-full mb-4">
+        <h1 className="text-2xl font-semibold">Review Exams</h1>
+        <Input
+          type="text"
+          placeholder="Search by Student ID..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="max-w-xs"
+        />
       </div>
-    </>
+      <div className="w-full">
+        <Card className="bg-white border rounded">
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Student Name</TableHead>
+                  <TableHead>Student ID</TableHead>
+                  <TableHead>Score/{totalMarks}</TableHead>
+                  <TableHead>View Exam</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredScores.map((student, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{student.StudentName}</TableCell>
+                    <TableCell>{student.StudentID}</TableCell>
+                    <TableCell>
+                      {editStudentId === student.StudentID ? (
+                        <Input
+                          type="number"
+                          value={student.Score}
+                          max={totalMarks}
+                          min="0"
+                          onChange={(e) => handleScoreChange(e, student.StudentID)}
+                        />
+                      ) : (
+                        student.Score
+                      )}
+                      {editStudentId === student.StudentID ? (
+                        <>
+                          <Button onClick={() => setEditStudentId(null)}>Save</Button>
+                          <Button onClick={() => handleCancel(student.StudentID)}>Cancel</Button>
+                        </>
+                      ) : (
+                        <Button onClick={() => handleEdit(student.StudentID)}>Edit</Button>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() =>
+                          handleViewClick(student.StudentID, student.front_page, student.back_page)
+                        }
+                      >
+                        View
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+      <Button onClick={() => saveResults()} className="mt-4 self-end">
+        Save Results
+      </Button>
+      <Toaster />
+    </main>
   );
 };
 

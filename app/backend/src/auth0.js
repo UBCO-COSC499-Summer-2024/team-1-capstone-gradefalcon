@@ -36,7 +36,7 @@ const errorHandler = (err, req, res, next) => {
 
 const checkRole = (role) => {
   return (req, res, next) => {
-    const roles = req.auth[`${process.env.REACT_APP_AUTH0_AUDIENCE}/roles`] || [];
+    const roles = req.auth[`${process.env.REACT_APP_AUTH0_MYAPP}/role`] || [];
     if (!roles.includes(role)) {
       return res.status(403).json({ message: 'Forbidden' });
     }
