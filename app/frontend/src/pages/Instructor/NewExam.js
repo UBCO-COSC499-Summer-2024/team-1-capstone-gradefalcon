@@ -71,8 +71,13 @@ const NewExam = () => {
     } // For custom, the number of questions will be set in the CustomBubbleSheet component
   };
   const handleClassChange = (value) => {
-    setSelectedClassId(value);
-    setCourseId(value);
+    // Find the selected class object
+    const selectedClass = classes.find(cls => cls.class_id === value);
+    
+    if (selectedClass) {
+      setSelectedClassId(selectedClass.class_id);  // Set the selected class ID
+      setCourseId(selectedClass.course_id);        // Set the corresponding course ID
+    }
   };
 
   const isFormValid = () => {
@@ -248,7 +253,7 @@ const NewExam = () => {
                 <Button asChild size="sm" className="px-2 py-1">
                       <Link
                         to={isFormValid() ? "/ManualExamKey" : "#"}
-                        state={{ examTitle: examTitle, classID: courseId, template, numQuestions, numOptions }}
+                        state={{ examTitle: examTitle, classID: selectedClassId, courseId: courseId, template, numQuestions, numOptions }}
                         onClick={handleButtonClick}
                       >
                         Manually Select Answers
@@ -257,7 +262,7 @@ const NewExam = () => {
                     <Button asChild size="sm" variant="secondary" className="px-2 py-1">
                       <Link
                         to={isFormValid() ? "/UploadExamKey" : "#"}
-                        state={{ examTitle: examTitle, classID: courseId, template, numQuestions, numOptions }}
+                        state={{ examTitle: examTitle, classID: selectedClassId, courseId: courseId, template, numQuestions, numOptions }}
                         onClick={handleButtonClick}
                       >
                         Upload Answer Key

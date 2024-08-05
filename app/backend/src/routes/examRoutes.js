@@ -28,6 +28,13 @@ const { PDFDocument } = require("pdf-lib");
 const multer = require("multer");
 const { formatWithOptions } = require("util");
 const router = express.Router();
+const combinedUpload = multer().fields([
+  { name: 'examKey', maxCount: 1 },
+  { name: 'numQuestions' },
+  { name: 'examTitle' },
+  { name: 'classID' },
+  { name: 'template' }
+]);
 
 router.post("/saveQuestions", checkJwt, checkPermissions(['create:exam']), saveQuestions);
 router.post("/NewExam", checkJwt, checkPermissions(['create:exam']), newExam);
@@ -267,14 +274,19 @@ router.post(
 );
 
 // Save the exam key uploaded by the user
-router.post(
-  "/saveExamKey/:examType",
-  checkJwt,
-  checkPermissions(["upload:file"]),
+router.post("/saveExamKey/:examType", checkJwt, checkPermissions(["upload:file"]),
   async function (req, res) {
-    const examType = req.params.examType;
-    const numQuestions = req.body.numQuestions; // Assuming you pass numQuestions in the request body
-    console.log("Exam Type:", examType);
+    combinedUpload(req, res, async function (err) {
+      if (err) {
+        return res.status(500).send("Error uploading file.");
+      }
+
+      console.log("Request Body:", req.body);  // contain the form fields
+      console.log("Uploaded File:", req.files); //show the uploaded file
+
+      const examType = req.params.examType;
+      const numQuestions = parseInt(req.body.numQuestions, 10); // Ensure numQuestions is a number
+      console.log("Exam Type:", examType);
 
     if (examType === "100mcq") {
       // Only one page
@@ -341,76 +353,58 @@ router.post(
     } else {
       return res.status(400).send("Invalid exam type or number of questions.");
     }
+  });
   }
 );
 
 
 // Copy the template JSON file to the shared volume
 router.post("/copyTemplate", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
-    console.log("copyTemplate");
-    const examType = req.body.examType;
-    const keyOrExam = req.body.keyOrExam;
-    const numQuestions = req.body.numQuestions; // Assuming the number of questions is provided in the request
+  console.log("copyTemplate");
+  const { examType, keyOrExam, numQuestions, examTitle, classID, courseId } = req.body;
 
-    const filePath_1 = "/code/omr/inputs/page_1";
-    const filePath_2 = "/code/omr/inputs/page_2";
+  const filePath_1 = "/code/omr/inputs/page_1";
+  const filePath_2 = "/code/omr/inputs/page_2";
 
+  try {
     let templatePath_1, templatePath_2;
 
     if (examType === "100mcq" && keyOrExam === "key") {
-      // For 100mcq key, only copy the second page template
-      const filePath = "/code/omr/inputs";
       templatePath_2 = path.join(__dirname, "../assets/templates/100mcq_page_2.json");
-      const destinationTemplatePath = path.join(filePath, "template.json");
-
-      ensureDirectoryExistence(filePath);
-
-      try {
-        fs.copyFileSync(templatePath_2, destinationTemplatePath);
-        console.log("Template.json copied successfully for 100mcq key");
-        return res.send(JSON.stringify("File copied successfully"));
-      } catch (error) {
-        console.error("Error copying template.json:", error);
-        return res.status(500).send("Error copying template.json");
-      }
+      ensureDirectoryExistence(filePath_2);
+      fs.copyFileSync(templatePath_2, path.join(filePath_2, "template.json"));
+      console.log("Template.json copied successfully for 100mcq key");
+      return res.json({ message: "File copied successfully" });
     }
 
     if (examType === "200mcq" || (examType === "custom" && numQuestions > 100)) {
-      // For 200mcq or custom with more than 100 questions, copy both page templates
-      templatePath_1 = path.join(__dirname, `../assets/templates/${examType}_page_1.json`);
-      templatePath_2 = path.join(__dirname, `../assets/templates/${examType}_page_2.json`);
+      if (examType === "custom") {
+        templatePath_1 = path.join(__dirname, `../assets/custom/${courseId}_${examTitle}_${classID}/custom_page_1.json`);
+        templatePath_2 = path.join(__dirname, `../assets/custom/${courseId}_${examTitle}_${classID}/custom_page_2.json`);
+      } else {
+        templatePath_1 = path.join(__dirname, `../assets/templates/${examType}_page_1.json`);
+        templatePath_2 = path.join(__dirname, `../assets/templates/${examType}_page_2.json`);
+      }
 
       ensureDirectoryExistence(filePath_1);
       ensureDirectoryExistence(filePath_2);
 
-      try {
-        fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
-        console.log("First template.json copied successfully");
-        fs.copyFileSync(templatePath_2, path.join(filePath_2, "template.json"));
-        console.log("Second template.json copied successfully");
-        return res.send(JSON.stringify("Files copied successfully"));
-      } catch (error) {
-        console.error("Error copying template.json:", error);
-        return res.status(500).send("Error copying template.json");
-      }
+      fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
+      console.log("First template.json copied successfully");
+      fs.copyFileSync(templatePath_2, path.join(filePath_2, "template.json"));
+      console.log("Second template.json copied successfully");
+
+      return res.json({ message: "Files copied successfully" });
     }
 
     if (examType === "custom" && numQuestions <= 100) {
-      // For custom template with 100 or fewer questions, copy only the first page template
       templatePath_1 = path.join(__dirname, "../assets/templates/custom_page_1.json");
       ensureDirectoryExistence(filePath_1);
-
-      try {
-        fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
-        console.log("Custom template.json for page 1 copied successfully");
-        return res.send(JSON.stringify("File copied successfully"));
-      } catch (error) {
-        console.error("Error copying template.json:", error);
-        return res.status(500).send("Error copying template.json");
-      }
+      fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
+      console.log("Custom template.json for page 1 copied successfully");
+      return res.json({ message: "File copied successfully" });
     }
 
-    // Handle 100mcq exam case, which also requires both pages
     if (examType === "100mcq" && keyOrExam === "exam") {
       templatePath_1 = path.join(__dirname, `../assets/templates/100mcq_page_1.json`);
       templatePath_2 = path.join(__dirname, `../assets/templates/100mcq_page_2.json`);
@@ -418,91 +412,79 @@ router.post("/copyTemplate", checkJwt, checkPermissions(["upload:file"]), async 
       ensureDirectoryExistence(filePath_1);
       ensureDirectoryExistence(filePath_2);
 
-      try {
-        fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
-        console.log("First template.json copied successfully for 100mcq exam");
-        fs.copyFileSync(templatePath_2, path.join(filePath_2, "template.json"));
-        console.log("Second template.json copied successfully for 100mcq exam");
-        return res.send(JSON.stringify("Files copied successfully"));
-      } catch (error) {
-        console.error("Error copying template.json:", error);
-        return res.status(500).send("Error copying template.json");
-      }
+      fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
+      console.log("First template.json copied successfully for 100mcq exam");
+      fs.copyFileSync(templatePath_2, path.join(filePath_2, "template.json"));
+      console.log("Second template.json copied successfully for 100mcq exam");
+
+      return res.json({ message: "Files copied successfully" });
     }
 
-    // Fallback if the conditions above are not met
-    return res.status(400).send("Invalid request parameters.");
+    return res.status(400).json({ error: "Invalid request parameters." });
+  } catch (error) {
+    console.error("Error copying template.json:", error);
+    return res.status(500).json({ error: "Error copying template.json" });
   }
-);
+});
+
+
 // Generate the evaluation JSON for an exam
-router.post( "/GenerateEvaluation", checkJwt, checkPermissions(["create:evaluation"]),
-  async function (req, res) {
-    const { examType, exam_id, numQuestions } = req.body; // Add numQuestions to the request body
+router.post("/GenerateEvaluation", checkJwt, checkPermissions(["create:evaluation"]), async function (req, res) {
+  const { examType, exam_id, numQuestions } = req.body;
 
-    try {
-      if (!exam_id) {
-        return res.status(400).send("Missing exam_id");
-      }
-
-      const answerKey = await getAnswerKeyForExam(exam_id);
-      const customMarkingSchemes = await getCustomMarkingSchemes(exam_id);
-
-      const markingSchemes = {
-        DEFAULT: {
-          correct: "1",
-          incorrect: "0",
-          unmarked: "0",
-        },
-      };
-
-      for (const [sectionName, scheme] of Object.entries(customMarkingSchemes)) {
-        markingSchemes[sectionName] = {
-          questions: scheme.questions,
-          marking: scheme.marking,
-        };
-      }
-
-      if (examType === "200mcq" || (examType === "custom" && numQuestions > 100)) {
-        // Handle 200mcq or custom template with more than 100 questions
-        const firstHalfQuestions = answerKey.slice(0, 100);
-        const secondHalfQuestions = answerKey.slice(100);
-
-        // Create evaluation.json for the first half
-        const evaluationJsonPage1 = createEvaluationJson(firstHalfQuestions, markingSchemes, 1);
-        // Create evaluation.json for the second half
-        const evaluationJsonPage2 = createEvaluationJson(secondHalfQuestions, markingSchemes, 101);
-
-        // Ensure directories exist
-        const destinationDirPage1 = `/code/omr/inputs/page_1`;
-        const destinationDirPage2 = `/code/omr/inputs/page_2`;
-        ensureDirectoryExistence(destinationDirPage1);
-        ensureDirectoryExistence(destinationDirPage2);
-
-        // Write JSON files
-        fs.writeFileSync(path.join(destinationDirPage1, "evaluation.json"), JSON.stringify(evaluationJsonPage1, null, 2));
-        fs.writeFileSync(path.join(destinationDirPage2, "evaluation.json"), JSON.stringify(evaluationJsonPage2, null, 2));
-
-        res.json({ message: "evaluation.json files created successfully for 200mcq or custom with more than 100 questions" });
-      } else if (examType === "100mcq" || (examType === "custom" && numQuestions <= 100)) {
-        // Handle 100mcq or custom template with 100 or fewer questions
-        const evaluationJson = createEvaluationJson(answerKey, markingSchemes, 1);
-
-        const destinationDir = `/code/omr/inputs/page_2`;
-        ensureDirectoryExistence(destinationDir);
-
-        // Write JSON file
-        fs.writeFileSync(path.join(destinationDir, "evaluation.json"), JSON.stringify(evaluationJson, null, 2));
-
-        res.json({ message: "evaluation.json created successfully for 100mcq or custom with 100 or fewer questions" });
-      } else {
-        res.status(400).send("Invalid exam type.");
-      }
-    } catch (error) {
-      console.error("Error in /GenerateEvaluation:", error);
-      res.status(500).send("Error generating evaluation file");
-    }
+  if (!exam_id) {
+    return res.status(400).json({ error: "Missing exam_id" });
   }
-);
+
+  try {
+    const answerKey = await getAnswerKeyForExam(exam_id);
+    const customMarkingSchemes = await getCustomMarkingSchemes(exam_id);
+
+    const markingSchemes = {
+      DEFAULT: {
+        correct: "1",
+        incorrect: "0",
+        unmarked: "0",
+      },
+    };
+
+    for (const [sectionName, scheme] of Object.entries(customMarkingSchemes)) {
+      markingSchemes[sectionName] = {
+        questions: scheme.questions,
+        marking: scheme.marking,
+      };
+    }
+
+    if (examType === "200mcq" || (examType === "custom" && numQuestions > 100)) {
+      const firstHalfQuestions = answerKey.slice(0, 100);
+      const secondHalfQuestions = answerKey.slice(100);
+
+      const evaluationJsonPage1 = createEvaluationJson(firstHalfQuestions, markingSchemes, 1);
+      const evaluationJsonPage2 = createEvaluationJson(secondHalfQuestions, markingSchemes, 101);
+
+      ensureDirectoryExistence("/code/omr/inputs/page_1");
+      ensureDirectoryExistence("/code/omr/inputs/page_2");
+
+      fs.writeFileSync("/code/omr/inputs/page_1/evaluation.json", JSON.stringify(evaluationJsonPage1, null, 2));
+      fs.writeFileSync("/code/omr/inputs/page_2/evaluation.json", JSON.stringify(evaluationJsonPage2, null, 2));
+
+      return res.json({ message: "evaluation.json files created successfully for 200mcq or custom with more than 100 questions" });
+    } else if (examType === "100mcq" || (examType === "custom" && numQuestions <= 100)) {
+      const evaluationJson = createEvaluationJson(answerKey, markingSchemes, 1);
+
+      ensureDirectoryExistence("/code/omr/inputs/page_2");
+      fs.writeFileSync("/code/omr/inputs/page_2/evaluation.json", JSON.stringify(evaluationJson, null, 2));
+
+      return res.json({ message: "evaluation.json created successfully for 100mcq or custom with 100 or fewer questions" });
+    } else {
+      return res.status(400).json({ error: "Invalid exam type." });
+    }
+  } catch (error) {
+    console.error("Error in /GenerateEvaluation:", error);
+    return res.status(500).json({ error: "Error generating evaluation file" });
+  }
+});
+
 
 function createEvaluationJson(questions, markingSchemes, questionStartIndex) {
   return {
@@ -616,16 +598,19 @@ router.get("/getExamQuestionDetails/:exam_id", checkJwt, checkPermissions(["read
     if (isNaN(exam_id)) {
       return res.status(400).send("Invalid exam_id");
     }
-    const exam_type = await getExamQuestionDetails(exam_id);
-    if (exam_type.length === 0) {
-      return res.status(404).send("No exam type found for this exam");
+
+    const examDetails = await getExamQuestionDetails(exam_id);
+    if (!examDetails || !examDetails.totalQuestions || !examDetails.examType) {
+      return res.status(404).send("No exam details found for this exam");
     }
-    res.json({ exam_type });
+
+    res.json({ examDetails });
   } catch (error) {
     console.error("Error in /getExamQuestionDetails:", error);
-    res.status(500).send("Error retrieving scores");
+    res.status(500).send("Error retrieving exam details");
   }
 });
+
 
 router.post("/saveResults", saveResults);
 

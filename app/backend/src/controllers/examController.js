@@ -174,16 +174,17 @@ const getStudentNameById = async (studentId) => {
 //get Total Questions and Exam type (formally named getExamType)
 const getExamQuestionDetails = async (exam_id) => {
   try {
-    const result = await pool.query("SELECT total_questions FROM exam WHERE exam_id = $1", [
-      exam_id,
-    ]);
+    const result = await pool.query(
+      "SELECT total_questions, template FROM exam WHERE exam_id = $1",
+      [exam_id]
+    );
 
     if (result.rows.length === 0) {
       return "No scores found for this exam";
     }
 
     const totalQuestions = result.rows[0].total_questions;
-    const examType = totalQuestions > 100 ? "200mcq" : "100mcq";
+    const examType = result.rows[0].template;
 
     return {
       totalQuestions,
@@ -194,6 +195,7 @@ const getExamQuestionDetails = async (exam_id) => {
     throw error;
   }
 };
+
 
 
 const getScoreByExamId = async (exam_id) => {
@@ -452,7 +454,7 @@ async function generateCustomJsonTemplate(questions, options, courseId, examTitl
     }
 
     // Save the template to a separate file for each page
-    const outputDir = path.join(__dirname, '../assets', `${courseId}_${examTitle}_${classId}`);
+    const outputDir = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}`);
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
@@ -493,7 +495,7 @@ async function generateCustomBubbleSheet(req, res) {
   }
 
   // Create the directory if it doesn't exist
-  const outputDir = path.join(__dirname, '../assets', `${courseId}_${examTitle}_${classId}`);
+  const outputDir = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}`);
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }

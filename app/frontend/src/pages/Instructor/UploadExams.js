@@ -29,6 +29,7 @@ const UploadExam = () => {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
+        console.log("API Response Data:", data); // Log the entire response data
         console.log(`Exam Type: ${data.examType}, Total Questions: ${data.totalQuestions}`);
         setExamType(data.examType);
         setNumQuestions(data.totalQuestions); // Rename totalQuestions to numQuestions
@@ -69,11 +70,11 @@ const UploadExam = () => {
 
   const sendToBackend = async () => {
     if (!file) return;
-
+  
     const formData = new FormData();
     formData.append("examPages", file);
     formData.append("exam_id", exam_id); // Include exam_id in the form data
-
+  
     try {
       const token = await getAccessTokenSilently(); // Get the token
       const responses = await Promise.all([
@@ -102,22 +103,41 @@ const UploadExam = () => {
           body: JSON.stringify({ examType, keyOrExam: "exam", numQuestions }), // Pass numQuestions
         }),
       ]);
-
-      const dataUploadExam = await responses[0].json();
-      const dataGenerateEvaluation = await responses[1].json();
-      const dataCopyTemplate = await responses[2].json();
-
+  
+      const results = await Promise.all(
+        responses.map(async (response) => {
+          if (!response.ok) {
+            const contentType = response.headers.get("content-type");
+            let errorMessage;
+  
+            if (contentType && contentType.includes("application/json")) {
+              const errorResponse = await response.json();
+              errorMessage = errorResponse.error || "Unknown error occurred";
+            } else {
+              errorMessage = await response.text();
+            }
+  
+            throw new Error(errorMessage);
+          }
+  
+          return response.json(); // Parse the successful JSON response
+        })
+      );
+  
+      const [dataUploadExam, dataGenerateEvaluation, dataCopyTemplate] = results;
+  
       console.log("Data from UploadExam:", dataUploadExam);
       console.log("Data from GenerateEvaluation:", dataGenerateEvaluation);
       console.log("Data from copyTemplate:", dataCopyTemplate);
-
+  
       navigate("/OMRProcessingUpload", {
         state: { exam_id },
       });
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error:", error.message);
     }
   };
+  
 
   return (
     <main className="flex flex-col gap-4 p-2">

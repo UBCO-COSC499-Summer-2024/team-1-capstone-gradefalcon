@@ -13,7 +13,7 @@ const UploadExamKey = () => {
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
   const location = useLocation();
-  const { examTitle, classID, template, numQuestions, numOptions } = location.state || {};
+  const { examTitle, classID, courseId, template, numQuestions, numOptions } = location.state || {};
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -22,6 +22,7 @@ const UploadExamKey = () => {
       examTitle,
       classID,
       template,
+      courseId,
     });
 
     const handleFileSelect = (event) => {
@@ -78,7 +79,6 @@ const UploadExamKey = () => {
     //   `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`
     // );
     formData.append("fileName", file.name);
-    // formData.append("examID", examID);
     formData.append("examTitle", examTitle);
     formData.append("classID", classID);
     formData.append("template", template);
@@ -102,7 +102,8 @@ const UploadExamKey = () => {
             "Authorization": `Bearer ${token}`, // Include the token in the request
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ examType: template, keyOrExam: "key", numQuestions: numQuestions }),
+          body: JSON.stringify({ examType: template, keyOrExam: "key", numQuestions: numQuestions, 
+            examTitle: examTitle, classID: classID, courseId: courseId}),
         }),
       ]);
 
