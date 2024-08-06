@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/App.css";
 import { Button } from "../../components/ui/button";
@@ -24,6 +24,7 @@ const ExamControls = () => {
     questions,
     numQuestions,
     totalMarks,
+    template,
     markingSchemes = [],
   } = location.state || {};
   const { toast } = useToast();
@@ -34,6 +35,20 @@ const ExamControls = () => {
 
   const handleConfirm = async (event) => {
     event.preventDefault();
+
+      // Log the data being sent to the server
+  console.log("Sending the following data to the server:", {
+    classID,
+    examTitle,
+    questions,
+    numQuestions,
+    totalMarks,
+    markingSchemes,
+    template,
+    canViewExam,
+    canViewAnswers,
+  });
+  
     try {
       const token = await getAccessTokenSilently(); // Get the token
       const response = await fetch("/api/exam/saveQuestions", {
@@ -49,6 +64,7 @@ const ExamControls = () => {
           numQuestions: numQuestions,
           totalMarks: totalMarks,
           markingSchemes: markingSchemes,
+          template: template,
           canViewExam: canViewExam,
           canViewAnswers: canViewAnswers,
         }),
@@ -138,7 +154,7 @@ const ExamControls = () => {
           </div>
         </div>
       </main>
-      <Toaster /> {/* Adding the Toaster component */}
+      <Toaster />
     </>
   );
 };

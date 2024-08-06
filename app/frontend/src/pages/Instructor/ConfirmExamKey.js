@@ -26,9 +26,9 @@ import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0
 const ConfirmExamKey = () => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
   const location = useLocation();
-  const { examTitle, classID, template } = location.state || {};
-  const [numQuestions, setNumQuestions] = useState(10);
-  const [numOptions, setNumOptions] = useState(5);
+  const { examTitle, classID, template, numQuestions: initialNumQuestions, numOptions: initialNumOptions } = location.state || {};
+  const [numQuestions, setNumQuestions] = useState(initialNumQuestions);
+  const [numOptions, setNumOptions] = useState(initialNumOptions);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [result, setResult] = useState({});
   const [selectedQuestions, setSelectedQuestions] = useState([]);
@@ -46,7 +46,7 @@ const ConfirmExamKey = () => {
 
   const frameworks = Array.from({ length: numQuestions }, (_, j) => ({
     value: `Question ${j + 1}`,
-    label: `Question ${j + 1}`,
+    label: `Q${j + 1}`,
   }));
 
   const removeQuestion = (questionNumber, option) => {
@@ -179,7 +179,7 @@ const ConfirmExamKey = () => {
           Authorization: `Bearer ${token}`, // Include the token in the request
         },
         credentials: "include",
-        body: JSON.stringify({ singlePage: template === "100mcq" }),
+        body: JSON.stringify({ singlePage: template === "100mcq" || (template === "custom" && numQuestions <= 100) }),
       });
 
       const data = await response.json();
@@ -248,24 +248,138 @@ const ConfirmExamKey = () => {
 
   return (
     <main className="flex flex-col gap-4 p-2">
-      <div className="w-full mx-auto grid flex-1 auto-rows-max gap-8">
-        <div className="flex items-center gap-4">
-          <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
-            <ChevronLeftIcon className="h-4 w-4" />
-            <span className="sr-only">Back</span>
-          </Button>
-          <h1 className="flex-1 text-3xl font-semibold tracking-tight">Confirm Exam Key</h1>
-          <div className="flex items-center gap-2 ml-auto">
-            <Link
-              to="/ExamControls"
-              state={{
-                classID: classID,
-                examTitle: examTitle,
-                questions: selectedOptions,
-                numQuestions: numQuestions,
-                markingSchemes: markingSchemes,
-                totalMarks: totalMarks,
-              }}
+    <div className="w-full mx-auto grid flex-1 auto-rows-max gap-8">
+      <div className="flex items-center gap-4">
+        <Button
+          variant="outline"
+          size="icon"
+          className="h-10 w-10"
+          onClick={() => window.history.back()}
+        >
+          <ChevronLeftIcon className="h-4 w-4" />
+          <span className="sr-only">Back</span>
+        </Button>
+        <h1 className="flex-1 text-3xl font-semibold tracking-tight">Confirm Exam Key</h1>
+        <div className="flex items-center gap-2 ml-auto">
+          <Link
+            to="/ExamControls"
+            state={{
+              classID: classID,
+              examTitle: examTitle,
+              questions: selectedOptions,
+              numQuestions: numQuestions,
+              markingSchemes: markingSchemes,
+              template: template,
+              totalMarks: totalMarks,
+            }}
+          >
+            <Button size="icon" className="h-10 w-10">
+              <ChevronRightIcon className="h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      <div className="flex flex-row gap-8 w-full">
+        <Card className="bg-white border rounded-lg p-6 w-full md:w-1/2">
+          <CardHeader className="flex justify-between px-6 py-4">
+            <CardTitle>Questions</CardTitle>
+            <CardDescription>Configure exam questions</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-4">
+              <Label htmlFor="num-questions" className="block text-sm font-medium text-gray-700">
+                #Questions
+              </Label>
+              <Input
+                type="number"
+                id="num-questions"
+                className="mt-1 block w-full"
+                value={numQuestions}
+                onChange={(e) => setNumQuestions(Math.min(300, parseInt(e.target.value) || 10))}
+                min="1"
+                max="300"
+                data-testid="num-questions-input"
+              />
+            </div>
+            <div className="mb-4">
+              <Label htmlFor="num-options" className="block text-sm font-medium text-gray-700">
+                #Options per question
+              </Label>
+              <Input
+                type="number"
+                id="num-options"
+                className="mt-1 block w-full"
+                value={numOptions}
+                onChange={(e) => setNumOptions(Math.min(26, parseInt(e.target.value) || 5))}
+                min="1"
+                max="26"
+                data-testid="num-options-input"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-white border rounded-lg w-full md:w-1/2 p-6">
+          <CardHeader className="flex justify-between px-6 py-4">
+            <CardTitle>Custom Marking Scheme</CardTitle>
+            <CardDescription>Set the marking scheme for your questions. By default, the total mark match the number of questions. You can adjust the total mark manually below.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Questions</TableHead>
+                  <TableHead>Correct</TableHead>
+                  <TableHead>Incorrect</TableHead>
+                  <TableHead>Blank</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {markingSchemes.map((scheme, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{scheme.questions.join(", ")}</TableCell>
+                    <TableCell>
+                      <Input
+                        type="number"
+                        value={scheme.correct}
+                        className="w-full"
+                        onChange={(e) => handleSchemeChange(index, "correct", e.target.value)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        type="number"
+                        value={scheme.incorrect}
+                        className="w-full"
+                        onChange={(e) => handleSchemeChange(index, "incorrect", e.target.value)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        type="number"
+                        value={scheme.unmarked}
+                        className="w-full"
+                        onChange={(e) => handleSchemeChange(index, "unmarked", e.target.value)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button size="icon" variant="ghost" onClick={() => handleDeleteScheme(index)}>
+                        <TrashIcon className="h-5 w-5" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+          <CardFooter className="justify-center border-t p-4">
+            <Button
+              size="sm"
+              variant="ghost"
+              className="gap-1"
+              onClick={() => setShowCustomSchemeModal(true)}
             >
               <Button size="icon" className="h-10 w-10">
                 <ChevronRightIcon className="h-4 w-4" />

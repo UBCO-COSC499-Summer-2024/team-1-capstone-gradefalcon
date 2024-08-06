@@ -11,10 +11,9 @@ const UploadExamKey = () => {
   const { getAccessTokenSilently } = useAuth0(); // Get the token
   const [fileURL, setFileURL] = useState(null);
   const [file, setFile] = useState(null);
-  const [template, setTemplate] = useState("100mcq");
   const fileInputRef = useRef(null);
   const location = useLocation();
-  const { examTitle, classID } = location.state || {};
+  const { examTitle, classID, courseId, template, numQuestions, numOptions } = location.state || {};
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -23,6 +22,7 @@ const UploadExamKey = () => {
       examTitle,
       classID,
       template,
+      courseId,
     });
 
     const handleFileSelect = (event) => {
@@ -57,10 +57,6 @@ const UploadExamKey = () => {
     toast({ title: "Reset", description: "File upload has been reset." });
   };
 
-  const handleTemplateChange = (event) => {
-    setTemplate(event.target.value);
-  };
-
   const sendToBackend = async () => {
     if (!file) {
       toast({ title: "No File", description: "No file selected to upload." });
@@ -83,9 +79,11 @@ const UploadExamKey = () => {
     //   `Instructors/${userName}_(${userID})/${courseID}_(${classID})/${examTitle}/AnswerKey`
     // );
     formData.append("fileName", file.name);
-    // formData.append("examID", examID);
     formData.append("examTitle", examTitle);
     formData.append("classID", classID);
+    formData.append("template", template);
+    formData.append("numQuestions", numQuestions);
+
 
     try {
       const token = await getAccessTokenSilently(); // Get the token
@@ -104,7 +102,8 @@ const UploadExamKey = () => {
             "Authorization": `Bearer ${token}`, // Include the token in the request
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ examType: template, keyOrExam: "key" }),
+          body: JSON.stringify({ examType: template, keyOrExam: "key", numQuestions: numQuestions, 
+            examTitle: examTitle, classID: classID, courseId: courseId}),
         }),
       ]);
 
@@ -124,6 +123,8 @@ const UploadExamKey = () => {
           examTitle: examTitle,
           classID: classID,
           template: template,
+          numOptions: numOptions, 
+          numQuestions: numQuestions,
         },
       });
     } catch (error) {
@@ -149,27 +150,14 @@ const UploadExamKey = () => {
           Upload Exam Key
         </h1>
         <div className="hidden items-center gap-2 md:ml-auto md:flex"></div>
-      </div>
-      <label>Exam Template:</label>
-      <div>
-        <label>
-          <input
-            type="radio"
-            value="100mcq"
-            checked={template === "100mcq"}
-            onChange={handleTemplateChange}
-          />
-          100 MCQ
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="200mcq"
-            checked={template === "200mcq"}
-            onChange={handleTemplateChange}
-          />
-          200 MCQ
-        </label>
+        <div className="flex items-center gap-2 ml-auto">
+        <Button size="sm" variant="outline" onClick={resetUpload}>
+            Reset
+          </Button>
+          <Button size="sm" className="gap-1" onClick={sendToBackend}>
+            Import
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col items-center gap-4 w-full">
@@ -204,14 +192,6 @@ const UploadExamKey = () => {
               ></iframe>
             </div>
           )}
-        </div>
-        <div className="flex gap-2 w-full mt-4">
-          <Button size="sm" className="gap-1" onClick={sendToBackend}>
-            Import
-          </Button>
-          <Button size="sm" variant="outline" onClick={resetUpload}>
-            Reset
-          </Button>
         </div>
       </div>
       <Toaster />
