@@ -1,13 +1,12 @@
-//sidebar.js:
 import { Link } from "react-router-dom";
-import { Bird, Home, BookOpen, Users, Settings, Flag } from "lucide-react";
+import { ClipboardCheck, Home, BookOpen, Users, Settings, Flag } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "./ui/dropdown-menu";
 
 export default function Sidebar({ handleLogout }) {
   return (
     <aside className="sidebar">
       <div className="logo">
-        <Bird className="h-8 w-8" />
+        <ClipboardCheck className="h-6 w-6" />
         <span className="ml-2">GradeFalcon</span>
       </div>
       <nav className="flex flex-col gap-3 py-12">

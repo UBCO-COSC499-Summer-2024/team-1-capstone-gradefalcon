@@ -1,10 +1,9 @@
-
 import React from 'react';
 import '@fontsource/inter/latin.css'; // Import the font
 import '../css/App.css'; // Import global styles
 import { useLocation, Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Bird, Settings, LogOut, Flag } from "lucide-react"; // Import Bird and Flag icons
+import { useNavigate} from "react-router-dom";
+import { ClipboardCheck, Settings, LogOut, Flag } from "lucide-react"; // Import Flag icon
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -19,7 +18,6 @@ const StudentLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth0();
-  
   const handleLogout = async () => {
     try {
       // Perform the Auth0 logout
@@ -57,7 +55,7 @@ const StudentLayout = ({ children }) => {
     >
       <nav className="bg-[hsl(var(--primary))] p-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <Bird className="h-8 w-8 text-white" />
+          <ClipboardCheck className="h-6 w-6 text-white" />
           <span className="font-bold text-2xl text-white">GradeFalcon</span>
         </div>
         <div className="flex items-center gap-4">
