@@ -101,7 +101,7 @@ const ClassManagement = () => {
           <TooltipProvider>
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
-                <Link to={`../NewExam/${params.class_id}`} className="gap-1">
+                <Link to={`../NewExam`} className="gap-1">
                   <Button size="sm" className="gap-1">
                     <Plus className="h-3.5 w-3.5" />
                   </Button>

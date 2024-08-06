@@ -12,6 +12,7 @@ import { Toaster } from "../../components/ui/toaster";
 import { Badge } from "../../components/ui/badge";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "../../components/ui/dialog";
 import "../../css/App.css";
 
 const ExamBoard = () => {
@@ -23,6 +24,8 @@ const ExamBoard = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [filter, setFilter] = useState("all");
+  const [deleteExamId, setDeleteExamId] = useState(null);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -91,21 +94,15 @@ const ExamBoard = () => {
         throw new Error(data.message || "Failed to delete exam");
       }
 
-      handleDeleteFromBoard(examId);
+      // Refresh the exam board data
+      await fetchClassData();
+      toast({ title: "Exam deleted successfully." });
+     
     } catch (error) {
       setError("Error deleting exam: " + error.message);
     }
   };
 
-  const handleDeleteFromBoard = (examId) => {
-    setClassData((prevData) => {
-      const updatedClasses = prevData.classes.filter((exam) => exam.exam_id !== examId);
-      return { ...prevData, classes: updatedClasses };
-    });
-    toast({
-      title: "Deleted successfully",
-    });
-  };
 
   const handleDeleteSelected = () => {
     setClassData((prevData) => {
@@ -165,7 +162,7 @@ const ExamBoard = () => {
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <Button asChild size="sm" className="gap-1">
-                <Link to={`/NewExam/defaultClassId`}>
+                <Link to={`/NewExam`}>
                   <Plus className="h-6 w-6" />
                 </Link>
               </Button>
@@ -176,75 +173,106 @@ const ExamBoard = () => {
           </Tooltip>
         </TooltipProvider>
       </div>
-      <Tabs value={filter} onValueChange={setFilter} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="graded">Graded</TabsTrigger>
-          <TabsTrigger value="not_graded">Not Graded</TabsTrigger>
-        </TabsList>
-        <TabsContent value={filter}>
-          <div className="w-full">
-            <Card className="bg-white border rounded">
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>
-                        <Checkbox checked={allSelected} onCheckedChange={handleSelectAll} />
-                      </TableHead>
-                      <TableHead>Exam Name</TableHead>
-                      <TableHead>Course Name</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredExams.map((exam) => (
-                      <TableRow key={exam.exam_id}>
-                        <TableCell>
-                          <Checkbox
-                            checked={selectedExams.includes(exam.exam_id)}
-                            onCheckedChange={() => handleSelectExam(exam.exam_id)}
-                          />
-                        </TableCell>
-                        <TableCell>{exam.exam_title}</TableCell>
-                        <TableCell>{exam.course_name}</TableCell>
-                        <TableCell>
-                          <Badge variant={getStatusColor(exam.graded)}>{exam.graded ? "Graded" : "Not graded"}</Badge>
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <MoreVertical className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                              <DropdownMenuItem onClick={() => deleteExam(exam.exam_id)}>Delete</DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}>View Results</DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => {
-                                  if (!exam.graded) {
-                                    navigate(`/UploadExams/${exam.exam_id}`);
-                                  } else {
-                                    toast({ title: "Error", description: "This exam has already been graded." });
-                                  }
-                                }}
-                              >
-                                Grade Exam
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
+      <div className="w-full">
+        <Card className="bg-white border rounded">
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>
+                    <Checkbox checked={allSelected} onCheckedChange={handleSelectAll} />
+                  </TableHead>
+                  <TableHead>Exam Name</TableHead>
+                  <TableHead>Course Name</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredExams.map((exam) => (
+                  <TableRow key={exam.exam_id}>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedExams.includes(exam.exam_id)}
+                        onCheckedChange={() => handleSelectExam(exam.exam_id)}
+                      />
+                    </TableCell>
+                    <TableCell>{exam.exam_title}</TableCell>
+                    <TableCell>{exam.course_name}</TableCell>
+                    <TableCell>
+                      <Badge variant={getStatusColor(exam.graded)}>
+                        {exam.graded ? "Graded" : "Not graded"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              if (!exam.graded) {
+                                navigate(`/UploadExams/${exam.exam_id}`);
+                              } else {
+                                toast({ title: "Error", description: "This exam has already been graded." });
+                              }
+                            }}
+                          >
+                            Grade Exam
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setDeleteExamId(exam.exam_id)}>
+                            Delete
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}>
+                            View Results
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+      <Dialog open={deleteExamId !== null} onOpenChange={() => setDeleteExamId(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Exam</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this exam? Deleting an exam will remove all associated exam data and student results. This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <Checkbox
+            id="confirm-delete"
+            checked={isConfirmed}
+            onCheckedChange={setIsConfirmed}
+            label="I understand the consequences"
+          />
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline" onClick={() => setDeleteExamId(null)}>
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button
+              variant="destructive"
+              disabled={!isConfirmed}
+              onClick={() => {
+                deleteExam(deleteExamId);
+                setDeleteExamId(null);
+                setIsConfirmed(false);
+              }}
+            >
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <Toaster />
     </main>
   );

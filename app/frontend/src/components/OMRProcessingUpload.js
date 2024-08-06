@@ -9,7 +9,7 @@ import "../css/App.css";
 const OMRProcessingUpload = () => {
   const location = useLocation();
   const [progress, setProgress] = useState(0); // Initial progress value for visibility
-  const { exam_id } = location.state || {};
+  const { exam_id, examType, numQuestions } = location.state || {};
   const navigate = useNavigate();
   const { toast } = useToast();
   const { getAccessTokenSilently } = useAuth0(); // Get the token
@@ -42,7 +42,7 @@ const OMRProcessingUpload = () => {
       // Navigate to the next page after a short delay to show the toast notification
       setTimeout(() => {
         navigate("/ReviewExams", {
-          state: { exam_id },
+          state: { exam_id, examType, numQuestions },
         });
       }, 2000);
     } catch (error) {
