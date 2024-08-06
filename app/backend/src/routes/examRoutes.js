@@ -101,6 +101,7 @@ router.post("/studentScores", checkJwt, checkPermissions(["read:grades"]), async
   fs.createReadStream(filePath)
     .pipe(csv())
     .on("data", (data) => {
+
       let result = {};
       if (examType === "custom" && numQuestions <= 100) {
         // Only grab the front page for custom templates with 100 or fewer questions
@@ -530,7 +531,6 @@ router.post("/GenerateEvaluation", checkJwt, checkPermissions(["create:evaluatio
 
       ensureDirectoryExistence("/code/omr/inputs/page_1");
       fs.writeFileSync("/code/omr/inputs/page_1/evaluation.json", JSON.stringify(evaluationJson, null, 2));
-
       return res.json({ message: "evaluation.json created successfully for custom with 100 or fewer questions" });
     } else {
       return res.status(400).json({ error: "Invalid exam type." });
@@ -693,7 +693,7 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
   const backPagePath = path.join(__dirname, "../../omr/outputs/page_2/Results/Results.csv");
   const outputPath = path.join(__dirname, "../../omr/outputs/combined.csv");
 
-  // ensureDirectoryExistence(path.join(__dirname, "../../omr/outputs"));
+  ensureDirectoryExistence(path.join(__dirname, "../../omr/outputs"));
 
   const frontPageData = [];
   const backPageData = [];
