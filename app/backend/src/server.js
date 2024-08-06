@@ -42,7 +42,7 @@ const checkJwt = auth({
 
 const checkRole = (role) => {
   return (req, res, next) => {
-    const roles = req.auth.payload[`${process.env.AUTH0_AUDIENCE}/roles`] || [];
+    const roles = req.auth.payload[`${process.env.AUTH0_MYAPP}/role`] || [];
     if (roles.includes(role)) {
       next();
     } else {

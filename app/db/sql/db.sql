@@ -25,8 +25,8 @@ CREATE TABLE classes (
     instructor_id text,
     course_id text,
     course_name text,
-    unique (instructor_id, course_id),
-    foreign key (instructor_id) references instructor(auth0_id)
+    active boolean,
+    unique (instructor_id, course_id)
 );
 
 CREATE TABLE student (
@@ -48,7 +48,8 @@ CREATE TABLE exam (
     upper_quartile double precision,
     lower_quartile double precision,
     page_count int,
-    file_size int,
+    viewing_options JSONB,
+    graded boolean default false,
     foreign key (class_id) references classes(class_id)
 );
 
@@ -75,7 +76,7 @@ CREATE TABLE studentResults (
     exam_id int not null,
     chosen_answers text[],
     grade int,
-    filepath text,
+    grade_changelog text[],
     foreign key (exam_id) references exam(exam_id),
     foreign key (student_id) references student(student_id)
 );
@@ -145,11 +146,11 @@ INSERT INTO classes (instructor_id, course_id, course_name) VALUES
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST400', 'Data Structures');
 
 -- Insert exams
-INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES
-    (1, 'Midterm', 50, 50),
-    (1, 'Final', 5, 100),
-    (2, 'Midterm - 200', 50, 50),
-    (2, 'Final - 200', 100, 100),
+INSERT INTO exam (class_id, exam_title, total_questions, total_marks, graded, viewing_options) VALUES
+    (1, 'Midterm', 50, 50, true, '{"canViewExam": true, "canViewAnswers": false}'),
+    (1, 'Final', 5, 100, true, '{"canViewExam": false, "canViewAnswers": false}'),
+    (2, 'Midterm - 200', 50, 50, true, '{"canViewExam": false, "canViewAnswers": true}'),
+    (2, 'Final - 200', 100, 100, true, '{"canViewExam": true, "canViewAnswers": true}'),
     (3, 'Midterm - 300', 50, 50),
     (3, 'Final - 300', 100, 100),
     (4, 'Midterm - 400', 50, 50),
