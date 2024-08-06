@@ -160,15 +160,14 @@ const Classes = () => {
                           <TooltipProvider key={index}>
                             <Tooltip delayDuration={0}>
                               <TooltipTrigger asChild>
-                                <TableRow
-                                  className="hover:bg-gray-100 cursor-pointer"
-                                  onClick={() => navigate(`/ClassManagement/${classItem.class_id}`)}
-                                >
-                                  <TableCell>
+                                <TableRow className="hover:bg-gray-100 cursor-pointer">
+                                  <TableCell onClick={() => navigate(`/ClassManagement/${classItem.class_id}`)}>
                                     <div className="font-medium">{classItem.course_name}</div>
                                   </TableCell>
-                                  <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
-                                  <TableCell>
+                                  <TableCell className="hidden sm:table-cell" onClick={() => navigate(`/ClassManagement/${classItem.class_id}`)}>
+                                    {classItem.course_id}
+                                  </TableCell>
+                                  <TableCell onClick={() => navigate(`/ClassManagement/${classItem.class_id}`)}>
                                     <Badge variant="outline" className={statusClass}>
                                       {status}
                                     </Badge>
@@ -182,16 +181,27 @@ const Classes = () => {
                                       </DropdownMenuTrigger>
                                       <DropdownMenuContent>
                                         {classItem.active ? (
-                                          <DropdownMenuItem onSelect={() => handleArchiveCourse(classItem.class_id)}>
+                                          <DropdownMenuItem
+                                            onClick={(e) => {
+                                              e.stopPropagation(); // Prevent row click event
+                                              handleArchiveCourse(classItem.class_id);
+                                            }}
+                                          >
                                             Archive Course
                                           </DropdownMenuItem>
                                         ) : (
-                                          <DropdownMenuItem onSelect={() => handleUnarchiveCourse(classItem.class_id)}>
+                                          <DropdownMenuItem
+                                            onClick={(e) => {
+                                              e.stopPropagation(); // Prevent row click event
+                                              handleUnarchiveCourse(classItem.class_id);
+                                            }}
+                                          >
                                             Re-activate Course
                                           </DropdownMenuItem>
                                         )}
                                         <DropdownMenuItem
-                                          onSelect={() => {
+                                          onClick={(e) => {
+                                            e.stopPropagation(); // Prevent row click event
                                             setSelectedClass(classItem);
                                             setDialogOpen(true);
                                           }}

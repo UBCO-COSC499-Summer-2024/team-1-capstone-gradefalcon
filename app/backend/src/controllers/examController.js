@@ -56,6 +56,7 @@ const newExam = async (req, res, next) => {
   }
 };
 
+
 const examBoard = async (req, res, next) => {
   const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
@@ -69,7 +70,7 @@ const examBoard = async (req, res, next) => {
         course_name, 
         graded 
       FROM exam 
-      RIGHT JOIN classes ON (exam.class_id = classes.class_id) 
+      INNER JOIN classes ON (exam.class_id = classes.class_id) 
       WHERE instructor_id = $1 
       AND classes.active = true  -- Exclude exams from archived (inactive) classes
       `,
@@ -82,9 +83,6 @@ const examBoard = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  examBoard,
-};
 
 const getAveragePerExam = async (req, res, next) => {
   const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
