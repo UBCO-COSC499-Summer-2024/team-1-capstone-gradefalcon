@@ -1,31 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowUpRight, Plus, MoreVertical } from "lucide-react";
+import { Plus, MoreVertical } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../../components/ui/table";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "../../components/ui/dropdown-menu";
 import { Checkbox } from "../../components/ui/checkbox";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
-import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
-import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
-import { Badge } from "../../components/ui/badge"; // Import the Badge component
+import { useToast } from "../../components/ui/use-toast";
+import { Toaster } from "../../components/ui/toaster";
+import { Badge } from "../../components/ui/badge";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "../../components/ui/dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs"; // Import Tabs components
 import "../../css/App.css";
+import { CheckboxRed } from "../../components/ui/checkbox";
 
 const ExamBoard = () => {
-  const { getAccessTokenSilently } = useAuth0(); // Get the token
+  const { getAccessTokenSilently } = useAuth0();
   const [classData, setClassData] = useState([]);
   const [selectedExams, setSelectedExams] = useState([]);
   const [allSelected, setAllSelected] = useState(false);
   const [error, setError] = useState(null);
-  const { toast } = useToast(); // Using the toast hook
-  const navigate = useNavigate(); // Using the navigate hook
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [filter, setFilter] = useState("all");
+  const [deleteExamId, setDeleteExamId] = useState(null);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   const getStatusColor = (status) => {
     switch (status) {
       case true:
-        return "default"; // Using the theme color for Approved
+        return "default";
       case false:
         return "destructive";
       default:
@@ -33,33 +39,32 @@ const ExamBoard = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchClassData = async () => {
-      try {
-        const token = await getAccessTokenSilently(); // Get the token
-        const response = await fetch(`/api/exam/ExamBoard`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include the token in the request
-          },
-          credentials: "include",
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setClassData(data); // Set the class data state with the fetched data
-        } else {
-          setError("Failed to fetch class data");
-        }
-      } catch (error) {
-        setError("Error fetching class data: " + error.message);
+  const fetchClassData = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await fetch(`/api/exam/ExamBoard`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setClassData(data);
+      } else {
+        setError("Failed to fetch class data");
       }
-    };
+    } catch (error) {
+      setError("Error fetching class data: " + error.message);
+    }
+  };
 
+  useEffect(() => {
     fetchClassData();
   }, [getAccessTokenSilently]);
 
-  // Transform classData.classes into a structure that groups exams by course_id
   const groupedExams = (classData.classes || []).reduce((acc, current) => {
     const { course_id, course_name, exam_title, class_id, exam_id, graded } = current;
     if (!acc[course_id]) {
@@ -73,14 +78,30 @@ const ExamBoard = () => {
     return acc;
   }, {});
 
-  const handleDeleteFromBoard = (examId) => {
-    setClassData((prevData) => {
-      const updatedClasses = prevData.classes.filter((exam) => exam.exam_id !== examId);
-      return { ...prevData, classes: updatedClasses };
-    });
-    toast({
-      title: "Deleted successfully",
-    });
+  const deleteExam = async (examId) => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await fetch(`/api/exam/delete-exam`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ exam_id: examId }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to delete exam");
+      }
+
+      // Refresh the exam board data
+      await fetchClassData();
+      toast({ title: "Exam deleted successfully." });
+     
+    } catch (error) {
+      setError("Error deleting exam: " + error.message);
+    }
   };
 
   const handleDeleteSelected = () => {
@@ -92,17 +113,6 @@ const ExamBoard = () => {
     setAllSelected(false);
     toast({
       title: "Deleted selected exams successfully",
-    });
-  };
-
-  const handleArchiveSelected = () => {
-    // Implement archiving logic here
-    console.log("Archiving selected exams:", selectedExams);
-    // Reset selection after archiving
-    setSelectedExams([]);
-    setAllSelected(false);
-    toast({
-      title: "Archived selected exams successfully",
     });
   };
 
@@ -123,6 +133,18 @@ const ExamBoard = () => {
       setSelectedExams([...selectedExams, examId]);
     }
   };
+
+  const filteredExams = Object.entries(groupedExams).flatMap(([courseId, { course_name, class_id, exams }]) => {
+    switch (filter) {
+      case "graded":
+        return exams.filter((exam) => exam.graded).map((exam) => ({ ...exam, course_name }));
+      case "not_graded":
+        return exams.filter((exam) => !exam.graded).map((exam) => ({ ...exam, course_name }));
+      case "all":
+      default:
+        return exams.sort((a, b) => b.graded - a.graded).map((exam) => ({ ...exam, course_name }));
+    }
+  });
 
   if (error) {
     return <div data-testid="error-message">{error}</div>;
@@ -151,32 +173,32 @@ const ExamBoard = () => {
           </Tooltip>
         </TooltipProvider>
       </div>
-      <div className="w-full">
-        <Card className="bg-white border rounded">
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>
-                    <Checkbox checked={allSelected} onCheckedChange={handleSelectAll} />
-                  </TableHead>
-                  <TableHead>Exam Name</TableHead>
-                  <TableHead>Course Name</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {Object.entries(groupedExams).map(([courseId, { course_name, class_id, exams }]) =>
-                  exams.map((exam, index) => (
-                    // <TooltipProvider key={index}>
-                    //   <Tooltip delayDuration={0}>
-                    //     <TooltipTrigger asChild>
-                    <TableRow
-                    // key={`${courseId}-${exam.exam_id}`}
-                    // className="hover:bg-gray-100 cursor-pointer"
-                    // onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}
-                    >
+
+      {/* Tabs for filtering exams */}
+      <Tabs value={filter} onValueChange={setFilter} className="w-full">
+        <TabsList className="grid w-full grid-cols-3 mb-4">
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="graded">Graded</TabsTrigger>
+          <TabsTrigger value="not_graded">Not Graded</TabsTrigger>
+        </TabsList>
+        <TabsContent value={filter}>
+          <Card className="bg-white border rounded">
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>
+                      <Checkbox checked={allSelected} onCheckedChange={handleSelectAll} />
+                    </TableHead>
+                    <TableHead>Exam Name</TableHead>
+                    <TableHead>Course Name</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredExams.map((exam) => (
+                    <TableRow key={exam.exam_id}>
                       <TableCell>
                         <Checkbox
                           checked={selectedExams.includes(exam.exam_id)}
@@ -184,9 +206,11 @@ const ExamBoard = () => {
                         />
                       </TableCell>
                       <TableCell>{exam.exam_title}</TableCell>
-                      <TableCell>{course_name}</TableCell>
+                      <TableCell>{exam.course_name}</TableCell>
                       <TableCell>
-                        <Badge variant = {getStatusColor(exam.graded)}>{exam.graded ? "Graded" : "Not graded"}</Badge>
+                        <Badge variant={getStatusColor(exam.graded)}>
+                          {exam.graded ? "Graded" : "Not graded"}
+                        </Badge>
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>
@@ -196,7 +220,7 @@ const ExamBoard = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent>
-                          <DropdownMenuItem
+                            <DropdownMenuItem
                               onClick={() => {
                                 if (!exam.graded) {
                                   navigate(`/UploadExams/${exam.exam_id}`);
@@ -207,25 +231,58 @@ const ExamBoard = () => {
                             >
                               Grade Exam
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleDeleteFromBoard(exam.exam_id)}>Delete</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}>View Results</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setDeleteExamId(exam.exam_id)}>
+                              Delete
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}>
+                              View Results
+                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
                     </TableRow>
-                    //     </TooltipTrigger>
-                    //     <TooltipContent>
-                    //       <p>View Exam</p>
-                    //     </TooltipContent>
-                    //   </Tooltip>
-                    // </TooltipProvider>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+
+      <Dialog open={deleteExamId !== null} onOpenChange={() => setDeleteExamId(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Exam</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this exam? Deleting an exam will remove all associated exam data and student results. This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-red-600">I understand the consequences:</span>
+              <CheckboxRed
+                id="confirm-delete"
+                checked={isConfirmed}
+                onCheckedChange={setIsConfirmed}
+              />
+            </div>
+            <Button
+              variant="destructive"
+              disabled={!isConfirmed}
+              onClick={() => {
+                deleteExam(deleteExamId);
+                setDeleteExamId(null);
+                setIsConfirmed(false);
+              }}
+            >
+              Delete
+            </Button>
+            <DialogClose asChild>
+              <Button variant="ghost" onClick={() => setDeleteExamId(null)}>Cancel</Button>
+            </DialogClose>
+          </div>
+        </DialogContent>
+      </Dialog>
       <Toaster />
     </main>
   );

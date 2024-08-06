@@ -23,6 +23,7 @@ const {
   fetchSolution,
   changeGrade,
   getGradeChangeLog,
+  deleteMyExam
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
 const { checkJwt, checkPermissions, checkRole } = require("../auth0"); // Importing from auth.js
@@ -55,6 +56,9 @@ router.get("/getStudentAttempt/:exam_id", checkJwt, checkPermissions(["read:exam
 router.get("/getExamQuestionDetails/:exam_id", checkJwt, checkPermissions(["read:exam"]), getExamQuestionDetails);
 
 
+router.post('/delete-exam', checkJwt, (req, res, next) => {
+  checkPermissions(['delete:exams'])(req, res, next);
+}, deleteMyExam);
 // Function to get the answer key for a specific exam
 
 router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
