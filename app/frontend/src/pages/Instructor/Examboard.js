@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowUpRight, Plus, MoreVertical } from "lucide-react";
+import { Plus, MoreVertical } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../../components/ui/table";
@@ -11,9 +11,9 @@ import { useToast } from "../../components/ui/use-toast";
 import { Toaster } from "../../components/ui/toaster";
 import { Badge } from "../../components/ui/badge";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "../../components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "../../components/ui/dialog";
 import "../../css/App.css";
+import { CheckboxRed } from "../../components/ui/checkbox";
 
 const ExamBoard = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -38,29 +38,29 @@ const ExamBoard = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchClassData = async () => {
-      try {
-        const token = await getAccessTokenSilently();
-        const response = await fetch(`/api/exam/ExamBoard`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          credentials: "include",
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setClassData(data);
-        } else {
-          setError("Failed to fetch class data");
-        }
-      } catch (error) {
-        setError("Error fetching class data: " + error.message);
+  const fetchClassData = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await fetch(`/api/exam/ExamBoard`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setClassData(data);
+      } else {
+        setError("Failed to fetch class data");
       }
-    };
+    } catch (error) {
+      setError("Error fetching class data: " + error.message);
+    }
+  };
 
+  useEffect(() => {
     fetchClassData();
   }, [getAccessTokenSilently]);
 
@@ -247,18 +247,15 @@ const ExamBoard = () => {
               Are you sure you want to delete this exam? Deleting an exam will remove all associated exam data and student results. This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
-          <Checkbox
-            id="confirm-delete"
-            checked={isConfirmed}
-            onCheckedChange={setIsConfirmed}
-            label="I understand the consequences"
-          />
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline" onClick={() => setDeleteExamId(null)}>
-                Cancel
-              </Button>
-            </DialogClose>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-red-600">I understand the consequences:</span>
+              <CheckboxRed
+                id="confirm-delete"
+                checked={isConfirmed}
+                onCheckedChange={setIsConfirmed}
+              />
+            </div>
             <Button
               variant="destructive"
               disabled={!isConfirmed}
@@ -270,7 +267,10 @@ const ExamBoard = () => {
             >
               Delete
             </Button>
-          </DialogFooter>
+            <DialogClose asChild>
+              <Button variant="ghost" onClick={() => setDeleteExamId(null)}>Cancel</Button>
+            </DialogClose>
+          </div>
         </DialogContent>
       </Dialog>
       <Toaster />
