@@ -66,9 +66,6 @@ const fetchStudentScores = async () => {
           console.log("preprocessData", data);
         };
   
-        // Fetch student scores for the exam
-        await fetchStudentScores();
-  
         // Fetch the max marks for the exam
         const fetchTotalScore = async () => {
           const token = await getAccessTokenSilently();
@@ -87,13 +84,12 @@ const fetchStudentScores = async () => {
         };
   
         // Only run preprocessingCSV if the examType is not custom or if numQuestions > 100
-        console.log("fsdfdsfdexamType", examType);
-        console.log("numQuestions", numQuestions);
         if (!(examType === "custom" && numQuestions <= 100)) {
           console.log("Preprocessing data...");
           await preprocessData();
         }
-  
+
+        await fetchStudentScores();
         await fetchTotalScore();
   
         setResultsCombined(true);

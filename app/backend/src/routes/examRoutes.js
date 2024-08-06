@@ -100,14 +100,24 @@ router.post("/studentScores", checkJwt, checkPermissions(["read:grades"]), async
 
   fs.createReadStream(filePath)
     .pipe(csv())
-    .on("data", (data) =>
-      results.push({
-        StudentID: data.StudentID,
-        Score: data.score,
-        front_page: data.front_page_file_id,
-        back_page: data.back_page_file_id,
-      })
-    ) // Extract only the student number (Roll) and score
+    .on("data", (data) => {
+      if (examType === "custom" && numQuestions <= 100) {
+        // Only grab the front page for custom templates with 100 or fewer questions
+        results.push({
+          StudentID: data.StudentID,
+          Score: data.score,
+          front_page: data.file_id, // Grab only the front page
+        });
+      } else {
+        // Handle the case for other types (e.g., 100mcq, 200mcq, custom with more than 100 questions)
+        results.push({
+          StudentID: data.StudentID,
+          Score: data.score,
+          front_page: data.front_page_file_id, // Grab the front page
+          back_page: data.back_page_file_id,   // Grab the back page
+        });
+      }
+    })
     .on("end", async () => {
       try {
         // Map each result to include the student name
