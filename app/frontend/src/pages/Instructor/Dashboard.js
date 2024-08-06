@@ -284,7 +284,7 @@ export default function Dashboard() {
               <CardTitle className="mb-2">Exam Board</CardTitle>
               <div className="flex gap-2">
                 <Button size="sm" className="gap-1">
-                  <Link to={`/NewExam/defaultClassId`}>
+                  <Link to={`/NewExam`}>
                     <Plus className="h-4 w-4" />
                   </Link>
                 </Button>

@@ -36,8 +36,8 @@ import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
 
 const ManualExamKey = () => {
   const location = useLocation();
-  const { examTitle, classID } = location.state || {};
-  const [numQuestions, setNumQuestions] = useState(10);
+  const { examTitle, classID, courseId, template, numQuestions: initialNumQuestions } = location.state || {};  // Extract numQuestions
+  const [numQuestions, setNumQuestions] = useState(initialNumQuestions || 10);
   const [numOptions, setNumOptions] = useState(5);
   const [totalMarks, setTotalMarks] = useState();
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -54,7 +54,7 @@ const ManualExamKey = () => {
 
   const frameworks = Array.from({ length: numQuestions }, (_, j) => ({
     value: `Question ${j + 1}`,
-    label: `Question ${j + 1}`,
+    label: `Q${j + 1}`,
   }));
 
   const removeQuestion = (questionNumber, option) => {
@@ -216,6 +216,7 @@ const ManualExamKey = () => {
           numQuestions: numQuestions,
           totalMarks: totalMarks,
           markingSchemes: markingSchemes,
+          template: template,
         }}
       >
         <Button size="icon" className="h-10 w-10">

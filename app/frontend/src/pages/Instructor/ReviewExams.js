@@ -19,14 +19,39 @@ const ReviewExams = () => {
   const [editStudentId, setEditStudentId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [resultsCombined, setResultsCombined] = useState(false);
-  const { exam_id } = location.state || {};
+  const { exam_id, examType, numQuestions } = location.state || {};
   const navigate = useNavigate();
   const { toast } = useToast();
+
+    // Log the values to see if they are being received
+    console.log("Received exam_id:", exam_id);
+    console.log("Received examType:", examType);
+    console.log("Received numQuestions:", numQuestions);
+
+  // Fetch student scores for the exam
+const fetchStudentScores = async () => {
+  const token = await getAccessTokenSilently();
+  const response = await fetch(`/api/exam/studentScores`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ examType, numQuestions }), // Send examType and numQuestions in the request body
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  const data = await response.json();
+  console.log("data", data);
+  setStudentScores(data);
+};
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Preprocess the data
+        // Preprocess the data, but only if examType is not custom or numQuestions > 100
         const preprocessData = async () => {
           const token = await getAccessTokenSilently();
           const response = await fetch("/api/exam/preprocessingCSV", {
@@ -40,23 +65,7 @@ const ReviewExams = () => {
           const data = await response.json();
           console.log("preprocessData", data);
         };
-
-        // Fetch student scores for the exam
-        const fetchStudentScores = async () => {
-          const token = await getAccessTokenSilently();
-          const response = await fetch("/api/exam/studentScores", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          console.log("setStudentScores data", data);
-          setStudentScores(data);
-        };
-
+  
         // Fetch the max marks for the exam
         const fetchTotalScore = async () => {
           const token = await getAccessTokenSilently();
@@ -73,19 +82,24 @@ const ReviewExams = () => {
           console.log("totalMarks", data);
           setTotalMarks(data.scores[0]);
         };
+  
+        // Only run preprocessingCSV if the examType is not custom or if numQuestions > 100
+        if (!(examType === "custom" && numQuestions <= 100)) {
+          console.log("Preprocessing data...");
+          await preprocessData();
+        }
 
-        await preprocessData();
         await fetchStudentScores();
         await fetchTotalScore();
-
+  
         setResultsCombined(true);
       } catch (error) {
         console.error("Error:", error);
       }
     };
-
+  
     fetchData();
-  }, [getAccessTokenSilently, exam_id]);
+  }, [getAccessTokenSilently, exam_id, examType, numQuestions]);
 
   const handleViewClick = (studentId, front_page, back_page, student_name, grade) => {
     navigate("/ViewExam", {
@@ -120,7 +134,7 @@ const ReviewExams = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ exam_id: exam_id, data: studentData }),
+        body: JSON.stringify({ exam_id: exam_id, data: studentData, examType, numQuestions }),
       });
       if (!response.ok) {
         throw new Error("saveExams Network response was not ok");
