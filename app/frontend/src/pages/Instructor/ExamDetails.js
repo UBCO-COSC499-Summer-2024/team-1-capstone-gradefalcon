@@ -9,6 +9,7 @@ import { ScrollArea } from "../../components/ui/scroll-area";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { FileIcon, BarChartIcon } from "lucide-react";
+import {Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext} from "../../components/ui/carousel";
 import {
   Drawer,
   DrawerClose,
@@ -114,8 +115,10 @@ const ExamDetails = () => {
   const q3Grade = grades.sort((a, b) => a - b)[Math.floor((grades.length * 3) / 4)];
 
   const layout = {
-    width: '70%',
+    width: '50%',
     height: 400,
+    paper_bgcolor: 'rgba(0,0,0,0)',  // Transparent background
+    plot_bgcolor: 'rgba(0,0,0,0)',
     margin: {
       l: 100, 
       r: 100,  
@@ -336,27 +339,53 @@ const ExamDetails = () => {
             </Tooltip>
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
-                <Drawer>
+              
+              <Drawer>
                   <DrawerTrigger asChild>
                     <Button size="sm" className="h-8 gap-1 text-white" style={{ backgroundColor: "hsl(var(--primary))" }}>
                       <BarChartIcon className="h-4 w-4" />
                     </Button>
                   </DrawerTrigger>
                   <DrawerContent>
-                    <div className="mx-auto w-full max-w-sm">
+                    <div className="mx-auto w-full max-w-lg">
                       <DrawerHeader>
                         <DrawerTitle>Exam Analysis</DrawerTitle>
                         <DrawerDescription>View detailed analysis of the exam results.</DrawerDescription>
                       </DrawerHeader>
-                      <div className="flex justify-center" style={{ overflow: 'visible', padding: '0 20px' }}>
-                        <Plot
-                          data={data}
-                          layout={layout}
-                          config={{
-                            responsive: true,  // Make the plot responsive
-                          }}
-                        />
-                      </div>
+
+                      {/* Carousel with box plot and blank item */}
+                      <Carousel className="w-full max-w-lg">
+                        <CarouselContent>
+                          <CarouselItem>
+                            <div className="p-1">
+                              <Card>
+                                <CardContent className="flex aspect-square items-center justify-center p-3">
+                                  <Plot
+                                    data={data}
+                                    layout={layout}
+                                    config={{
+                                      responsive: true,  // Make the plot responsive
+                                      displayModeBar: false
+                                    }}
+                                  />
+                                </CardContent>
+                              </Card>
+                            </div>
+                          </CarouselItem>
+                          <CarouselItem>
+                            <div className="p-1">
+                              <Card>
+                                <CardContent className="flex aspect-square items-center justify-center p-6">
+                                  {/* Blank item */}
+                                </CardContent>
+                              </Card>
+                            </div>
+                          </CarouselItem>
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                      </Carousel>
+
                       <DrawerFooter>
                         <DrawerClose asChild>
                           <Button variant="outline">Close</Button>
