@@ -93,7 +93,7 @@ router.post("/studentScores", checkJwt, checkPermissions(["read:grades"]), async
 
   // Determine the correct file path based on examType and numQuestions
   const filePath = (examType === "custom" && numQuestions <= 100)
-    ? path.join(__dirname, "../../omr/outputs/Results/Results.csv")
+    ? path.join(__dirname, "../../omr/outputs/page_1/Results/Results.csv")
     : path.join(__dirname, "../../omr/outputs/combined.csv");
 
   const results = []; // Array to hold student number and score
@@ -145,7 +145,7 @@ router.post("/UploadExam/:examType/:numQuestions", checkJwt, checkPermissions(["
 
     const destinationDir1 = "/code/omr/inputs/page_1";
     const destinationDir2 = "/code/omr/inputs/page_2";
-    const singlePageDir = "/code/omr/inputs";
+    // const singlePageDir = "/code/omr/inputs";
 
     try {
       const existingPdfBytes = fs.readFileSync(tempFilePath);
@@ -155,9 +155,9 @@ router.post("/UploadExam/:examType/:numQuestions", checkJwt, checkPermissions(["
 
       if ((examType === "custom" && numQuestions <= 100)) {
         // Handle 100mcq or custom templates with 100 or fewer questions (1 page)
-        ensureDirectoryExistence(singlePageDir);
+        ensureDirectoryExistence(destinationDir1);
         const examBytes = await examsPDF.save();
-        fs.writeFileSync(path.join(singlePageDir, "exam.pdf"), examBytes);
+        fs.writeFileSync(path.join(destinationDir1, "exam.pdf"), examBytes);
         res.json({ message: "Exam uploaded successfully with one page." });
       } else if (examType === "200mcq" || (examType === "custom" && numQuestions > 100) || examType === "100mcq") {
         // Handle 200mcq or custom templates with more than 100 questions (2 pages)
@@ -203,7 +203,7 @@ router.post("/getResults", checkJwt, checkPermissions(["read:grades"]), async fu
   if (singlePage) {
     const results = []; // Array to hold all rows of data
     console.log("singlePage");
-    fs.createReadStream(path.join(outputDirPath, "Results/Results.csv"))
+    fs.createReadStream(path.join(outputDirPath, "page_1/Results/Results.csv"))
       .pipe(csv())
       .on("data", (data) => results.push(data)) // Push each row of data into the results array
       .on("end", () => {
@@ -268,43 +268,41 @@ router.post("/saveStudentExams", checkJwt, checkPermissions(["upload:file"]), as
 
   const exam_id = req.body.exam_id;
   const studentData = req.body.data;
+  const examType = req.body.examType; // Assume you are passing examType in the request body
+  const numQuestions = parseInt(req.body.numQuestions, 10); // Assume you are passing numQuestions in the request body
+
   try {
     for (const student of studentData) {
       const student_id = student.StudentID;
-
       const destFilePath = path.join(__dirname, `../../uploads/Students/exam_id_${exam_id}/student_id_${student_id}`);
 
       const front_page_path = path.join(__dirname, `../../omr/outputs/page_1/CheckedOMRs/colored/${student.front_page}`);
-      console.log("front_page_path", front_page_path);
       const original_front_page_path = path.join(__dirname, `../../omr/inputs/page_1/${student.front_page}`);
-      console.log("original front page path", original_front_page_path);
-      const back_page_path = path.join(__dirname, `../../omr/outputs/page_2/CheckedOMRs/colored/${student.back_page}`);
-      console.log("back_page_path", back_page_path);
-      const original_back_page_path = path.join(__dirname, `../../omr/inputs/page_2/${student.back_page}`);
-      console.log("original back page path", original_back_page_path);
-
       const front_page_dest = path.join(destFilePath, "front_page.png");
-      console.log("front_page_dest", front_page_dest);
       const original_front_page_dest = path.join(destFilePath, "original_front_page.png");
-      console.log("original_front_page_dest", original_front_page_dest);
-      const back_page_dest = path.join(destFilePath, "back_page.png");
-      console.log("back_page_dest", back_page_dest);
-      const original_back_page_dest = path.join(destFilePath, "original_back_page.png");
-      console.log("original_back_page_dest", original_back_page_dest);
 
       ensureDirectoryExistence(destFilePath);
-
-      console.log("ensured directory exists");
 
       try {
         fs.copyFileSync(front_page_path, front_page_dest);
         console.log("First page copied successfully");
-        fs.copyFileSync(back_page_path, back_page_dest);
-        console.log("Second page copied successfully");
         fs.copyFileSync(original_front_page_path, original_front_page_dest);
         console.log("Original First page copied successfully");
-        fs.copyFileSync(original_back_page_path, original_back_page_dest);
-        console.log("Original Second page copied successfully");
+
+        // Only attempt to copy the back page if it's not a custom exam with 100 or fewer questions
+        if (!(examType === "custom" && numQuestions <= 100)) {
+          const back_page_path = path.join(__dirname, `../../omr/outputs/page_2/CheckedOMRs/colored/${student.back_page}`);
+          const original_back_page_path = path.join(__dirname, `../../omr/inputs/page_2/${student.back_page}`);
+          const back_page_dest = path.join(destFilePath, "back_page.png");
+          const original_back_page_dest = path.join(destFilePath, "original_back_page.png");
+
+          fs.copyFileSync(back_page_path, back_page_dest);
+          console.log("Second page copied successfully");
+          fs.copyFileSync(original_back_page_path, original_back_page_dest);
+          console.log("Original Second page copied successfully");
+        } else {
+          console.log("Skipping back page copy for custom exam with 100 or fewer questions.");
+        }
       } catch (error) {
         console.log("Error copying files:", error);
       }
@@ -333,7 +331,7 @@ router.post("/saveExamKey/:examType", checkJwt, checkPermissions(["upload:file"]
     try {
       if (examType === "100mcq" || (examType === "custom" && numQuestions <= 100)) {
         // Handle 100mcq or custom templates with 100 or fewer questions (1 page)
-        const destinationDir = "/code/omr/inputs";
+        const destinationDir = "/code/omr/inputs/page_1";
         
         ensureDirectoryExistence(destinationDir);
 
@@ -402,8 +400,8 @@ router.post("/copyTemplate", checkJwt, checkPermissions(["upload:file"]), async 
 
     if (examType === "100mcq" && keyOrExam === "key") {
       templatePath_2 = path.join(__dirname, "../assets/templates/100mcq_page_2.json");
-      ensureDirectoryExistence(filePath_2);
-      fs.copyFileSync(templatePath_2, path.join(filePath_2, "template.json"));
+      ensureDirectoryExistence(filePath_1);
+      fs.copyFileSync(templatePath_2, path.join(filePath_1, "template.json"));
       console.log("Template.json copied successfully for 100mcq key");
       return res.json({ message: "File copied successfully" });
     }
@@ -430,8 +428,8 @@ router.post("/copyTemplate", checkJwt, checkPermissions(["upload:file"]), async 
 
     if (examType === "custom" && numQuestions <= 100) {
       templatePath_1 = path.join(__dirname, `../assets/custom/${courseId}_${examTitle}_${classID}/custom_page_1.json`);
-      ensureDirectoryExistence(singlePageDir);
-      fs.copyFileSync(templatePath_1, path.join(singlePageDir, "template.json"));
+      ensureDirectoryExistence(filePath_1);
+      fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
       console.log("Custom template.json for page 1 copied successfully");
       return res.json({ message: "File copied successfully" });
     }
@@ -512,7 +510,7 @@ router.post("/GenerateEvaluation", checkJwt, checkPermissions(["create:evaluatio
       const evaluationJson = createEvaluationJson(answerKey, markingSchemes, 1);
 
       ensureDirectoryExistence("/code/omr/inputs/");
-      fs.writeFileSync("/code/omr/inputs/evaluation.json", JSON.stringify(evaluationJson, null, 2));
+      fs.writeFileSync("/code/omr/inputs/page_1/evaluation.json", JSON.stringify(evaluationJson, null, 2));
 
       return res.json({ message: "evaluation.json created successfully for custom with 100 or fewer questions" });
     } else {
@@ -669,13 +667,14 @@ router.post("/saveResults", saveResults);
 // We extract the ID from front_pages_page_1.png and the answers from back_pages_page_1.png
 // Create a CSV file with the following fields:
 // "front_page_id", "back_page_id", "score", "student_id", "question_1", "question_2", ..., "question_100"
+
 router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), async (req, res) => {
   console.log("Hello from preprocessingCSV");
   const frontPagePath = path.join(__dirname, "../../omr/outputs/page_1/Results/Results.csv");
   const backPagePath = path.join(__dirname, "../../omr/outputs/page_2/Results/Results.csv");
   const outputPath = path.join(__dirname, "../../omr/outputs/combined.csv");
 
-  // ensureDirectoryExistence(path.join(__dirname, "../../omr/outputs"));
+  ensureDirectoryExistence(path.join(__dirname, "../../omr/outputs"));
 
   const frontPageData = [];
   const backPageData = [];

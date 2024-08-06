@@ -87,7 +87,10 @@ const fetchStudentScores = async () => {
         };
   
         // Only run preprocessingCSV if the examType is not custom or if numQuestions > 100
+        console.log("fsdfdsfdexamType", examType);
+        console.log("numQuestions", numQuestions);
         if (!(examType === "custom" && numQuestions <= 100)) {
+          console.log("Preprocessing data...");
           await preprocessData();
         }
   
@@ -135,7 +138,7 @@ const fetchStudentScores = async () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ exam_id: exam_id, data: studentData }),
+        body: JSON.stringify({ exam_id: exam_id, data: studentData, examType, numQuestions }),
       });
       if (!response.ok) {
         throw new Error("saveExams Network response was not ok");
