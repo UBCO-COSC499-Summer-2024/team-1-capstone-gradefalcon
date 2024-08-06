@@ -60,7 +60,19 @@ const examBoard = async (req, res, next) => {
   const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
     const classes = await pool.query(
-      "SELECT exam_id, classes.class_id, exam_title, course_id, course_name, graded FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
+      `
+      SELECT 
+        exam_id, 
+        classes.class_id, 
+        exam_title, 
+        course_id, 
+        course_name, 
+        graded 
+      FROM exam 
+      RIGHT JOIN classes ON (exam.class_id = classes.class_id) 
+      WHERE instructor_id = $1 
+      AND classes.active = true  -- Exclude exams from archived (inactive) classes
+      `,
       [instructorId]
     );
 
@@ -68,6 +80,10 @@ const examBoard = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+module.exports = {
+  examBoard,
 };
 
 const getAveragePerExam = async (req, res, next) => {
