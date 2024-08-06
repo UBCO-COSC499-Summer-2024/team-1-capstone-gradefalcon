@@ -278,7 +278,7 @@ const ConfirmExamKey = () => {
     <main className="flex flex-col gap-4 p-2">
     <div className="w-full mx-auto grid flex-1 auto-rows-max gap-8">
       <div className="flex items-center gap-4">
-        <Button
+        {/* <Button
           variant="outline"
           size="icon"
           className="h-10 w-10"
@@ -286,7 +286,7 @@ const ConfirmExamKey = () => {
         >
           <ChevronLeftIcon className="h-4 w-4" />
           <span className="sr-only">Back</span>
-        </Button>
+        </Button> */}
         <h1 className="flex-1 text-3xl font-semibold tracking-tight">Confirm Exam Key</h1>
         <div className="flex items-center gap-2 ml-auto">
           <Link

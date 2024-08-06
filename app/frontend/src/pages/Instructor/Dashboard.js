@@ -249,7 +249,8 @@ export default function Dashboard() {
                       <Tooltip delayDuration={0}>
                         <TooltipTrigger asChild>
                           <Link to={`/ClassManagement/${course.class_id}`}>
-                            <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md max-w-md mx-auto h-30">
+                          <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md max-w-md mx-auto h-30 hover:bg-gray-100 
+                          transition-colors duration-300">
                               <div className="flex items-center justify-between mb-4">
                                 <CardDescription>{course.course_name}</CardDescription>
                                 <Bookmark className="h-6 w-6 text-muted-foreground" />
@@ -284,7 +285,7 @@ export default function Dashboard() {
               <CardTitle className="mb-2">Exam Board</CardTitle>
               <div className="flex gap-2">
                 <Button size="sm" className="gap-1">
-                  <Link to={`/NewExam/defaultClassId`}>
+                  <Link to={`/NewExam`}>
                     <Plus className="h-4 w-4" />
                   </Link>
                 </Button>

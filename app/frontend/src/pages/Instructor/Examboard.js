@@ -196,10 +196,7 @@ const ExamBoard = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => handleDeleteFromBoard(exam.exam_id)}>Delete</DropdownMenuItem>
-                            <DropdownMenuItem>Archive</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}>View Results</DropdownMenuItem>
-                            <DropdownMenuItem
+                          <DropdownMenuItem
                               onClick={() => {
                                 if (!exam.graded) {
                                   navigate(`/UploadExams/${exam.exam_id}`);
@@ -210,6 +207,8 @@ const ExamBoard = () => {
                             >
                               Grade Exam
                             </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleDeleteFromBoard(exam.exam_id)}>Delete</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => navigate(`/ExamDetails/${exam.exam_id}`)}>View Results</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
