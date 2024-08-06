@@ -83,14 +83,23 @@ router.get("/studentScores", checkJwt, checkPermissions(["read:grades"]), async 
 
   fs.createReadStream(filePath)
     .pipe(csv())
-    .on("data", (data) =>
-      results.push({
+    .on("data", (data) => {
+      const result = {
         StudentID: data.StudentID,
         Score: data.score,
         front_page: data.front_page_file_id,
         back_page: data.back_page_file_id,
-      })
-    ) // Extract only the student number (Roll) and score
+      };
+
+      // Add question fields
+      Object.keys(data).forEach((key) => {
+        if (key.startsWith("q") && data[key].trim() !== "") {
+          result[key] = data[key];
+        }
+      });
+
+      results.push(result);
+    }) // Extract only the student number (Roll) and score
     .on("end", async () => {
       try {
         // Map each result to include the student name
@@ -677,13 +686,12 @@ router.get("/searchExam/:student_id", checkJwt, checkPermissions(["read:students
 // We extract the ID from front_pages_page_1.png and the answers from back_pages_page_1.png
 // Create a CSV file with the following fields:
 // "front_page_id", "back_page_id", "score", "student_id", "question_1", "question_2", ..., "question_100"
+
 router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), async (req, res) => {
   console.log("Hello from preprocessingCSV");
   const frontPagePath = path.join(__dirname, "../../omr/outputs/page_1/Results/Results.csv");
   const backPagePath = path.join(__dirname, "../../omr/outputs/page_2/Results/Results.csv");
   const outputPath = path.join(__dirname, "../../omr/outputs/combined.csv");
-
-  // ensureDirectoryExistence(path.join(__dirname, "../../omr/outputs"));
 
   const frontPageData = [];
   const backPageData = [];
@@ -692,33 +700,62 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
   fs.createReadStream(frontPagePath)
     .pipe(csv())
     .on("data", (data) => {
-      frontPageData.push({
+      const frontData = {
         front_page_file_id: data.file_id,
         FirstName: data.FirstName,
         LastName: data.LastName,
         StudentID: data.StudentID,
         score: data.score,
+      };
+
+      // Add question fields
+      Object.keys(data).forEach((key) => {
+        if (key.startsWith("q")) {
+          frontData[key] = data[key];
+        }
       });
+
+      frontPageData.push(frontData);
     })
     .on("end", () => {
       // Read back_page.csv
       fs.createReadStream(backPagePath)
         .pipe(csv())
         .on("data", (data) => {
-          backPageData.push({
+          const backData = {
             back_page_file_id: data.file_id,
             score: data.score,
+          };
+
+          // Add question fields
+          Object.keys(data).forEach((key) => {
+            if (key.startsWith("q")) {
+              backData[key] = data[key];
+            }
           });
+
+          backPageData.push(backData);
         })
         .on("end", () => {
           // Combine data from both CSV files
           const combinedData = frontPageData.map((frontData) => {
             const backData = backPageData.find((back) => back.back_page_file_id.slice(-6) === frontData.front_page_file_id.slice(-6));
-            return {
+            const combined = {
               ...frontData,
               back_page_file_id: backData ? backData.back_page_file_id : null,
               score: backData && frontData ? parseInt(backData.score, 10) + parseInt(frontData.score, 10) : null,
             };
+
+            // Combine question fields
+            if (backData) {
+              Object.keys(backData).forEach((key) => {
+                if (key.startsWith("q")) {
+                  combined[key] = backData[key];
+                }
+              });
+            }
+
+            return combined;
           });
 
           // Convert combined data to CSV format

@@ -74,7 +74,7 @@ CREATE TABLE studentResults(
     sheet_int serial primary key,
     student_id text not null,
     exam_id int not null,
-    chosen_answers text[],
+    chosen_answers JSONB,
     grade int,
     grade_changelog text[],
     foreign key (exam_id) references exam(exam_id),
