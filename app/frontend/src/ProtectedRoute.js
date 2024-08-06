@@ -17,7 +17,7 @@ const ProtectedRoute = ({ children, roles = [] }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/Login" />;
+    return <Navigate to="/Home" />;
   }
 
   // Retrieve the user's roles from the Auth0 token

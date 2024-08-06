@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
   const { logout } = useAuth0();
   const navigate = useNavigate();
   const location = useLocation();
-  const shouldDisplayNavBar =  location.pathname !== "/*" && location.pathname !== "/Login" 
+  const shouldDisplayNavBar =  location.pathname !== "/*" && location.pathname !== "/Home" 
     && location.pathname !== "/signup" && location.pathname !== "/AdminDashboard" 
     && location.pathname !== "/userManagement" && location.pathname !== "/Logout";
 

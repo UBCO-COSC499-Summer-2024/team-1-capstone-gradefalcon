@@ -43,6 +43,7 @@ CREATE TABLE exam (
     exam_title text, 
     total_questions int,
     total_marks int,
+    template text,
     mean double precision,
     high double precision,
     low double precision,
