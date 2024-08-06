@@ -300,6 +300,7 @@ const ExamDetails = () => {
         color: primaryColor,
       },
       line: {
+        shape: "spline",  // Use spline to make the lines smoother (if supported)
         color: primaryColor,
         width: 3,  // Thicker border for better visibility
       },
