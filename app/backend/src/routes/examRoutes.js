@@ -86,8 +86,14 @@ router.get("/getStudentAttempt/:exam_id", async (req, res, next) => {
 
 // Add this route to the examRoutes.js file
 
-router.get("/studentScores", checkJwt, checkPermissions(["read:grades"]), async function (req, res) {
-  const filePath = path.join(__dirname, "../../omr/outputs/combined.csv");
+router.post("/studentScores", checkJwt, checkPermissions(["read:grades"]), async function (req, res) {
+  const { examType, numQuestions } = req.body; // Get examType and numQuestions from the request body
+
+  // Determine the correct file path based on examType and numQuestions
+  const filePath = (examType === "custom" && numQuestions <= 100)
+    ? path.join(__dirname, "../../omr/outputs/Results/Results.csv")
+    : path.join(__dirname, "../../omr/outputs/combined.csv");
+
   const results = []; // Array to hold student number and score
 
   fs.createReadStream(filePath)
@@ -122,7 +128,10 @@ router.get("/studentScores", checkJwt, checkPermissions(["read:grades"]), async 
     });
 });
 
-router.post("/UploadExam", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
+
+router.post("/UploadExam/:examType/:numQuestions", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
+  const { examType, numQuestions } = req.params;
+
   const upload = multer({ dest: "uploads/" }).single("examPages");
 
   upload(req, res, async function (err) {
@@ -131,8 +140,10 @@ router.post("/UploadExam", checkJwt, checkPermissions(["upload:file"]), async fu
     }
 
     const { path: tempFilePath } = req.file;
+
     const destinationDir1 = "/code/omr/inputs/page_1";
     const destinationDir2 = "/code/omr/inputs/page_2";
+    const singlePageDir = "/code/omr/inputs";
 
     try {
       const existingPdfBytes = fs.readFileSync(tempFilePath);
@@ -140,29 +151,40 @@ router.post("/UploadExam", checkJwt, checkPermissions(["upload:file"]), async fu
       const totalPages = examsPDF.getPageCount();
       console.log("Total pages:", totalPages);
 
-      const oddPagesPdf = await PDFDocument.create();
-      const evenPagesPdf = await PDFDocument.create();
+      if ((examType === "custom" && numQuestions <= 100)) {
+        // Handle 100mcq or custom templates with 100 or fewer questions (1 page)
+        ensureDirectoryExistence(singlePageDir);
+        const examBytes = await examsPDF.save();
+        fs.writeFileSync(path.join(singlePageDir, "exam.pdf"), examBytes);
+        res.json({ message: "Exam uploaded successfully with one page." });
+      } else if (examType === "200mcq" || (examType === "custom" && numQuestions > 100) || examType === "100mcq") {
+        // Handle 200mcq or custom templates with more than 100 questions (2 pages)
+        const oddPagesPdf = await PDFDocument.create();
+        const evenPagesPdf = await PDFDocument.create();
 
-      for (let i = 0; i < totalPages; i++) {
-        if ((i + 1) % 2 === 1) {
-          const [pageToCopy] = await oddPagesPdf.copyPages(examsPDF, [i]);
-          oddPagesPdf.addPage(pageToCopy);
-        } else {
-          const [pageToCopy] = await evenPagesPdf.copyPages(examsPDF, [i]);
-          evenPagesPdf.addPage(pageToCopy);
+        for (let i = 0; i < totalPages; i++) {
+          if ((i + 1) % 2 === 1) {
+            const [pageToCopy] = await oddPagesPdf.copyPages(examsPDF, [i]);
+            oddPagesPdf.addPage(pageToCopy);
+          } else {
+            const [pageToCopy] = await evenPagesPdf.copyPages(examsPDF, [i]);
+            evenPagesPdf.addPage(pageToCopy);
+          }
         }
+        ensureDirectoryExistence(destinationDir1);
+        ensureDirectoryExistence(destinationDir2);
+
+        const oddBytes = await oddPagesPdf.save();
+        fs.writeFileSync(path.join(destinationDir1, "front_pages.pdf"), oddBytes);
+        const evenBytes = await evenPagesPdf.save();
+        fs.writeFileSync(path.join(destinationDir2, "back_pages.pdf"), evenBytes);
+
+        fs.unlinkSync(tempFilePath); // Clean up the temporary file
+
+        res.json({ message: "Exam uploaded and split successfully." });
+      } else {
+        return res.status(400).send("Invalid exam type or number of questions.");
       }
-      ensureDirectoryExistence(destinationDir1);
-      ensureDirectoryExistence(destinationDir2);
-
-      const oddBytes = await oddPagesPdf.save();
-      fs.writeFileSync(path.join(destinationDir1, "front_pages.pdf"), oddBytes);
-      const evenBytes = await evenPagesPdf.save();
-      fs.writeFileSync(path.join(destinationDir2, "back_pages.pdf"), evenBytes);
-
-      fs.unlinkSync(tempFilePath); // Clean up the temporary file
-
-      res.json({ message: "File uploaded and split successfully" });
     } catch (error) {
       console.error("Error processing PDF file:", error);
       res.status(500).send("Error processing PDF file");
@@ -280,68 +302,75 @@ router.post("/saveStudentExams", checkJwt, checkPermissions(["upload:file"]), as
 });
 
 // Save the exam key uploaded by the user
-router.post("/saveExamKey/:examType", checkJwt, checkPermissions(["upload:file"]),
-  async function (req, res) {
-    combinedUpload(req, res, async function (err) {
-      if (err) {
-        return res.status(500).send("Error uploading file.");
-      }
+router.post("/saveExamKey/:examType", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
+  combinedUpload(req, res, async function (err) {
+    if (err) {
+      return res.status(500).send("Error uploading file.");
+    }
 
-      console.log("Request Body:", req.body);  // This should now contain the form fields
-      console.log("Uploaded File:", req.files); // This should show the uploaded file
+    console.log("Request Body:", req.body);  // This should now contain the form fields
+    console.log("Uploaded File:", req.files); // This should show the uploaded file
 
-      const examType = req.params.examType;
-      const numQuestions = parseInt(req.body.numQuestions, 10); // Ensure numQuestions is a number
-      console.log("Exam Type:", examType);
+    const examType = req.params.examType;
+    const numQuestions = parseInt(req.body.numQuestions, 10); // Ensure numQuestions is a number
+    console.log("Exam Type:", examType);
 
+    try {
       if (examType === "100mcq" || (examType === "custom" && numQuestions <= 100)) {
         // Handle 100mcq or custom templates with 100 or fewer questions (1 page)
         const destinationDir = "/code/omr/inputs";
-        const upload = createUploadMiddleware(destinationDir);
+        
+        ensureDirectoryExistence(destinationDir);
 
-        upload.single("examKey")(req, res, function (err) {
-          if (err) {
-            return res.status(500).send("Error uploading file.");
-          }
-          console.log(req.file);
-          res.send(JSON.stringify("File uploaded successfully"));
-        });
+        // Directly save the uploaded file to the destination directory
+        const fileBuffer = req.files.examKey[0].buffer; // Use the buffer from the uploaded file
+        const filePath = path.join(destinationDir, req.files.examKey[0].originalname);
+
+        fs.writeFileSync(filePath, fileBuffer);
+
+        console.log(`File uploaded to ${filePath}`);
+        return res.json({ message: "File uploaded successfully" });
+
       } else if (examType === "200mcq" || (examType === "custom" && numQuestions > 100)) {
         // Handle 200mcq or custom templates with more than 100 questions (2 pages)
         const existingPdfBytes = req.files.examKey[0].buffer; // Use the buffer directly
         const destinationDir1 = "/code/omr/inputs/page_1";
         const destinationDir2 = "/code/omr/inputs/page_2";
 
-      ensureDirectoryExistence(destinationDir1);
-      ensureDirectoryExistence(destinationDir2);
+        ensureDirectoryExistence(destinationDir1);
+        ensureDirectoryExistence(destinationDir2);
 
         try {
           const keyPDF = await PDFDocument.load(existingPdfBytes);
 
-        const key_page_1 = await PDFDocument.create();
-        const key_page_2 = await PDFDocument.create();
+          const key_page_1 = await PDFDocument.create();
+          const key_page_2 = await PDFDocument.create();
 
-        const [page1] = await key_page_1.copyPages(keyPDF, [0]);
-        const [page2] = await key_page_2.copyPages(keyPDF, [1]);
+          const [page1] = await key_page_1.copyPages(keyPDF, [0]);
+          const [page2] = await key_page_2.copyPages(keyPDF, [1]);
 
-        key_page_1.addPage(page1);
-        key_page_2.addPage(page2);
-        const key_page_1_Bytes = await key_page_1.save();
-        fs.writeFileSync(path.join(destinationDir1, "page_1.pdf"), key_page_1_Bytes);
-        const key_page_2_Bytes = await key_page_2.save();
-        fs.writeFileSync(path.join(destinationDir2, "page_2.pdf"), key_page_2_Bytes);
+          key_page_1.addPage(page1);
+          key_page_2.addPage(page2);
+          const key_page_1_Bytes = await key_page_1.save();
+          fs.writeFileSync(path.join(destinationDir1, "page_1.pdf"), key_page_1_Bytes);
+          const key_page_2_Bytes = await key_page_2.save();
+          fs.writeFileSync(path.join(destinationDir2, "page_2.pdf"), key_page_2_Bytes);
 
-          res.json({ message: "200mcq or custom key uploaded and split successfully" });
+          return res.json({ message: "200mcq or custom key uploaded and split successfully" });
         } catch (error) {
           console.error("Error processing PDF file:", error);
-          res.status(500).send("Error processing PDF file");
+          return res.status(500).send("Error processing PDF file");
         }
       } else {
         return res.status(400).send("Invalid exam type or number of questions.");
       }
-    });
-  }
-);
+    } catch (error) {
+      console.error("Error in saveExamKey:", error);
+      return res.status(500).send("Internal server error.");
+    }
+  });
+});
+
 
 
 // Copy the template JSON file to the shared volume
@@ -351,6 +380,7 @@ router.post("/copyTemplate", checkJwt, checkPermissions(["upload:file"]), async 
 
   const filePath_1 = "/code/omr/inputs/page_1";
   const filePath_2 = "/code/omr/inputs/page_2";
+  const singlePageDir = "/code/omr/inputs";
 
   try {
     let templatePath_1, templatePath_2;
@@ -385,8 +415,8 @@ router.post("/copyTemplate", checkJwt, checkPermissions(["upload:file"]), async 
 
     if (examType === "custom" && numQuestions <= 100) {
       templatePath_1 = path.join(__dirname, `../assets/custom/${courseId}_${examTitle}_${classID}/custom_page_1.json`);
-      ensureDirectoryExistence(filePath_1);
-      fs.copyFileSync(templatePath_1, path.join(filePath_1, "template.json"));
+      ensureDirectoryExistence(singlePageDir);
+      fs.copyFileSync(templatePath_1, path.join(singlePageDir, "template.json"));
       console.log("Custom template.json for page 1 copied successfully");
       return res.json({ message: "File copied successfully" });
     }
@@ -455,13 +485,21 @@ router.post("/GenerateEvaluation", checkJwt, checkPermissions(["create:evaluatio
       fs.writeFileSync("/code/omr/inputs/page_2/evaluation.json", JSON.stringify(evaluationJsonPage2, null, 2));
 
       return res.json({ message: "evaluation.json files created successfully for 200mcq or custom with more than 100 questions" });
-    } else if (examType === "100mcq" || (examType === "custom" && numQuestions <= 100)) {
+    } else if (examType === "100mcq") {
       const evaluationJson = createEvaluationJson(answerKey, markingSchemes, 1);
 
       ensureDirectoryExistence("/code/omr/inputs/page_2");
       fs.writeFileSync("/code/omr/inputs/page_2/evaluation.json", JSON.stringify(evaluationJson, null, 2));
 
-      return res.json({ message: "evaluation.json created successfully for 100mcq or custom with 100 or fewer questions" });
+      return res.json({ message: "evaluation.json created successfully for 100mcq o" });
+    } 
+    else if (examType === "custom" && numQuestions <= 100) {
+      const evaluationJson = createEvaluationJson(answerKey, markingSchemes, 1);
+
+      ensureDirectoryExistence("/code/omr/inputs/");
+      fs.writeFileSync("/code/omr/inputs/evaluation.json", JSON.stringify(evaluationJson, null, 2));
+
+      return res.json({ message: "evaluation.json created successfully for custom with 100 or fewer questions" });
     } else {
       return res.status(400).json({ error: "Invalid exam type." });
     }
@@ -589,29 +627,29 @@ router.get("/getExamQuestionDetails/:exam_id", checkJwt, checkPermissions(["read
 
 router.post("/saveResults", saveResults);
 
-router.get("/searchExam/:student_id", checkJwt, checkPermissions(["read:students"]), async (req, res) => {
-  const studentId = req.params.student_id;
-  const filePath = path.join(__dirname, "../../omr/outputs/Results/Results.csv");
-  let found = false; // Flag to check if student is found
+// router.get("/searchExam/:student_id", checkJwt, checkPermissions(["read:students"]), async (req, res) => {
+//   const studentId = req.params.student_id;
+//   const filePath = path.join(__dirname, "../../omr/outputs/Results/Results.csv");
+//   let found = false; // Flag to check if student is found
 
-  fs.createReadStream(filePath)
-    .pipe(csv())
-    .on("data", (data) => {
-      if (data.StudentID === studentId) {
-        found = true;
-        res.json({ file_id: data.file_id });
-      }
-    })
-    .on("end", () => {
-      if (!found) {
-        res.status(404).send("Student ID not found");
-      }
-    })
-    .on("error", (error) => {
-      console.error("Error reading CSV file:", error);
-      res.status(500).send("Error reading CSV file");
-    });
-});
+//   fs.createReadStream(filePath)
+//     .pipe(csv())
+//     .on("data", (data) => {
+//       if (data.StudentID === studentId) {
+//         found = true;
+//         res.json({ file_id: data.file_id });
+//       }
+//     })
+//     .on("end", () => {
+//       if (!found) {
+//         res.status(404).send("Student ID not found");
+//       }
+//     })
+//     .on("error", (error) => {
+//       console.error("Error reading CSV file:", error);
+//       res.status(500).send("Error reading CSV file");
+//     });
+// });
 
 // There are 2 folders in outputs: page_1 and page_2
 // The first folder contains the ID page and the second folder contains the question page

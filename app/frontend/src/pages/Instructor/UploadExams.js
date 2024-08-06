@@ -104,7 +104,7 @@ const UploadExam = () => {
     try {
       const token = await getAccessTokenSilently(); // Get the token
       const responses = await Promise.all([
-        fetch("/api/exam/UploadExam", {
+        fetch(`/api/exam/UploadExam/${examType}/${numQuestions}`, {
           method: "POST",
           body: formData,
           headers: {
@@ -157,7 +157,7 @@ const UploadExam = () => {
       console.log("Data from copyTemplate:", dataCopyTemplate);
   
       navigate("/OMRProcessingUpload", {
-        state: { exam_id },
+        state: { exam_id, numQuestions, examType },
       });
     } catch (error) {
       console.error("Error:", error.message);
