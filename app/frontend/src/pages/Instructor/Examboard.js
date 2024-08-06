@@ -140,7 +140,7 @@ const ExamBoard = () => {
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <Button asChild size="sm" className="gap-1">
-                <Link to={`/NewExam/defaultClassId`}>
+                <Link to={`/NewExam`}>
                   <Plus className="h-6 w-6" />
                 </Link>
               </Button>

@@ -9,7 +9,7 @@ import StudentLayout from './components/StudentLayout';
 import ProtectedRoute from './ProtectedRoute';
 import NotFound from './components/NotFound';
 import Unauthorized from './pages/Unauthorized';
-import Login from './pages/Login';
+import Home from './pages/Home';
 import OMRProcessing from './components/OMRProcessing';
 import OMRProcessingUpload from './components/OMRProcessingUpload';
 
@@ -47,7 +47,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/Login" element={<Login />} />
+          <Route path="/Home" element={<Home />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           {/* Role-based Redirect */}
           <Route path="/" element={<ProtectedRoute />} />
@@ -59,7 +59,7 @@ function App() {
           <Route path="/ClassManagement/:class_id" element={<ProtectedRoute roles={['Instructor']}><Layout><ClassManagement /></Layout></ProtectedRoute>} />
           <Route path="/ExamDetails/:exam_id" element={<ProtectedRoute roles={['Instructor']}><Layout><ExamDetails /></Layout></ProtectedRoute>} />
           <Route path="/New-Class" element={<ProtectedRoute roles={['Instructor']}><Layout><NewClass /></Layout></ProtectedRoute>} />
-          <Route path="/NewExam/:class_id" element={<ProtectedRoute roles={['Instructor']}><Layout><NewExam /></Layout></ProtectedRoute>} />
+          <Route path="/NewExam" element={<ProtectedRoute roles={['Instructor']}><Layout><NewExam /></Layout></ProtectedRoute>} />
           <Route path="/ExamBoard" element={<ProtectedRoute roles={['Instructor']}><Layout><ExamBoard /></Layout></ProtectedRoute>} />
           <Route path="/ExamControls" element={<ProtectedRoute roles={['Instructor']}><Layout><ExamControls /></Layout></ProtectedRoute>} />
           <Route path="/ManualExamKey" element={<ProtectedRoute roles={['Instructor']}><Layout><ManualExamKey /></Layout></ProtectedRoute>} />
