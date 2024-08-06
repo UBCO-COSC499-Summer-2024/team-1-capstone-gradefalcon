@@ -322,12 +322,13 @@ const ConfirmExamKey = () => {
               <Input
                 type="number"
                 id="num-questions"
-                className="mt-1 block w-full disabled"
+                className="mt-1 block w-full"
                 value={numQuestions}
                 onChange={(e) => setNumQuestions(Math.min(300, parseInt(e.target.value) || 10))}
                 min="1"
                 max="300"
                 data-testid="num-questions-input"
+                disabled
               />
             </div>
             <div className="mb-4">
@@ -337,12 +338,13 @@ const ConfirmExamKey = () => {
               <Input
                 type="number"
                 id="num-options"
-                className="mt-1 block w-full disabled"
+                className="mt-1 block w-full"
                 value={numOptions}
                 onChange={(e) => setNumOptions(Math.min(26, parseInt(e.target.value) || 5))}
                 min="1"
                 max="26"
                 data-testid="num-options-input"
+                disabled
               />
             </div>
           </CardContent>
