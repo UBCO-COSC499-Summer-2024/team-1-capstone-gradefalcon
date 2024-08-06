@@ -60,7 +60,7 @@ const examBoard = async (req, res, next) => {
   const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
     const classes = await pool.query(
-      "SELECT exam_id, classes.class_id, exam_title, course_id, course_name FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
+      "SELECT exam_id, classes.class_id, exam_title, course_id, course_name, graded FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
       [instructorId]
     );
 
@@ -222,6 +222,37 @@ const getScoreByExamId = async (exam_id) => {
   } catch (error) {
     console.error("Error getting scores by exam ID:", error);
     throw error;
+  }
+};
+
+const changeGrade = async (req, res, next) => {
+  try {
+    // Retrieve the current grade
+    const currentGradeResult = await pool.query("SELECT grade FROM studentResults WHERE student_id = $1 AND exam_id = $2", [
+      req.body.student_id,
+      req.body.exam_id,
+    ]);
+
+    if (currentGradeResult.rowCount === 0) {
+      return res.status(404).json({ message: "Student or exam not found" });
+    }
+
+    const currentGrade = currentGradeResult.rows[0].grade;
+
+    // Update the grade and append to changelog
+    const result = await pool.query(
+      "UPDATE studentResults SET grade = $1, grade_changelog = array_append(grade_changelog, $2) WHERE student_id = $3 AND exam_id = $4",
+      [req.body.grade, `Grade was changed from ${currentGrade} to ${req.body.grade}`, req.body.student_id, req.body.exam_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Student or exam not found" });
+    }
+
+    res.status(200).json({ message: "Grade updated successfully" });
+  } catch (error) {
+    console.error("Error changing grade:", error);
+    next(error);
   }
 };
 
@@ -617,6 +648,26 @@ const getStudentExams = async (req, res, next) => {
   }
 };
 
+const getGradeChangeLog = async (req, res, next) => {
+  const { student_id, exam_id } = req.body;
+  console.log(student_id, exam_id);
+  try {
+    const result = await pool.query("SELECT grade_changelog FROM studentResults WHERE student_id = $1 AND exam_id = $2", [
+      student_id,
+      exam_id,
+    ]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Student or exam not found" });
+    }
+
+    res.json({ grade_changelog: result.rows[0].grade_changelog });
+  } catch (error) {
+    console.error("Error fetching grade changelog:", error);
+    next(error);
+  }
+};
+
 const getStudentAttempt = async (req, res, next) => {
   const studentId = req.auth.sub; // Get the student ID from Auth0 token
   const examId = parseInt(req.params.exam_id, 10);
@@ -708,4 +759,6 @@ module.exports = {
   getStudentAttempt,
   fetchStudentExam,
   fetchSolution,
+  changeGrade,
+  getGradeChangeLog,
 };

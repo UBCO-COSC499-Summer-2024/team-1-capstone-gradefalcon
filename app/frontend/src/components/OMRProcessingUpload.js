@@ -70,7 +70,7 @@ const OMRProcessingUpload = () => {
       <div className="App">
         <main className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-gradient-start to-gradient-end">
           <h2 className="text-2xl font-semibold mb-2">Scanning file</h2>
-          <Progress value={progress} className="w-1/2 mb-4 h-4 bg-green-500" />
+          <Progress value={progress} className="w-1/2 mb-4 h-4" />
           {progress === 100 ? (
             <p className="text-green-600 mt-4">OMR processing completed. Redirecting...</p>
           ) : (

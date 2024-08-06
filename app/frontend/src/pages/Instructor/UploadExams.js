@@ -25,7 +25,7 @@ const UploadExam = () => {
         const response = await fetch(`/api/exam/getExamQuestionDetails/${exam_id}`, {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`, // Include the token in the request
+            Authorization: `Bearer ${token}`, // Include the token in the request
           },
         });
         if (!response.ok) {
@@ -108,14 +108,14 @@ const UploadExam = () => {
           method: "POST",
           body: formData,
           headers: {
-            "Authorization": `Bearer ${token}`, // Include the token in the request
+            Authorization: `Bearer ${token}`, // Include the token in the request
           },
         }),
         fetch("/api/exam/GenerateEvaluation", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`, // Include the token in the request
+            Authorization: `Bearer ${token}`, // Include the token in the request
           },
           body: JSON.stringify({ examType, exam_id, numQuestions }), // Pass numQuestions
         }),
@@ -123,7 +123,7 @@ const UploadExam = () => {
           method: "POST",
           credentials: "include",
           headers: {
-            "Authorization": `Bearer ${token}`, // Include the token in the request
+            Authorization: `Bearer ${token}`, // Include the token in the request
             "Content-Type": "application/json",
           },
           body: JSON.stringify({examType, keyOrExam: "exam", numQuestions, examTitle, courseId, classID: classId }), // Pass numQuestions

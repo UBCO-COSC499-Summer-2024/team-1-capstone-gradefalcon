@@ -30,6 +30,8 @@ import UploadExamKey from './pages/Instructor/UploadExamKey';
 import UploadExams from './pages/Instructor/UploadExams';
 import ReviewExams from './pages/Instructor/ReviewExams';
 import ViewExam from './pages/Instructor/ViewExam';
+import Reports from './pages/Instructor/Reports';
+import ViewReport from './pages/Instructor/ViewReport';
 
 // Import Student pages
 import StudentDashboard from './pages/Student/StudentDashboard';
@@ -37,8 +39,8 @@ import StudentAccountSettings from './pages/Student/StudentAccountSettings';
 import StudentNotificationPreferences from './pages/Student/StudentNotificationPreferences';
 import StudentGradeReport from './pages/Student/StudentGradeReport';
 import ViewExamDetails from './pages/Student/ViewExamDetails';
-import ReportGradeStudent from './pages/Student/ReportGradeStudent';
-import StudentReportsSubmitted from './pages/Student/StudentReportsSubmitted';
+import SubmitReport from './pages/Student/SubmitReport';
+import StudentReportsDashboard from './pages/Student/StudentReportsDashboard';
 
 function App() {
   return (
@@ -69,15 +71,17 @@ function App() {
           <Route path="/ReviewExams" element={<ProtectedRoute roles={['Instructor']}><Layout><ReviewExams /></Layout></ProtectedRoute>} />
           <Route path="/ViewExam" element={<ProtectedRoute roles={['Instructor']}><Layout><ViewExam /></Layout></ProtectedRoute>} />
           <Route path="/NotificationPreferences" element={<ProtectedRoute roles={['Instructor']}><Layout><NotificationPreferences /></Layout></ProtectedRoute>} />
+          <Route path="/Reports" element={<ProtectedRoute roles={['Instructor']}><Layout><Reports /></Layout></ProtectedRoute>} />
+          <Route path="/ViewReport" element={<ProtectedRoute roles={['Instructor']}><Layout><ViewReport /></Layout></ProtectedRoute>} />
 
           {/* Student Routes */}
           <Route path="/StudentDashboard" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentDashboard /></StudentLayout></ProtectedRoute>} />
-          <Route path="/StudentGradeReporg" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentGradeReport /></StudentLayout></ProtectedRoute>} />
+          <Route path="/StudentGradeReport" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentGradeReport /></StudentLayout></ProtectedRoute>} />
           <Route path="/StudentAccountSettings" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentAccountSettings /></StudentLayout></ProtectedRoute>} />
           <Route path="/StudentNotificationPreferences" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentNotificationPreferences /></StudentLayout></ProtectedRoute>} />
           <Route path="/ViewExamDetails" element={<ProtectedRoute roles={['Student']}><StudentLayout><ViewExamDetails /></StudentLayout></ProtectedRoute>} />
-          <Route path="ReportGradeStudent" element={<ProtectedRoute roles={['Student']}><StudentLayout><ReportGradeStudent /></StudentLayout></ProtectedRoute>} />
-          <Route path="/StudentReportsSubmitted" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentReportsSubmitted /></StudentLayout></ProtectedRoute>} />
+          <Route path="SubmitReport" element={<ProtectedRoute roles={['Student']}><StudentLayout><SubmitReport /></StudentLayout></ProtectedRoute>} />
+          <Route path="/StudentReportsDashboard" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentReportsDashboard /></StudentLayout></ProtectedRoute>} />
 
           {/* Fallback for unmatched routes */}
           <Route path="*" element={<NotFound />} />

@@ -6,6 +6,7 @@ import { Card, CardContent } from "../../components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../../components/ui/table";
 import { Input } from "../../components/ui/input";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
+import { EyeIcon } from "@heroicons/react/24/solid";
 import { useToast } from "../../components/ui/use-toast";
 import { Toaster } from "../../components/ui/toaster";
 import "../../css/App.css";
@@ -16,7 +17,6 @@ const ReviewExams = () => {
   const [studentScores, setStudentScores] = useState([]);
   const [totalMarks, setTotalMarks] = useState();
   const [editStudentId, setEditStudentId] = useState(null);
-  const [originalScores, setOriginalScores] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [resultsCombined, setResultsCombined] = useState(false);
   const { exam_id, examType, numQuestions } = location.state || {};
@@ -80,7 +80,9 @@ const fetchStudentScores = async () => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
+          console.log("exam_id", exam_id);
           const data = await response.json();
+          console.log("totalMarks", data);
           setTotalMarks(data.scores[0]);
         };
   
@@ -100,13 +102,19 @@ const fetchStudentScores = async () => {
     fetchData();
   }, [getAccessTokenSilently, exam_id, examType, numQuestions]);
 
-  const handleViewClick = (studentId, front_page, back_page) => {
+  const handleViewClick = (studentId, front_page, back_page, student_name, grade) => {
     navigate("/ViewExam", {
       state: {
         student_id: studentId,
         exam_id: exam_id,
-        front_page: front_page,
-        back_page: back_page,
+        front_page: `../../omr/outputs/page_1/CheckedOMRs/colored/${front_page}`,
+        back_page: `../../omr/outputs/page_2/CheckedOMRs/colored/${back_page}`,
+        original_front_page: `../../omr/inputs/page_1/${front_page}`,
+        original_back_page: `../../omr/inputs/page_2/${back_page}`,
+        student_name: student_name,
+        grade: grade,
+        total_marks: totalMarks,
+        reviewExams: true,
       },
     });
   };
@@ -114,33 +122,8 @@ const fetchStudentScores = async () => {
   const handleScoreChange = (e, studentId) => {
     const newScore = e.target.value;
     setStudentScores((currentScores) =>
-      currentScores.map((score) =>
-        score.StudentID === studentId ? { ...score, Score: newScore } : score
-      )
+      currentScores.map((score) => (score.StudentID === studentId ? { ...score, Score: newScore } : score))
     );
-  };
-
-  const handleEdit = (studentId) => {
-    setEditStudentId(studentId);
-    const studentScore = studentScores.find((s) => s.StudentID === studentId).Score;
-    setOriginalScores((prevScores) => ({
-      ...prevScores,
-      [studentId]: studentScore,
-    }));
-  };
-
-  const handleCancel = (studentId) => {
-    setStudentScores((currentScores) =>
-      currentScores.map((score) =>
-        score.StudentID === studentId ? { ...score, Score: originalScores[studentId] } : score
-      )
-    );
-    setEditStudentId(null);
-    setOriginalScores((prevScores) => {
-      const newScores = { ...prevScores };
-      delete newScores[studentId];
-      return newScores;
-    });
   };
 
   const saveStudentExams = async (studentData) => {
@@ -165,12 +148,6 @@ const fetchStudentScores = async () => {
   };
 
   const saveResults = async () => {
-    if (editStudentId !== null) {
-      toast({
-        title: "Please save or cancel the current edit before saving all results.",
-      });
-      return;
-    }
     try {
       saveStudentExams(studentScores);
 
@@ -222,7 +199,7 @@ const fetchStudentScores = async () => {
                 <TableRow>
                   <TableHead>Student Name</TableHead>
                   <TableHead>Student ID</TableHead>
-                  <TableHead>Score/{totalMarks}</TableHead>
+                  <TableHead>Score/ {totalMarks}</TableHead>
                   <TableHead>View Exam</TableHead>
                 </TableRow>
               </TableHeader>
@@ -232,33 +209,25 @@ const fetchStudentScores = async () => {
                     <TableCell>{student.StudentName}</TableCell>
                     <TableCell>{student.StudentID}</TableCell>
                     <TableCell>
-                      {editStudentId === student.StudentID ? (
-                        <Input
-                          type="number"
-                          value={student.Score}
-                          max={totalMarks}
-                          min="0"
-                          onChange={(e) => handleScoreChange(e, student.StudentID)}
-                        />
-                      ) : (
-                        student.Score
-                      )}
-                      {editStudentId === student.StudentID ? (
-                        <>
-                          <Button onClick={() => setEditStudentId(null)}>Save</Button>
-                          <Button onClick={() => handleCancel(student.StudentID)}>Cancel</Button>
-                        </>
-                      ) : (
-                        <Button onClick={() => handleEdit(student.StudentID)}>Edit</Button>
-                      )}
+                      <Input
+                        type="number"
+                        value={student.Score}
+                        max={totalMarks}
+                        min="0"
+                        onChange={(e) => handleScoreChange(e, student.StudentID)}
+                        className="w-14 px-2 py-1"
+                      />
                     </TableCell>
                     <TableCell>
                       <Button
+                        size="icon"
+                        variant="ghost"
+                        className="flex items-center justify-center hover:text-primary"
                         onClick={() =>
-                          handleViewClick(student.StudentID, student.front_page, student.back_page)
+                          handleViewClick(student.StudentID, student.front_page, student.back_page, student.StudentName, student.Score)
                         }
                       >
-                        View
+                        <EyeIcon className="h-6 w-6" />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -268,7 +237,7 @@ const fetchStudentScores = async () => {
           </CardContent>
         </Card>
       </div>
-      <Button onClick={() => saveResults()} className="mt-4 self-end">
+      <Button onClick={saveResults} className="mt-4 self-end">
         Save Results
       </Button>
       <Toaster />

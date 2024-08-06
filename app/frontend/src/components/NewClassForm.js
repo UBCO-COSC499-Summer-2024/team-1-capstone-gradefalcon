@@ -190,18 +190,18 @@ const NewClassForm = ({ setIsDialogOpen }) => {
             </div>
             <p className="mb-3 text-sm">Import a CSV file containing the student names, their student IDs, and student emails in your class.</p>
             <div className="file-input-container mb-3">
-              <label className="file-input-button text-sm cursor-pointer inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[hsl(var(--primary))]">
-                Choose File
-                <input
-                  type="file"
-                  accept=".csv"
-                  ref={fileInputRef}
-                  data-testid="csvFile"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
-              </label>
-              <span className="file-input-label text-sm">no file selected</span>
+            <label className="file-input-button text-sm cursor-pointer inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm bg-secondary text-secondary-foreground hover:bg-secondary/80">
+            Choose File
+            <input
+              type="file"
+              accept=".csv"
+              ref={fileInputRef}
+              data-testid="csvFile"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+          </label>
+          <span className="file-input-label text-sm ml-4">no file selected</span>
             </div>
             <div className="flex gap-2">
               <Button size="sm" onClick={handleFileUpload} data-testid="uploadButton">

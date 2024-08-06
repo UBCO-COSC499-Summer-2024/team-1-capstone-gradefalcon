@@ -19,6 +19,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../../components/ui/drawer";
+import "../../css/App.css";
 
 const ExamDetails = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -26,6 +27,7 @@ const ExamDetails = () => {
   const [examData, setExamData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [answers, setAnswers] = useState([]);
 
   const navigate = useNavigate();
 
@@ -44,9 +46,25 @@ const ExamDetails = () => {
 
         if (response.ok) {
           const data = await response.json();
+          console.log("data", data);
           setExamData(data);
         } else {
           setError("Failed to fetch exam data");
+        }
+
+        const answersResponse = await fetch(`/api/exam/fetchSolution/${exam_id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        });
+
+        if (answersResponse.ok) {
+          const data = await answersResponse.json();
+          setAnswers(data);
+          console.log("answers", data);
         }
       } catch (error) {
         setError("Error fetching exam data");
@@ -87,7 +105,7 @@ const ExamDetails = () => {
   }
 
   const grades = examData.studentResults.map((result) => result.grade);
-  const darkGreenColor = "#006400"; // Darker green color hex code
+  const primaryColor = "#0a8537";
   const minGrade = Math.min(...grades);
   const maxGrade = Math.max(...grades);
   const meanGrade = (grades.reduce((a, b) => a + b, 0) / grades.length).toFixed(2);
@@ -96,15 +114,24 @@ const ExamDetails = () => {
   const q3Grade = grades.sort((a, b) => a - b)[Math.floor((grades.length * 3) / 4)];
 
   const layout = {
-    width: 400,
-    height: 300,
-    title: "Box Plot of Exam Grades",
-    yaxis: {
-      showticklabels: false,
+    width: '70%',
+    height: 400,
+    margin: {
+      l: 100, 
+      r: 100,  
+      b: 70,  
+      t: 100,  
+      pad: 4,
     },
+    showlegend: false,
     xaxis: {
       title: "Grades",
       zeroline: false,
+      tickfont: {
+        family: "var(--font-body)", // Use the Inter font defined in your layout
+        size: 12,
+        color: "hsl(var(--foreground))",
+      },
     },
     shapes: [
       {
@@ -115,7 +142,7 @@ const ExamDetails = () => {
         x0: minGrade,
         x1: minGrade,
         line: {
-          color: "blue",
+          color: primaryColor,
           width: 2,
           dash: "dot",
         },
@@ -128,9 +155,35 @@ const ExamDetails = () => {
         x0: maxGrade,
         x1: maxGrade,
         line: {
-          color: "blue",
+          color: primaryColor,
           width: 2,
           dash: "dot",
+        },
+      },
+      {
+        type: "line",
+        y0: 0,
+        y1: 1,
+        yref: "paper",
+        x0: q1Grade,
+        x1: q1Grade,
+        line: {
+          color: primaryColor,
+          width: 2,
+          dash: "solid",  // Solid line for Q1
+        },
+      },
+      {
+        type: "line",
+        y0: 0,
+        y1: 1,
+        yref: "paper",
+        x0: q3Grade,
+        x1: q3Grade,
+        line: {
+          color: primaryColor,
+          width: 2,
+          dash: "solid",  // Solid line for Q3
         },
       },
       {
@@ -141,7 +194,7 @@ const ExamDetails = () => {
         x0: meanGrade,
         x1: meanGrade,
         line: {
-          color: "blue",
+          color: primaryColor,
           width: 2,
           dash: "dot",
         },
@@ -159,6 +212,11 @@ const ExamDetails = () => {
         ax: 0,
         ay: -40,
         textangle: 0,
+        font: {
+          family: "var(--font-body)",
+          size: 12,
+          color: "hsl(var(--foreground))",
+        },
       },
       {
         y: 1,
@@ -171,6 +229,11 @@ const ExamDetails = () => {
         ax: 0,
         ay: -40,
         textangle: 0,
+        font: {
+          family: "var(--font-body)",
+          size: 12,
+          color: "hsl(var(--foreground))",
+        },
       },
       {
         y: 1,
@@ -183,9 +246,74 @@ const ExamDetails = () => {
         ax: 0,
         ay: -40,
         textangle: 0,
+        font: {
+          family: "var(--font-body)",
+          size: 12,
+          color: "hsl(var(--foreground))",
+        },
+      },
+      {
+        y: 1,
+        x: q1Grade,
+        yref: "paper",
+        xref: "x",
+        text: `Q1: ${q1Grade}`,
+        showarrow: true,
+        arrowhead: 7,
+        ax: 0,
+        ay: -40,
+        textangle: 0,
+        font: {
+          family: "var(--font-body)",
+          size: 12,
+          color: "hsl(var(--foreground))",
+        },
+      },
+      {
+        y: 1,
+        x: q3Grade,
+        yref: "paper",
+        xref: "x",
+        text: `Q3: ${q3Grade}`,
+        showarrow: true,
+        arrowhead: 7,
+        ax: 0,
+        ay: -40,
+        textangle: 0,
+        font: {
+          family: "var(--font-body)",
+          size: 12,
+          color: "hsl(var(--foreground))",
+        },
       },
     ],
   };
+
+  const data = [
+    {
+      x: grades,
+      type: "box",
+      boxpoints: "all",
+      jitter: 0.3,
+      pointpos: -1.8,
+      marker: {
+        color: primaryColor,
+      },
+      line: {
+        color: primaryColor,
+        width: 3,  // Thicker border for better visibility
+      },
+      fillcolor: "rgba(10, 133, 55, 0.8)",  // Fill the inside of the box plot with the primary color
+      boxmean: true,  // Display the mean
+      meanline: {
+        color: primaryColor,
+        width: 2,
+      },
+      whiskerwidth: 2,
+      hoverinfo: "x",
+    },
+  ];
+  
 
   return (
     <div className="mx-auto grid max-w-[70rem] flex-1 auto-rows-max gap-8">
@@ -220,27 +348,13 @@ const ExamDetails = () => {
                         <DrawerTitle>Exam Analysis</DrawerTitle>
                         <DrawerDescription>View detailed analysis of the exam results.</DrawerDescription>
                       </DrawerHeader>
-                      <div className="p-4 pb-0">
+                      <div className="flex justify-center" style={{ overflow: 'visible', padding: '0 20px' }}>
                         <Plot
-                          data={[
-                            {
-                              x: grades,
-                              type: "box",
-                              boxpoints: "all",
-                              jitter: 0.3,
-                              pointpos: -1.8,
-                              marker: { color: darkGreenColor },
-                              line: { color: darkGreenColor },
-                              whiskerwidth: 1,
-                              boxmean: true,
-                              meanline: {
-                                color: "blue",
-                                width: 2,
-                              },
-                              hoverinfo: "x",
-                            },
-                          ]}
+                          data={data}
                           layout={layout}
+                          config={{
+                            responsive: true,  // Make the plot responsive
+                          }}
                         />
                       </div>
                       <DrawerFooter>
@@ -258,51 +372,103 @@ const ExamDetails = () => {
         </div>
       </div>
 
-      <Card className="bg-white border rounded">
-        <CardHeader className="flex justify-between px-6 py-4">
-          <div>
-            <CardTitle className="mb-2">Student Results</CardTitle>
+      <div className="flex space-x-4">
+        {examData.studentResults.length > 0 ? (
+          <Card className="bg-white border rounded w-1/2">
+            <CardHeader className="flex justify-between px-6 py-4">
+              <div>
+                <CardTitle className="mb-2">Student Results</CardTitle>
+                <h1>Total marks: {examData.total_marks}</h1>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-80">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Student ID</TableHead>
+                      <TableHead>Student Name</TableHead>
+                      <TableHead>Grade</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {examData.studentResults.map((result) => (
+                      <TooltipProvider key={result.student_id}>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger asChild>
+                            <TableRow
+                              onClick={() => {
+                                navigate(`/ViewExam`, {
+                                  state: {
+                                    student_id: result.student_id,
+                                    exam_id: exam_id,
+                                    student_name: result.student_name,
+                                    grade: result.grade,
+                                    total_marks: examData.total_marks,
+                                  },
+                                });
+                              }}
+                              key={result.student_id}
+                            >
+                              <TableCell>{result.student_id}</TableCell>
+                              <TableCell>{result.student_name}</TableCell>
+                              <TableCell>{result.grade}</TableCell>
+                            </TableRow>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Click for details</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ))}
+                  </TableBody>
+                </Table>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="w-1/2 flex flex-col items-center justify-center bg-white border rounded p-4">
+            <p>Exam not graded yet</p>
+            <Button
+              size="sm"
+              className="mt-2"
+              onClick={() => {
+                navigate(`/UploadExams/${exam_id}`);
+              }}
+            >
+              Grade Exam
+            </Button>
           </div>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-80">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Student ID</TableHead>
-                  <TableHead>Student Name</TableHead>
-                  <TableHead>Grade</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {examData.studentResults.map((result) => (
-                  <TooltipProvider key={result.student_id}>
-                    <Tooltip delayDuration={0}>
-                      <TooltipTrigger asChild>
-                        <TableRow
-                          onClick={() => {
-                            navigate(`/ViewExam`, {
-                              state: { student_id: result.student_id, exam_id: exam_id },
-                            });
-                          }}
-                          key={result.student_id}
-                        >
-                          <TableCell>{result.student_id}</TableCell>
-                          <TableCell>{result.student_name}</TableCell>
-                          <TableCell>{result.grade}</TableCell>
-                        </TableRow>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Click for details</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                ))}
-              </TableBody>
-            </Table>
-          </ScrollArea>
-        </CardContent>
-      </Card>
+        )}
+
+        <Card className="bg-white border rounded w-1/2">
+          <CardHeader className="flex justify-between px-6 py-4">
+            <div>
+              <CardTitle className="mb-2">Answer Key</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-80">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Question</TableHead>
+                    <TableHead>Answer</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {answers.map((answer, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{answer}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

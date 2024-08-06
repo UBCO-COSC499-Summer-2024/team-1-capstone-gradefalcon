@@ -77,7 +77,7 @@ CREATE TABLE studentResults(
     exam_id int not null,
     chosen_answers text[],
     grade int,
-    filepath text,
+    grade_changelog text[],
     foreign key (exam_id) references exam(exam_id),
     foreign key (student_id) references student(student_id)
 );
