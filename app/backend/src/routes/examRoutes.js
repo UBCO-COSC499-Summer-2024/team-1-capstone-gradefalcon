@@ -101,22 +101,32 @@ router.post("/studentScores", checkJwt, checkPermissions(["read:grades"]), async
   fs.createReadStream(filePath)
     .pipe(csv())
     .on("data", (data) => {
+
+      let result = {};
       if (examType === "custom" && numQuestions <= 100) {
         // Only grab the front page for custom templates with 100 or fewer questions
-        results.push({
+        result = {
           StudentID: data.StudentID,
           Score: data.score,
           front_page: data.file_id, // Grab only the front page
-        });
+        };
       } else {
         // Handle the case for other types (e.g., 100mcq, 200mcq, custom with more than 100 questions)
-        results.push({
+        result = {
           StudentID: data.StudentID,
           Score: data.score,
-          front_page: data.front_page_file_id, // Grab the front page
-          back_page: data.back_page_file_id,   // Grab the back page
-        });
+          front_page: data.front_page_file_id,
+          back_page: data.back_page_file_id,
+        };
       }
+      // Add question fields
+      Object.keys(data).forEach((key) => {
+        if (key.startsWith("q") && data[key].trim() !== "") {
+          result[key] = data[key];
+        }
+      });
+
+      results.push(result);
     })
     .on("end", async () => {
       try {
@@ -519,9 +529,8 @@ router.post("/GenerateEvaluation", checkJwt, checkPermissions(["create:evaluatio
     else if (examType === "custom" && numQuestions <= 100) {
       const evaluationJson = createEvaluationJson(answerKey, markingSchemes, 1);
 
-      ensureDirectoryExistence("/code/omr/inputs/");
+      ensureDirectoryExistence("/code/omr/inputs/page_1");
       fs.writeFileSync("/code/omr/inputs/page_1/evaluation.json", JSON.stringify(evaluationJson, null, 2));
-
       return res.json({ message: "evaluation.json created successfully for custom with 100 or fewer questions" });
     } else {
       return res.status(400).json({ error: "Invalid exam type." });
@@ -693,33 +702,62 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
   fs.createReadStream(frontPagePath)
     .pipe(csv())
     .on("data", (data) => {
-      frontPageData.push({
+      const frontData = {
         front_page_file_id: data.file_id,
         FirstName: data.FirstName,
         LastName: data.LastName,
         StudentID: data.StudentID,
         score: data.score,
+      };
+
+      // Add question fields
+      Object.keys(data).forEach((key) => {
+        if (key.startsWith("q")) {
+          frontData[key] = data[key];
+        }
       });
+
+      frontPageData.push(frontData);
     })
     .on("end", () => {
       // Read back_page.csv
       fs.createReadStream(backPagePath)
         .pipe(csv())
         .on("data", (data) => {
-          backPageData.push({
+          const backData = {
             back_page_file_id: data.file_id,
             score: data.score,
+          };
+
+          // Add question fields
+          Object.keys(data).forEach((key) => {
+            if (key.startsWith("q")) {
+              backData[key] = data[key];
+            }
           });
+
+          backPageData.push(backData);
         })
         .on("end", () => {
           // Combine data from both CSV files
           const combinedData = frontPageData.map((frontData) => {
             const backData = backPageData.find((back) => back.back_page_file_id.slice(-6) === frontData.front_page_file_id.slice(-6));
-            return {
+            const combined = {
               ...frontData,
               back_page_file_id: backData ? backData.back_page_file_id : null,
               score: backData && frontData ? parseInt(backData.score, 10) + parseInt(frontData.score, 10) : null,
             };
+
+            // Combine question fields
+            if (backData) {
+              Object.keys(backData).forEach((key) => {
+                if (key.startsWith("q")) {
+                  combined[key] = backData[key];
+                }
+              });
+            }
+
+            return combined;
           });
 
           // Convert combined data to CSV format
