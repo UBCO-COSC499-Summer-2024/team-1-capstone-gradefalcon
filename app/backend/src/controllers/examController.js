@@ -265,12 +265,19 @@ const saveResults = async (req, res, next) => {
     // Assuming you have a database connection established and a model for studentResults
     for (const score of studentScores) {
       if (score.StudentName !== "Unknown student") {
+        // Extract fields starting with 'q' and store them in an array
+        const questionFields = Object.keys(score)
+          .filter((key) => key.startsWith("q") && score[key].trim() !== "")
+          .map((key) => ({ [key]: score[key] }));
+
+        // Convert the array to a JSON string
+        const questionFieldsJson = JSON.stringify(questionFields);
+        console.log("questionFieldsJson", questionFieldsJson);
         // Assuming studentResults is your table/model name and it has a method to insert data
-        const result = await pool.query("INSERT INTO studentresults (student_id, exam_id, grade) VALUES ($1,$2,$3)", [
-          score.StudentID,
-          exam_id,
-          parseInt(score.Score, 10),
-        ]);
+        const result = await pool.query(
+          "INSERT INTO studentresults (student_id, exam_id, grade, chosen_answers) VALUES ($1, $2, $3, $4)",
+          [score.StudentID, exam_id, parseInt(score.Score, 10), questionFieldsJson]
+        );
       }
     }
     // Update the "graded" status in the exams table

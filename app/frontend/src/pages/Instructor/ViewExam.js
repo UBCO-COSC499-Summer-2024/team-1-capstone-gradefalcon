@@ -170,76 +170,49 @@ const ViewExam = () => {
   };
 
   return (
-    <main className="mx-auto grid max-w-[100rem] flex-1 auto-rows-max gap-8 p-2">
-      <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => window.history.back()}>
+    <main className="flex flex-col gap-4 p-2">
+    <div className="w-full mx-auto flex items-center gap-8">
+      <Button
+        variant="outline"
+        size="icon"
+        className="h-10 w-10"
+        onClick={() => window.history.back()}
+      >
         <ChevronLeftIcon className="h-4 w-4" />
         <span className="sr-only">Back</span>
       </Button>
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {/* Student Details */}
-        <div className="grid auto-rows-max items-start gap-8 lg:col-span-2">
-          <Card className="bg-white border rounded-lg p-6">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <CardTitle>Student Details</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-4">
-                <p className="font-bold">Name</p>
-                <p>{student_name}</p>
-              </div>
-              <div className="mb-4">
-                <p className="font-bold">ID</p>
-                <p>{student_id}</p>
-              </div>
-              <div>
-                <p className="font-bold">Grade</p>
-              </div>
-              <GradeRadialChart grade={displayGrade} totalMarks={total_marks} />
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Grade Changelog */}
-        <div className="grid auto-rows-max items-start gap-8 lg:col-span-1">
-          <Card className="bg-white border rounded-lg p-6 h-full">
-            <CardHeader className="flex justify-between px-6 py-4">
-              <CardTitle>Grade Changelog</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {gradeChangelog && gradeChangelog.length === 0 ? (
-                <p>No changes to this grade have been made</p>
-              ) : (
-                gradeChangelog && (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Changelog</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {gradeChangelog.map((log, index) => (
-                        <TableRow key={index}>
-                          <TableCell>
-                            <Badge variant="secondary" className="text-base">
-                              {log}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                )
-              )}
-            </CardContent>
-          </Card>
-        </div>
+      <h1 className="flex-1 text-3xl font-semibold tracking-tight">View Exam</h1>
+      <div className="flex items-center gap-2 ml-auto">
+        {/* Additional buttons or controls */}
       </div>
-
-
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-8">
-        {/* Edit Grade */}
-        <div className="grid auto-rows-max items-start gap-8 lg:col-span-3">
-          <Card className="bg-white border rounded-lg p-6">
+    </div>
+  
+    <div className="flex flex-col gap-8 w-full">
+      {/* Student Details */}
+      <div className="flex flex-row gap-8 w-full">
+        <Card className="bg-white border rounded-lg p-6 w-full md:w-1/3">
+          <CardHeader className="flex justify-between px-6 py-4">
+            <CardTitle>Student Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-4">
+              <p className="font-bold">Name</p>
+              <p>{student_name}</p>
+            </div>
+            <div className="mb-4">
+              <p className="font-bold">ID</p>
+              <p>{student_id}</p>
+            </div>
+            <div>
+              <p className="font-bold">Grade</p>
+            </div>
+            <GradeRadialChart grade={displayGrade} totalMarks={total_marks} />
+          </CardContent>
+        </Card>
+  
+        <div className="flex flex-col w-full md:w-2/3 gap-8">
+          {/* Edit Grade */}
+        <Card className="bg-white border rounded-lg p-6">
             <CardHeader className="flex justify-between px-4 py-4">
               <CardTitle>Edit Grade</CardTitle>
             </CardHeader>
@@ -277,9 +250,43 @@ const ViewExam = () => {
               </div>
             </CardContent>
           </Card>
+
+        {/* Grade Changelog and Edit Grade stacked */}
+          <Card className="bg-white border rounded-lg p-6">
+            <CardHeader className="flex justify-between px-6 py-4">
+              <CardTitle>Grade Changelog</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {gradeChangelog && gradeChangelog.length === 0 ? (
+                <p>No changes to this grade have been made</p>
+              ) : (
+                gradeChangelog && (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Changelog</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {gradeChangelog.map((log, index) => (
+                        <TableRow key={index}>
+                          <TableCell>
+                            <Badge variant="secondary" className="text-base">
+                              {log}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
-    </main>
+    </div>
+  </main>  
   );
 };
 

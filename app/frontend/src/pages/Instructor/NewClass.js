@@ -176,50 +176,6 @@ const NewClass = () => {
       };
   return (
     <div className="flex min-h-screen">
-      <aside className="sidebar">
-        <div className="logo">
-          <ClipboardCheck className="h-6 w-6" />
-          <span className="ml-2">GradeFalcon</span>
-        </div>
-        <nav className="flex flex-col gap-4">
-          <Link to="/Dashboard" className="nav-item" data-tooltip="Dashboard">
-            <Home className="icon" />
-            <span>Dashboard</span>
-          </Link>
-          <Link to="/Examboard" className="nav-item" data-tooltip="Exam Board">
-            <BookOpen className="icon" />
-            <span>Exam Board</span>
-          </Link>
-          <Link to="/Classes" className="nav-item" data-tooltip="Classes">
-            <Users className="icon" />
-            <span>Classes</span>
-          </Link>
-        </nav>
-        <div className="mt-auto flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div className="nav-item" data-tooltip="My Account">
-                <Settings className="icon" />
-                <span>My Account</span>
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link to="/AccountSettings">Account Settings</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/NotificationPreferences">Notification Preferences</Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild onClick={handleLogout}>
-                <span>Logout</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </aside>
       <div className="main-content flex-1 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
         <main className="flex flex-col gap-4">
           {toast && (
