@@ -33,6 +33,7 @@ router.post('/unarchive-course', checkJwt, (req, res, next) => {
 router.post('/delete-course', checkJwt, (req, res, next) => {
 checkPermissions(['delete:courses'])(req, res, next);
 }, deleteCourse);
+
 router.get('/student/courses', checkJwt, (req, res, next) => {
   checkPermissions(['read:courses_student'])(req, res, next);
 }, getStudentCourses);

@@ -8,10 +8,11 @@ DROP TABLE IF EXISTS solution CASCADE;
 DROP TABLE IF EXISTS enrollment CASCADE;
 DROP TABLE IF EXISTS studentResults CASCADE;
 DROP TABLE IF EXISTS scannedExam CASCADE;
-DROP TABLE IF EXISTS feedback CASCADE;
+DROP TABLE IF EXISTS report CASCADE;
 DROP TABLE IF EXISTS admins CASCADE;
 DROP TABLE IF EXISTS sessions CASCADE;
-DROP TYPE IF EXISTS feedback_status CASCADE;
+
+
 
 -- ////////// Create tables: /////////////////
 
@@ -90,17 +91,22 @@ CREATE TABLE scannedExam(
     foreign key (exam_id) references exam(exam_id)
 );
 
-CREATE TYPE feedback_status as enum ('Not Done', 'Done', 'In Progress');
 
-CREATE TABLE feedback(
-    feedback_id serial primary key,
-    sheet_id int not null,
+-- ////////// Create ENUM type for report status: /////////////////
+
+CREATE TYPE report_status AS ENUM ('Closed', 'Pending');
+
+CREATE TABLE report (
+    report_id serial primary key,
+    exam_id int not null,
     student_id text not null,
-    feedback_text text not null,
-    feedback_time timestamp not null,
-    status feedback_status not null,
-    foreign key (student_id) references student(student_id)
+    report_text text not null,
+    report_time TIMESTAMP DEFAULT NOW(),
+    reply_text text, -- This field will store the instructor's reply
+    status report_status DEFAULT 'Pending', -- Column to track report status
+    foreign key (exam_id) references exam(exam_id)
 );
+
 
 CREATE TABLE admins(
     auth0_id text primary key,
@@ -162,9 +168,10 @@ INSERT INTO scannedExam (exam_id) VALUES (
     1
 );
 
-INSERT INTO feedback (sheet_id, student_id, feedback_text, feedback_time, status) VALUES (
-    1, '1', 'Q5 is incorrectly marked', CURRENT_TIMESTAMP, 'Not Done'
-);
+-- Insert values into the report table:
+INSERT INTO report (exam_id, student_id, report_text, reply_text, status) VALUES 
+(1, '1', 'I think Q5 is incorrectly marked.', 'I reviewed your answer for Q5. The marking is correct according to the scheme. Please refer to the marking guide.', 'Closed'),
+(2, '2', 'Can you explain the grading for the final exam?', 'Sure, the grading is based on the rubric provided in class.', 'Closed');
 
 INSERT INTO admins (auth0_id, email, name) VALUES (
     'auth0|6697fe650e143a8cede3ec08', 'sys.controller0@gmail.com', 'Admin'

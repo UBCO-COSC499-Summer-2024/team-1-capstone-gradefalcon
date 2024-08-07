@@ -23,10 +23,10 @@ const {
   fetchSolution,
   changeGrade,
   getGradeChangeLog,
-  deleteMyExam
+  deleteMyExam,
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
-const { checkJwt, checkPermissions, checkRole } = require("../auth0"); // Importing from auth.js
+const { checkJwt, checkPermissions } = require("../auth0"); // Importing from auth.js
 const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
