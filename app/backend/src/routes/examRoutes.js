@@ -81,6 +81,21 @@ router.get("/getAnswerKey/:exam_id", checkJwt, checkPermissions(["read:exam"]), 
     res.status(500).send("Error getting answer key");
   }
 });
+
+// Get the exam attempt for a given student
+router.get("/getStudentAttempt/:exam_id", async (req, res, next) => {
+  try {
+    const exam_id = parseInt(req.params.exam_id, 10);
+    if (isNaN(exam_id)) {
+      throw new Error("Invalid exam_id");
+    }
+    const studentAttempt = await getStudentAttempt(exam_id);
+    res.json({ studentAttempt });
+  } catch (error) {
+    console.error("Error in /getStudentAttempt:", error);
+    res.status(500).send("Error getting student attempt");
+  }
+});
 router.post("/studentScores", checkJwt, checkPermissions(["read:grades"]), async function (req, res) {
   const { examType, numQuestions } = req.body;
   const filePath = (examType === "custom" && numQuestions <= 100)
@@ -488,6 +503,51 @@ router.post("/GenerateEvaluation", checkJwt, checkPermissions(["create:evaluatio
   }
 });
 
+function createEvaluationJson(questions, markingSchemes, questionStartIndex) {
+  return {
+    source_type: "custom",
+    options: {
+      questions_in_order: Array.from({ length: questions.length }, (_, i) => `q${i + questionStartIndex}`),
+      answers_in_order: questions,
+    },
+    outputs_configuration: {
+      should_explain_scoring: true,
+      draw_score: {
+        enabled: true,
+        position: [600, 1100],
+        size: 1.5,
+      },
+      draw_answers_summary: {
+        enabled: true,
+        position: [300, 1200],
+        size: 1.0,
+      },
+      draw_question_verdicts: {
+        enabled: true,
+        verdict_colors: {
+          correct: "#00ff00",
+          neutral: "#ff0000",
+          incorrect: "#ff0000",
+        },
+        verdict_symbol_colors: {
+          positive: "#000000",
+          neutral: "#000000",
+          negative: "#000000",
+        },
+        draw_answer_groups: {
+          enabled: true,
+        },
+      },
+      draw_detected_bubble_texts: {
+        enabled: false,
+      },
+    },
+    marking_schemes: markingSchemes,
+  };
+}
+
+// Call the OMR processing service
+
 router.post("/callOMR", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
   console.log("callOMR");
   try {
@@ -515,6 +575,61 @@ router.post("/fetchImage", checkJwt, checkPermissions(["read:image"]), async fun
     res.status(500).send("Error fetching image");
   }
 });
+
+router.get("/getExamQuestionDetails/:exam_id", checkJwt, checkPermissions(["read:exam"]), async (req, res) => {
+  try {
+    const exam_id = parseInt(req.params.exam_id, 10);
+    if (isNaN(exam_id)) {
+      return res.status(400).send("Invalid exam_id");
+    }
+
+    const examDetails = await getExamQuestionDetails(exam_id);
+    if (!examDetails || !examDetails.totalQuestions || !examDetails.examType) {
+      return res.status(404).send("No exam details found for this exam");
+    }
+
+    res.json({ examDetails });
+  } catch (error) {
+    console.error("Error in /getExamQuestionDetails:", error);
+    res.status(500).send("Error retrieving exam details");
+  }
+});
+
+
+router.post("/saveResults", saveResults);
+
+// router.get("/searchExam/:student_id", checkJwt, checkPermissions(["read:students"]), async (req, res) => {
+//   const studentId = req.params.student_id;
+//   const filePath = path.join(__dirname, "../../omr/outputs/Results/Results.csv");
+//   let found = false; // Flag to check if student is found
+
+//   fs.createReadStream(filePath)
+//     .pipe(csv())
+//     .on("data", (data) => {
+//       if (data.StudentID === studentId) {
+//         found = true;
+//         res.json({ file_id: data.file_id });
+//       }
+//     })
+//     .on("end", () => {
+//       if (!found) {
+//         res.status(404).send("Student ID not found");
+//       }
+//     })
+//     .on("error", (error) => {
+//       console.error("Error reading CSV file:", error);
+//       res.status(500).send("Error reading CSV file");
+//     });
+// });
+
+// There are 2 folders in outputs: page_1 and page_2
+// The first folder contains the ID page and the second folder contains the question page
+// Each ID page has a matching question page
+// e.g front_pages_page_1.png = back_pages_page_1.png
+// We extract the ID from front_pages_page_1.png and the answers from back_pages_page_1.png
+// Create a CSV file with the following fields:
+// "front_page_id", "back_page_id", "score", "student_id", "question_1", "question_2", ..., "question_100"
+
 
 router.get("/getScoreByExamId/:exam_id", checkJwt, checkPermissions(["read:grades"]), async (req, res) => {
   try {
@@ -626,6 +741,14 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
       res.status(500).json("Error reading front_page.csv");
     });
 });
+
+router.post("/fetchStudentExam/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchStudentExam);
+
+router.post("/fetchSolution/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchSolution);
+
+router.post("/changeGrade", checkJwt, checkPermissions(["read:exam_student"]), changeGrade);
+
+//test routes
 
 router.post("/test", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
   console.log("test called");
