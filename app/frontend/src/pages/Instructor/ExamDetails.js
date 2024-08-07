@@ -7,9 +7,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/ca
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
-import { ChevronLeftIcon } from "@heroicons/react/20/solid";
+import { ChevronLeftIcon, TableCellsIcon } from "@heroicons/react/20/solid";
 import { FileIcon, BarChartIcon } from "lucide-react";
-import {Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext} from "../../components/ui/carousel";
 import {
   Drawer,
   DrawerClose,
@@ -21,7 +20,7 @@ import {
   DrawerTrigger,
 } from "../../components/ui/drawer";
 import "../../css/App.css";
-import QuestionsBarChart from "../../components/QuestionsBarChart";
+import QuestionsTable from "../../components/QuestionsTable";
 
 const ExamDetails = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -348,42 +347,41 @@ const ExamDetails = () => {
               <TooltipContent>Export results as a CSV file.</TooltipContent>
             </Tooltip>
 
-            {/* Drawer for Box Plot */}
+           {/* Drawer for Box Plot */}
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
-                <Drawer>
-                  <DrawerTrigger asChild>
-                    <Button size="sm" className="h-8 gap-1 text-white" style={{ backgroundColor: "hsl(var(--primary))" }}>
+                <Button size="sm" className="h-8 gap-1 text-white" style={{ backgroundColor: "hsl(var(--primary))" }}>
+                  <Drawer>
+                    <DrawerTrigger asChild>
                       <BarChartIcon className="h-4 w-4" />
-                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">View Box Plot</span>
-                    </Button>
-                  </DrawerTrigger>
-                  <DrawerContent>
-                    <div className="mx-auto w-full max-w-lg">
-                      <DrawerHeader>
-                        <DrawerTitle>Box Plot Analysis</DrawerTitle>
-                        <DrawerDescription>View the box plot analysis of the exam results.</DrawerDescription>
-                      </DrawerHeader>
-                      <Card>
-                        <CardContent className="flex aspect-square items-center justify-center p-3">
-                          <Plot
-                            data={data}
-                            layout={layout}
-                            config={{
-                              responsive: true, // Make the plot responsive
-                              displayModeBar: false,
-                            }}
-                          />
-                        </CardContent>
-                      </Card>
-                      <DrawerFooter>
-                        <DrawerClose asChild>
-                          <Button variant="outline">Close</Button>
-                        </DrawerClose>
-                      </DrawerFooter>
-                    </div>
-                  </DrawerContent>
-                </Drawer>
+                    </DrawerTrigger>
+                    <DrawerContent>
+                      <div className="mx-auto w-full max-w-lg">
+                        <DrawerHeader>
+                          <DrawerTitle>Box Plot Analysis</DrawerTitle>
+                          <DrawerDescription>View the box plot analysis of the exam results.</DrawerDescription>
+                        </DrawerHeader>
+                        <Card>
+                          <CardContent className="flex aspect-square items-center justify-center p-3">
+                            <Plot
+                              data={data}
+                              layout={layout}
+                              config={{
+                                responsive: true, // Make the plot responsive
+                                displayModeBar: false,
+                              }}
+                            />
+                          </CardContent>
+                        </Card>
+                        <DrawerFooter>
+                          <DrawerClose asChild>
+                            <Button variant="outline">Close</Button>
+                          </DrawerClose>
+                        </DrawerFooter>
+                      </div>
+                    </DrawerContent>
+                  </Drawer>
+                </Button>
               </TooltipTrigger>
               <TooltipContent>View Box Plot</TooltipContent>
             </Tooltip>
@@ -391,30 +389,27 @@ const ExamDetails = () => {
             {/* Drawer for Question Stats */}
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
-                <Drawer>
-                  <DrawerTrigger asChild>
-                    <Button size="sm" className="h-8 gap-1 text-white" style={{ backgroundColor: "hsl(var(--primary))" }}>
-                      <BarChartIcon className="h-4 w-4" />
-                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">View Question Stats</span>
-                    </Button>
-                  </DrawerTrigger>
-                  <DrawerContent>
-                    <div className="mx-auto w-full max-w-lg">
+                <Button size="sm" className="h-8 gap-1 text-white" style={{ backgroundColor: "hsl(var(--primary))" }}>
+                  <Drawer>
+                    <DrawerTrigger asChild>
+                      <TableCellsIcon className="h-4 w-4" />
+                    </DrawerTrigger>
+                    <DrawerContent style={{ height: '90vh' }}>
                       <DrawerHeader>
                         <DrawerTitle>Question Statistics</DrawerTitle>
-                        <DrawerDescription>View the response distribution per question.</DrawerDescription>
+                        <DrawerDescription>View the response distribution by question.</DrawerDescription>
                       </DrawerHeader>
-                          <QuestionsBarChart questionStats={examData.questionStats} />
+                      <QuestionsTable questionStats={examData.questionStats} />
                       <DrawerFooter>
                         <DrawerClose asChild>
                           <Button variant="outline">Close</Button>
                         </DrawerClose>
                       </DrawerFooter>
-                    </div>
-                  </DrawerContent>
-                </Drawer>
+                    </DrawerContent>
+                  </Drawer>
+                </Button>
               </TooltipTrigger>
-              <TooltipContent>View Question Stats</TooltipContent>
+              <TooltipContent>View Question Distribution</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
