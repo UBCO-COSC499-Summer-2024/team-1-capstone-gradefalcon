@@ -234,16 +234,12 @@ const Classes = () => {
               <CardDescription>Import a CSV file containing the student names and their student IDs in your class.</CardDescription>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-grow">
             <Dialog>
               <DialogTrigger asChild>
                 <Button size="sm">Create Class</Button>
               </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Create New Class</DialogTitle>
-                  <DialogDescription>Enter the details for the new class and import the student list via a CSV file.</DialogDescription>
-                </DialogHeader>
+              <DialogContent className="max-w-3xl">
                 <NewClassForm />
                 <DialogClose asChild>
                   <Button variant="ghost">Close</Button>
