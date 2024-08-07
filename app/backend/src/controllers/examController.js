@@ -722,7 +722,7 @@ const getStudentAttempt = async (req, res, next) => {
   try {
     const exam = await pool.query(
       `
-      SELECT exam_id, student_id, grade, exam_title, course_id, course_name, viewing_options 
+      SELECT exam_id, student_id, grade, exam_title, total_marks, course_id, course_name, viewing_options 
       from studentResults 
       join student using (student_id) 
 	    join exam using (exam_id)
