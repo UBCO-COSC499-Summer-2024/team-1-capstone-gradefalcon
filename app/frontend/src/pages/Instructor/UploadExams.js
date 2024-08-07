@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -17,6 +17,22 @@ const UploadExam = () => {
   const [classId, setClassId] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+
+  const handleFileSelect = useCallback(
+    (event) => {
+      const file = event.target.files[0];
+      if (file && file.type === "application/pdf") {
+        const fileURL = URL.createObjectURL(file);
+        setFileURL(fileURL);
+        setFile(file);
+      } else {
+        setFileURL(null);
+        setFile(null);
+        console.error("Please upload a valid PDF file.");
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     const fetchQuestionExamDetails = async () => {
@@ -47,7 +63,7 @@ const UploadExam = () => {
         const response = await fetch(`/api/exam/getExamDetails/${exam_id}`, {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`, // Include the token in the request
+            Authorization: `Bearer ${token}`, // Include the token in the request
           },
         });
         if (!response.ok) {
@@ -65,42 +81,23 @@ const UploadExam = () => {
 
     fetchExamDetails();
     fetchQuestionExamDetails();
-
-    const handleFileSelect = (event) => {
-      const file = event.target.files[0];
-      if (file && file.type === "application/pdf") {
-        const fileURL = URL.createObjectURL(file);
-        setFileURL(fileURL);
-        setFile(file);
-      }
-    };
-
-    const fileInput = fileInputRef.current;
-    if (fileInput) {
-      fileInput.addEventListener("change", handleFileSelect);
-    }
-
-    return () => {
-      if (fileInput) {
-        fileInput.removeEventListener("change", handleFileSelect);
-      }
-    };
-  }, []);
+  }, [exam_id, getAccessTokenSilently]);
 
   const resetUpload = () => {
     setFileURL(null);
+    setFile(null); // Clear the file state
     if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      fileInputRef.current.value = null; // Ensure the file input is cleared and ready for new selection
     }
   };
 
   const sendToBackend = async () => {
     if (!file) return;
-  
+
     const formData = new FormData();
     formData.append("examPages", file);
     formData.append("exam_id", exam_id); // Include exam_id in the form data
-  
+
     try {
       const token = await getAccessTokenSilently(); // Get the token
       const responses = await Promise.all([
@@ -126,36 +123,43 @@ const UploadExam = () => {
             Authorization: `Bearer ${token}`, // Include the token in the request
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({examType, keyOrExam: "exam", numQuestions, examTitle, courseId, classID: classId }), // Pass numQuestions
+          body: JSON.stringify({
+            examType,
+            keyOrExam: "exam",
+            numQuestions,
+            examTitle,
+            courseId,
+            classID: classId,
+          }), // Pass numQuestions
         }),
       ]);
-  
+
       const results = await Promise.all(
         responses.map(async (response) => {
           if (!response.ok) {
             const contentType = response.headers.get("content-type");
             let errorMessage;
-  
+
             if (contentType && contentType.includes("application/json")) {
               const errorResponse = await response.json();
               errorMessage = errorResponse.error || "Unknown error occurred";
             } else {
               errorMessage = await response.text();
             }
-  
+
             throw new Error(errorMessage);
           }
-  
+
           return response.json(); // Parse the successful JSON response
         })
       );
-  
+
       const [dataUploadExam, dataGenerateEvaluation, dataCopyTemplate] = results;
-  
+
       console.log("Data from UploadExam:", dataUploadExam);
       console.log("Data from GenerateEvaluation:", dataGenerateEvaluation);
       console.log("Data from copyTemplate:", dataCopyTemplate);
-  
+
       navigate("/OMRProcessingUpload", {
         state: { exam_id, numQuestions, examType },
       });
@@ -163,7 +167,6 @@ const UploadExam = () => {
       console.error("Error:", error.message);
     }
   };
-  
 
   return (
     <main className="flex flex-col gap-4 p-2">
@@ -182,14 +185,14 @@ const UploadExam = () => {
             Upload Exam
           </h1>
           <div className="hidden items-center gap-2 md:ml-auto md:flex"></div>
-        <div className="flex items-center gap-2 ml-auto">
-        <Button size="sm" variant="outline" onClick={resetUpload}>
-            Reset
-          </Button>
-          <Button size="sm" className="gap-1" onClick={sendToBackend}>
-            Import
-          </Button>
-        </div>
+          <div className="flex items-center gap-2 ml-auto">
+            <Button size="sm" variant="outline" onClick={resetUpload}>
+              Reset
+            </Button>
+            <Button size="sm" className="gap-1" onClick={sendToBackend}>
+              Import
+            </Button>
+          </div>
         </div>
 
         <div className="flex flex-col items-center gap-4 w-full">
@@ -198,7 +201,7 @@ const UploadExam = () => {
               <div className="flex flex-col items-center gap-1 text-center w-full h-full">
                 <h3 className="text-2xl font-bold tracking-tight">No File Selected</h3>
                 <p className="text-sm text-muted-foreground">
-                  You can upload the exam answer key as a PDF file.
+                  You can upload the exam file as a PDF.
                 </p>
                 <Button
                   className="mt-4"
@@ -213,6 +216,7 @@ const UploadExam = () => {
                   hidden
                   accept="application/pdf"
                   ref={fileInputRef}
+                  onChange={handleFileSelect} // Attach event handler directly
                 />
               </div>
             ) : (
