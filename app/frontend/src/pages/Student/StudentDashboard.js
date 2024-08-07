@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react"; // Import Search icon
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { ScrollArea } from "../../components/ui/scroll-area";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
 import { Input } from "../../components/ui/input";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table"; // Import table components
@@ -15,6 +17,8 @@ export default function StudentDashboard() {
   const [filteredExams, setFilteredExams] = useState([]);
   const [examSearchTerm, setExamSearchTerm] = useState("");
   const [filter, setFilter] = useState("all"); // State to manage the active tab
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -123,17 +127,31 @@ export default function StudentDashboard() {
                     <TableBody>
                       {filteredExams.length > 0 ? (
                         filteredExams.map((exam, index) => (
-                          <TableRow key={index} className="hover:bg-gray-100 cursor-pointer">
-                            <TableCell>
-                              <span className="font-bold">{exam.exam_title}</span>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
-                            <TableCell>
-                              <Badge variant={getExamStatusColor(exam.graded)}>
-                                {exam.graded ? "Graded" : "Not graded"}
-                              </Badge>
-                            </TableCell>
-                          </TableRow>
+                          <TooltipProvider key={index}>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger asChild>
+                            <TableRow
+                              className="hover:bg-gray-100 cursor-pointer"
+                              onClick={() => {
+                                if (exam.graded) {
+                                  navigate(`/ViewExamDetails`, {
+                                    state: { exam_id: exam.exam_id },
+                                  });
+                                }
+                              }}
+                            >
+                              <TableCell>
+                                <span className="font-bold">{exam.exam_title}</span>
+                              </TableCell>
+                              <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
+                              <TableCell>{exam.graded ? "Graded" : "Not graded"}</TableCell>
+                            </TableRow>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{exam.graded ? "Click for details" : "Exam not graded yet"}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                         ))
                       ) : (
                         <TableRow>

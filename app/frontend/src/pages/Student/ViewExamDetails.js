@@ -70,6 +70,7 @@ export default function ViewExamDetails() {
           let url = URL.createObjectURL(blob);
           setFrontSrc(url);
         } else {
+          setFrontSrc(null);
           console.error("Failed to fetch exam details");
         }
 
@@ -87,6 +88,7 @@ export default function ViewExamDetails() {
           let url = URL.createObjectURL(blob);
           setBackSrc(url);
         } else {
+          setBackSrc(null);
           console.error("Failed to fetch exam details");
         }   
       } catch (err) {
@@ -169,7 +171,7 @@ export default function ViewExamDetails() {
                 }}
               />
             ) : (
-              <p>Loading front image...</p>
+              <p>No front image found</p>
             )}
             {backSrc ? (
               <img
@@ -181,7 +183,7 @@ export default function ViewExamDetails() {
                 }}
               />
             ) : (
-              <p>Loading back image...</p>
+              <p>No front image found</p>
             )}
           </div>
         ) : (
