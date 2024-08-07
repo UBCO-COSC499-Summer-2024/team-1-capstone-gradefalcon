@@ -2,6 +2,74 @@
 
 ### Timesheet
 Clockify report
+![Clockify report](../Clockify/aug6_screenshot.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Writing Individual Report
+  * #2: Report Feature for student and Instructors
+  * #3: Testing
+
+    
+### Progress Update (since 31/7/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Writing Individual Report
+        </td>
+        <!-- Status -->
+        <td> In Progress
+        </td>
+    </tr>
+     <tr>
+        <!-- Task/Issue # -->
+        <td>Report Feature for student and Instructors
+        </td>
+        <!-- Status -->
+        <td>Complete
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Testing
+        </td>
+        <!-- Status -->
+        <td> In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+### Summary
+This week, I focused on recovering from a stressful last week. I took most of the long weekend to rest, which helped me recharge. On Monday, I resumed work and completed the report feature for students and instructors. Following that, I worked on fixing bugs from merges, ensuring the system's stability. 
+
+In preparation for our demo to Raymond, we worked together as a group to develop a solid plan. My primary task now is to make sure everything that needs to work for the demo is functioning correctly.
+
+#### In Progress:
+- **Ensuring functionality for the demo**: In Progress
+
+### Reflections and Lessons Learned:
+This cycle emphasized the importance of taking breaks to recover from intense periods of work. The time off allowed me to return with renewed energy and focus, which was crucial for completing the report feature and addressing merge bugs. Effective teamwork and planning were also key in preparing for the demo.
+
+Moving forward, I recognize the need to maintain a balance between work and rest to ensure consistent productivity. Communication and regular updates with my team will continue to be essential.
+
+### Adjustments and Future Plans:
+- Finish my individual report
+- Work on writing tests
+- Ensure all my code is properly pushed to the dev branch
+
+
+
+## Wednesday (31/7- 2/8)
+
+### Timesheet
+Clockify report
 ![Clockify report](../Clockify/aug2_screenshot.png)
 
 ### Current Tasks (Provide sufficient detail)
