@@ -7,8 +7,8 @@
 
 clockify report
 
-<img width="926" alt="Time18" src="https://github.com/user-attachments/assets/47c681c6-c3f5-4b7e-b784-6ebd78ce4277">
 
+<img width="926" alt="clockifyreport_18" src="https://github.com/user-attachments/assets/b72988e6-05e6-444c-8506-13efbeb6c04f">
 
 
 ### Current Tasks (Provide Details):
