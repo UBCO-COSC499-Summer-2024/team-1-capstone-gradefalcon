@@ -65,7 +65,6 @@ router.post('/delete-exam', checkJwt, (req, res, next) => {
 }, deleteMyExam);
 // Function to get the answer key for a specific exam
 
-router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
 router.post("/fetchStudentExam/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchStudentExam);
 router.post("/fetchSolution/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchSolution);
 router.post("/changeGrade", checkJwt, checkPermissions(["read:exam_student"]), changeGrade);

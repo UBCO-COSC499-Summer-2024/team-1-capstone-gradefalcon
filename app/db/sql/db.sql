@@ -148,8 +148,8 @@ INSERT INTO student (student_id, auth0_id, email, name) VALUES
 INSERT INTO classes (instructor_id, course_id, course_name, active) VALUES
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST100', 'Database Test', true),
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST200', 'Database Test 2', true),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST300', 'Algorithms'),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST400', 'Data Structures');
+    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST300', 'Algorithms', true),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST400', 'Data Structures', true);
 
 -- Insert exams
 INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES
