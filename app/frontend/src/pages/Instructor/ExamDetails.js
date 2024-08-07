@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/ca
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
-import { ChevronLeftIcon } from "@heroicons/react/20/solid";
+import { ChevronLeftIcon, TableCellsIcon } from "@heroicons/react/20/solid";
 import { FileIcon, BarChartIcon } from "lucide-react";
 import {
   Drawer,
@@ -20,6 +20,7 @@ import {
   DrawerTrigger,
 } from "../../components/ui/drawer";
 import "../../css/App.css";
+import QuestionsTable from "../../components/QuestionsTable";
 
 const ExamDetails = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -104,6 +105,12 @@ const ExamDetails = () => {
     return <div>{error}</div>;
   }
 
+  // // Safeguard against undefined or null questionStats
+  // const questionStats = examData.questionStats ? examData.questionStats : {};
+
+  // Log questionStats
+  console.log("Question Stats:", examData.questionStats);
+
   const grades = examData.studentResults.map((result) => result.grade);
   const primaryColor = "#0a8537";
   const minGrade = Math.min(...grades);
@@ -114,8 +121,10 @@ const ExamDetails = () => {
   const q3Grade = grades.sort((a, b) => a - b)[Math.floor((grades.length * 3) / 4)];
 
   const layout = {
-    width: '70%',
+    width: '50%',
     height: 400,
+    paper_bgcolor: 'rgba(0,0,0,0)',  // Transparent background
+    plot_bgcolor: 'rgba(0,0,0,0)',
     margin: {
       l: 100, 
       r: 100,  
@@ -323,7 +332,9 @@ const ExamDetails = () => {
           <ChevronLeftIcon className="h-4 w-4" />
           <span className="sr-only">Back</span>
         </Button>
-        <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">{examData.exam_title}</h1>
+        <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+          {examData.exam_title}
+        </h1>
         <div className="flex items-center gap-2 ml-auto">
           <TooltipProvider>
             <Tooltip delayDuration={0}>
@@ -335,39 +346,70 @@ const ExamDetails = () => {
               </TooltipTrigger>
               <TooltipContent>Export results as a CSV file.</TooltipContent>
             </Tooltip>
+
+           {/* Drawer for Box Plot */}
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
-                <Drawer>
-                  <DrawerTrigger asChild>
-                    <Button size="sm" className="h-8 gap-1 text-white" style={{ backgroundColor: "hsl(var(--primary))" }}>
+                <Button size="sm" className="h-8 gap-1 text-white" style={{ backgroundColor: "hsl(var(--primary))" }}>
+                  <Drawer>
+                    <DrawerTrigger asChild>
                       <BarChartIcon className="h-4 w-4" />
-                    </Button>
-                  </DrawerTrigger>
-                  <DrawerContent>
-                    <div className="mx-auto w-full max-w-sm">
-                      <DrawerHeader>
-                        <DrawerTitle>Exam Analysis</DrawerTitle>
-                        <DrawerDescription>View detailed analysis of the exam results.</DrawerDescription>
-                      </DrawerHeader>
-                      <div className="flex justify-center" style={{ overflow: 'visible', padding: '0 20px' }}>
-                        <Plot
-                          data={data}
-                          layout={layout}
-                          config={{
-                            responsive: true,  // Make the plot responsive
-                          }}
-                        />
+                    </DrawerTrigger>
+                    <DrawerContent>
+                      <div className="mx-auto w-full max-w-lg">
+                        <DrawerHeader>
+                          <DrawerTitle>Box Plot Analysis</DrawerTitle>
+                          <DrawerDescription>View the box plot analysis of the exam results.</DrawerDescription>
+                        </DrawerHeader>
+                        <Card>
+                          <CardContent className="flex aspect-square items-center justify-center p-3">
+                            <Plot
+                              data={data}
+                              layout={layout}
+                              config={{
+                                responsive: true, // Make the plot responsive
+                                displayModeBar: false,
+                              }}
+                            />
+                          </CardContent>
+                        </Card>
+                        <DrawerFooter>
+                          <DrawerClose asChild>
+                            <Button variant="outline">Close</Button>
+                          </DrawerClose>
+                        </DrawerFooter>
                       </div>
+                    </DrawerContent>
+                  </Drawer>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>View Box Plot</TooltipContent>
+            </Tooltip>
+
+            {/* Drawer for Question Stats */}
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Button size="sm" className="h-8 gap-1 text-white" style={{ backgroundColor: "hsl(var(--primary))" }}>
+                  <Drawer>
+                    <DrawerTrigger asChild>
+                      <TableCellsIcon className="h-4 w-4" />
+                    </DrawerTrigger>
+                    <DrawerContent style={{ height: '90vh' }}>
+                      <DrawerHeader>
+                        <DrawerTitle>Question Statistics</DrawerTitle>
+                        <DrawerDescription>View the response distribution by question.</DrawerDescription>
+                      </DrawerHeader>
+                      <QuestionsTable questionStats={examData.questionStats} />
                       <DrawerFooter>
                         <DrawerClose asChild>
                           <Button variant="outline">Close</Button>
                         </DrawerClose>
                       </DrawerFooter>
-                    </div>
-                  </DrawerContent>
-                </Drawer>
+                    </DrawerContent>
+                  </Drawer>
+                </Button>
               </TooltipTrigger>
-              <TooltipContent>View analysis of exam results.</TooltipContent>
+              <TooltipContent>View Question Distribution</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
@@ -377,10 +419,7 @@ const ExamDetails = () => {
         {examData.studentResults.length > 0 ? (
           <Card className="bg-white border rounded w-1/2">
             <CardHeader className="flex justify-between px-6 py-4">
-              <div>
-                <CardTitle className="mb-2">Student Results</CardTitle>
-                <h1>Total marks: {examData.total_marks}</h1>
-              </div>
+              <CardTitle className="mb-2">Student Grades</CardTitle>
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-80">
@@ -402,7 +441,7 @@ const ExamDetails = () => {
                                 navigate(`/ViewExam`, {
                                   state: {
                                     student_id: result.student_id,
-                                    exam_id: exam_id,
+                                    exam_id: examData.exam_id,
                                     student_name: result.student_name,
                                     grade: result.grade,
                                     total_marks: examData.total_marks,
@@ -413,7 +452,7 @@ const ExamDetails = () => {
                             >
                               <TableCell>{result.student_id}</TableCell>
                               <TableCell>{result.student_name}</TableCell>
-                              <TableCell>{result.grade}</TableCell>
+                              <TableCell>{result.grade}/<span className="text-gray-500">{examData.total_marks}</span></TableCell>
                             </TableRow>
                           </TooltipTrigger>
                           <TooltipContent>
@@ -434,7 +473,7 @@ const ExamDetails = () => {
               size="sm"
               className="mt-2"
               onClick={() => {
-                navigate(`/UploadExams/${exam_id}`);
+                navigate(`/UploadExams/${examData.exam_id}`);
               }}
             >
               Grade Exam
@@ -444,9 +483,7 @@ const ExamDetails = () => {
 
         <Card className="bg-white border rounded w-1/2">
           <CardHeader className="flex justify-between px-6 py-4">
-            <div>
-              <CardTitle className="mb-2">Answer Key</CardTitle>
-            </div>
+            <CardTitle className="mb-2">Answer Key</CardTitle>
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-80">
