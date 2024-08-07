@@ -1,5 +1,54 @@
 # Personal Log
 
+## Thursday (8/02 - 8/06)
+
+## TimeSheet
+Clockify report
+![alt text](../Clockify/Bennett/08_02_2024-08_06_2024.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Delete Exams
+  * #2: General visual/logic bug fixes
+
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>COMPLETED
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>2
+        </td>
+        <!-- Status -->
+        <td>In Progress
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * Did not put in as many hours as I typically do, but i got done what my group asked me to get done
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Going to fix one more visual bug, wednessday focus on final report, thursday preperation for final presentation, friday after presentation is for any last additions
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+# Personal Log
+
 ## Thursday (7/31 - 8/01)
 
 ## TimeSheet
