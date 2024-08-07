@@ -341,63 +341,6 @@ const getStudentCourses = async (req, res, next) => {
   }
 };
 
-const displayClassWithExams = async (req, res, next) => {
-  try {
-    const { class_id } = req.params;
-    const studentResult = await pool.query(
-      "SELECT student_id, name FROM enrollment JOIN student USING (student_id) WHERE class_id = $1",
-      [class_id]
-    );
-    const students = studentResult.rows;
-
-    const examsResult = await pool.query(
-      "SELECT exam_id, exam_title FROM exam WHERE class_id = $1",
-      [class_id]
-    );
-    const exams = examsResult.rows;
-
-    const courseQuery = await pool.query(
-      "SELECT course_id, course_name FROM classes WHERE class_id = $1",
-      [class_id]
-    );
-    const courseDetails = courseQuery.rows;
-
-    const examResultsPromises = students.map(student =>
-      pool.query(
-        "SELECT exam_id, grade FROM studentResults WHERE student_id = $1",
-        [student.student_id]
-      ).then(result => ({
-        student_id: student.student_id,
-        name: student.name,
-        exams: result.rows,
-      }))
-    );
-
-    const studentInfo = await Promise.all(examResultsPromises);
-    res.json({ studentInfo, courseDetails, exams });
-  } catch (error) {
-    console.error("Error in displayClassWithExams:", error);
-    next(error);
-  }
-};
-
-const getUnreadMessages = async (req, res, next) => {
-  try {
-    const instructorAuth0Id = req.auth.sub;
-    const result = await pool.query(`
-      SELECT m.message_id, m.sender_id, m.receiver_id, m.exam_id, m.message_text, m.message_time, e.class_id
-      FROM messages m
-      JOIN exam e ON m.exam_id = e.exam_id
-      JOIN classes c ON e.class_id = c.class_id
-      WHERE m.receiver_id = $1 AND m.read = false
-    `, [instructorAuth0Id]);
-
-    res.json(result.rows);
-  } catch (err) {
-    console.error("Error in getUnreadMessages:", err);
-    next(err);
-  }
-};
 
 module.exports = {
   displayClasses,
@@ -408,7 +351,5 @@ module.exports = {
   archiveCourse,
   unarchiveCourse,
   deleteCourse,
-  getStudentCourses,
-  displayClassWithExams,
-  getUnreadMessages
+  getStudentCourses
 };

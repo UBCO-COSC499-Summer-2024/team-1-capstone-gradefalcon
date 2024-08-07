@@ -13,9 +13,6 @@ DROP TABLE IF EXISTS admins CASCADE;
 DROP TABLE IF EXISTS sessions CASCADE;
 
 
--- ////////// Create ENUM type for message status: /////////////////
-
-CREATE TYPE message_status AS ENUM ('Approved', 'Declined', 'Pending');
 
 -- ////////// Create tables: /////////////////
 
@@ -94,20 +91,21 @@ CREATE TABLE scannedExam(
     foreign key (exam_id) references exam(exam_id)
 );
 
--- Create the messages table for the reports
-CREATE TABLE messages (
-    message_id serial primary key,
-    sender_id text not null,
-    sender_type text not null, -- 'student' or 'instructor'
-    receiver_id text not null,
-    receiver_type text not null, -- 'student' or 'instructor'
+
+-- ////////// Create ENUM type for message status: /////////////////
+
+CREATE TYPE report_status AS ENUM ('Closed', 'Pending');
+
+CREATE TABLE report (
+    report_id serial primary key,
     exam_id int not null,
-    message_text text not null,
-    message_time timestamp not null,
-    report_topic text,
-    status message_status DEFAULT 'Pending', -- Column to track read status
+    student_id text not null,
+    report_text text not null,
+    reply_text text, -- This field will store the instructor's reply
+    status report_status DEFAULT 'Pending', -- Column to track report status
     foreign key (exam_id) references exam(exam_id)
 );
+
 
 CREATE TABLE admins(
     auth0_id text primary key,
@@ -167,10 +165,6 @@ INSERT INTO studentResults (student_id, exam_id, grade) VALUES
 
 INSERT INTO scannedExam (exam_id) VALUES (
     1
-);
-
-INSERT INTO feedback (sheet_id, student_id, feedback_text, feedback_time, status) VALUES (
-    1, '1', 'Q5 is incorrectly marked', CURRENT_TIMESTAMP, 'Not Done'
 );
 
 INSERT INTO messages (sender_id, sender_type, receiver_id, receiver_type, exam_id, message_text, message_time, status) VALUES (
