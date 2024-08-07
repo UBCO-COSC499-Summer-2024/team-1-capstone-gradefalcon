@@ -1,6 +1,6 @@
 # Personal Log
 
-## Thursday (8/02 - 8/06)
+## Tuesday (8/02 - 8/06)
 
 ## TimeSheet
 Clockify report
