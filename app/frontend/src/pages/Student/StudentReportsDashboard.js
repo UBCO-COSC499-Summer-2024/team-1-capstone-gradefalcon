@@ -18,7 +18,7 @@ export default function StudentReportsDashboard() {
     const fetchStudentReports = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const response = await fetch("/api/student-reports", {
+        const response = await fetch("/api/reports/student-reports", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

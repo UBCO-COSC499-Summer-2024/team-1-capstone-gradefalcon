@@ -59,13 +59,14 @@ const SubmitReport = () => {
       // Fetch the images for the selected exam
       try {
         const token = await getAccessTokenSilently();
-        const frontPageResponse = await fetch("/api/exam/fetchImage", {
+        const frontPageResponse = await fetch(`/api/exam/fetchStudentExam/${value}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ file_name: `${exam.file_path}/front_page.png` }),
+          credentials: "include",
+          body: JSON.stringify({ page: "front_page.png" }),
         });
         if (frontPageResponse.ok) {
           const blob = await frontPageResponse.blob();
@@ -75,13 +76,14 @@ const SubmitReport = () => {
           console.error("Failed to fetch front page image");
         }
 
-        const backPageResponse = await fetch("/api/exam/fetchImage", {
+        const backPageResponse = await fetch(`/api/exam/fetchStudentExam/${value}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ file_name: `${exam.file_path}/back_page.png` }),
+          credentials: "include",
+          body: JSON.stringify({ page: "back_page.png" }),
         });
         if (backPageResponse.ok) {
           const blob = await backPageResponse.blob();
