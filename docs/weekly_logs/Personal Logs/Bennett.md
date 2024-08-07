@@ -38,7 +38,8 @@ Clockify report
 </table>
 
 ### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
-  * Did not put in as many hours as I typically do, but i got done what my group asked me to get done. That being to add a delete exam feature, and fix bugs that broke features presented last friday.
+  * Did not put in as many hours as I typically do, but i got done what my group asked me to get done. That being to add a delete exam feature, and fix bugs that broke features presented last friday. Wedndessday afternoon planning was done for the client presentation aswell as assisting in bug fixes from all the recent flurry of merges
+
 ### Next Cycle Goals (What are you going to accomplish during the next cycle)
   * Going to fix one more visual bug, wednessday focus on final report, thursday preperation for final presentation, friday after presentation is for any last additions
 
