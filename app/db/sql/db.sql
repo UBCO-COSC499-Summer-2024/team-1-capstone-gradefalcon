@@ -132,18 +132,20 @@ INSERT INTO instructor (auth0_id, email, name) VALUES (
 );
 
 INSERT INTO student (student_id, auth0_id, email, name) VALUES 
-    ('1', 'auth0|669eca4940b5ccd84d81caa2', 'stu.example0@gmail.com', 'Student'),
-    ('2', 'auth0|669ecaa440b5ccd84d81caa3', 'stu.example1@gmail.com', 'Student II');
+    ('1', 'auth0|669eca4940b5ccd84d81caa2', 'stu.example0@gmail.com', 'Nelson Mirza'),
+    ('2', 'auth0|669ecaa440b5ccd84d81caa3', 'stu.example1@gmail.com', 'Bennett Al-Yaqubi'),
+    ('3', 'auth0|669ecaa440b5ccd84d81caa4', 'ahmad@example.com', 'Ahmad Ngumo'),
+    ('4', 'auth0|669ecaa440b5ccd84d81caa5', 'omar@example.com', 'Omar Witt');
 
 INSERT INTO classes (instructor_id, course_id, course_name, active) VALUES
-    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST100', 'Database Test', true),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST200', 'Database Test 2', true);
+    ('auth0|6696d634bec6c6d1cc3e2274', 'COSC304', 'Introduction to Database', true),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'BIOL265', 'Principles of Genetics', true);
 
 INSERT INTO exam (class_id, exam_title, total_questions, total_marks, graded, viewing_options) VALUES
-    (1,'Midterm', 50, 50, true, '{"canViewExam": true, "canViewAnswers": false}'),
-    (1, 'Final', 5, 100, true, '{"canViewExam": false, "canViewAnswers": false}'),
-    (2, 'Midterm - 200', 50, 50, true, '{"canViewExam": false, "canViewAnswers": true}'),  -- Exams for TEST200
-    (2, 'Final - 200', 100, 100, true, '{"canViewExam": true, "canViewAnswers": true}');  -- Exams for TEST200
+    (1,'Midterm 1', 50, 50, true, '{"canViewExam": true, "canViewAnswers": false}'),
+    (1, 'Midterm 2', 50, 100, true, '{"canViewExam": false, "canViewAnswers": false}'),
+    (2, 'Midterm', 50, 50, true, '{"canViewExam": false, "canViewAnswers": true}'),  -- Exams for TEST200
+    (2, 'Final', 100, 100, true, '{"canViewExam": true, "canViewAnswers": true}');  -- Exams for TEST200
 
 INSERT INTO solution (exam_id) VALUES
     (1),
@@ -152,8 +154,12 @@ INSERT INTO solution (exam_id) VALUES
 INSERT INTO enrollment (class_id, student_id) VALUES 
     (1, 1),
     (1, 2),
-    (2, 1),  -- Enrollments for TEST200
-    (2, 2);  -- Enrollments for TEST200
+    (1, 3), 
+    (1, 4),
+    (2, 1),
+    (2, 2),
+    (2, 3),
+    (2, 4);
 
 INSERT INTO studentResults (student_id, exam_id, chosen_answers, grade) VALUES
 (1, 1, '[
@@ -180,6 +186,30 @@ INSERT INTO studentResults (student_id, exam_id, chosen_answers, grade) VALUES
     {"q41": "B"}, {"q42": "D"}, {"q43": "C"}, {"q44": "A"}, {"q45": "B"},
     {"q46": "D"}, {"q47": "C"}, {"q48": "A"}, {"q49": "B"}, {"q50": "D"}
 ]', 11),
+(3, 1, '[
+    {"q1": "A"}, {"q2": "B"}, {"q3": "C"}, {"q4": "D"}, {"q5": "A"},
+    {"q6": "C"}, {"q7": "B"}, {"q8": "D"}, {"q9": "A"}, {"q10": "B"},
+    {"q11": "C"}, {"q12": "D"}, {"q13": "A"}, {"q14": "B"}, {"q15": "C"},
+    {"q16": "D"}, {"q17": "A"}, {"q18": "B"}, {"q19": "C"}, {"q20": "D"},
+    {"q21": "A"}, {"q22": "B"}, {"q23": "C"}, {"q24": "D"}, {"q25": "A"},
+    {"q26": "B"}, {"q27": "C"}, {"q28": "D"}, {"q29": "A"}, {"q30": "B"},
+    {"q31": "C"}, {"q32": "D"}, {"q33": "A"}, {"q34": "B"}, {"q35": "C"},
+    {"q36": "D"}, {"q37": "A"}, {"q38": "B"}, {"q39": "C"}, {"q40": "D"},
+    {"q41": "A"}, {"q42": "B"}, {"q43": "C"}, {"q44": "D"}, {"q45": "A"},
+    {"q46": "B"}, {"q47": "C"}, {"q48": "D"}, {"q49": "A"}, {"q50": "B"}
+]', 50),
+(4, 1, '[
+    {"q1": "A"}, {"q2": "B"}, {"q3": "C"}, {"q4": "D"}, {"q5": "A"},
+    {"q6": "C"}, {"q7": "B"}, {"q8": "D"}, {"q9": "A"}, {"q10": "B"},
+    {"q11": "C"}, {"q12": "D"}, {"q13": "A"}, {"q14": "B"}, {"q15": "C"},
+    {"q16": "D"}, {"q17": "A"}, {"q18": "B"}, {"q19": "C"}, {"q20": "D"},
+    {"q21": "A"}, {"q22": "B"}, {"q23": "C"}, {"q24": "D"}, {"q25": "A"},
+    {"q26": "B"}, {"q27": "C"}, {"q28": "D"}, {"q29": "A"}, {"q30": "B"},
+    {"q31": "C"}, {"q32": "D"}, {"q33": "A"}, {"q34": "B"}, {"q35": "C"},
+    {"q36": "D"}, {"q37": "A"}, {"q38": "B"}, {"q39": "C"}, {"q40": "D"},
+    {"q41": "A"}, {"q42": "B"}, {"q43": "C"}, {"q44": "D"}, {"q45": "A"},
+    {"q46": "B"}, {"q47": "C"}, {"q48": "D"}, {"q49": "A"}, {"q50": "B"}
+]', 50),
 (1, 2, '[
     {"q1": "D"}, {"q2": "B"}, {"q3": "C"}, {"q4": "A"}, {"q5": "D"},
     {"q6": "A"}, {"q7": "B"}, {"q8": "C"}, {"q9": "D"}, {"q10": "A"},
@@ -193,6 +223,30 @@ INSERT INTO studentResults (student_id, exam_id, chosen_answers, grade) VALUES
     {"q46": "A"}, {"q47": "B"}, {"q48": "C"}, {"q49": "D"}, {"q50": "A"}
 ]', 69),
 (2, 2, '[
+    {"q1": "A"}, {"q2": "A"}, {"q3": "B"}, {"q4": "C"}, {"q5": "D"},
+    {"q6": "A"}, {"q7": "B"}, {"q8": "C"}, {"q9": "D"}, {"q10": "A"},
+    {"q11": "B"}, {"q12": "C"}, {"q13": "D"}, {"q14": "A"}, {"q15": "B"},
+    {"q16": "C"}, {"q17": "D"}, {"q18": "A"}, {"q19": "B"}, {"q20": "C"},
+    {"q21": "D"}, {"q22": "A"}, {"q23": "B"}, {"q24": "C"}, {"q25": "D"},
+    {"q26": "A"}, {"q27": "B"}, {"q28": "C"}, {"q29": "D"}, {"q30": "A"},
+    {"q31": "B"}, {"q32": "C"}, {"q33": "D"}, {"q34": "A"}, {"q35": "B"},
+    {"q36": "C"}, {"q37": "D"}, {"q38": "A"}, {"q39": "B"}, {"q40": "C"},
+    {"q41": "D"}, {"q42": "A"}, {"q43": "B"}, {"q44": "C"}, {"q45": "D"},
+    {"q46": "A"}, {"q47": "B"}, {"q48": "C"}, {"q49": "D"}, {"q50": "A"}
+]', 85),
+(3, 2, '[
+    {"q1": "D"}, {"q2": "B"}, {"q3": "C"}, {"q4": "A"}, {"q5": "D"},
+    {"q6": "A"}, {"q7": "B"}, {"q8": "C"}, {"q9": "D"}, {"q10": "A"},
+    {"q11": "B"}, {"q12": "C"}, {"q13": "D"}, {"q14": "A"}, {"q15": "B"},
+    {"q16": "C"}, {"q17": "D"}, {"q18": "A"}, {"q19": "B"}, {"q20": "C"},
+    {"q21": "D"}, {"q22": "A"}, {"q23": "B"}, {"q24": "C"}, {"q25": "D"},
+    {"q26": "A"}, {"q27": "B"}, {"q28": "C"}, {"q29": "D"}, {"q30": "A"},
+    {"q31": "B"}, {"q32": "C"}, {"q33": "D"}, {"q34": "A"}, {"q35": "B"},
+    {"q36": "C"}, {"q37": "D"}, {"q38": "A"}, {"q39": "B"}, {"q40": "C"},
+    {"q41": "D"}, {"q42": "A"}, {"q43": "B"}, {"q44": "C"}, {"q45": "D"},
+    {"q46": "A"}, {"q47": "B"}, {"q48": "C"}, {"q49": "D"}, {"q50": "A"}
+]', 69),
+(4, 2, '[
     {"q1": "A"}, {"q2": "A"}, {"q3": "B"}, {"q4": "C"}, {"q5": "D"},
     {"q6": "A"}, {"q7": "B"}, {"q8": "C"}, {"q9": "D"}, {"q10": "A"},
     {"q11": "B"}, {"q12": "C"}, {"q13": "D"}, {"q14": "A"}, {"q15": "B"},

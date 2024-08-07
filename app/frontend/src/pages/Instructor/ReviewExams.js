@@ -214,7 +214,7 @@ const fetchStudentScores = async () => {
                         max={totalMarks}
                         min="0"
                         onChange={(e) => handleScoreChange(e, student.StudentID)}
-                        className="w-14 px-2 py-1"
+                        className="w-16 px-2 py-1"
                       />
                     </TableCell>
                     <TableCell>
