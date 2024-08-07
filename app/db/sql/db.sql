@@ -8,10 +8,14 @@ DROP TABLE IF EXISTS solution CASCADE;
 DROP TABLE IF EXISTS enrollment CASCADE;
 DROP TABLE IF EXISTS studentResults CASCADE;
 DROP TABLE IF EXISTS scannedExam CASCADE;
-DROP TABLE IF EXISTS feedback CASCADE;
+DROP TABLE IF EXISTS messages CASCADE;
 DROP TABLE IF EXISTS admins CASCADE;
 DROP TABLE IF EXISTS sessions CASCADE;
-DROP TYPE IF EXISTS feedback_status CASCADE;
+
+
+-- ////////// Create ENUM type for message status: /////////////////
+
+CREATE TYPE message_status AS ENUM ('Approved', 'Declined', 'Pending');
 
 -- ////////// Create tables: /////////////////
 
@@ -90,16 +94,19 @@ CREATE TABLE scannedExam(
     foreign key (exam_id) references exam(exam_id)
 );
 
-CREATE TYPE feedback_status as enum ('Not Done', 'Done', 'In Progress');
-
-CREATE TABLE feedback(
-    feedback_id serial primary key,
-    sheet_id int not null,
-    student_id text not null,
-    feedback_text text not null,
-    feedback_time timestamp not null,
-    status feedback_status not null,
-    foreign key (student_id) references student(student_id)
+-- Create the messages table for the reports
+CREATE TABLE messages (
+    message_id serial primary key,
+    sender_id text not null,
+    sender_type text not null, -- 'student' or 'instructor'
+    receiver_id text not null,
+    receiver_type text not null, -- 'student' or 'instructor'
+    exam_id int not null,
+    message_text text not null,
+    message_time timestamp not null,
+    report_topic text,
+    status message_status DEFAULT 'Pending', -- Column to track read status
+    foreign key (exam_id) references exam(exam_id)
 );
 
 CREATE TABLE admins(
@@ -165,6 +172,14 @@ INSERT INTO scannedExam (exam_id) VALUES (
 INSERT INTO feedback (sheet_id, student_id, feedback_text, feedback_time, status) VALUES (
     1, '1', 'Q5 is incorrectly marked', CURRENT_TIMESTAMP, 'Not Done'
 );
+
+INSERT INTO messages (sender_id, sender_type, receiver_id, receiver_type, exam_id, message_text, message_time, status) VALUES (
+    ('1', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 1, 'I think Q5 is incorrectly marked.', CURRENT_TIMESTAMP, 'Pending'),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '1', 'student', 1, 'I reviewed your answer for Q5. The marking is correct according to the scheme. Please refer to the marking guide.', CURRENT_TIMESTAMP, 'Approved'),
+    ('2', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 2, 'Can you explain the grading for the final exam?', CURRENT_TIMESTAMP, 'Pending'),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '2', 'student', 2, 'Sure, the grading is based on the rubric provided in class.', CURRENT_TIMESTAMP, 'Approved'),
+)
+
 
 INSERT INTO admins (auth0_id, email, name) VALUES (
     'auth0|6697fe650e143a8cede3ec08', 'sys.controller0@gmail.com', 'Admin'
