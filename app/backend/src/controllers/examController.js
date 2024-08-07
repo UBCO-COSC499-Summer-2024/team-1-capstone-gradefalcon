@@ -615,17 +615,43 @@ const getExamDetails = async (req, res, next) => {
     }
 
     const ExamDetails = examResult.rows[0];
-
+    
     const studentResultsQuery = `
-      SELECT sr.student_id, s.name as student_name, sr.grade
-      FROM studentResults sr
-      JOIN student s ON sr.student_id = s.student_id
-      WHERE sr.exam_id = $1
-    `;
+    SELECT sr.student_id, s.name as student_name, sr.grade, sr.chosen_answers
+    FROM studentResults sr
+    JOIN student s ON sr.student_id = s.student_id
+    WHERE sr.exam_id = $1
+  `;
     const studentResultsResult = await pool.query(studentResultsQuery, [exam_id]);
 
     ExamDetails.studentResults = studentResultsResult.rows;
 
+    // Calculate percentage of students who selected each response
+    const questionStats = {};
+    studentResultsResult.rows.forEach(result => {
+      const chosenAnswers = result.chosen_answers;
+      chosenAnswers.forEach(answer => {
+        const question = Object.keys(answer)[0];
+        const response = answer[question];
+        
+        if (!questionStats[question]) {
+          questionStats[question] = {};
+        }
+        if (!questionStats[question][response]) {
+          questionStats[question][response] = 0;
+        }
+        questionStats[question][response] += 1;
+      });
+    });
+
+    const totalStudents = studentResultsResult.rows.length;
+    for (const question in questionStats) {
+      for (const response in questionStats[question]) {
+        questionStats[question][response] = (questionStats[question][response] / totalStudents) * 100;
+      }
+    }
+
+    ExamDetails.questionStats = questionStats;
     res.json(ExamDetails);
   } catch (error) {
     console.error("Error fetching exam details:", error);
