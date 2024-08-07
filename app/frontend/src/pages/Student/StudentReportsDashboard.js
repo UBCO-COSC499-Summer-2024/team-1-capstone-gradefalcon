@@ -7,10 +7,15 @@ import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../../components/ui/dialog";
 
 export default function StudentReportsDashboard() {
   const { getAccessTokenSilently } = useAuth0();
   const [submittedReports, setSubmittedReports] = useState([]);
+  const [selectedReportReplies, setSelectedReportReplies] = useState(null);
+  const [selectedReportGrade, setSelectedReportGrade] = useState(null);
+  const [totalMarks, setTotalMarks] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,17 +42,40 @@ export default function StudentReportsDashboard() {
     };
 
     fetchStudentReports();
-
   }, [getAccessTokenSilently]);
 
   const getStatusColor = (status) => {
     switch (status) {
       case "Closed":
-        return "default"; // Can adjust color variant as needed
+        return "default";
       case "Pending":
         return "secondary";
       default:
         return "default";
+    }
+  };
+
+  const handleRowClick = async (report_id) => {
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await fetch(`/api/reports/${report_id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedReportReplies(data.reply_text);
+        setSelectedReportGrade(data.grade); 
+        setTotalMarks(data.total_marks); 
+        setIsDialogOpen(true);
+      } else {
+        console.error("Failed to fetch report replies");
+      }
+    } catch (error) {
+      console.error("Error fetching report replies:", error);
     }
   };
 
@@ -82,28 +110,58 @@ export default function StudentReportsDashboard() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Report Status</TableHead>
                   <TableHead>Class Name</TableHead>
                   <TableHead>Exam Name</TableHead>
+                  <TableHead>Report Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {submittedReports.map((report, index) => (
-                  <TableRow key={index}>
-                    <TableCell>
-                      <Badge variant={getStatusColor(report.status)}>
-                        {report.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{report.course_name}</TableCell> {/* Ensure backend returns 'course_name' */}
-                    <TableCell>{report.exam_title}</TableCell> {/* Ensure backend returns 'exam_title' */}
-                  </TableRow>
+                  <TooltipProvider key={index}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <TableRow
+                          onClick={() => report.status === "Closed" && handleRowClick(report.report_id)}
+                          className={report.status === "Closed" ? "cursor-pointer" : ""}
+                        >
+                          <TableCell>{report.course_name}</TableCell>
+                          <TableCell>{report.exam_title}</TableCell>
+                          <TableCell>
+                            <Badge variant={getStatusColor(report.status)}>
+                              {report.status}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>View Response</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 ))}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Report Replies</DialogTitle>
+            <DialogDescription>
+              {selectedReportReplies ? (
+                <div>
+                  <p><strong>Grade:</strong> {selectedReportGrade}/ <span className="text-gray-500">{totalMarks}</span></p>
+                  <p>{selectedReportReplies}</p>
+                </div>
+              ) : (
+                <p>No replies found.</p>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

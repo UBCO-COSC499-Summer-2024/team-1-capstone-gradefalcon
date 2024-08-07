@@ -101,6 +101,7 @@ CREATE TABLE report (
     exam_id int not null,
     student_id text not null,
     report_text text not null,
+    report_time TIMESTAMP DEFAULT NOW(),
     reply_text text, -- This field will store the instructor's reply
     status report_status DEFAULT 'Pending', -- Column to track report status
     foreign key (exam_id) references exam(exam_id)

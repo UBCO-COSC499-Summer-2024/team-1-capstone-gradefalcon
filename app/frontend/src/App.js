@@ -72,7 +72,7 @@ function App() {
           <Route path="/ViewExam" element={<ProtectedRoute roles={['Instructor']}><Layout><ViewExam /></Layout></ProtectedRoute>} />
           <Route path="/NotificationPreferences" element={<ProtectedRoute roles={['Instructor']}><Layout><NotificationPreferences /></Layout></ProtectedRoute>} />
           <Route path="/Reports" element={<ProtectedRoute roles={['Instructor']}><Layout><Reports /></Layout></ProtectedRoute>} />
-          <Route path="/ViewReport" element={<ProtectedRoute roles={['Instructor']}><Layout><ViewReport /></Layout></ProtectedRoute>} />
+          <Route path="/ViewReport/:report_id" element={<ProtectedRoute roles={['Instructor']}><Layout><ViewReport /></Layout></ProtectedRoute>} />
 
           {/* Student Routes */}
           <Route path="/StudentDashboard" element={<ProtectedRoute roles={['Student']}><StudentLayout><StudentDashboard /></StudentLayout></ProtectedRoute>} />
