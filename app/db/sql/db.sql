@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS solution CASCADE;
 DROP TABLE IF EXISTS enrollment CASCADE;
 DROP TABLE IF EXISTS studentResults CASCADE;
 DROP TABLE IF EXISTS scannedExam CASCADE;
-DROP TABLE IF EXISTS messages CASCADE;
+DROP TABLE IF EXISTS report CASCADE;
 DROP TABLE IF EXISTS admins CASCADE;
 DROP TABLE IF EXISTS sessions CASCADE;
 
@@ -92,7 +92,7 @@ CREATE TABLE scannedExam(
 );
 
 
--- ////////// Create ENUM type for message status: /////////////////
+-- ////////// Create ENUM type for report status: /////////////////
 
 CREATE TYPE report_status AS ENUM ('Closed', 'Pending');
 
@@ -167,13 +167,10 @@ INSERT INTO scannedExam (exam_id) VALUES (
     1
 );
 
-INSERT INTO messages (sender_id, sender_type, receiver_id, receiver_type, exam_id, message_text, message_time, status) VALUES (
-    ('1', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 1, 'I think Q5 is incorrectly marked.', CURRENT_TIMESTAMP, 'Pending'),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '1', 'student', 1, 'I reviewed your answer for Q5. The marking is correct according to the scheme. Please refer to the marking guide.', CURRENT_TIMESTAMP, 'Approved'),
-    ('2', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 2, 'Can you explain the grading for the final exam?', CURRENT_TIMESTAMP, 'Pending'),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '2', 'student', 2, 'Sure, the grading is based on the rubric provided in class.', CURRENT_TIMESTAMP, 'Approved'),
-)
-
+-- Insert values into the report table:
+INSERT INTO report (exam_id, student_id, report_text, reply_text, status) VALUES 
+(1, '1', 'I think Q5 is incorrectly marked.', 'I reviewed your answer for Q5. The marking is correct according to the scheme. Please refer to the marking guide.', 'Closed'),
+(2, '2', 'Can you explain the grading for the final exam?', 'Sure, the grading is based on the rubric provided in class.', 'Closed');
 
 INSERT INTO admins (auth0_id, email, name) VALUES (
     'auth0|6697fe650e143a8cede3ec08', 'sys.controller0@gmail.com', 'Admin'

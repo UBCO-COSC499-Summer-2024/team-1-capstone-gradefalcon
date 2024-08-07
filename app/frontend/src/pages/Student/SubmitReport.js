@@ -1,82 +1,119 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
-import { ArrowUpRightIcon, ChevronLeftIcon, PaperClipIcon } from "@heroicons/react/24/solid";
+import { ArrowUpRightIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { Badge } from "../../components/ui/badge";
 import { Label } from "../../components/ui/label";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "../../components/ui/tooltip";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../components/ui/select";
 import { AspectRatio } from "../../components/ui/aspect-ratio";
-import { useAuth0 } from "@auth0/auth0-react";
 
 const SubmitReport = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { getAccessTokenSilently } = useAuth0();
-  const { student_id, exam_id, grade } = location.state || {}; // Extracting data passed from the previous page
-
+  const [exams, setExams] = useState([]);
+  const [selectedExam, setSelectedExam] = useState(null);
+  const [grade, setGrade] = useState("");
   const [reportText, setReportText] = useState("");
   const [frontSrc, setFrontSrc] = useState("");
   const [backSrc, setBackSrc] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    const fetchExamImages = async () => {
-      const token = await getAccessTokenSilently();
-      const path = `../../uploads/Students/exam_id_${exam_id}/student_id_${student_id}/`;
-
+    // Fetch the exams for the student
+    const fetchExams = async () => {
       try {
-        const front_page_response = await fetch("/api/exam/fetchImage", {
-          method: "POST",
+        const token = await getAccessTokenSilently();
+        const response = await fetch(`/api/exam/student/exams`, {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ file_name: path + "front_page.png" }),
+          credentials: "include",
         });
-        let blob = await front_page_response.blob();
-        let url = URL.createObjectURL(blob);
-        setFrontSrc(url);
-
-        const back_page_response = await fetch("/api/exam/fetchImage", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ file_name: path + "back_page.png" }),
-        });
-        blob = await back_page_response.blob();
-        url = URL.createObjectURL(blob);
-        setBackSrc(url);
-      } catch (error) {
-        console.error("Failed to fetch exam images:", error);
+        if (response.ok) {
+          const data = await response.json();
+          setExams(data.exams);
+        } else {
+          console.error("Failed to fetch exams");
+        }
+      } catch (err) {
+        console.error("Error fetching exams:", err);
       }
     };
 
-    fetchExamImages();
-  }, [exam_id, student_id, getAccessTokenSilently]);
+    fetchExams();
+  }, [getAccessTokenSilently]);
 
-  const handleSubmit = async () => {
-    const token = await getAccessTokenSilently();
+  const handleExamChange = async (value) => {
+    const exam = exams.find((ex) => ex.exam_id === value);
+    if (exam) {
+      setSelectedExam(exam);
+      setGrade(exam.grade);
+
+      // Fetch the images for the selected exam
+      try {
+        const token = await getAccessTokenSilently();
+        const frontPageResponse = await fetch("/api/exam/fetchImage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ file_name: `${exam.file_path}/front_page.png` }),
+        });
+        if (frontPageResponse.ok) {
+          const blob = await frontPageResponse.blob();
+          const url = URL.createObjectURL(blob);
+          setFrontSrc(url);
+        } else {
+          console.error("Failed to fetch front page image");
+        }
+
+        const backPageResponse = await fetch("/api/exam/fetchImage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ file_name: `${exam.file_path}/back_page.png` }),
+        });
+        if (backPageResponse.ok) {
+          const blob = await backPageResponse.blob();
+          const url = URL.createObjectURL(blob);
+          setBackSrc(url);
+        } else {
+          console.error("Failed to fetch back page image");
+        }
+      } catch (error) {
+        console.error("Error fetching exam images:", error);
+      }
+    }
+  };
+
+  const handleReportSubmit = async () => {
     try {
-      const response = await fetch("/api/reports", {
+      const token = await getAccessTokenSilently();
+      const response = await fetch("/api/report/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          student_id,
-          exam_id,
+          exam_id: selectedExam.exam_id,
           report_text: reportText,
         }),
       });
 
       if (response.ok) {
-        setSubmitted(true); // Disables further editing of the report
+        setIsSubmitted(true);
+        console.log("Report submitted successfully");
       } else {
         console.error("Failed to submit report");
       }
@@ -106,69 +143,102 @@ const SubmitReport = () => {
             <div className="grid auto-rows-max items-start gap-8">
               <Card className="bg-white border rounded-lg p-6">
                 <CardHeader>
-                  <CardTitle>Report</CardTitle>
+                  <CardTitle>Select Exam</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid gap-6">
-                    <div className="grid gap-3">
-                      <Label htmlFor="grade">Grade</Label>
-                      <Label id="grade">{grade}</Label>
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="report-text">Message</Label>
-                      <Textarea
-                        id="report-text"
-                        placeholder="Describe your issue..."
-                        className="min-h-[9.5rem]"
-                        value={reportText}
-                        onChange={(e) => setReportText(e.target.value)}
-                        disabled={submitted}
-                      />
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <PaperClipIcon className="h-4 w-4" />
-                              <span className="sr-only">Attach file</span>
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">Attach File</TooltipContent>
-                        </Tooltip>
-                        <Button
-                          type="submit"
-                          size="sm"
-                          className="ml-auto gap-1.5"
-                          onClick={handleSubmit}
-                          disabled={submitted || !reportText}
-                        >
-                          Submit
-                          <ArrowUpRightIcon className="h-3.5 w-3.5" />
-                        </Button>
-                      </TooltipProvider>
-                    </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="exam">Exam</Label>
+                    <Select onValueChange={handleExamChange}>
+                      <SelectTrigger id="exam" aria-label="Select exam">
+                        <SelectValue placeholder="Select exam" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {exams.map((exam) => (
+                          <SelectItem key={exam.exam_id} value={exam.exam_id}>
+                            {exam.exam_title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </CardContent>
               </Card>
+
+              {selectedExam && (
+                <Card className="bg-white border rounded-lg p-6">
+                  <CardHeader>
+                    <CardTitle>Report</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-6">
+                      <div className="grid gap-3">
+                        <Label htmlFor="grade">Grade</Label>
+                        <Label id="grade">{grade}</Label>
+                      </div>
+                      <div className="grid gap-3">
+                        <Label htmlFor="content">Message</Label>
+                        <Textarea
+                          id="content"
+                          placeholder="Student comments..."
+                          className="min-h-[9.5rem]"
+                          value={reportText}
+                          onChange={(e) => setReportText(e.target.value)}
+                          disabled={isSubmitted}
+                        />
+                        <TooltipProvider>
+                          <Button
+                            type="submit"
+                            size="sm"
+                            className="ml-auto gap-1.5"
+                            onClick={handleReportSubmit}
+                            disabled={isSubmitted}
+                          >
+                            Submit
+                            <ArrowUpRightIcon className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipProvider>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
 
-          <div className="relative flex h-full min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2">
-            <Badge variant="outline" className="absolute right-3 top-3">
-              Exam
-            </Badge>
+          {selectedExam && (
+            <div className="relative flex h-full min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2">
+              <Badge variant="outline" className="absolute right-3 top-3">
+                Exam
+              </Badge>
 
-            {/* Image Section */}
-            <div className="w-[450px] mb-4">
-              <AspectRatio ratio={16 / 9}>
-                <img src={frontSrc} alt="Front Page" className="rounded-md object-cover" />
-              </AspectRatio>
+              <div style={{ display: "flex", gap: "20px" }}>
+                {frontSrc ? (
+                  <img
+                    src={frontSrc}
+                    alt="Student Exam Front Page"
+                    style={{
+                      maxWidth: "30%",
+                      height: "auto",
+                    }}
+                  />
+                ) : (
+                  <p>Loading front image...</p>
+                )}
+                {backSrc ? (
+                  <img
+                    src={backSrc}
+                    alt="Student Exam Back Page"
+                    style={{
+                      maxWidth: "30%",
+                      height: "auto",
+                    }}
+                  />
+                ) : (
+                  <p>Loading back image...</p>
+                )}
+              </div>
             </div>
-            <div className="w-[450px] mb-4">
-              <AspectRatio ratio={16 / 9}>
-                <img src={backSrc} alt="Back Page" className="rounded-md object-cover" />
-              </AspectRatio>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </main>
