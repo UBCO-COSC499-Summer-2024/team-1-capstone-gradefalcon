@@ -33,9 +33,18 @@ router.post('/unarchive-course', checkJwt, (req, res, next) => {
 router.post('/delete-course', checkJwt, (req, res, next) => {
 checkPermissions(['delete:courses'])(req, res, next);
 }, deleteCourse);
+
 router.get('/student/courses', checkJwt, (req, res, next) => {
   checkPermissions(['read:courses_student'])(req, res, next);
 }, getStudentCourses);
+
+router.post('/classWithExams/:class_id', checkJwt, (req, res, next) => {
+  checkPermissions(['read:classManagement'])(req, res, next);
+}, displayClassWithExams);
+
+router.get('/unreadMessages', checkJwt, (req, res, next) => {
+  checkPermissions(['read:messages'])(req, res, next);
+}, getUnreadMessages);
 
 router.param('class_id', (req, res, next, class_id) => {
   req.session.class_id = class_id;

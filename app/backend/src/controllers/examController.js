@@ -810,6 +810,51 @@ const deleteMyExam = async (req, res, next) => {
   }
 };
 
+const getExamsFromClassID = async (req, res) => {
+  const { class_id } = req.params;
+  const { student_id } = req.query;
+
+  try {
+    let query;
+    let params;
+
+    if (student_id) {
+      query = `
+        SELECT e.*
+        FROM exam e
+        JOIN enrollment en ON e.class_id = en.class_id
+        JOIN studentResults sr ON e.exam_id = sr.exam_id
+        WHERE e.class_id = $1 AND en.student_id = $2 AND sr.student_id = $2
+      `;
+      params = [class_id, student_id];
+    } else {
+      query = "SELECT * FROM exam WHERE class_id = $1";
+      params = [class_id];
+    }
+
+    const result = await pool.query(query, params);
+    res.json({ exams: result.rows || [] });
+  } catch (err) {
+    console.error("Error fetching exams:", err);
+    res.status(500).json({ message: "Failed to fetch exams" });
+  }
+};
+
+const getStudentsByExamID = async (req, res) => {
+  const { exam_id } = req.params;
+  try {
+    const result = await pool.query(
+      "SELECT s.student_id, s.name FROM studentResults sr JOIN student s ON sr.student_id = s.student_id WHERE sr.exam_id = $1",
+      [exam_id]
+    );
+    res.json({ students: result.rows || [] });
+  } catch (err) {
+    console.error("Error fetching students:", err);
+    res.status(500).json({ message: "Failed to fetch students" });
+  }
+};
+
+
 module.exports = {
   saveQuestions,
   newExam,
@@ -836,4 +881,6 @@ module.exports = {
   changeGrade,
   getGradeChangeLog,
   deleteMyExam,
+  getExamsFromClassID,
+  getStudentsByExamID,
 };
