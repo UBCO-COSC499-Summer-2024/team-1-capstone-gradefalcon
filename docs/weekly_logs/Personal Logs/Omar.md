@@ -1,4 +1,72 @@
 # Personal Log
+## Wedndsday (8/02-8/07)
+
+### Timesheet
+Clockify report  
+![time](../Clockify/Omar/Time18.png)
+
+### Current Tasks (Provide sufficient detail)
+
+1. **Reworked Report Feature**
+   - Implemented the foundational structure for the Report feature, allowing students and instructors to view and contest exam results. Refactored backend routes to efficiently handle report generation and management, with a focus on robust data handling and retrieval.
+   - Added UI components to display report data in a clear, concise manner, including filter options and status indicators for better usability.
+
+2. **Custom Bubble Sheet Support**
+   - Implemented Custom Bubble Sheet Upload during exam creation and for exam grading. Refactored the backend logic to conditionally check the exam type to include custom bubble sheets that have 1 or 2 pages. Added functionality to handle up to 252 questions with a maximum of 5 options per question.
+   - Integrated custom bubble sheets into the New Exam creation pipeline, ensuring seamless generation, downloading, and processing of these templates during exam creation and grading workflows.
+
+3. **UI Improvements**
+   - Enhanced the UI for the newly introduced ReportView and Report pages, making them more intuitive and user-friendly. The UI improvements also included consistent use of cards across the grid layout, refined chart labels for better readability, and various other styling adjustments across the frontend for a more cohesive user experience.
+   - Updated the dashboard UI to be consistent with the overall website design. Modified the badges on the dashboard and included a bar chart for grades on the View Exam page, along with other UI refinements.
+
+---
+
+### Progress Update (since 7/16/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>#284 - Report</td>
+        <td>In Progress</td>
+    </tr>
+    <tr>
+        <td>#17 - User Story: Custom Bubble Sheet Support</td>
+        <td>Completed</td>
+    </tr>
+    <tr>
+        <td>#271 - Functional Enhancements and Features Related to OMR and Grading</td>
+        <td>Completed</td>
+    </tr>
+</table> 
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - Successfully integrated custom bubble sheets into the exam creation and grading pipeline, which was a significant enhancement.
+  - Improved the UI consistency and user experience across multiple pages, particularly with the Report and View Exam pages.
+
+- **What Was Done:**
+  - Completed the custom bubble sheet generation feature, handling up to 252 questions and 5 options.
+  - Updated the backend to accommodate custom bubble sheets and refined the OMR processing logic.
+  - Enhanced the frontend with updated UI elements, ensuring a consistent and user-friendly design.
+
+- **What Didn't Go Well:**
+  - I had to refactor a lot of the backend logic for exams to include custom bubble sheets, which took more time than anticipated.
+  - UI changes took longer than expected due to the complexity of integrating new design elements and ensuring consistency across the application.
+
+- **Retrospective:**
+  - Custom Bubble Sheets are finally functional and fully integrated into the exam processing workflow. The additional complexity of the feature required significant refactoring, but the outcome has been successful. Moving forward, the process can be optimized to reduce time spent on UI adjustments.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+
+1. **Final Presentation**
+
+2. **Individual Report**
+
+
 ## Friday (7/30-8/02)
 
 ### Timesheet
