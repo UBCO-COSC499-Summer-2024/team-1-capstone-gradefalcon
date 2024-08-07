@@ -140,9 +140,9 @@ INSERT INTO student (student_id, auth0_id, email, name) VALUES
     ('5', 'auth0|669eca440b5ccd84d81caa6', 'stu.example4@gmail.com', 'Student E');
 
 -- Insert classes
-INSERT INTO classes (instructor_id, course_id, course_name) VALUES
-    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST100', 'Database Test'),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST200', 'Database Test 2'),
+INSERT INTO classes (instructor_id, course_id, course_name, active) VALUES
+    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST100', 'Database Test', true),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST200', 'Database Test 2', true),
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST300', 'Algorithms'),
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST400', 'Data Structures');
 

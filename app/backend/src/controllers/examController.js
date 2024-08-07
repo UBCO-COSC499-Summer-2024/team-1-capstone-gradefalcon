@@ -56,11 +56,24 @@ const newExam = async (req, res, next) => {
   }
 };
 
+
 const examBoard = async (req, res, next) => {
   const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
   try {
     const classes = await pool.query(
-      "SELECT exam_id, classes.class_id, exam_title, course_id, course_name, graded FROM exam RIGHT JOIN classes ON (exam.class_id = classes.class_id) WHERE instructor_id = $1 ",
+      `
+      SELECT 
+        exam_id, 
+        classes.class_id, 
+        exam_title, 
+        course_id, 
+        course_name, 
+        graded 
+      FROM exam 
+      INNER JOIN classes ON (exam.class_id = classes.class_id) 
+      WHERE instructor_id = $1 
+      AND classes.active = true  -- Exclude exams from archived (inactive) classes
+      `,
       [instructorId]
     );
 
@@ -69,6 +82,7 @@ const examBoard = async (req, res, next) => {
     next(err);
   }
 };
+
 
 const getAveragePerExam = async (req, res, next) => {
   const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
@@ -769,6 +783,59 @@ const fetchSolution = async (req, res, next) => {
   }
 };
 
+const deleteMyExam = async (req, res, next) => {
+  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
+  const { exam_id } = req.body; // Get exam ID from request body
+
+  try {
+    // Verify that the instructor owns the exam
+    const examVerificationResult = await pool.query(
+      `SELECT e.exam_id 
+       FROM exam e
+       JOIN classes c ON e.class_id = c.class_id
+       WHERE e.exam_id = $1 AND c.instructor_id = $2`,
+      [exam_id, auth0_id]
+    );
+
+    if (examVerificationResult.rowCount === 0) {
+      return res.status(403).json({ message: "Exam not found or you do not have permission to delete this exam." });
+    }
+
+    // Start a transaction to ensure atomicity
+    await pool.query('BEGIN');
+
+    // Delete from studentResults
+    await pool.query("DELETE FROM studentResults WHERE exam_id = $1", [exam_id]);
+
+    // Delete from scannedExam
+    await pool.query("DELETE FROM scannedExam WHERE exam_id = $1", [exam_id]);
+
+    // Delete from solutions
+    await pool.query("DELETE FROM solution WHERE exam_id = $1", [exam_id]);
+
+    // Delete the exam
+    const examDeleteResult = await pool.query(
+      "DELETE FROM exam WHERE exam_id = $1 RETURNING *",
+      [exam_id]
+    );
+
+    if (examDeleteResult.rowCount === 0) {
+      throw new Error("Failed to delete the exam.");
+    }
+
+    // Commit the transaction
+    await pool.query('COMMIT');
+
+    res.json({ message: "Exam and related data deleted successfully" });
+
+  } catch (err) {
+    // Rollback transaction in case of error
+    await pool.query('ROLLBACK');
+    console.error("Error deleting exam:", err);
+    next(err);
+  }
+};
+
 module.exports = {
   saveQuestions,
   newExam,
@@ -794,6 +861,7 @@ module.exports = {
   fetchSolution,
   changeGrade,
   getGradeChangeLog,
+  deleteMyExam,
   getExamsFromClassID,
   getStudentsByExamID
 };
