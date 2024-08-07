@@ -7,7 +7,8 @@
 
 clockify report
 
-<img width="926" alt="clockifyreport_18" src="https://github.com/user-attachments/assets/2e97e048-ec5b-4b3b-a083-7cd5daa624e9">
+
+<img width="926" alt="clockifyreport_18" src="https://github.com/user-attachments/assets/b72988e6-05e6-444c-8506-13efbeb6c04f">
 
 
 
