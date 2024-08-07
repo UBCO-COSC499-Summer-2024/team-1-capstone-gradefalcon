@@ -1,7 +1,18 @@
 const express = require('express');
 const { checkJwt, checkPermissions } = require('../auth0');
-const { displayClasses, displayClassManagement, importClass , getAllCourses, displayClassWithExams, getUnreadMessages} = require('../controllers/classController');
-const { displayClasses, displayClassManagement, importClass , getAllCourses, archiveCourse, unarchiveCourse, deleteCourse, getStudentCourses} = require('../controllers/classController');
+const {
+  displayClasses,
+  displayClassManagement,
+  importClass,
+  getAllCourses,
+  archiveCourse,
+  unarchiveCourse,
+  deleteCourse,
+  getStudentCourses,
+  displayClassWithExams,
+  getUnreadMessages,
+} = require('../controllers/classController'); // Ensure all functions are imported
+
 const router = express.Router();
 
 router.use((req, res, next) => {
@@ -18,7 +29,7 @@ router.post('/classWithExams/:class_id', checkJwt, (req, res, next) => {
 
 router.get('/unreadMessages', checkJwt, (req, res, next) => {
   checkPermissions(['read:messages'])(req, res, next);
-},getUnreadMessages);
+}, getUnreadMessages);
 
 router.post('/classManagement/:class_id', checkJwt, (req, res, next) => {
   checkPermissions(['read:classManagement'])(req, res, next);
@@ -38,10 +49,12 @@ router.post('/archive-course', checkJwt, (req, res, next) => {
 
 router.post('/unarchive-course', checkJwt, (req, res, next) => {
   checkPermissions(['read:classes'])(req, res, next);
-}, unarchiveCourse); 
+}, unarchiveCourse);
+
 router.post('/delete-course', checkJwt, (req, res, next) => {
-checkPermissions(['delete:courses'])(req, res, next);
+  checkPermissions(['delete:courses'])(req, res, next);
 }, deleteCourse);
+
 router.get('/student/courses', checkJwt, (req, res, next) => {
   checkPermissions(['read:courses_student'])(req, res, next);
 }, getStudentCourses);
@@ -50,7 +63,6 @@ router.param('class_id', (req, res, next, class_id) => {
   req.session.class_id = class_id;
   req.session.save();
   next();
-  
 });
 
 module.exports = router;

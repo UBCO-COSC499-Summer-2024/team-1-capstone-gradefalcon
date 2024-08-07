@@ -12,6 +12,10 @@ DROP TABLE IF EXISTS messages CASCADE;
 DROP TABLE IF EXISTS admins CASCADE;
 DROP TABLE IF EXISTS sessions CASCADE;
 
+-- ////////// Create ENUM type for message status: /////////////////
+
+CREATE TYPE message_status AS ENUM ('Pending', 'Approved', 'Declined');
+
 -- ////////// Create tables: /////////////////
 
 CREATE TABLE instructor (
@@ -49,8 +53,8 @@ CREATE TABLE exam (
     upper_quartile double precision,
     lower_quartile double precision,
     page_count int,
-    viewing_options JSONB,
-    graded boolean default false,
+    viewing_options JSONB default '{"canViewExam": true, "canViewAnswers": false}', -- DEFAULT VALUE
+    graded boolean default false, -- DEFAULT VALUE
     foreign key (class_id) references classes(class_id)
 );
 
@@ -103,7 +107,8 @@ CREATE TABLE messages (
     exam_id int not null,
     message_text text not null,
     message_time timestamp not null,
-    read boolean default false, -- Column to track read status
+    report_topic text,
+    status message_status DEFAULT 'Pending', -- Column to track read status
     foreign key (exam_id) references exam(exam_id)
 );
 
@@ -147,11 +152,11 @@ INSERT INTO classes (instructor_id, course_id, course_name, active) VALUES
     ('auth0|6696d634bec6c6d1cc3e2274', 'TEST400', 'Data Structures');
 
 -- Insert exams
-INSERT INTO exam (class_id, exam_title, total_questions, total_marks, graded, viewing_options) VALUES
-    (1, 'Midterm', 50, 50, true, '{"canViewExam": true, "canViewAnswers": false}'),
-    (1, 'Final', 5, 100, true, '{"canViewExam": false, "canViewAnswers": false}'),
-    (2, 'Midterm - 200', 50, 50, true, '{"canViewExam": false, "canViewAnswers": true}'),
-    (2, 'Final - 200', 100, 100, true, '{"canViewExam": true, "canViewAnswers": true}'),
+INSERT INTO exam (class_id, exam_title, total_questions, total_marks) VALUES
+    (1, 'Midterm', 50, 50),
+    (1, 'Final', 5, 100),
+    (2, 'Midterm - 200', 50, 50),
+    (2, 'Final - 200', 100, 100),
     (3, 'Midterm - 300', 50, 50),
     (3, 'Final - 300', 100, 100),
     (4, 'Midterm - 400', 50, 50),
@@ -214,17 +219,17 @@ INSERT INTO scannedExam (exam_id, page_count, filepath) VALUES
     (8, 22, 'path/to/scanned/exam8.pdf');
 
 -- Insert messages
-INSERT INTO messages (sender_id, sender_type, receiver_id, receiver_type, exam_id, message_text, message_time, read) VALUES
-    ('1', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 1, 'I think Q5 is incorrectly marked.', CURRENT_TIMESTAMP, false),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '1', 'student', 1, 'I reviewed your answer for Q5. The marking is correct according to the scheme. Please refer to the marking guide.', CURRENT_TIMESTAMP, true),
-    ('2', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 2, 'Can you explain the grading for the final exam?', CURRENT_TIMESTAMP, false),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '2', 'student', 2, 'Sure, the grading is based on the rubric provided in class.', CURRENT_TIMESTAMP, true),
-    ('3', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 3, 'I need clarification on Q3 of the midterm.', CURRENT_TIMESTAMP, false),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '3', 'student', 3, 'Q3 was about dynamic programming. Please check the lecture notes for more details.', CURRENT_TIMESTAMP, true),
-    ('4', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 4, 'I have an issue with the grading of Q2.', CURRENT_TIMESTAMP, false),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '4', 'student', 4, 'I will review Q2 and get back to you shortly.', CURRENT_TIMESTAMP, true),
-    ('5', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 5, 'Can you provide feedback on my final exam?', CURRENT_TIMESTAMP, false),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '5', 'student', 5, 'Yes, I will provide detailed feedback by the end of the week.', CURRENT_TIMESTAMP, true);
+INSERT INTO messages (sender_id, sender_type, receiver_id, receiver_type, exam_id, message_text, message_time, status) VALUES
+    ('1', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 1, 'I think Q5 is incorrectly marked.', CURRENT_TIMESTAMP, 'Pending'),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '1', 'student', 1, 'I reviewed your answer for Q5. The marking is correct according to the scheme. Please refer to the marking guide.', CURRENT_TIMESTAMP, 'Approved'),
+    ('2', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 2, 'Can you explain the grading for the final exam?', CURRENT_TIMESTAMP, 'Pending'),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '2', 'student', 2, 'Sure, the grading is based on the rubric provided in class.', CURRENT_TIMESTAMP, 'Approved'),
+    ('3', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 3, 'I need clarification on Q3 of the midterm.', CURRENT_TIMESTAMP, 'Pending'),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '3', 'student', 3, 'Q3 was about dynamic programming. Please check the lecture notes for more details.', CURRENT_TIMESTAMP, 'Approved'),
+    ('4', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 4, 'I have an issue with the grading of Q2.', CURRENT_TIMESTAMP, 'Pending'),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '4', 'student', 4, 'I will review Q2 and get back to you shortly.', CURRENT_TIMESTAMP, 'Approved'),
+    ('5', 'student', 'auth0|6696d634bec6c6d1cc3e2274', 'instructor', 5, 'Can you provide feedback on my final exam?', CURRENT_TIMESTAMP, 'Pending'),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'instructor', '5', 'student', 5, 'Yes, I will provide detailed feedback by the end of the week.', CURRENT_TIMESTAMP, 'Approved');
 
 -- Insert admin
 INSERT INTO admins (auth0_id, email, name) VALUES (

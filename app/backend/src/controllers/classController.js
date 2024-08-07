@@ -5,7 +5,6 @@ const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID; // Auth0 client ID from 
 const clientSecret = process.env.REACT_APP_AUTH0_CLIENT_SECRET; // Auth0 client secret from environment variables
 const audience = `https://${auth0Domain}/api/v2/`; // Auth0 Management API audience
 
-// Generates a random password with a specified character set
 const generateRandomPassword = () => {
   const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
   let password = "";
@@ -15,7 +14,6 @@ const generateRandomPassword = () => {
   return password;
 };
 
-// Retrieves an access token for the Auth0 Management API
 const getManagementApiAccessToken = async () => {
   const options = {
     method: "POST",
@@ -26,7 +24,7 @@ const getManagementApiAccessToken = async () => {
       client_id: clientId,
       client_secret: clientSecret,
       audience: audience,
-      scope: "create:users read:users", // Scopes required for creating and reading users
+      scope: "create:users read:users",
     }),
   };
 
@@ -39,39 +37,33 @@ const getManagementApiAccessToken = async () => {
   }
 };
 
-// Displays classes for the authenticated instructor
 const displayClasses = async (req, res, next) => {
   try {
-    const instructorAuth0Id = req.auth.sub; // Get the instructor ID from the JWT
+    const instructorAuth0Id = req.auth.sub;
     const result = await pool.query("SELECT * FROM classes WHERE instructor_id = $1 ORDER BY active DESC", [instructorAuth0Id]);
-    res.json(result.rows); // Send the list of classes as JSON
+    res.json(result.rows);
   } catch (err) {
-    console.error("Error in displayClasses:", err); // Log any errors
+    console.error("Error in displayClasses:", err);
     next(err);
   }
 };
 
-// Retrieves the name of a specific class by its ID
 const getClassNameById = async (req, res, next) => {
   try {
-    const { classId } = req.params; // Get the class ID from the request parameters
-
+    const { classId } = req.params;
     const result = await pool.query("SELECT course_name FROM classes WHERE class_id = $1", [classId]);
-
     if (result.rowCount === 0) {
       return res.status(404).json({ error: "Class not found" });
     }
-
-    res.json({ course_name: result.rows[0].course_name }); // Send the class name as JSON
+    res.json({ course_name: result.rows[0].course_name });
   } catch (err) {
     next(err);
   }
 };
 
-// Displays students enrolled in a class along with their exam grades
 const displayClassManagement = async (req, res, next) => {
   try {
-    const { class_id } = req.params; // Get the class ID from the request parameters
+    const { class_id } = req.params;
     const result = await pool.query("SELECT student_id, name FROM enrollment JOIN student USING (student_id) WHERE class_id = $1", [
       class_id,
     ]);
@@ -81,16 +73,13 @@ const displayClassManagement = async (req, res, next) => {
       pool.query("SELECT exam_id, grade FROM studentResults WHERE student_id = $1", [student.student_id]).then((result) => ({
         student_id: student.student_id,
         name: student.name,
-        exams: result.rows, // This will be an array of exam results
+        exams: result.rows,
       }))
     );
 
-    // Wait for all promises to resolve
     const combinedResults = await Promise.all(examResults);
-    // Now let's get the course code and course name given class_id
     const courseQuery = await pool.query("SELECT course_id, course_name FROM classes WHERE class_id = $1", [class_id]);
     const courseDetails = courseQuery.rows;
-    // Combine the students info and course details
     res.json({ studentInfo: combinedResults, courseDetails });
   } catch (error) {
     next(error);
@@ -99,30 +88,25 @@ const displayClassManagement = async (req, res, next) => {
 
 const displayClassWithExams = async (req, res, next) => {
   try {
-    const { class_id } = req.params; // Get the class ID from the request parameters
-
-    // Fetch students enrolled in the class
+    const { class_id } = req.params;
     const studentResult = await pool.query(
       "SELECT student_id, name FROM enrollment JOIN student USING (student_id) WHERE class_id = $1",
       [class_id]
     );
     const students = studentResult.rows;
 
-    // Fetch exams related to the class
     const examsResult = await pool.query(
       "SELECT exam_id, exam_title FROM exam WHERE class_id = $1",
       [class_id]
     );
     const exams = examsResult.rows;
 
-    // Fetch the course details for the class
     const courseQuery = await pool.query(
       "SELECT course_id, course_name FROM classes WHERE class_id = $1",
       [class_id]
     );
     const courseDetails = courseQuery.rows;
 
-    // Fetch exam results for each student
     const examResultsPromises = students.map(student =>
       pool.query(
         "SELECT exam_id, grade FROM studentResults WHERE student_id = $1",
@@ -130,26 +114,21 @@ const displayClassWithExams = async (req, res, next) => {
       ).then(result => ({
         student_id: student.student_id,
         name: student.name,
-        exams: result.rows, // This will be an array of exam results
+        exams: result.rows,
       }))
     );
 
-    // Wait for all promises to resolve
     const studentInfo = await Promise.all(examResultsPromises);
-
-    // Combine the students info, course details, and exams
     res.json({ studentInfo, courseDetails, exams });
   } catch (error) {
-    console.error("Error in displayClassWithExams:", error); // Log any errors
+    console.error("Error in displayClassWithExams:", error);
     next(error);
   }
 };
 
-// Fetch unread messages for the instructor
-// Get unread messages for the authenticated instructor
 const getUnreadMessages = async (req, res, next) => {
   try {
-    const instructorAuth0Id = req.auth.sub; // Get the instructor ID from the JWT
+    const instructorAuth0Id = req.auth.sub;
     const result = await pool.query(`
       SELECT m.message_id, m.sender_id, m.receiver_id, m.exam_id, m.message_text, m.message_time, e.class_id
       FROM messages m
@@ -158,21 +137,16 @@ const getUnreadMessages = async (req, res, next) => {
       WHERE m.receiver_id = $1 AND m.read = false
     `, [instructorAuth0Id]);
 
-    res.json(result.rows); // Send the unread messages as JSON
+    res.json(result.rows);
   } catch (err) {
-    console.error("Error in getUnreadMessages:", err); // Log any errors
+    console.error("Error in getUnreadMessages:", err);
     next(err);
   }
 };
 
-
-
-
-
-// Imports a class and its students
 const importClass = async (req, res) => {
   const { students, courseName, courseId } = req.body;
-  const instructorId = req.auth.sub; // Retrieve instructor ID from JWT
+  const instructorId = req.auth.sub;
 
   if (!instructorId) {
     return res.status(403).json({ message: "Unauthorized" });
@@ -198,9 +172,8 @@ const importClass = async (req, res) => {
       classId = classQuery.rows[0].class_id;
     }
 
-    // Create users in Auth0 and insert them into the database if they don't exist
     const auth0Promises = students.map(async (student) => {
-      const password = generateRandomPassword(); // Generate a random password
+      const password = generateRandomPassword();
       const userData = {
         email: student.studentEmail,
         password,
@@ -242,11 +215,8 @@ const importClass = async (req, res) => {
     });
 
     const auth0Users = await Promise.all(auth0Promises);
-
-    // Filter out unsuccessful Auth0 user creations
     const successfulUsers = auth0Users.filter((user) => user !== null);
 
-    // Insert enrollments
     const enrollmentPromises = successfulUsers.map(async (student) => {
       const enrollmentQuery = await pool.query("SELECT * FROM enrollment WHERE class_id = $1 AND student_id = $2", [
         classId,
@@ -267,9 +237,8 @@ const importClass = async (req, res) => {
   }
 };
 
-// Fetch all courses
 const getAllCourses = async (req, res, next) => {
-  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
+  const auth0_id = req.auth.sub;
   try {
     const result = await pool.query("SELECT class_id, course_id, course_name FROM classes WHERE instructor_id = $1", [auth0_id]);
     res.json(result.rows);
@@ -279,11 +248,10 @@ const getAllCourses = async (req, res, next) => {
 };
 
 const archiveCourse = async (req, res, next) => {
-  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
-  const { class_id } = req.body; // Get class ID from request body
+  const auth0_id = req.auth.sub;
+  const { class_id } = req.body;
 
   try {
-    // Update the active status of the course to false (archived)
     const result = await pool.query(
       "UPDATE classes SET active = false WHERE class_id = $1 AND instructor_id = $2 RETURNING *",
       [class_id, auth0_id]
@@ -301,11 +269,10 @@ const archiveCourse = async (req, res, next) => {
 };
 
 const unarchiveCourse = async (req, res, next) => {
-  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
-  const { class_id } = req.body; // Get class ID from request body
+  const auth0_id = req.auth.sub;
+  const { class_id } = req.body;
 
   try {
-    // Update the active status of the course to true (unarchived)
     const result = await pool.query(
       "UPDATE classes SET active = true WHERE class_id = $1 AND instructor_id = $2 RETURNING *",
       [class_id, auth0_id]
@@ -323,11 +290,10 @@ const unarchiveCourse = async (req, res, next) => {
 };
 
 const deleteCourse = async (req, res, next) => {
-  const auth0_id = req.auth.sub; // Retrieve instructor ID from JWT
-  const { class_id } = req.body; // Get class ID from request body
+  const auth0_id = req.auth.sub;
+  const { class_id } = req.body;
 
   try {
-    // Verify that the instructor owns the course
     const courseVerificationResult = await pool.query(
       "SELECT class_id FROM classes WHERE class_id = $1 AND instructor_id = $2",
       [class_id, auth0_id]
@@ -337,37 +303,24 @@ const deleteCourse = async (req, res, next) => {
       return res.status(403).json({ message: "Course not found or you do not have permission to delete this course." });
     }
 
-    // Start a transaction to ensure atomicity
     await pool.query('BEGIN');
-
-    // Delete from enrollment
     await pool.query("DELETE FROM enrollment WHERE class_id = $1", [class_id]);
-
-    // Delete from studentResults
     await pool.query(`
       DELETE FROM studentResults 
       WHERE exam_id IN (SELECT exam_id FROM exam WHERE class_id = $1)`, 
       [class_id]
     );
-
-    // Delete from scannedExam
     await pool.query(`
       DELETE FROM scannedExam 
       WHERE exam_id IN (SELECT exam_id FROM exam WHERE class_id = $1)`, 
       [class_id]
     );
-
-    // Delete from solutions
     await pool.query(`
       DELETE FROM solution 
       WHERE exam_id IN (SELECT exam_id FROM exam WHERE class_id = $1)`, 
       [class_id]
     );
-
-    // Delete exams
     await pool.query("DELETE FROM exam WHERE class_id = $1", [class_id]);
-
-    // Delete class
     const classDeleteResult = await pool.query(
       "DELETE FROM classes WHERE class_id = $1 AND instructor_id = $2 RETURNING *",
       [class_id, auth0_id]
@@ -377,23 +330,19 @@ const deleteCourse = async (req, res, next) => {
       throw new Error("Course not found or you do not have permission to delete this course.");
     }
 
-    // Commit the transaction
     await pool.query('COMMIT');
-
     res.json({ message: "Course and related exams deleted successfully" });
 
   } catch (err) {
-    // Rollback transaction in case of error
     await pool.query('ROLLBACK');
     console.error("Error deleting course:", err);
     next(err);
   }
 };
 
-// Fetch courses that a particular student is enrolled in
 const getStudentCourses = async (req, res, next) => {
   try {
-    const studentAuth0Id = req.auth.sub; // Get the  ID from the JWT
+    const studentAuth0Id = req.auth.sub;
     console.log(`Fetching courses for student_id: ${studentAuth0Id}`);
     const result = await pool.query(
       `
@@ -422,5 +371,7 @@ module.exports = {
   archiveCourse,
   unarchiveCourse,
   deleteCourse,
-  getStudentCourses
+  getStudentCourses,
+  displayClassWithExams,
+  getUnreadMessages
 };

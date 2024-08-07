@@ -12,6 +12,7 @@ const Reports = () => {
   const [classes, setClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
   const [exams, setExams] = useState([]);
+  const [selectedExam, setSelectedExam] = useState(null);  // Added state for selected exam
   const [students, setStudents] = useState([]);
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
@@ -67,6 +68,7 @@ const Reports = () => {
   const handleBack = () => {
     if (students.length > 0) {
       setStudents([]);
+      setSelectedExam(null); // Reset selected exam when going back from students view
     } else {
       setSelectedClass(null);
       setExams([]);
@@ -99,13 +101,14 @@ const Reports = () => {
 
   const handleExamClick = async (exam) => {
     console.log("Selected Exam:", exam); // Debugging
+    setSelectedExam(exam); // Set selected exam state
     try {
       const token = await getAccessTokenSilently();
       const response = await fetch(`/api/exam/getStudentsByExamID/${exam.exam_id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`
         },
       });
       if (response.ok) {
@@ -119,6 +122,7 @@ const Reports = () => {
       console.error("Error fetching students:", error);
     }
   };
+  
 
   const renderContent = () => {
     if (students.length > 0) {
@@ -128,7 +132,7 @@ const Reports = () => {
             {student.name} {messages.some(msg => msg.sender_id === student.student_id) && <BellIcon className="text-red-500 h-4 w-4" />}
           </TableCell>
           <TableCell>
-            <Button onClick={() => navigate(`/ViewReport`, { state: { student } })}>
+            <Button onClick={() => navigate(`/ViewReport`, { state: { student, exam_id: selectedExam.exam_id } })}>
               View Report
             </Button>
           </TableCell>

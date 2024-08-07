@@ -28,15 +28,15 @@ const {
   deleteMyExam
 } = require("../controllers/examController");
 const { createUploadMiddleware } = require("../middleware/uploadMiddleware");
-const { checkJwt, checkPermissions, checkRole } = require("../auth0"); // Importing from auth.js
+const { checkJwt, checkPermissions } = require("../auth0");
 const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
 const { Parser } = require("json2csv");
 const { PDFDocument } = require("pdf-lib");
 const multer = require("multer");
-const { formatWithOptions } = require("util");
 const router = express.Router();
+
 const combinedUpload = multer().fields([
   { name: 'examKey', maxCount: 1 },
   { name: 'numQuestions' },
@@ -54,10 +54,9 @@ router.get('/grades/:studentId', checkJwt, checkPermissions(['read:grades']), ge
 router.post("/generateCustomBubbleSheet", checkJwt, checkPermissions(['create:exam']), generateCustomBubbleSheet);  
 router.get("/getExamDetails/:exam_id", checkJwt, checkPermissions(['read:exams']), getExamDetails);
 router.get("/student/exams", checkJwt, checkPermissions(["read:exam_student"]), getStudentExams);
-router.get("/getStudentAttempt/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), getStudentAttempt);router.get("/getExamsFromClassID/:class_id", checkJwt, checkPermissions(['read:exams']), getExamsFromClassID);
+router.get("/getStudentAttempt/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), getStudentAttempt);
+router.get("/getExamsFromClassID/:class_id", checkJwt, checkPermissions(['read:exams']), getExamsFromClassID);
 router.get("/getStudentsByExamID/:exam_id", checkJwt, checkPermissions(['read:exams']), getStudentsByExamID);
-
-
 router.get("/getExamQuestionDetails/:exam_id", checkJwt, checkPermissions(["read:exam"]), getExamQuestionDetails);
 
 
@@ -67,6 +66,10 @@ router.post('/delete-exam', checkJwt, (req, res, next) => {
 // Function to get the answer key for a specific exam
 
 router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
+router.post("/fetchStudentExam/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchStudentExam);
+router.post("/fetchSolution/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchSolution);
+router.post("/changeGrade", checkJwt, checkPermissions(["read:exam_student"]), changeGrade);
+router.get("/getAnswerKey/:exam_id", checkJwt, checkPermissions(["read:exam"]), async (req, res, next) => {
   try {
     const exam_id = parseInt(req.params.exam_id, 10);
     if (isNaN(exam_id)) {
@@ -79,35 +82,13 @@ router.get("/getAnswerKey/:exam_id", async (req, res, next) => {
     res.status(500).send("Error getting answer key");
   }
 });
-
-// Get the exam attempt for a given student
-router.get("/getStudentAttempt/:exam_id", async (req, res, next) => {
-  try {
-    const exam_id = parseInt(req.params.exam_id, 10);
-    if (isNaN(exam_id)) {
-      throw new Error("Invalid exam_id");
-    }
-    const studentAttempt = await getStudentAttempt(exam_id);
-    res.json({ studentAttempt });
-  } catch (error) {
-    console.error("Error in /getStudentAttempt:", error);
-    res.status(500).send("Error getting student attempt");
-  }
-});
-
-
-
-// Add this route to the examRoutes.js file
-
 router.post("/studentScores", checkJwt, checkPermissions(["read:grades"]), async function (req, res) {
-  const { examType, numQuestions } = req.body; // Get examType and numQuestions from the request body
-
-  // Determine the correct file path based on examType and numQuestions
+  const { examType, numQuestions } = req.body;
   const filePath = (examType === "custom" && numQuestions <= 100)
     ? path.join(__dirname, "../../omr/outputs/page_1/Results/Results.csv")
     : path.join(__dirname, "../../omr/outputs/combined.csv");
 
-  const results = []; // Array to hold student number and score
+  const results = [];
 
   fs.createReadStream(filePath)
     .pipe(csv())
@@ -115,14 +96,12 @@ router.post("/studentScores", checkJwt, checkPermissions(["read:grades"]), async
 
       let result = {};
       if (examType === "custom" && numQuestions <= 100) {
-        // Only grab the front page for custom templates with 100 or fewer questions
         result = {
           StudentID: data.StudentID,
           Score: data.score,
-          front_page: data.file_id, // Grab only the front page
+          front_page: data.file_id,
         };
       } else {
-        // Handle the case for other types (e.g., 100mcq, 200mcq, custom with more than 100 questions)
         result = {
           StudentID: data.StudentID,
           Score: data.score,
@@ -141,15 +120,14 @@ router.post("/studentScores", checkJwt, checkPermissions(["read:grades"]), async
     })
     .on("end", async () => {
       try {
-        // Map each result to include the student name
         const resultsWithNames = await Promise.all(
           results.map(async (result) => {
-            const studentName = await getStudentNameById(result.StudentID); // Assuming this function exists and returns the student's name
+            const studentName = await getStudentNameById(result.StudentID);
             return { StudentName: studentName, ...result };
           })
         );
 
-        res.json(resultsWithNames); // Send the data including student names as a response
+        res.json(resultsWithNames);
       } catch (error) {
         console.error("Error fetching student names:", error);
         res.status(500).send("Error fetching student names");
@@ -161,10 +139,8 @@ router.post("/studentScores", checkJwt, checkPermissions(["read:grades"]), async
     });
 });
 
-
 router.post("/UploadExam/:examType/:numQuestions", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
   const { examType, numQuestions } = req.params;
-
   const upload = multer({ dest: "uploads/" }).single("examPages");
 
   upload(req, res, async function (err) {
@@ -173,10 +149,8 @@ router.post("/UploadExam/:examType/:numQuestions", checkJwt, checkPermissions(["
     }
 
     const { path: tempFilePath } = req.file;
-
     const destinationDir1 = "/code/omr/inputs/page_1";
     const destinationDir2 = "/code/omr/inputs/page_2";
-    // const singlePageDir = "/code/omr/inputs";
 
     try {
       const existingPdfBytes = fs.readFileSync(tempFilePath);
@@ -185,13 +159,11 @@ router.post("/UploadExam/:examType/:numQuestions", checkJwt, checkPermissions(["
       console.log("Total pages:", totalPages);
 
       if ((examType === "custom" && numQuestions <= 100)) {
-        // Handle 100mcq or custom templates with 100 or fewer questions (1 page)
         ensureDirectoryExistence(destinationDir1);
         const examBytes = await examsPDF.save();
         fs.writeFileSync(path.join(destinationDir1, "exam.pdf"), examBytes);
         res.json({ message: "Exam uploaded successfully with one page." });
       } else if (examType === "200mcq" || (examType === "custom" && numQuestions > 100) || examType === "100mcq") {
-        // Handle 200mcq or custom templates with more than 100 questions (2 pages)
         const oddPagesPdf = await PDFDocument.create();
         const evenPagesPdf = await PDFDocument.create();
 
@@ -212,7 +184,7 @@ router.post("/UploadExam/:examType/:numQuestions", checkJwt, checkPermissions(["
         const evenBytes = await evenPagesPdf.save();
         fs.writeFileSync(path.join(destinationDir2, "back_pages.pdf"), evenBytes);
 
-        fs.unlinkSync(tempFilePath); // Clean up the temporary file
+        fs.unlinkSync(tempFilePath);
 
         res.json({ message: "Exam uploaded and split successfully." });
       } else {
@@ -232,21 +204,16 @@ router.post("/getResults", checkJwt, checkPermissions(["read:grades"]), async fu
   const inputDirPath = path.join(__dirname, "../../omr/inputs");
   const outputDirPath = path.join(__dirname, "../../omr/outputs");
   if (singlePage) {
-    const results = []; // Array to hold all rows of data
+    const results = [];
     console.log("singlePage");
     fs.createReadStream(path.join(outputDirPath, "page_1/Results/Results.csv"))
       .pipe(csv())
-      .on("data", (data) => results.push(data)) // Push each row of data into the results array
+      .on("data", (data) => results.push(data))
       .on("end", () => {
-        // Once file reading is done, send the entire results array as a response
         res.json({ csv_file: results });
-
-        // Delete all files in the input and output directories
         resetOMR();
       })
-
       .on("error", (error) => {
-        // Handle any errors during file reading
         console.error("Error reading CSV file:", error);
         res.status(500).send("Error reading CSV file");
       });
@@ -254,22 +221,16 @@ router.post("/getResults", checkJwt, checkPermissions(["read:grades"]), async fu
     const resultsPage1 = [];
     const resultsPage2 = [];
 
-    // Read page_1/Results/Results.csv
     fs.createReadStream(path.join(outputDirPath, "page_1/Results/Results.csv"))
       .pipe(csv())
       .on("data", (data) => resultsPage1.push(data))
       .on("end", () => {
-        // Read page_2/Results/Results.csv
         fs.createReadStream(path.join(outputDirPath, "page_2/Results/Results.csv"))
           .pipe(csv())
           .on("data", (data) => resultsPage2.push(data))
           .on("end", () => {
-            // Combine results from both pages
             const combinedResults = [{ ...resultsPage1[0], ...resultsPage2[0] }];
-            // Send the combined results as a response
             res.json({ csv_file: combinedResults });
-
-            // Delete all files in the input and output directories
             resetOMR();
           })
           .on("error", (error) => {
@@ -284,23 +245,11 @@ router.post("/getResults", checkJwt, checkPermissions(["read:grades"]), async fu
   }
 });
 
-// Save student exams to the backend
 router.post("/saveStudentExams", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
-  // we will be saving whatever is in the omr outputs folder
-  // we just need to figure out where to save which page
-  // recall: a student has their front page and back page in different folders
-  // front page in /outputs/page_1 and back page in /outputs/page_2
-  // data is an array of objects
-  // Object: {Score, StudentID, StudentName, back_page, front_page}
-  // dest: /code/upload/Students/exam_id_${exam_id}/student_id_${student_id}
-  // We will be copying both front & back page to this folder
-  // path for front page: /code/omr/outputs/page_1/CheckedOMRs/colored/${front_page}
-  // path for back page: /code/omr/outputs/page_2/CheckedOMRs/colored/${back_page}
-
   const exam_id = req.body.exam_id;
   const studentData = req.body.data;
-  const examType = req.body.examType; // Assume you are passing examType in the request body
-  const numQuestions = parseInt(req.body.numQuestions, 10); // Assume you are passing numQuestions in the request body
+  const examType = req.body.examType;
+  const numQuestions = parseInt(req.body.numQuestions, 10);
 
   try {
     for (const student of studentData) {
@@ -320,7 +269,6 @@ router.post("/saveStudentExams", checkJwt, checkPermissions(["upload:file"]), as
         fs.copyFileSync(original_front_page_path, original_front_page_dest);
         console.log("Original First page copied successfully");
 
-        // Only attempt to copy the back page if it's not a custom exam with 100 or fewer questions
         if (!(examType === "custom" && numQuestions <= 100)) {
           const back_page_path = path.join(__dirname, `../../omr/outputs/page_2/CheckedOMRs/colored/${student.back_page}`);
           const original_back_page_path = path.join(__dirname, `../../omr/inputs/page_2/${student.back_page}`);
@@ -345,39 +293,34 @@ router.post("/saveStudentExams", checkJwt, checkPermissions(["upload:file"]), as
   }
 });
 
-// Save the exam key uploaded by the user
 router.post("/saveExamKey/:examType", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
   combinedUpload(req, res, async function (err) {
     if (err) {
       return res.status(500).send("Error uploading file.");
     }
 
-    console.log("Request Body:", req.body);  // This should now contain the form fields
-    console.log("Uploaded File:", req.files); // This should show the uploaded file
+    console.log("Request Body:", req.body);
+    console.log("Uploaded File:", req.files);
 
     const examType = req.params.examType;
-    const numQuestions = parseInt(req.body.numQuestions, 10); // Ensure numQuestions is a number
+    const numQuestions = parseInt(req.body.numQuestions, 10);
     console.log("Exam Type:", examType);
 
     try {
       if (examType === "100mcq" || (examType === "custom" && numQuestions <= 100)) {
-        // Handle 100mcq or custom templates with 100 or fewer questions (1 page)
         const destinationDir = "/code/omr/inputs/page_1";
         
         ensureDirectoryExistence(destinationDir);
 
-        // Directly save the uploaded file to the destination directory
-        const fileBuffer = req.files.examKey[0].buffer; // Use the buffer from the uploaded file
+        const fileBuffer = req.files.examKey[0].buffer;
         const filePath = path.join(destinationDir, req.files.examKey[0].originalname);
 
         fs.writeFileSync(filePath, fileBuffer);
 
         console.log(`File uploaded to ${filePath}`);
         return res.json({ message: "File uploaded successfully" });
-
       } else if (examType === "200mcq" || (examType === "custom" && numQuestions > 100)) {
-        // Handle 200mcq or custom templates with more than 100 questions (2 pages)
-        const existingPdfBytes = req.files.examKey[0].buffer; // Use the buffer directly
+        const existingPdfBytes = req.files.examKey[0].buffer;
         const destinationDir1 = "/code/omr/inputs/page_1";
         const destinationDir2 = "/code/omr/inputs/page_2";
 
@@ -415,16 +358,12 @@ router.post("/saveExamKey/:examType", checkJwt, checkPermissions(["upload:file"]
   });
 });
 
-
-
-// Copy the template JSON file to the shared volume
 router.post("/copyTemplate", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
   console.log("copyTemplate");
   const { examType, keyOrExam, numQuestions, examTitle, classID, courseId } = req.body;
 
   const filePath_1 = "/code/omr/inputs/page_1";
   const filePath_2 = "/code/omr/inputs/page_2";
-  const singlePageDir = "/code/omr/inputs";
 
   try {
     let templatePath_1, templatePath_2;
@@ -487,8 +426,6 @@ router.post("/copyTemplate", checkJwt, checkPermissions(["upload:file"]), async 
   }
 });
 
-
-// Generate the evaluation JSON for an exam
 router.post("/GenerateEvaluation", checkJwt, checkPermissions(["create:evaluation"]), async function (req, res) {
   const { examType, exam_id, numQuestions } = req.body;
 
@@ -535,7 +472,7 @@ router.post("/GenerateEvaluation", checkJwt, checkPermissions(["create:evaluatio
       ensureDirectoryExistence("/code/omr/inputs/page_2");
       fs.writeFileSync("/code/omr/inputs/page_2/evaluation.json", JSON.stringify(evaluationJson, null, 2));
 
-      return res.json({ message: "evaluation.json created successfully for 100mcq o" });
+      return res.json({ message: "evaluation.json created successfully for 100mcq" });
     } 
     else if (examType === "custom" && numQuestions <= 100) {
       const evaluationJson = createEvaluationJson(answerKey, markingSchemes, 1);
@@ -552,51 +489,6 @@ router.post("/GenerateEvaluation", checkJwt, checkPermissions(["create:evaluatio
   }
 });
 
-
-function createEvaluationJson(questions, markingSchemes, questionStartIndex) {
-  return {
-    source_type: "custom",
-    options: {
-      questions_in_order: Array.from({ length: questions.length }, (_, i) => `q${i + questionStartIndex}`),
-      answers_in_order: questions,
-    },
-    outputs_configuration: {
-      should_explain_scoring: true,
-      draw_score: {
-        enabled: true,
-        position: [600, 1100],
-        size: 1.5,
-      },
-      draw_answers_summary: {
-        enabled: true,
-        position: [300, 1200],
-        size: 1.0,
-      },
-      draw_question_verdicts: {
-        enabled: true,
-        verdict_colors: {
-          correct: "#00ff00",
-          neutral: "#ff0000",
-          incorrect: "#ff0000",
-        },
-        verdict_symbol_colors: {
-          positive: "#000000",
-          neutral: "#000000",
-          negative: "#000000",
-        },
-        draw_answer_groups: {
-          enabled: true,
-        },
-      },
-      draw_detected_bubble_texts: {
-        enabled: false,
-      },
-    },
-    marking_schemes: markingSchemes,
-  };
-}
-
-// Call the OMR processing service
 router.post("/callOMR", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
   console.log("callOMR");
   try {
@@ -613,13 +505,11 @@ router.post("/callOMR", checkJwt, checkPermissions(["upload:file"]), async funct
   }
 });
 
-// Route to fetch the first PNG image in the folder
 router.post("/fetchImage", checkJwt, checkPermissions(["read:image"]), async function (req, res) {
   const imagesFolderPath = path.join(__dirname, req.body.file_name);
   console.log(imagesFolderPath);
   console.log(req.body.file_name);
   try {
-    // imagesFolderPath = path.resolve(__dirname, `../../uploads/Students/exam_id_5/student_id_1/${filename}`);
     res.sendFile(imagesFolderPath);
   } catch (error) {
     console.error("Error fetching image:", error);
@@ -644,60 +534,6 @@ router.get("/getScoreByExamId/:exam_id", checkJwt, checkPermissions(["read:grade
   }
 });
 
-router.get("/getExamQuestionDetails/:exam_id", checkJwt, checkPermissions(["read:exam"]), async (req, res) => {
-  try {
-    const exam_id = parseInt(req.params.exam_id, 10);
-    if (isNaN(exam_id)) {
-      return res.status(400).send("Invalid exam_id");
-    }
-
-    const examDetails = await getExamQuestionDetails(exam_id);
-    if (!examDetails || !examDetails.totalQuestions || !examDetails.examType) {
-      return res.status(404).send("No exam details found for this exam");
-    }
-
-    res.json({ examDetails });
-  } catch (error) {
-    console.error("Error in /getExamQuestionDetails:", error);
-    res.status(500).send("Error retrieving exam details");
-  }
-});
-
-
-router.post("/saveResults", saveResults);
-
-// router.get("/searchExam/:student_id", checkJwt, checkPermissions(["read:students"]), async (req, res) => {
-//   const studentId = req.params.student_id;
-//   const filePath = path.join(__dirname, "../../omr/outputs/Results/Results.csv");
-//   let found = false; // Flag to check if student is found
-
-//   fs.createReadStream(filePath)
-//     .pipe(csv())
-//     .on("data", (data) => {
-//       if (data.StudentID === studentId) {
-//         found = true;
-//         res.json({ file_id: data.file_id });
-//       }
-//     })
-//     .on("end", () => {
-//       if (!found) {
-//         res.status(404).send("Student ID not found");
-//       }
-//     })
-//     .on("error", (error) => {
-//       console.error("Error reading CSV file:", error);
-//       res.status(500).send("Error reading CSV file");
-//     });
-// });
-
-// There are 2 folders in outputs: page_1 and page_2
-// The first folder contains the ID page and the second folder contains the question page
-// Each ID page has a matching question page
-// e.g front_pages_page_1.png = back_pages_page_1.png
-// We extract the ID from front_pages_page_1.png and the answers from back_pages_page_1.png
-// Create a CSV file with the following fields:
-// "front_page_id", "back_page_id", "score", "student_id", "question_1", "question_2", ..., "question_100"
-
 router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), async (req, res) => {
   console.log("Hello from preprocessingCSV");
   const frontPagePath = path.join(__dirname, "../../omr/outputs/page_1/Results/Results.csv");
@@ -709,7 +545,6 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
   const frontPageData = [];
   const backPageData = [];
 
-  // Read front_page.csv
   fs.createReadStream(frontPagePath)
     .pipe(csv())
     .on("data", (data) => {
@@ -731,7 +566,6 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
       frontPageData.push(frontData);
     })
     .on("end", () => {
-      // Read back_page.csv
       fs.createReadStream(backPagePath)
         .pipe(csv())
         .on("data", (data) => {
@@ -750,7 +584,6 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
           backPageData.push(backData);
         })
         .on("end", () => {
-          // Combine data from both CSV files
           const combinedData = frontPageData.map((frontData) => {
             const backData = backPageData.find((back) => back.back_page_file_id.slice(-6) === frontData.front_page_file_id.slice(-6));
             const combined = {
@@ -771,11 +604,9 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
             return combined;
           });
 
-          // Convert combined data to CSV format
           const json2csvParser = new Parser();
           const csvData = json2csvParser.parse(combinedData);
 
-          // Save the combined CSV data to a file
           fs.writeFile(outputPath, csvData, (err) => {
             if (err) {
               console.log("Error writing combined.csv:", err);
@@ -797,13 +628,6 @@ router.get("/preprocessingCSV", checkJwt, checkPermissions(["upload:file"]), asy
     });
 });
 
-router.post("/fetchStudentExam/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchStudentExam);
-
-router.post("/fetchSolution/:exam_id", checkJwt, checkPermissions(["read:exam_student"]), fetchSolution);
-
-router.post("/changeGrade", checkJwt, checkPermissions(["read:exam_student"]), changeGrade);
-
-//test routes
 router.post("/test", checkJwt, checkPermissions(["upload:file"]), async function (req, res) {
   console.log("test called");
   res.send(JSON.stringify("Test route called successfully"));

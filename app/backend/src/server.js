@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const morgan = require('morgan');
 const session = require('express-session');
@@ -5,6 +6,7 @@ const PgSession = require('connect-pg-simple')(session);
 const bodyParser = require('body-parser');
 const pool = require('./utils/db');
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
+const path = require('path');
 
 const classRoutes = require('./routes/classRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -80,7 +82,10 @@ app.use('/exam', checkJwt,  examRoutes);
 app.use('/users', checkJwt,  userRoutes);
 app.use('/upload', checkJwt,  uploadRoutes);
 app.use('/courses', checkJwt,  courseRoutes);
-app.use('/reports', reportRoutes);
+app.use('/reports', checkJwt, reportRoutes);
+
+// Serve static files from the uploads directory
+app.use('/fetchingUpload', express.static(path.join(__dirname, '../uploads')));
 
 app.get('/healthz', (req, res) => {
   res.send('I am happy and healthy\n');

@@ -40,7 +40,6 @@ const saveQuestions = async (req, res, next) => {
   }
 };
 
-// New exam route
 const newExam = async (req, res, next) => {
   const { exam_id, student_id, grade } = req.body;
 
@@ -58,7 +57,7 @@ const newExam = async (req, res, next) => {
 
 
 const examBoard = async (req, res, next) => {
-  const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
+  const instructorId = req.auth.sub;
   try {
     const classes = await pool.query(
       `
@@ -85,7 +84,7 @@ const examBoard = async (req, res, next) => {
 
 
 const getAveragePerExam = async (req, res, next) => {
-  const instructorId = req.auth.sub; // Get the instructor ID from Auth0 token
+  const instructorId = req.auth.sub;
   try {
     const averagePerExamData = await pool.query(
       `
@@ -163,9 +162,8 @@ const getAnswerKeyForExam = async (exam_id) => {
       throw new Error("Solution not found");
     }
 
-    const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
+    const answersArray = solutionResult.rows[0].answers;
 
-    // Extract the answers in order
     const answersInOrder = answersArray.map((answer) => answer.split(":")[1]);
 
     return answersInOrder;
@@ -183,7 +181,6 @@ const getStudentNameById = async (studentId) => {
     const result = await pool.query("SELECT name FROM student WHERE student_id = $1", [studentId]);
 
     if (result.rows.length === 0) {
-      // throw new Error("Student not found");
       return "Unknown student";
     }
 
@@ -194,8 +191,6 @@ const getStudentNameById = async (studentId) => {
   }
 };
 
-
-//get Total Questions and Exam type (formally named getExamType)
 const getExamQuestionDetails = async (req, res) => {
   const { exam_id } = req.params;
 
@@ -221,9 +216,6 @@ const getExamQuestionDetails = async (req, res) => {
   }
 };
 
-
-
-
 const getScoreByExamId = async (exam_id) => {
   try {
     const result = await pool.query("SELECT total_marks FROM exam WHERE exam_id = $1", [exam_id]);
@@ -241,7 +233,6 @@ const getScoreByExamId = async (exam_id) => {
 
 const changeGrade = async (req, res, next) => {
   try {
-    // Retrieve the current grade
     const currentGradeResult = await pool.query("SELECT grade FROM studentResults WHERE student_id = $1 AND exam_id = $2", [
       req.body.student_id,
       req.body.exam_id,
@@ -253,7 +244,6 @@ const changeGrade = async (req, res, next) => {
 
     const currentGrade = currentGradeResult.rows[0].grade;
 
-    // Update the grade and append to changelog
     const result = await pool.query(
       "UPDATE studentResults SET grade = $1, grade_changelog = array_append(grade_changelog, $2) WHERE student_id = $3 AND exam_id = $4",
       [req.body.grade, `Grade was changed from ${currentGrade} to ${req.body.grade}`, req.body.student_id, req.body.exam_id]
@@ -276,7 +266,6 @@ const saveResults = async (req, res, next) => {
   console.log(exam_id);
 
   try {
-    // Assuming you have a database connection established and a model for studentResults
     for (const score of studentScores) {
       if (score.StudentName !== "Unknown student") {
         // Extract fields starting with 'q' and store them in an array
@@ -287,14 +276,12 @@ const saveResults = async (req, res, next) => {
         // Convert the array to a JSON string
         const questionFieldsJson = JSON.stringify(questionFields);
         console.log("questionFieldsJson", questionFieldsJson);
-        // Assuming studentResults is your table/model name and it has a method to insert data
         const result = await pool.query(
           "INSERT INTO studentresults (student_id, exam_id, grade, chosen_answers) VALUES ($1, $2, $3, $4)",
           [score.StudentID, exam_id, parseInt(score.Score, 10), questionFieldsJson]
         );
       }
     }
-    // Update the "graded" status in the exams table
     await pool.query("UPDATE exam SET graded = true WHERE exam_id = $1", [exam_id]);
 
     res.send({ message: "Scores saved successfully" });
@@ -317,7 +304,6 @@ const resetOMR = () => {
   return true;
 };
 
-// Function to delete all files in a directory
 const deleteAllFilesInDir = (dirPath) => {
   fs.readdir(dirPath, (err, files) => {
     if (err) {
@@ -380,7 +366,6 @@ async function getCustomMarkingSchemes(exam_id) {
   return transformedSchemes;
 }
 
-//helper function to generate the latex document
 async function generateLatexDocument(questions, options, courseId, examTitle) {
   const questionTemplate = `
     \\noindent
@@ -446,17 +431,17 @@ async function generateLatexDocument(questions, options, courseId, examTitle) {
 }
 
 async function generateCustomJsonTemplate(questions, options, courseId, examTitle, classId) {
-  const columns = 4; // Number of columns in the template
-  const questionsPerPage = 100; // Questions per page threshold
-  const pages = questions > questionsPerPage ? 2 : 1; // Determine if the exam will span 1 or 2 pages
+  const columns = 4;
+  const questionsPerPage = 100;
+  const pages = questions > questionsPerPage ? 2 : 1;
 
   for (let page = 1; page <= pages; page++) {
     const currentPageQuestions = page === 1
       ? Math.min(questions, questionsPerPage)
       : questions - questionsPerPage;
 
-    const baseQuestionsPerColumn = Math.ceil(currentPageQuestions / columns); // Base number of questions per column
-    const remainder = currentPageQuestions % columns; // Questions that won't be evenly distributed
+    const baseQuestionsPerColumn = Math.ceil(currentPageQuestions / columns);
+    const remainder = currentPageQuestions % columns;
     const lastColumnQuestions = remainder === 0 ? baseQuestionsPerColumn : currentPageQuestions - (baseQuestionsPerColumn * (columns - 1));
 
     let template = {
@@ -474,20 +459,18 @@ async function generateCustomJsonTemplate(questions, options, courseId, examTitl
       ],
     };
 
-        // Add Student ID block and custom label to the first page
-        if (page === 1) {
-          template.customLabels = {
-            StudentID: ["roll1..8"]
-          };
-          template.fieldBlocks.StudentID = {
-            fieldType: "QTYPE_ID",
-            origin: [363, 169],
-            fieldLabels: ["roll1..8"],
-            bubblesGap: 31,
-            labelsGap: 22,
-          };
-        }
-    
+    if (page === 1) {
+      template.customLabels = {
+        StudentID: ["roll1..8"]
+      };
+      template.fieldBlocks.StudentID = {
+        fieldType: "QTYPE_ID",
+        origin: [363, 169],
+        fieldLabels: ["roll1..8"],
+        bubblesGap: 31,
+        labelsGap: 22,
+      };
+    }
 
     let startQuestion = page === 1 ? 1 : 101;
 
@@ -510,17 +493,16 @@ async function generateCustomJsonTemplate(questions, options, courseId, examTitl
       if (labels.length > 0) {
         template.fieldBlocks[`MCQBlock${col}`] = {
           fieldType: `QTYPE_MCQ${options}`,
-          origin: calculateOrigin(col, page), // Custom function to determine origin
+          origin: calculateOrigin(col, page),
           fieldLabels: labels,
-          bubblesGap: options === 4 ? 24.9 : 20, // Adjust bubble gap for different options
+          bubblesGap: options === 4 ? 24.9 : 20,
           labelsGap: 29.7,
         };
       }
 
-      startQuestion = endQuestion + 1; // Update the start question for the next column
+      startQuestion = endQuestion + 1;
     }
 
-    // Save the template to a separate file for each page
     const outputDir = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}`);
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
@@ -532,7 +514,6 @@ async function generateCustomJsonTemplate(questions, options, courseId, examTitl
 }
 
 function calculateOrigin(column, page) {
-  // Define fixed origins based on column and page
   const originsPage1 = [
     [160, 395],
     [350, 395],
@@ -553,7 +534,6 @@ function calculateOrigin(column, page) {
   }
 }
 
-
 async function generateCustomBubbleSheet(req, res) {
   const { numQuestions, numOptions, courseId, examTitle, classId } = req.body;
 
@@ -561,36 +541,30 @@ async function generateCustomBubbleSheet(req, res) {
     return res.status(400).send("Missing number of questions, options, courseId, examTitle, or classId.");
   }
 
-  // Create the directory if it doesn't exist
   const outputDir = path.join(__dirname, '../assets/custom', `${courseId}_${examTitle}_${classId}`);
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  // Generate LaTeX document and save to file
   const latexDocument = await generateLatexDocument(numQuestions, numOptions, courseId, examTitle);
   const latexFilePath = path.join(outputDir, `${courseId}_${examTitle}_${classId}.tex`);
   const pdfFilePath = path.join(outputDir, `${courseId}_${examTitle}_${classId}.pdf`);
 
   fs.writeFileSync(latexFilePath, latexDocument);
 
-  // Generate and save JSON templates
   await generateCustomJsonTemplate(numQuestions, numOptions, courseId, examTitle, classId);
 
-  // Compile the LaTeX file into a PDF
   exec(`pdflatex -output-directory=${outputDir} ${latexFilePath}`, (error, stdout, stderr) => {
     if (error) {
       console.error('Error compiling LaTeX:', stderr);
       return res.status(500).send("Failed to generate PDF.");
     }
 
-    // Set response headers and stream the PDF file
     res.setHeader('Content-Disposition', `attachment; filename="${courseId}_${examTitle}_${classId}.pdf"`);
     res.setHeader('Content-Type', 'application/pdf');
     const pdfStream = fs.createReadStream(pdfFilePath);
     pdfStream.pipe(res);
 
-    // Clean up auxiliary files after the PDF has been sent
     pdfStream.on('close', () => {
       const auxFilePath = path.join(outputDir, `${courseId}_${examTitle}_${classId}.aux`);
       const logFilePath = path.join(outputDir, `${courseId}_${examTitle}_${classId}.log`);
@@ -608,10 +582,9 @@ async function generateCustomBubbleSheet(req, res) {
   });
 }
 
-
-// Fetch exam details by exam_id
 const getExamDetails = async (req, res, next) => {
   const { exam_id } = req.params;
+  const { student_id } = req.query;
 
   try {
     const examQuery = `
@@ -630,13 +603,20 @@ const getExamDetails = async (req, res, next) => {
 
     const ExamDetails = examResult.rows[0];
 
-    const studentResultsQuery = `
+    let studentResultsQuery = `
       SELECT sr.student_id, s.name as student_name, sr.grade
       FROM studentResults sr
       JOIN student s ON sr.student_id = s.student_id
       WHERE sr.exam_id = $1
     `;
-    const studentResultsResult = await pool.query(studentResultsQuery, [exam_id]);
+    const queryParams = [exam_id];
+
+    if (student_id) {
+      studentResultsQuery += ' AND sr.student_id = $2';
+      queryParams.push(student_id);
+    }
+
+    const studentResultsResult = await pool.query(studentResultsQuery, queryParams);
 
     ExamDetails.studentResults = studentResultsResult.rows;
 
@@ -647,12 +627,30 @@ const getExamDetails = async (req, res, next) => {
   }
 };
 
-// Get exams for a specific class
 const getExamsFromClassID = async (req, res) => {
   const { class_id } = req.params;
+  const { student_id } = req.query;
+
   try {
-    const result = await pool.query("SELECT * FROM exam WHERE class_id = $1", [class_id]);
-    res.json({ exams: result.rows || [] }); // Always respond with an array
+    let query;
+    let params;
+
+    if (student_id) {
+      query = `
+        SELECT e.*
+        FROM exam e
+        JOIN enrollment en ON e.class_id = en.class_id
+        JOIN studentResults sr ON e.exam_id = sr.exam_id
+        WHERE e.class_id = $1 AND en.student_id = $2 AND sr.student_id = $2
+      `;
+      params = [class_id, student_id];
+    } else {
+      query = "SELECT * FROM exam WHERE class_id = $1";
+      params = [class_id];
+    }
+
+    const result = await pool.query(query, params);
+    res.json({ exams: result.rows || [] });
   } catch (err) {
     console.error("Error fetching exams:", err);
     res.status(500).json({ message: "Failed to fetch exams" });
@@ -666,7 +664,7 @@ const getStudentsByExamID = async (req, res) => {
       "SELECT s.student_id, s.name FROM studentResults sr JOIN student s ON sr.student_id = s.student_id WHERE sr.exam_id = $1",
       [exam_id]
     );
-    res.json({ students: result.rows || [] }); // Always respond with an array
+    res.json({ students: result.rows || [] });
   } catch (err) {
     console.error("Error fetching students:", err);
     res.status(500).json({ message: "Failed to fetch students" });
@@ -674,19 +672,36 @@ const getStudentsByExamID = async (req, res) => {
 };
 
 const getStudentExams = async (req, res, next) => {
-  const studentId = req.auth.sub; // Get the student ID from Auth0 token
+  const studentId = req.auth.sub;
+  const classId = req.params.class_id;
 
   try {
-    const exams = await pool.query(
-      `
-      select exam_id, exam_title, course_id, course_name, graded from exam 
-	    join classes using (class_id)
-      join enrollment using (class_id)
-      join student using (student_id)
-      where auth0_id = $1
-    `,
-      [studentId]
-    );
+    let query;
+    let params;
+
+    if (classId) {
+      query = `
+        SELECT exam_id, exam_title, course_id, course_name, graded 
+        FROM exam 
+        JOIN classes USING (class_id)
+        JOIN enrollment USING (class_id)
+        JOIN student USING (student_id)
+        WHERE auth0_id = $1 AND class_id = $2
+      `;
+      params = [studentId, classId];
+    } else {
+      query = `
+        SELECT exam_id, exam_title, course_id, course_name, graded 
+        FROM exam 
+        JOIN classes USING (class_id)
+        JOIN enrollment USING (class_id)
+        JOIN student USING (student_id)
+        WHERE auth0_id = $1
+      `;
+      params = [studentId];
+    }
+
+    const exams = await pool.query(query, params);
 
     res.json({ exams: exams.rows });
   } catch (err) {
@@ -716,7 +731,7 @@ const getGradeChangeLog = async (req, res, next) => {
 };
 
 const getStudentAttempt = async (req, res, next) => {
-  const studentId = req.auth.sub; // Get the student ID from Auth0 token
+  const studentId = req.auth.sub;
   const examId = parseInt(req.params.exam_id, 10);
 
   try {
@@ -725,8 +740,8 @@ const getStudentAttempt = async (req, res, next) => {
       SELECT exam_id, student_id, grade, exam_title, course_id, course_name, viewing_options 
       from studentResults 
       join student using (student_id) 
-	    join exam using (exam_id)
-	    join classes using (class_id)
+      join exam using (exam_id)
+      join classes using (class_id)
       where auth0_id = $1 and exam_id = $2
     `,
       [studentId, examId]
@@ -739,7 +754,7 @@ const getStudentAttempt = async (req, res, next) => {
 };
 
 const fetchStudentExam = async (req, res, next) => {
-  const auth0_id = req.auth.sub; // Get the student ID from Auth0 token
+  const auth0_id = req.auth.sub;
   const exam_id = parseInt(req.params.exam_id, 10);
   const file_name = req.body.page;
   console.log("file_name", file_name);
@@ -771,9 +786,8 @@ const fetchSolution = async (req, res, next) => {
       throw new Error("Solution not found");
     }
 
-    const answersArray = solutionResult.rows[0].answers; // This should be a JSON array
+    const answersArray = solutionResult.rows[0].answers;
 
-    // Extract the answers in order
     const answersInOrder = answersArray.map((answer) => answer.split(":")[1]);
 
     res.json(answersInOrder);
