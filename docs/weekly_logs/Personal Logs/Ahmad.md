@@ -1,6 +1,70 @@
 # Personal Log
 Ahmad Saleem Mirza
 
+## Wednesday (Aug 2 - Aug 7)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/Aug2-7.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Displaying results on student view
+  * #2: Maintain a changelog of grade changes
+  * #3: Implementing test-o-rama suggestions to OMR 
+  * #4: Save student answers for exam statistics
+  * #5: Integrating changes across branches 
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr> 
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Maintain a changelog of grade changes
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>  
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Displaying results on instructor view later
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Implementing test-o-rama suggestions to OMR
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>  
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Save student answers for exam statistics
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>  
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+I have completed all of the aforementioned tasks within this cycle, in addition to helping my teammates successfully integrate these changes to ensure their features are working as well. All of them were fairly straightforward to accomplish this time around because they were mostly front end focused. The most difficult among them was definitely integrating my teammates' changes, especially since Omar implemented the custom bubble sheet feature which I ensured would be compatible with both the existing and new code. 
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Ensure all features are working before the project presentation and eventual handoff to the client
+
+
+
 ## Friday (July 31 - Aug 2)
 
 ### Timesheet
