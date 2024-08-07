@@ -576,6 +576,23 @@ router.post("/fetchImage", checkJwt, checkPermissions(["read:image"]), async fun
   }
 });
 
+router.get("/getScoreByExamId/:exam_id", checkJwt, checkPermissions(["read:grades"]), async (req, res) => {
+  try {
+    const exam_id = parseInt(req.params.exam_id, 10);
+    if (isNaN(exam_id)) {
+      return res.status(400).send("Invalid exam_id");
+    }
+    const scores = await getScoreByExamId(exam_id);
+    if (scores.length === 0) {
+      return res.status(404).send("No scores found for this exam");
+    }
+    res.json({ scores });
+  } catch (error) {
+    console.error("Error in /getScoreByExamId:", error);
+    res.status(500).send("Error retrieving scores");
+  }
+});
+
 router.get("/getExamQuestionDetails/:exam_id", checkJwt, checkPermissions(["read:exam"]), async (req, res) => {
   try {
     const exam_id = parseInt(req.params.exam_id, 10);
