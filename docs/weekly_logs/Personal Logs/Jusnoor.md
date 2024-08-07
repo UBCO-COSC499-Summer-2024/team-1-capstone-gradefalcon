@@ -1,6 +1,102 @@
 
 # Personal Log
 
+## Friday ( 02/08 - 07/08 )
+
+### Timesheet 
+
+clockify report
+
+<img width="926" alt="Time18" src="https://github.com/user-attachments/assets/47c681c6-c3f5-4b7e-b784-6ebd78ce4277">
+
+
+
+### Current Tasks (Provide Details):
+- #1 : User Story: Enhance Course and Exam Management #207
+- #2: User Story: Enhance Exam Stastics and Grade Edit #243
+- #3: User Story: Improve Instructor User Interface and Experience #241
+- #4: Layout Adjustments: #267
+- #5: Tooltips and Static Elements #268
+- #6: Exam and Class Table Interactions #270
+- #7: Color and Button Styling #266
+  
+  
+### Progress Update (since 02/08/2024) 
+<table>
+   <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+   <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Enhance Course and Exam Management #207
+        </td>
+        <!-- Status -->
+        <td>In Review
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Enhance Exam Stastics and Grade Edit #243
+        </td>
+        <!-- Status -->
+        <td>In Review
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>User Story: Improve Instructor User Interface and Experience #241
+        </td>
+        <!-- Status -->
+        <td>In Review
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Layout Adjustments: #267
+        </td>
+        <!-- Status -->
+        <td>Completed 
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td> Tooltips and Static Elements #268
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Exam and Class Table Interactions #270
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+  <tr>
+        <!-- Task/Issue # -->
+        <td>Color and Button Styling #266
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+</table>
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+As we made progress from the last cycle , I was assigned some additional task from what I was assigned in the last cycle as per the feedback we got from the peer review round 2. I was assigned some UI fixes to be done which have been majorly completed and the related issues have been closed. Some of the changes are to be reviewd and have a few sub issues left which I am to compleet by the next cycle. I was not able to be as fast and efficient as I wanted to be since I have been keeping unwell since the last week but this week my health detoriated even more due to acute food poisioning but still I was determined to complete my tasks as asssigned in order to support this last phase of the development process and my team to make the progress as desired. There are a few UI changes left (all of the issues have just a few sub tasks to be completed) , and will be completed and closed by the next cycle. I am very happy with the new/modified changes after the review , gives our application a cleaner and modern look.
+
+
+### Next Cycle Goals ( What to accomplish during the next cycle ):
+- User Story: Enhance Course and Exam Management #207
+- User Story: Enhance Exam Stastics and Grade Edit #243
+- User Story: Improve Instructor User Interface and Experience #241
+
 ## Wednesday ( 31/7 - 02/08 )
 
 ### Timesheet 
