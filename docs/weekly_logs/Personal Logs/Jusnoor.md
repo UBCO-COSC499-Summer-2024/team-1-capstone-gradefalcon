@@ -11,6 +11,8 @@ clockify report
 <img width="926" alt="clockifyreport_18" src="https://github.com/user-attachments/assets/b72988e6-05e6-444c-8506-13efbeb6c04f">
 
 
+
+
 ### Current Tasks (Provide Details):
 - #1 : User Story: Enhance Course and Exam Management #207
 - #2: User Story: Enhance Exam Stastics and Grade Edit #243
@@ -547,8 +549,8 @@ Moving forward from the last cycle, we succesfully completed the process of reva
 
 
 ### Next Cycle Goals ( What to accomplish during the next cycle ):
-- Revamping the front end UI using Shad cn 
-- Debugging graphs logic - Instructor Dashboard
+- Revamping the front end UI using Shad cn
+- Finalize Debugging graphs logic - Instructor Dashboard
 
 ## Friday ( 9/7 - 11/7 )
 
