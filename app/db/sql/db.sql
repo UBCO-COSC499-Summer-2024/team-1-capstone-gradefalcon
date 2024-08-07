@@ -129,9 +129,9 @@ INSERT INTO student (student_id, auth0_id, email, name) VALUES
     ('1', 'auth0|669eca4940b5ccd84d81caa2', 'stu.example0@gmail.com', 'Student'),
     ('2', 'auth0|669ecaa440b5ccd84d81caa3', 'stu.example1@gmail.com', 'Student II');
 
-INSERT INTO classes (instructor_id, course_id, course_name) VALUES
-    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST100', 'Database Test'),
-    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST200', 'Database Test 2');
+INSERT INTO classes (instructor_id, course_id, course_name, active) VALUES
+    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST100', 'Database Test', true),
+    ('auth0|6696d634bec6c6d1cc3e2274', 'TEST200', 'Database Test 2', true);
 
 INSERT INTO exam (class_id, exam_title, total_questions, total_marks, graded, viewing_options) VALUES
     (1,'Midterm', 50, 50, true, '{"canViewExam": true, "canViewAnswers": false}'),

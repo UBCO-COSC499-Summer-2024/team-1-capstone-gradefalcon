@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Added useNavigate
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "../../components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../../components/ui/table";
 import { ScrollArea } from "../../components/ui/scroll-area";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "../../components/ui/dialog";
 import NewClassForm from "../../components/NewClassForm";
-import { ArrowUpRight, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Badge } from "../../components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
@@ -17,13 +17,13 @@ import { CheckboxRed } from "../../components/ui/checkbox";
 
 const Classes = () => {
   const { getAccessTokenSilently } = useAuth0();
-  const navigate = useNavigate(); // Defined useNavigate
+  const navigate = useNavigate();
   const [classes, setClasses] = useState([]);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState("active"); // Default tab is 'active'
-  const [confirmDelete, setConfirmDelete] = useState(false); // State for checkbox
-  const [dialogOpen, setDialogOpen] = useState(false); // State for dialog open
-  const [selectedClass, setSelectedClass] = useState(null); // State for selected class
+  const [filter, setFilter] = useState("active");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedClass, setSelectedClass] = useState(null);
 
   const fetchClasses = async () => {
     try {
@@ -67,14 +67,13 @@ const Classes = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ class_id: classId }), // Send class_id in the request body
+        body: JSON.stringify({ class_id: classId }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to archive course");
       }
 
-      // Refresh the list of classes after archiving
       fetchClasses();
     } catch (error) {
       console.error("Error archiving course:", error);
@@ -91,14 +90,13 @@ const Classes = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ class_id: classId }), // Send class_id in the request body
+        body: JSON.stringify({ class_id: classId }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to re-activate course");
       }
 
-      // Refresh the list of classes after unarchiving
       fetchClasses();
     } catch (error) {
       console.error("Error re-activating course:", error);
@@ -115,17 +113,16 @@ const Classes = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ class_id: classId }), // Send class_id in the request body
+        body: JSON.stringify({ class_id: classId }),
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to delete course");
       }
-  
-      // Refresh the list of classes after deletion
+
       fetchClasses();
-      setDialogOpen(false); // Close dialog after confirmation
-      setConfirmDelete(false); // Reset checkbox
+      setDialogOpen(false);
+      setConfirmDelete(false);
     } catch (error) {
       console.error("Error deleting course:", error);
       setError("Error deleting course");
@@ -163,15 +160,14 @@ const Classes = () => {
                           <TooltipProvider key={index}>
                             <Tooltip delayDuration={0}>
                               <TooltipTrigger asChild>
-                                <TableRow
-                                  className="hover:bg-gray-100 cursor-pointer"
-                                  onClick={() => navigate(`/ClassManagement/${classItem.class_id}`)}
-                                >
-                                  <TableCell>
+                                <TableRow className="hover:bg-gray-100 cursor-pointer">
+                                  <TableCell onClick={() => navigate(`/ClassManagement/${classItem.class_id}`)}>
                                     <div className="font-medium">{classItem.course_name}</div>
                                   </TableCell>
-                                  <TableCell className="hidden sm:table-cell">{classItem.course_id}</TableCell>
-                                  <TableCell>
+                                  <TableCell className="hidden sm:table-cell" onClick={() => navigate(`/ClassManagement/${classItem.class_id}`)}>
+                                    {classItem.course_id}
+                                  </TableCell>
+                                  <TableCell onClick={() => navigate(`/ClassManagement/${classItem.class_id}`)}>
                                     <Badge variant="outline" className={statusClass}>
                                       {status}
                                     </Badge>
@@ -185,16 +181,27 @@ const Classes = () => {
                                       </DropdownMenuTrigger>
                                       <DropdownMenuContent>
                                         {classItem.active ? (
-                                          <DropdownMenuItem onSelect={() => handleArchiveCourse(classItem.class_id)}>
+                                          <DropdownMenuItem
+                                            onClick={(e) => {
+                                              e.stopPropagation(); // Prevent row click event
+                                              handleArchiveCourse(classItem.class_id);
+                                            }}
+                                          >
                                             Archive Course
                                           </DropdownMenuItem>
                                         ) : (
-                                          <DropdownMenuItem onSelect={() => handleUnarchiveCourse(classItem.class_id)}>
+                                          <DropdownMenuItem
+                                            onClick={(e) => {
+                                              e.stopPropagation(); // Prevent row click event
+                                              handleUnarchiveCourse(classItem.class_id);
+                                            }}
+                                          >
                                             Re-activate Course
                                           </DropdownMenuItem>
                                         )}
                                         <DropdownMenuItem
-                                          onSelect={() => {
+                                          onClick={(e) => {
+                                            e.stopPropagation(); // Prevent row click event
                                             setSelectedClass(classItem);
                                             setDialogOpen(true);
                                           }}
@@ -227,16 +234,12 @@ const Classes = () => {
               <CardDescription>Import a CSV file containing the student names and their student IDs in your class.</CardDescription>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex-grow">
             <Dialog>
               <DialogTrigger asChild>
                 <Button size="sm">Create Class</Button>
               </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Create New Class</DialogTitle>
-                  <DialogDescription>Enter the details for the new class and import the student list via a CSV file.</DialogDescription>
-                </DialogHeader>
+              <DialogContent className="max-w-3xl">
                 <NewClassForm />
                 <DialogClose asChild>
                   <Button variant="ghost">Close</Button>

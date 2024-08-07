@@ -16,7 +16,7 @@ import {
   DialogClose,
 } from "../../components/ui/dialog";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../components/ui/tooltip";
-import { Badge } from "../../components/ui/badge"; // Import the Badge component
+import { Badge } from "../../components/ui/badge";
 import AverageperExamChart from "../../components/AverageperExamChart";
 import AverageperCourseChart from "../../components/AverageperCourseChart";
 import NewClassForm from "../../components/NewClassForm";
@@ -25,7 +25,6 @@ import { Input } from "../../components/ui/input";
 
 export default function Dashboard() {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
-  //const roles = user[`${process.env.REACT_APP_AUTH0_MYAPP}/role`] || [];
   const [userName, setUserName] = useState("");
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
@@ -60,7 +59,7 @@ export default function Dashboard() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          credentials: "include", // This ensures cookies are included in the request
+          credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
@@ -86,10 +85,9 @@ export default function Dashboard() {
         });
         if (response.ok) {
           const data = await response.json();
-          // Filter out archived courses
           const activeCourses = data.filter((course) => course.active !== false);
           setCourses(activeCourses);
-          setFilteredCourses(activeCourses); // Initialize filteredCourses with the fetched data
+          setFilteredCourses(activeCourses);
         } else {
           console.error("Failed to fetch courses");
         }
@@ -112,7 +110,7 @@ export default function Dashboard() {
         if (response.ok) {
           const data = await response.json();
           setExams(data.classes);
-          setFilteredExams(data.classes); // Initialize filteredExams with the fetched data
+          setFilteredExams(data.classes);
         } else {
           console.error("Failed to fetch exams");
         }
@@ -173,11 +171,19 @@ export default function Dashboard() {
   }, [getAccessTokenSilently, isAuthenticated]);
 
   useEffect(() => {
-    setFilteredCourses(courses.filter((course) => course.course_name?.toLowerCase().includes(courseSearchTerm.toLowerCase())));
+    setFilteredCourses(
+      courses.filter((course) =>
+        course.course_name?.toLowerCase().includes(courseSearchTerm.toLowerCase())
+      )
+    );
   }, [courseSearchTerm, courses]);
 
   useEffect(() => {
-    setFilteredExams(exams.filter((exam) => exam.exam_title?.toLowerCase().includes(examSearchTerm.toLowerCase())));
+    setFilteredExams(
+      exams.filter((exam) =>
+        exam.exam_title?.toLowerCase().includes(examSearchTerm.toLowerCase())
+      )
+    );
   }, [examSearchTerm, exams]);
 
   const handleExamCreated = (newExam) => {
@@ -207,13 +213,7 @@ export default function Dashboard() {
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Create New Class</DialogTitle>
-                      <DialogDescription>
-                        Enter the details for the new course and import the student list via a CSV file.
-                      </DialogDescription>
-                    </DialogHeader>
+                  <DialogContent className="max-w-4xl">
                     <NewClassForm />
                     <DialogClose asChild>
                       <Button variant="ghost">Close</Button>
@@ -249,14 +249,17 @@ export default function Dashboard() {
                       <Tooltip delayDuration={0}>
                         <TooltipTrigger asChild>
                           <Link to={`/ClassManagement/${course.class_id}`}>
-                          <Card className="p-4 border rounded-lg flex flex-col justify-between shadow-md max-w-md mx-auto h-30 hover:bg-gray-100 
-                          transition-colors duration-300">
+                            <Card
+                              className="p-4 border rounded-lg flex flex-col justify-between shadow-md max-w-md mx-auto h-30 hover:bg-gray-100 
+                          transition-colors duration-300"
+                            >
                               <div className="flex items-center justify-between mb-4">
                                 <CardDescription>{course.course_name}</CardDescription>
                                 <Bookmark className="h-6 w-6 text-muted-foreground" />
                               </div>
                               <div className="flex flex-col items-center">
-                                <div className="text-2xl font-bold">{course.course_id}</div>
+                               
+                              <div className="text-2xl font-bold">{course.course_id}</div>
                               </div>
                             </Card>
                           </Link>
@@ -284,39 +287,11 @@ export default function Dashboard() {
             <div className="flex justify-between items-center">
               <CardTitle className="mb-2">Exam Board</CardTitle>
               <div className="flex gap-2">
-                <Button size="sm" className="gap-1">
+                <Button asChild size="sm" className="gap-1">
                   <Link to={`/NewExam`}>
                     <Plus className="h-4 w-4" />
                   </Link>
                 </Button>
-                {/* <Dialog>
-                  <TooltipProvider>
-                    <Tooltip delayDuration={0}>
-                      <TooltipTrigger asChild>
-                        <DialogTrigger asChild>
-                          <Button size="sm" className="gap-1" onClick={() => setIsDialogOpen(true)}>
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                        </DialogTrigger>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Create New Exam</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Create New Exam</DialogTitle>
-                      <DialogDescription>
-                        Enter the details for the new exam and upload the answer key.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <NewExamForm setIsDialogOpen={setIsDialogOpen} onExamCreated={handleExamCreated} />
-                    <DialogClose asChild>
-                      <Button variant="ghost">Close</Button>
-                    </DialogClose>
-                  </DialogContent>
-                </Dialog> */}
                 <Button asChild size="sm" className="gap-1">
                   <Link to="/Examboard">
                     Manage Exams
@@ -361,7 +336,7 @@ export default function Dashboard() {
                             </TableCell>
                             <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
                             <TableCell>
-                              <Badge variant = {getStatusColor(exam.graded)}>
+                              <Badge variant={getStatusColor(exam.graded)}>
                                 {exam.graded ? "Graded" : "Not graded"}
                               </Badge>
                             </TableCell>
