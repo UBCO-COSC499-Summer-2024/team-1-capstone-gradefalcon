@@ -400,7 +400,7 @@ Clockify report
 
 ### Timesheet
 Clockify report
-![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/39a260aaa218e01ca0005f988830fd221617f075/docs/weekly_logs/Clockify/Omar/Time13.png)
+![time](../Clockify/Omar/Time14.png)
 
 ### Current Tasks (Provide sufficient detail)
 
@@ -480,7 +480,7 @@ Clockify report
 
 
 
-## Wednesday (7/11-7/116)
+## Wednesday (7/11-7/16)
 
 ### Timesheet
 Clockify report
@@ -1511,7 +1511,7 @@ Clockify report
 
 ### Timesheet
 Clockify report
-![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/eb0f920469f1a0df5389c184043ef61251d22275/docs/weekly_logs/Clockify/Omar/Time3.png)
+![time](https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon/blob/1010e35335a738357d825592a58077734a155f93/docs/weekly_logs/Clockify/Omar/Time3.png)
 
 ### Current Tasks (Provide sufficient detail)
   * #1: Database Setup

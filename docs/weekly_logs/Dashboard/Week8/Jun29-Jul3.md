@@ -1,0 +1,68 @@
+# Dashboard
+
+## Burn-up Chart (Velocity):
+- ![docs/weekly logs/Burn Up Charts/burn up chart 2.png](../../BurnUpCharts/BurnUpChart10.png)
+
+- ![docs/weekly logs/Clockify/Time1.png](../../Clockify/Time10.png)
+
+### Task Status
+
+- ![docs/weekly logs/Status/Status1.png](../../Status/Status10.png)
+
+
+## Associated Tasks from Project Board:
+| Task ID | Description | Feature | Assigned To | Status |
+|--------------|-------|----------|-----------|--------|
+| #2 | System Design: User Interface | System Design | Omar, Bennett | Completed |
+| #4 | System Design: System Architecture | System Design | Omar, Ahmad, Nelson | Completed |
+| #5 | System Design: DFD | System Design | Jusnoor | Completed |
+| #6 | System Design: Database Design | System Design | Ahmad, Nelson | Completed |
+| #7 | System Design: Use Cases | System Design | Omar, Ahmad | Completed |
+| #8 | Automate Dashboard Creation | Automation | Omar | Completed |
+| #9 | Populate Kanban | Project Planning | Omar | Completed |
+| #28 | Docker Setup | Docker Setup | Omar | Completed |
+| #29 | Database Setup | Database Setup | Ahmad | Completed |
+| #30 | React Development Environment Setup | UI and UX Design | Omar | Completed |
+| #31 | System Design: Video and Presentation | System Design | Team | Completed |
+| #32 | Transform Figma Mockups into Code | UI and UX Design | Bennett, Jusnoor | Completed |
+| #12 | Instructor Login and Authentication | Login and Authentication | Nelson | Completed |
+| #15 | Instructor Interface Development | Interface Development | Omar, Bennett, Jusnoor | Completed |
+| #56 | Express PostgreSQL Integration | Backend | Ahmad, Omar | Completed |
+| #37 | Student Interface Development | Interface Development | Omar, Jusnoor | Completed |
+| #44 | HTML Student View Complete and Central CSS File for Shared Elements Between Student and Instructor Views Completed | Enhancement | Bennett | Completed |
+| #57 | Style Fix: Navigation Bar Standardization | Interface Development | Bennett | Completed |
+| #107 | Display Exams on Examboard | Enhancement | Omar, Bennett | In Progress |
+| #22 | User Story: Create and Manage Exams | Enhancement | Ahmad, Nelson | In Progress |
+| #109 | Fix Frontend Testing | Testing | Bennett | In Progress |
+| #98 | Refactor Frontend Structure for Improved Maintainability | Enhancement | Bennett, Jusnoor | In Progress |
+| #97 | Refactor Backend Structure for Improved Maintainability | Enhancement | Ahmad, Nelson | In Progress |
+| #21 | User Story: Create and Manage Classes | Enhancement | Omar | In Progress |
+| #82 | Implement Class Creation Functionality (which would include adding the Instructor ID and Class ID to the Database) | Enhancement | Omar, Nelson | In Progress |
+| #54 | User Story: Import Class as a CSV file | Enhancement | Ahmad | In Progress |
+| #14 | User Story: Exam Results Export to Canvas | Enhancement | Omar | In Progress |
+| #55 | Implement Session Management and Creation | Enhancement | Ahmad | In Progress |
+| #71 | Display User Data on the Frontend | Enhancement | Bennett | In Progress |
+| #48 | Set Up Routing | Enhancement | Ahmad | In Progress |
+| #36 | Synthesize Central CSS file | Enhancement | Bennett | In Progress |
+| #49 | Configure the Backend to Include our Postgres DB | Backend | Ahmad | In Progress |
+| #45 | Reorganize Folder Structure | Enhancement | Ahmad, Omar | In Progress |
+| #23 | User Story: Upload and Parse Bubble Sheets | Enhancement | Ahmad | In Progress |
+| #80 | Refactor UI Using Shadcn UI Components | Enhancement | Jusnoor | In Progress |
+| #61 | Create User Roles and Permissions, Auth0 | Enhancement | Ahmad, Omar | In Progress |
+| #27 | CI/CD Setup | Project Planning | Nelson | In Progress |
+| #86 | User Story: Student Sign-Up Verification | Enhancement | Bennett | In Progress |
+| #77 | User Story: Protect Information on Sign Up and Sign In Pages | Enhancement | Nelson | In Progress |
+| #76 | User Story: Encrypt Cookies for Secure Session Management | Enhancement | Ahmad | In Progress |
+| #16 | User Story: Data Visualization | Enhancement | Jusnoor | In Progress |
+| #108 | User Story: Create and Manage Exams | Enhancement | Ahmad | In Progress |
+| #13 | User Story: Develop Standard Bubble Sheet | Enhancement | Jusnoor | In Progress |
+| #17 | User Story: Custom Bubble Sheet Support | Enhancement | Bennett | In Progress |
+| #18 | User Story: Parsing and Result Download | Enhancement | Bennett, Jusnoor | In Progress |
+| #19 | User Story: Student Result Viewing Options | Enhancement | Ahmad, Omar | In Progress |
+| #20 | User Story: QR Code Implementation on Bubble Sheets | Enhancement | Omar, Bennett | In Progress |
+| #26 | Implement Bubble Sheet Parsing Logic Using YOLO | Enhancement | Ahmad | In Progress |
+| #25 | Handle Bulk Upload of Scanned PDFs | Enhancement | Omar | In Progress |
+| #24 | Set Up File Upload Functionality | Enhancement | Ahmad, Omar | In Progress |
+| #10 | Develop Computer Vision Model | OMR System | Omar, Ahmad, Nelson | In Progress |
+| #50 | Setup AWS Storage for PDF Uploads | Backend | Nelson | In Progress |
+| #51 | Write Code for PDF Upload Page | Backend | Nelson | In Progress |
