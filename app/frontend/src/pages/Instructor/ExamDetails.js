@@ -143,6 +143,7 @@ const ExamDetails = () => {
       },
     },
     shapes: [
+      // Min, Max, and Mean lines
       {
         type: "line",
         y0: 0,
@@ -167,32 +168,6 @@ const ExamDetails = () => {
           color: primaryColor,
           width: 2,
           dash: "dot",
-        },
-      },
-      {
-        type: "line",
-        y0: 0,
-        y1: 1,
-        yref: "paper",
-        x0: q1Grade,
-        x1: q1Grade,
-        line: {
-          color: primaryColor,
-          width: 2,
-          dash: "solid",  // Solid line for Q1
-        },
-      },
-      {
-        type: "line",
-        y0: 0,
-        y1: 1,
-        yref: "paper",
-        x0: q3Grade,
-        x1: q3Grade,
-        line: {
-          color: primaryColor,
-          width: 2,
-          dash: "solid",  // Solid line for Q3
         },
       },
       {
@@ -261,44 +236,10 @@ const ExamDetails = () => {
           color: "hsl(var(--foreground))",
         },
       },
-      {
-        y: 1,
-        x: q1Grade,
-        yref: "paper",
-        xref: "x",
-        text: `Q1: ${q1Grade}`,
-        showarrow: true,
-        arrowhead: 7,
-        ax: 0,
-        ay: -40,
-        textangle: 0,
-        font: {
-          family: "var(--font-body)",
-          size: 12,
-          color: "hsl(var(--foreground))",
-        },
-      },
-      {
-        y: 1,
-        x: q3Grade,
-        yref: "paper",
-        xref: "x",
-        text: `Q3: ${q3Grade}`,
-        showarrow: true,
-        arrowhead: 7,
-        ax: 0,
-        ay: -40,
-        textangle: 0,
-        font: {
-          family: "var(--font-body)",
-          size: 12,
-          color: "hsl(var(--foreground))",
-        },
-      },
     ],
   };
 
-  const data = [
+const data = [
     {
       x: grades,
       type: "box",
@@ -319,10 +260,11 @@ const ExamDetails = () => {
         color: primaryColor,
         width: 2,
       },
-      whiskerwidth: 2,
+      whiskerwidth: 0,  // Hide whiskers (upper and lower fences)
       hoverinfo: "x",
     },
   ];
+
   
 
   return (
