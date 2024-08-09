@@ -1,10 +1,73 @@
 # Personal Log
-## Wedndsday (8/02-8/07)
+## Friday (8/02-8/07)
 
 ### Timesheet
 Clockify report  
-![time](../Clockify/Omar/Time18.png)
+![time](../Clockify/Omar/Time20.png)
 
+### Current Tasks (Provide sufficient detail)
+
+1. **Reworked Report Feature**
+   - Implemented the foundational structure for the Report feature, allowing students and instructors to view and contest exam results. Refactored backend routes to efficiently handle report generation and management, with a focus on robust data handling and retrieval.
+   - Added UI components to display report data in a clear, concise manner, including filter options and status indicators for better usability.
+
+2. **Final Presentation**
+   - Completed the final presentation slides.
+
+3. **UI Improvements**
+   - Worked on Individual Report
+
+---
+
+### Progress Update (since 7/16/2024)
+
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong></td>
+        <td><strong>STATUS</strong></td>
+    </tr>
+    <tr>
+        <td>#284 - Report</td>
+        <td>Completed</td>
+    </tr>
+    <tr>
+        <td>#17 - User Story: Custom Bubble Sheet Support</td>
+        <td>Completed</td>
+    </tr>
+    <tr>
+        <td>#271 - Functional Enhancements and Features Related to OMR and Grading</td>
+        <td>Completed</td>
+    </tr>
+        <tr>
+        <td>#301 - Support Screwed images for Custom Bubble Sheet</td>
+        <td>In Progress</td>
+    </tr>
+</table> 
+
+
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+- **What Went Well:**
+  - Completed the report feature over 1 night
+
+- **What Was Done:**
+  - Completed the Final Presentation
+  - Reworked Diagrams
+  - Worked on Individual report
+  - Completed the report feature
+
+- **What Didn't Go Well:**
+  - I had to do the report feature in 1 night
+
+- **Retrospective:**
+  - Made good progress on the individual report
+
+## Wenesday (8/02-8/07)
+
+### Timesheet
+Clockify report  
+![time](../Clockify/Omar/Time19.png)
 ### Current Tasks (Provide sufficient detail)
 
 1. **Reworked Report Feature**
