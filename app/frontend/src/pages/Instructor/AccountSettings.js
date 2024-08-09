@@ -19,31 +19,31 @@ const AccountSettings = () => {
   const { toast } = useToast(); // Using the toast hook
 
   useEffect(() => {
-    const fetchUserRole = async () => {
-      try {
-        const tokenResponse = await axios.post('/api/token', {
-          client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
-          client_secret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
-          audience: `https://${process.env.REACT_APP_AUTH0_DOMAIN}/api/v2/`,
-          grant_type: 'client_credentials'
-        });
+    // const fetchUserRole = async () => {
+    //   try {
+    //     const tokenResponse = await axios.post('/api/token', {
+    //       client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+    //       client_secret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
+    //       audience: `https://${process.env.REACT_APP_AUTH0_DOMAIN}/api/v2/`,
+    //       grant_type: 'client_credentials'
+    //     });
 
-        const managementToken = tokenResponse.data.access_token;
+    //     const managementToken = tokenResponse.data.access_token;
 
-        const response = await axios.get(`https://${process.env.REACT_APP_AUTH0_DOMAIN}/api/v2/users/${user.sub}`, {
-          headers: {
-            Authorization: `Bearer ${managementToken}`
-          }
-        });
+    //     const response = await axios.get(`https://${process.env.REACT_APP_AUTH0_DOMAIN}/api/v2/users/${user.sub}`, {
+    //       headers: {
+    //         Authorization: `Bearer ${managementToken}`
+    //       }
+    //     });
 
-        const userRoles = response.data[`${process.env.REACT_APP_AUTH0_MYAPP}/role`] || [];
-        setRole(userRoles[0] || ''); // Assuming single role assignment for simplicity
-      } catch (error) {
-        console.error('Error fetching user roles:', error);
-      }
-    };
+    //     const userRoles = response.data[`${process.env.REACT_APP_AUTH0_MYAPP}/role`] || [];
+    //     setRole(userRoles[0] || ''); // Assuming single role assignment for simplicity
+    //   } catch (error) {
+    //     console.error('Error fetching user roles:', error);
+    //   }
+    // };
 
-    fetchUserRole();
+    // fetchUserRole();
   }, [user.sub]);
 
   const handleInputChange = (e, setState) => {
