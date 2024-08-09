@@ -122,10 +122,6 @@ const AccountSettings = () => {
                 <Table>
                   <TableBody>
                     <TableRow>
-                      <TableCell>User ID</TableCell>
-                      <TableCell>{user.sub}</TableCell> {/* Displaying user ID */}
-                    </TableRow>
-                    <TableRow>
                       <TableCell>Email</TableCell>
                       <TableCell>{email}</TableCell> {/* Displaying email */}
                     </TableRow>
@@ -141,10 +137,6 @@ const AccountSettings = () => {
                           data-testid="username-input"
                         />
                       </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Role</TableCell>
-                      <TableCell>{role}</TableCell> {/* Displaying role */}
                     </TableRow>
                   </TableBody>
                 </Table>
