@@ -144,7 +144,11 @@ export default function StudentDashboard() {
                                 <span className="font-bold">{exam.exam_title}</span>
                               </TableCell>
                               <TableCell className="hidden sm:table-cell">{exam.course_id}</TableCell>
-                              <TableCell>{exam.graded ? "Graded" : "Not graded"}</TableCell>
+                              <TableCell>
+                                <Badge variant={getExamStatusColor(exam.graded)}>
+                                {exam.graded ? "Graded" : "Not graded"}
+                              </Badge>
+                              </TableCell>
                             </TableRow>
                           </TooltipTrigger>
                           <TooltipContent>

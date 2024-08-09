@@ -271,7 +271,7 @@ const NewExam = () => {
                         state={{ examTitle: examTitle, classID: selectedClassId, courseId: courseId, template, numQuestions, numOptions }}
                         onClick={handleButtonClick}
                       >
-                        Upload Answer Key
+                        Create Answer Key
                       </Link>
                     </Button>
                 </div>
