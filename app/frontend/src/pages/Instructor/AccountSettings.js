@@ -1,102 +1,160 @@
-// src/Instructor/AccountSettings.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../css/App.css';
+import { Button } from "../../components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
+import { Table, TableBody, TableRow, TableCell } from "../../components/ui/table";
+import { Input } from "../../components/ui/input"; // Importing the Shadcn Input component
+import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
+import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
+import { useAuth0 } from '@auth0/auth0-react';
+import axios from 'axios';
 
 const AccountSettings = () => {
-  const [username, setUsername] = useState('Dr. Pepper');
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { user, getAccessTokenSilently } = useAuth0();
+  const [username, setUsername] = useState(user.nickname || '');
+  const [email, setEmail] = useState(user.email || '');
+  const [role, setRole] = useState('');
+  const navigate = useNavigate();
+  const { toast } = useToast(); // Using the toast hook
+
+  useEffect(() => {
+    // const fetchUserRole = async () => {
+    //   try {
+    //     const tokenResponse = await axios.post('/api/token', {
+    //       client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+    //       client_secret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
+    //       audience: `https://${process.env.REACT_APP_AUTH0_DOMAIN}/api/v2/`,
+    //       grant_type: 'client_credentials'
+    //     });
+
+    //     const managementToken = tokenResponse.data.access_token;
+
+    //     const response = await axios.get(`https://${process.env.REACT_APP_AUTH0_DOMAIN}/api/v2/users/${user.sub}`, {
+    //       headers: {
+    //         Authorization: `Bearer ${managementToken}`
+    //       }
+    //     });
+
+    //     const userRoles = response.data[`${process.env.REACT_APP_AUTH0_MYAPP}/role`] || [];
+    //     setRole(userRoles[0] || ''); // Assuming single role assignment for simplicity
+    //   } catch (error) {
+    //     console.error('Error fetching user roles:', error);
+    //   }
+    // };
+
+    // fetchUserRole();
+  }, [user.sub]);
 
   const handleInputChange = (e, setState) => {
     const value = e.target.value;
-    const sanitizedValue = value.replace(/[^a-zA-Z0-9\s.,!?-]/g, ''); //restricts string altering characters
-
+    const sanitizedValue = value.replace(/[^a-zA-Z0-9\s.,!?-]/g, ''); // restricts string altering characters
     setState(sanitizedValue);
   };
 
-  const handleSubmit = () => {
-    if (newPassword !== confirmPassword) {
-      alert('New passwords do not match');
-      return;
-    }
-    // Backend call for saving changes
-    // Implement the backend API call here
-    // NOTE: can discord this if you with to impliment in a differant manner
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
+    try {
+      const token = await getAccessTokenSilently();
+
+      // Update username
+      await axios.post('/api/users/update', {
+        userId: user.sub,
+        username,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      toast({
+        title: "Success",
+        description: "Account settings have been saved.",
+      });
+
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update account settings.",
+        variant: "error"
+      });
+    }
   };
 
-  const handleDeleteAccount = () => {
-    // Backend call for deleting account
-    // Implement the backend API call here
-    // NOTE: can discord this if you with to impliment in a differant manner
+  const handleResetPassword = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+
+      // Trigger password reset email
+      await axios.post('/api/users/reset-password', {
+        email: user.email,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      toast({
+        title: "Success",
+        description: "Password reset email sent.",
+      });
+
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send password reset email.",
+        variant: "error"
+      });
+    }
   };
 
   return (
-    <div className="App">
-      <div className="main-content">
-        <header>
-          <h2 data-testid="header">Account Settings</h2>
-        </header>
-        <section className="account-settings">
-          <div className="user-info">
-            <p>User ID: 75826488</p> {/* //dummy input, will be retrieved with SQL query when implemented */}
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => handleInputChange(e, setUsername)}
-              data-testid="username-input"
-            />
-            <p>*A GradeFalcon Employee will never ask for your password*</p>
-          </div>
-          <div className="change-password">
-            <label htmlFor="old-password">Old Password</label>
-            <input
-              type="password"
-              id="old-password"
-              placeholder="Old Password"
-              value={oldPassword}
-              onChange={(e) => handleInputChange(e, setOldPassword)}
-              data-testid="old-password-input"
-            />
-            <label htmlFor="new-password">New Password</label>
-            <input
-              type="password"
-              id="new-password"
-              placeholder="New Password"
-              value={newPassword}
-              onChange={(e) => handleInputChange(e, setNewPassword)}
-              data-testid="new-password-input"
-            />
-            <label htmlFor="confirm-password">Confirm New Password</label>
-            <input
-              type="password"
-              id="confirm-password"
-              placeholder="Confirm New Password"
-              value={confirmPassword}
-              onChange={(e) => handleInputChange(e, setConfirmPassword)}
-              data-testid="confirm-password-input"
-            />
-            <button
-              className="save-changes-btn"
-              onClick={handleSubmit}
-              data-testid="save-changes-btn"
-            >
-              Save changes
-            </button>
-            <button
-              className="delete-account-btn"
-              onClick={handleDeleteAccount}
-              data-testid="delete-account-btn"
-            >
-              Delete Account
-            </button>
-          </div>
-        </section>
+    <>
+      <div className="main-content flex-1 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
+        <main className="flex flex-col gap-4">
+          <Card className="bg-white border rounded">
+            <CardHeader className="flex justify-between px-6 py-4">
+              <CardTitle className="text-3xl font-bold mb-4">Account Settings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit}>
+                <Table>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>Email</TableCell>
+                      <TableCell>{email}</TableCell> {/* Displaying email */}
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Username</TableCell>
+                      <TableCell>
+                        <Input
+                          type="text"
+                          id="username"
+                          value={username}
+                          onChange={(e) => handleInputChange(e, setUsername)}
+                          className="w-full"
+                          data-testid="username-input"
+                        />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+                <div className="flex justify-between mt-4">
+                  <Button size="sm" className="gap-1 green-button" onClick={handleResetPassword}>
+                    Reset Password
+                  </Button>
+                  <Button type="submit" className="gap-1 green-button" data-testid="save-changes-btn">
+                    Save changes
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </main>
       </div>
-    </div>
+      <Toaster /> {/* Adding the Toaster component */}
+    </>
   );
 };
 
