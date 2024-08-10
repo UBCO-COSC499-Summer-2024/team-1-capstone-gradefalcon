@@ -6,7 +6,7 @@ Here's an updated **Student User Guide** for GradeFalcon based on the new detail
 
 **Version:** 1.0  
 **Date:** August 2024  
-**Developed by:** [Your Team Name]
+**Developed by:** [GradeFalcon]
 
 ---
 
@@ -45,11 +45,30 @@ GradeFalcon is an online platform designed to help students view their graded ex
 ### **Signing Up and Logging In**
 
 1. **Receiving an Invitation:**
-   - If your instructor has enrolled you in a course, you will receive an email invitation. Follow the link in the email to create your account.
-   - If you already have an account you will automatically be added to the course 
+   - If your instructor has enrolled you in a course, you will receive an email invitation.
+   - ![Student Dashboard](../studentView/VerifyAccount.png)
+   - Follow the link in the email to verify your account.
+   - ![Student Dashboard](../studentView/EmailVerified.png)
+   - Once your account has been verified navigate back to the gradefalcon webpage.
+   - ![Student Dashboard](../studentView/DontHavePassword.png)
+   - You will notice that it asks for your email and password but because it is your first time logging in you MUST CLICK ON DON'T HAVE A PASSWORD/FORGOT PASSWORD BUTTON where you will recieve an email prompting you to change your password
+   - ![Student Dashboard](../studentView/PasswordEmail.png)
+   - Press on the link where you will be directed to the new password page
+   - ![Student Dashboard](../studentView/GetNewPassword.png)
+   - Set a new password and confirm it after this you will be directed to a password verified page
+   - ![Student Dashboard](../studentView/PasswordVerified.png)
+   - From here navigate back to the Gradefalcon login page and enter your credentials
+   - ![Student Dashboard](../studentView/Login.png)
+   - After logging in for the first time auth0 will ask you kindly for permission to use your information.
+   - ![Student Dashboard](../studentView/VerifyAccount.png)
+  
+   
+   - From here you will be directed to the main dashboard
+   - If you already have an account you will be asked to login with your credentials and then directed to the dashboard page where you will automatically be added to the course the instructor registered you for. 
 
 2. **Logging In:**
    - Visit the GradeFalcon login page and sign in with your credentials.
+   - ![Student Dashboard](../studentView/Login.png)
    - If you forget your password, click the “Forgot Password” link to reset it.
 
 ---
