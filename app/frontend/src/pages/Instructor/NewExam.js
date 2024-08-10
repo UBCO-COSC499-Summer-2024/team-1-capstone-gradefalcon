@@ -251,7 +251,7 @@ const NewExam = () => {
         <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-1 w-1/3">
              <Card className="bg-white border rounded-lg p-6 w-full">
               <CardHeader className="flex justify-between px-6 py-4">
-                <CardTitle className="mb-2">Upload Exam Key</CardTitle>
+                <CardTitle className="mb-2">Create Exam Key</CardTitle>
                 <CardDescription>Choose how you would like to create the exam key</CardDescription>
               </CardHeader>
               <CardContent>
@@ -271,7 +271,7 @@ const NewExam = () => {
                         state={{ examTitle: examTitle, classID: selectedClassId, courseId: courseId, template, numQuestions, numOptions }}
                         onClick={handleButtonClick}
                       >
-                        Create Answer Key
+                        Upload Exam Key
                       </Link>
                     </Button>
                 </div>
