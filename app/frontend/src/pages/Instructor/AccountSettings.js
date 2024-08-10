@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../css/App.css';
 import { Button } from "../../components/ui/button";
@@ -7,14 +7,44 @@ import { Table, TableBody, TableRow, TableCell } from "../../components/ui/table
 import { Input } from "../../components/ui/input"; // Importing the Shadcn Input component
 import { useToast } from "../../components/ui/use-toast"; // Importing the useToast hook
 import { Toaster } from "../../components/ui/toaster"; // Importing the Toaster component
+import { useAuth0 } from '@auth0/auth0-react';
+import axios from 'axios';
 
 const AccountSettings = () => {
-  const [username, setUsername] = useState('Dr. Pepper');
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { user, getAccessTokenSilently } = useAuth0();
+  const [username, setUsername] = useState(user.nickname || '');
+  const [email, setEmail] = useState(user.email || '');
+  const [role, setRole] = useState('');
   const navigate = useNavigate();
   const { toast } = useToast(); // Using the toast hook
+
+  useEffect(() => {
+    // const fetchUserRole = async () => {
+    //   try {
+    //     const tokenResponse = await axios.post('/api/token', {
+    //       client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+    //       client_secret: process.env.REACT_APP_AUTH0_CLIENT_SECRET,
+    //       audience: `https://${process.env.REACT_APP_AUTH0_DOMAIN}/api/v2/`,
+    //       grant_type: 'client_credentials'
+    //     });
+
+    //     const managementToken = tokenResponse.data.access_token;
+
+    //     const response = await axios.get(`https://${process.env.REACT_APP_AUTH0_DOMAIN}/api/v2/users/${user.sub}`, {
+    //       headers: {
+    //         Authorization: `Bearer ${managementToken}`
+    //       }
+    //     });
+
+    //     const userRoles = response.data[`${process.env.REACT_APP_AUTH0_MYAPP}/role`] || [];
+    //     setRole(userRoles[0] || ''); // Assuming single role assignment for simplicity
+    //   } catch (error) {
+    //     console.error('Error fetching user roles:', error);
+    //   }
+    // };
+
+    // fetchUserRole();
+  }, [user.sub]);
 
   const handleInputChange = (e, setState) => {
     const value = e.target.value;
@@ -22,25 +52,63 @@ const AccountSettings = () => {
     setState(sanitizedValue);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (newPassword !== confirmPassword) {
+
+    try {
+      const token = await getAccessTokenSilently();
+
+      // Update username
+      await axios.post('/api/users/update', {
+        userId: user.sub,
+        username,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      toast({
+        title: "Success",
+        description: "Account settings have been saved.",
+      });
+
+    } catch (error) {
       toast({
         title: "Error",
-        description: "New passwords do not match.",
+        description: "Failed to update account settings.",
         variant: "error"
       });
-      return;
     }
-
-    // Backend call for saving changes
-    // Implement the backend API call here
-    toast({
-      title: "Success",
-      description: "Account settings have been saved.",
-    });
   };
-  
+
+  const handleResetPassword = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+
+      // Trigger password reset email
+      await axios.post('/api/users/reset-password', {
+        email: user.email,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      toast({
+        title: "Success",
+        description: "Password reset email sent.",
+      });
+
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send password reset email.",
+        variant: "error"
+      });
+    }
+  };
+
   return (
     <>
       <div className="main-content flex-1 p-8 bg-gradient-to-r from-gradient-start to-gradient-end">
@@ -54,8 +122,8 @@ const AccountSettings = () => {
                 <Table>
                   <TableBody>
                     <TableRow>
-                      <TableCell>User ID</TableCell>
-                      <TableCell>75826488</TableCell> {/* dummy input, will be retrieved with SQL query when implemented */}
+                      <TableCell>Email</TableCell>
+                      <TableCell>{email}</TableCell> {/* Displaying email */}
                     </TableRow>
                     <TableRow>
                       <TableCell>Username</TableCell>
@@ -70,53 +138,11 @@ const AccountSettings = () => {
                         />
                       </TableCell>
                     </TableRow>
-                    <TableRow>
-                      <TableCell>Old Password</TableCell>
-                      <TableCell>
-                        <Input
-                          type="password"
-                          id="old-password"
-                          placeholder="Old Password"
-                          value={oldPassword}
-                          onChange={(e) => handleInputChange(e, setOldPassword)}
-                          className="w-full"
-                          data-testid="old-password-input"
-                        />
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>New Password</TableCell>
-                      <TableCell>
-                        <Input
-                          type="password"
-                          id="new-password"
-                          placeholder="New Password"
-                          value={newPassword}
-                          onChange={(e) => handleInputChange(e, setNewPassword)}
-                          className="w-full"
-                          data-testid="new-password-input"
-                        />
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Confirm New Password</TableCell>
-                      <TableCell>
-                        <Input
-                          type="password"
-                          id="confirm-password"
-                          placeholder="Confirm New Password"
-                          value={confirmPassword}
-                          onChange={(e) => handleInputChange(e, setConfirmPassword)}
-                          className="w-full"
-                          data-testid="confirm-password-input"
-                        />
-                      </TableCell>
-                    </TableRow>
                   </TableBody>
                 </Table>
                 <div className="flex justify-between mt-4">
-                  <Button size="sm" className="gap-1 green-button" onClick={() => window.history.back()}>
-                    Back
+                  <Button size="sm" className="gap-1 green-button" onClick={handleResetPassword}>
+                    Reset Password
                   </Button>
                   <Button type="submit" className="gap-1 green-button" data-testid="save-changes-btn">
                     Save changes

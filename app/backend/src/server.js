@@ -5,6 +5,7 @@ const PgSession = require('connect-pg-simple')(session);
 const bodyParser = require('body-parser');
 const pool = require('./utils/db');
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
+const { getAuth0ManagementToken } = require('./auth0');
 
 const classRoutes = require('./routes/classRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -42,7 +43,7 @@ const checkJwt = auth({
 
 const checkRole = (role) => {
   return (req, res, next) => {
-    const roles = req.auth.payload[`${process.env.AUTH0_MYAPP}/role`] || [];
+    const roles = req.auth.payload[`${process.env.REACT_APP_AUTH0_MYAPP}/role`] || [];
     if (roles.includes(role)) {
       next();
     } else {
@@ -55,7 +56,13 @@ const checkPermissions = (permissions) => {
   return requiredScopes(permissions);
 };
 
-module.exports = { checkRole, checkJwt, checkPermissions };
+app.use('/class', checkJwt, classRoutes);
+app.use('/exam', checkJwt, examRoutes);
+app.use('/users', checkJwt, userRoutes);
+app.use('/upload', checkJwt, uploadRoutes);
+app.use('/courses', checkJwt, courseRoutes);
+app.use('/reports', checkJwt, reportRoutes);
+app.post('/token', getAuth0ManagementToken); // New route for token generation
 
 app.get('/api/public', (req, res) => {
   res.json({
@@ -75,13 +82,6 @@ app.get('/api/private-scoped', checkJwt, requiredScopes('read:messages'), (req, 
   });
 });
 
-app.use('/class', checkJwt, classRoutes);
-app.use('/exam', checkJwt,  examRoutes);
-app.use('/users', checkJwt,  userRoutes);
-app.use('/upload', checkJwt,  uploadRoutes);
-app.use('/courses', checkJwt,  courseRoutes);
-app.use('/reports', checkJwt, reportRoutes);
-
 app.get('/healthz', (req, res) => {
   res.send('I am happy and healthy\n');
 });
@@ -93,7 +93,6 @@ app.get("/session-info", (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 80; 
-console.log(`Starting server on port ${PORT}`);
+const PORT = process.env.PORT || 80;
 
 module.exports = app;
