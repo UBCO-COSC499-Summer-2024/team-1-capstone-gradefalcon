@@ -9,7 +9,7 @@ steps:
       - git clone https://github.com/UBCO-COSC499-Summer-2024/team-1-capstone-gradefalcon.git
       - cd team-1-capstone-gradefalcon
 
-  - name: backend
+  - name: build-and-run-backend
     image: docker:20
     environment:
       DOCKER_BUILDKIT: 1
@@ -17,11 +17,10 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     commands:
-      - cd team-1-capstone-gradefalcon/app/backend
-      - docker-compose up --build -d db
-      - docker-compose up --build -d backend
+      - cd team-1-capstone-gradefalcon
+      - docker-compose up --build -d db backend flaskomr
 
-  - name: frontend
+  - name: build-and-run-frontend
     image: docker:20
     environment:
       DOCKER_BUILDKIT: 1
@@ -29,7 +28,7 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     commands:
-      - cd team-1-capstone-gradefalcon/app/frontend
+      - cd team-1-capstone-gradefalcon
       - docker-compose up --build -d frontend
       - docker-compose exec frontend npm install
       - docker-compose exec frontend npm run test
