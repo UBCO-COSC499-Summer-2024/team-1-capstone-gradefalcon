@@ -8,6 +8,8 @@
 4. Jusnoor Kaur Sachdeva
 5. Bennett Witt
 
+User guides for this app can be found in `docs/guides`
+
 **File Structure**
 ```
 ├── docs                    # Documentation files (alternatively `doc`)
