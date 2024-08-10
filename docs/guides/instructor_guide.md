@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Date:** August 2024  
-**Developed by:** [Your Team Name]
+**Developed by:** Team 1
 
 ---
 
@@ -13,7 +13,7 @@
 3. [Getting Started](#3-getting-started)
    - [Logging In](#logging-in)
    - [Dashboard Overview](#dashboard-overview)
-4. [Managing Classes](#4-managing-classes)
+4. [Classes](#4-classes)
    - [Creating a New Class](#creating-a-new-class)
    - [Inviting Students](#inviting-students)
    - [Viewing and Editing Classes](#viewing-and-editing-classes)
@@ -64,34 +64,43 @@ GradeFalcon is a web-based Optical Mark Recognition (OMR) system designed to str
 
 ### **Logging In**
 
-To access GradeFalcon, visit the login page and sign in with your credentials. If you’re new, you’ll receive an invitation via email after your instructor creates a class for you.
+To access GradeFalcon, visit the login page and sign in with your credentials. 
+![Login](images/login.PNG)
+![Login](images/login_info.png)
 
-### **Dashboard Overview**
 
-Upon logging in, you’ll be directed to the dashboard. The dashboard provides a quick overview of your courses, exams, and key actions such as creating new exams or viewing exam results.
+Upon logging in, you’ll be directed to the dashboard. The dashboard provides a quick overview of your courses, exams, and key actions such as creating new classes exams or viewing exam results.
+![Instructor Dashboard](images/instructor_dashboard.PNG)
 
 ---
 
-## **4. Managing Classes**
+## **4. Classes**
 
 ### **Creating a New Class**
 
-1. Navigate to the “Classes” section from the dashboard.
+1. Click on either the plus sign at the top right of the classes card on the dashboard OR navigate to the bottom of the “Classes” section from the navbar on the left.
+   
+![New class](images/new_class_1.png)
+
 2. Click on the “Create Class” button.
-3. Fill in the necessary details, such as the class name, description, and term.
-4. Click “Save” to create the class.
+3. Fill in the necessary details, such as the course name and course code.
+4. Click on the 'Choose File' button to import a list of students. If a student is already registered for GradeFalcon, they will be automatically added. Otherwise, they will be sent an invite link with which they can register.
+   
+![alt text](images/new_class_2.png)
 
-### **Inviting Students**
+1. The new class is now displayed on the exam board
+![alt text](images/new_class_3.png)
 
-1. After creating a class, you can invite students by navigating to the class details page.
-2. Click on “Invite Students.”
-3. Enter the email addresses of the students you wish to invite.
-4. Click “Send Invitations.”
+1. You can click on the course and view it's details. The class list can be exported by clicking the export button on the top right.
+![alt text](images/new_class_4.png)
 
-### **Viewing and Editing Classes**
+## 5. Exams
 
-To view or edit a class, simply click on the class name from your dashboard. From here, you can update class details or manage enrolled students.
+### **Creating a New Exam**
 
----
+1. Click on the plus button on the top right of the exam card or navigate to the exam board and click the button there
 
-## **5.
+2. You will be redirected to the new exam page. Here you can enter the name of the exam and choose the course you'd like to create it for.
+![New exam](images/new_exam_1.png)
+3.  
+
