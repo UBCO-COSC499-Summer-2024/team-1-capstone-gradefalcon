@@ -46,15 +46,15 @@ GradeFalcon is an online platform designed to help students view their graded ex
 
 1. **Receiving an Invitation:**
    - If your instructor has enrolled you in a course, you will receive an email invitation.
-   - ![Student Dashboard](../studentView/VerifyAccount.png)
+   - ![Student Dashboard](../studentView/InviteEmail.png)
    - Follow the link in the email to verify your account.
    - ![Student Dashboard](../studentView/EmailVerified.png)
    - Once your account has been verified navigate back to the gradefalcon webpage.
    - ![Student Dashboard](../studentView/DontHavePassword.png)
    - You will notice that it asks for your email and password but because it is your first time logging in you MUST CLICK ON DON'T HAVE A PASSWORD/FORGOT PASSWORD BUTTON where you will recieve an email prompting you to change your password
-   - ![Student Dashboard](../studentView/PasswordEmail.png)
-   - Press on the link where you will be directed to the new password page
    - ![Student Dashboard](../studentView/GetNewPassword.png)
+   - Press on the link where you will be directed to the new password page
+   - ![Student Dashboard](../studentView/PasswordEmail.png)
    - Set a new password and confirm it after this you will be directed to a password verified page
    - ![Student Dashboard](../studentView/PasswordVerified.png)
    - From here navigate back to the Gradefalcon login page and enter your credentials
