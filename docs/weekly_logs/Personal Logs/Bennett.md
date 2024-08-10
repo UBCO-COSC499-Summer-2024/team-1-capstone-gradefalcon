@@ -1,5 +1,43 @@
 # Personal Log
 
+## Thursday (8/07 - 8/08)
+
+## TimeSheet
+Clockify report
+![alt text](../Clockify/Bennett/08_07_2024-08_08_2024.png.png)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Client Demo presentation preparation with team
+
+
+### Progress Update (since 6/26/2024) 
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr>
+    <tr>
+        <!-- Task/Issue # -->
+        <td>1
+        </td>
+        <!-- Status -->
+        <td>COMPLETED
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+  * Spent a few hours before the client demo preparing for it with the team, rest was individual responsibilities not relevant to team log
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * Getting individual project responsibilities done before repo closure
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Personal Log
+
 ## Tuesday (8/02 - 8/06)
 
 ## TimeSheet
