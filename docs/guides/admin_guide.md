@@ -49,7 +49,7 @@ GradeFalcon is a comprehensive online platform designed to enhance the efficienc
 1. **Setting Up pgAdmin:**
    - Install pgAdmin on your system if it’s not already installed.
    - Connect to the GradeFalcon database using the provided connection details.
-   - ![pgAdmin](../adminView/pgadmin_login.png)
+   - ![pgAdmin](../guides/adminView/pgadmin_login.png)
 
 2. **Navigating pgAdmin:**
    - Once connected, you can view and manage the database structure, tables, and data.
@@ -59,11 +59,11 @@ GradeFalcon is a comprehensive online platform designed to enhance the efficienc
 1. **Logging In:**
    - Visit the Auth0 dashboard login page.
    - Sign in using your Auth0 administrator credentials.
-   - ![Auth0 Login](../adminView/auth0_login.png)
+   - ![Auth0 Login](../guides/adminView/auth0_login.png)
 
 2. **Navigating the Dashboard:**
    - Use the dashboard to manage applications, users, roles, custom APIs, and access logs.
-   - ![Auth0 Dashboard](../adminView/auth0_dashboard.png)
+   - ![Auth0 Dashboard](../guides/adminView/auth0_dashboard.png)
 
    For more detailed guidance on using the Auth0 dashboard, refer to the [Auth0 Documentation](https://auth0.com/docs/dashboard).
 
@@ -75,15 +75,15 @@ GradeFalcon is a comprehensive online platform designed to enhance the efficienc
 
 1. **Navigating to Users:**
    - In the Auth0 dashboard, go to the "Users" section.
-   - ![Users Section](../adminView/auth0_users.png)
+   - ![Users Section](../guides/adminView/auth0_users.png)
 
 2. **Creating a New User:**
    - Click on "Create User" (in most instances will be to add a new instructor.)
    - Fill in the email and password fields for the instructor account.
    - Click "Create" to save the new user.
    - Assign the role of "Instructor" to the user and any associated permissions get automatically given to the user.
-   - ![Create Instructor](../adminView/auth0_create_instructor0.png)
-   - ![Create Instructor](../adminView/auth0_create_instructor1.png)
+   - ![Create Instructor](../guides/adminView/auth0_create_instructor0.png)
+   - ![Create Instructor](../guides/adminView/auth0_create_instructor1.png)
 
 ### **Editing User Details**
 
@@ -96,8 +96,8 @@ GradeFalcon is a comprehensive online platform designed to enhance the efficienc
    - An admin cannot edit another users password, but can send said user a password change email.
    - Assign or change roles using the "Roles" tab.
    - Click "Save" to apply the changes.
-   - ![Edit User](../adminView/auth0_edit_user0.png)   
-   - ![Edit User](../adminView/auth0_edit_user1.png)
+   - ![Edit User](../guides/adminView/auth0_edit_user0.png)   
+   - ![Edit User](../guides/adminView/auth0_edit_user1.png)
 
 
 ### **Removing a User**
@@ -108,7 +108,7 @@ GradeFalcon is a comprehensive online platform designed to enhance the efficienc
 2. **Deleting the User:**
    - Click on the user's name to view their profile.
    - Click the "Delete" button and confirm the action to remove the user from the system.
-   - ![Delete User](../adminView/auth0_delete_user.png)
+   - ![Delete User](../guides/adminView/auth0_delete_user.png)
 
 ### **Checking Activity Logs**
 
@@ -118,7 +118,7 @@ GradeFalcon is a comprehensive online platform designed to enhance the efficienc
 2. **Reviewing Activity:**
    - Use filters to search for specific events or user activities.
    - Analyze logs to monitor user logins, role changes, and security-related events.
-   - ![Activity Logs](../adminView/auth0_activity_logs.png)
+   - ![Activity Logs](../guides/adminView/auth0_activity_logs.png)
 
    For more information on monitoring and logs, refer to the [Auth0 Monitoring and Logs Guide](https://auth0.com/docs/logs).
 
@@ -130,25 +130,25 @@ GradeFalcon is a comprehensive online platform designed to enhance the efficienc
 
 1. **Navigating to APIs:**
    - In the Auth0 dashboard, go to the "APIs" section.
-   - ![APIs Section](../adminView/auth0_apis.png)
+   - ![APIs Section](../guides/adminView/auth0_apis.png)
 
 2. **Creating a New API:**
    - Click on "Create API."
    - Enter the API name, identifier, and other settings.
    - Define scopes and permissions for the API.
    - Click "Create" to save the new API.
-   - ![Create API](../adminView/auth0_create_api.png)
+   - ![Create API](../guides/adminView/auth0_create_api.png)
 
 ### **Managing Permissions for APIs**
 
 1. **Viewing API Permissions:**
    - Select the API you want to manage permissions for.
-   - ![Manage API](../adminView/auth0_manage_api.png)
+   - ![Manage API](../guides/adminView/auth0_manage_api.png)
 
 2. **Editing Permissions:**
    - Add or modify permissions to align with the API endpoints.
    - Assign these permissions to roles as necessary in the roles section under "user management"
-   - ![Edit Permissions](../adminView/auth0_edit_permissions.png)
+   - ![Edit Permissions](../guides/adminView/auth0_edit_permissions.png)
 
    For detailed guidance, check the [Auth0 API Documentation](https://auth0.com/docs/api).
 
@@ -170,7 +170,7 @@ As an administrator, you have full access to the GradeFalcon database via pgAdmi
    - To view records, open the desired table and click "View/Edit Data."
    - Right-click on any row to edit the data directly.
    - Make sure to adhere to data integrity rules while making changes.
-   - ![Manage Database](../adminView/pgadmin_manage_database.png)
+   - ![Manage Database](../guides/adminView/pgadmin_manage_database.png)
 
 3. **Inserting New Records:**
    - Right-click on the table where you want to add data and select "Insert Data."
