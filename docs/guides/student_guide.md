@@ -1,7 +1,3 @@
-Here's an updated **Student User Guide** for GradeFalcon based on the new details:
-
----
-
 # **GradeFalcon Student User Guide**
 
 **Version:** 1.0  
@@ -188,7 +184,3 @@ If you believe there was an error in your grading, you can contest it through tw
 ---
 
 **Thank you for using GradeFalcon!**
-
----
-
-This guide should help students navigate and utilize GradeFalcon effectively. You can place this guide in the `docs/` folder of your repository or create a `student_guide.md` file at the root level. Make sure it's easily accessible to students.
