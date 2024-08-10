@@ -15,13 +15,10 @@
    - [Dashboard Overview](#dashboard-overview)
 4. [Classes](#4-classes)
    - [Creating a New Class](#creating-a-new-class)
-   - [Inviting Students](#inviting-students)
-   - [Viewing and Editing Classes](#viewing-and-editing-classes)
-5. [Creating and Managing Exams](#5-creating-and-managing-exams)
-   - [Creating an Exam](#creating-an-exam)
-     - [Default Templates](#default-templates)
-     - [Custom Templates](#custom-templates)
-   - [Uploading Exam Keys](#uploading-exam-keys)
+5. [Exams](#5-exams)
+   - [Creating a New Exam](#creating-a-new-exam)
+   - [Uploading the solution key](#uploading-the-solution-key)
+   - [Creating a custom exam sheet](#creating-a-custom-exam-sheet)
    - [Grading Exams](#grading-exams)
    - [Viewing Exam Statistics](#viewing-exam-statistics)
 6. [Student Interface](#6-student-interface)
@@ -65,12 +62,12 @@ GradeFalcon is a web-based Optical Mark Recognition (OMR) system designed to str
 ### **Logging In**
 
 To access GradeFalcon, visit the login page and sign in with your credentials. 
-![Login](images/login.PNG)
-![Login](images/login_info.png)
+![Login](instructorView/login.PNG)
+![Login](instructorView/login_info.png)
 
 
 Upon logging in, you’ll be directed to the dashboard. The dashboard provides a quick overview of your courses, exams, and key actions such as creating new classes exams or viewing exam results.
-![Instructor Dashboard](images/instructor_dashboard.PNG)
+![Instructor Dashboard](instructorView/instructor_dashboard.PNG)
 
 ---
 
@@ -80,19 +77,19 @@ Upon logging in, you’ll be directed to the dashboard. The dashboard provides a
 
 1. Click on either the plus sign at the top right of the classes card on the dashboard OR navigate to the bottom of the “Classes” section from the navbar on the left.
    
-![New class](images/new_class_1.png)
+![New class](instructorView/new_class_1.png)
 
 2. Click on the “Create Class” button.
 3. Fill in the necessary details, such as the course name and course code.
 4. Click on the 'Choose File' button to import a list of students. If a student is already registered for GradeFalcon, they will be automatically added. Otherwise, they will be sent an invite link with which they can register.
    
-![alt text](images/new_class_2.png)
+![alt text](instructorView/new_class_2.png)
 
 1. The new class is now displayed on the exam board
-![alt text](images/new_class_3.png)
+![alt text](instructorView/new_class_3.png)
 
 1. You can click on the course and view it's details. The class list can be exported by clicking the export button on the top right.
-![alt text](images/new_class_4.png)
+![alt text](instructorView/new_class_4.png)
 
 ## 5. Exams
 
@@ -101,54 +98,48 @@ Upon logging in, you’ll be directed to the dashboard. The dashboard provides a
 1. Click on the plus button on the top right of the exam card or navigate to the exam board and click the button there
 
 2. You will be redirected to the new exam page. Here you can enter the name of the exam and choose the course you'd like to create it for.
-![New exam](images/new_exam_1.png)
-3.  
+![New exam](instructorView/new_exam_1.png)
 
-Here's a section of the instructor user guide covering the report feature, including placeholders for where to insert images:
+1. Next you must choose the template for your exam. You can choose either the 100MCQ or 200MCQ template or create a custom one. Let's choose the existing 100MCQ sheet. 
+![Select template](instructorView/new_exam_2.png)  
 
----
+1. On the upload exam key page, you can choose to either create the exam key from an existing filled out PDF sheet or manually select the answers. Let's manually select the answers.
+![Upload or manual](instructorView/new_exam_3.png)
 
-## **Managing Student Reports**
+1. You can set the number of questions for your exam and select the right answers.
+![manual](instructorView/manual_exam_key.png)
 
-As an instructor, you can access and manage student reports through the Report Dashboard. This section will guide you through the steps for handling reports.
+1. GradeFalcon supports a custom marking scheme, which means you can increase the weight of certain questions, as well as penalize students for getting a question wrong.
+![custom marking](instructorView/custom_marking.png)
 
-### **Accessing the Report Dashboard**
+1. After clicking next, you can choose to let the student see their submitted and/or the solution to the exam. Click on 'Confirm' to save and create the exam.
+![viewing options](instructorView/viewing_options.png)
+The exam will then appear in the exam board.
+![exam board](instructorView/exam_board.png)
 
-1. Navigate to the Report Dashboard from the sidebar.
-2. The Report Dashboard displays all submitted reports along with their submission dates.
+### **Uploading the solution key**
 
-![Report Dashboard Overview](./images/ReportsDashboard.png)
+1. To create an exam by scanning an already filled in bubble sheet, click on 'Upload Exam Key' when creating an exam key.
+![Upload or manual](instructorView/new_exam_3.png)
 
-### **Handling a Report**
+2. Click on the 'Browse files' button and upload the appropriate PDF file to create an answer key from the given file. Click on the 'Import' button to let the OMR scan it. 
+![upload exam key](instructorView/upload_exam_key.png)
 
-1. **Viewing a Report:**
-   - Click on any report in the dashboard to view its details. You will see the student's comments, the exam grade, and any additional information provided.
+3. The OMR will begin scanning the key. Once it finishes, it will automatically fill in the bubble grid according to what was on the sheet.
+![exam key scan](instructorView/exam_key_scan.png)
 
-2. **Regrading an Exam:**
-   - If a regrade is required, you can adjust the grade directly from the report interface.
-   - After making the necessary changes, submit your updated grade.
+You can now proceed with setting the viewing options and saving the exam.
 
-![Viewing and Regrading a Report](./images/ViewReport.png)
+### **Creating a custom exam sheet**
 
-3. **Replying to a Report:**
-   - You can reply to the student's report with any comments or explanations.
-   - Once you've addressed the report, mark it as closed. This will update the report's status to "Closed."
+1. To create a custom exam sheet, select the 'Custom' option from template selection menu. A menu will pop up allowing you to set the number of questions and number of options per question. GradeFalcon supports up to 255 questions and 2-5 options per question.
+![select custom template](instructorView/select_custom_template.png)
 
-### **Reopening and Editing a Closed Report**
+2. After clicking on the generate PDF button, a PDF file will automatically be downloaded with the specified parameters. The course code and exam name is displayed at the top.
+![downloaded pdf](instructorView/downloaded_pdf.png)
 
-1. **Reopening a Report:**
-   - If necessary, you can reopen a closed report to make further edits or adjustments.
-   - Once reopened, you can modify the grade, update your reply, and re-close the report.
+This can then be uploaded and used in the upload exam key page.
 
-2. **Editing a Report:**
-   - After reopening, you have the ability to make any additional changes needed, ensuring all concerns are addressed.
+### **Grading Exams**
 
-![Reopening and Editing a Report](./images/ReopenReport.png)
-
-### **Report Status**
-
-- **Open:** The report is active and requires attention.
-- **Closed:** The report has been addressed, and no further action is required.
-- **Reopened:** The report was closed but has been reopened for further action.
-
-By effectively managing student reports, you can ensure that all grading concerns are handled promptly and fairly.
+1. To grade the exams for a course, we
