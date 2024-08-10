@@ -8,38 +8,20 @@
 
 ## **Table of Contents**
 
-1. [Introduction](#1-introduction)
-2. [System Requirements](#2-system-requirements)
-3. [Getting Started](#3-getting-started)
-   - [Logging In](#logging-in)
-   - [Dashboard Overview](#dashboard-overview)
-4. [Classes](#4-classes)
-   - [Creating a New Class](#creating-a-new-class)
-5. [Exams](#5-exams)
-   - [Creating a New Exam](#creating-a-new-exam)
-   - [Uploading the solution key](#uploading-the-solution-key)
-   - [Creating a custom exam sheet](#creating-a-custom-exam-sheet)
-   - [Grading Exams](#grading-exams)
-   - [Viewing Exam Statistics](#viewing-exam-statistics)
-6. [Student Interface](#6-student-interface)
-   - [Viewing Exam Results](#viewing-exam-results)
-   - [Contesting Grades](#contesting-grades)
-7. [Reports and Notifications](#7-reports-and-notifications)
-   - [Managing Student Reports](#managing-student-reports)
-   - [Responding to Reports](#responding-to-reports)
-8. [Managing Roles and Permissions](#8-managing-roles-and-permissions)
-   - [Instructor Roles](#instructor-roles)
-   - [Admin Roles](#admin-roles)
-9. [Exporting Data](#9-exporting-data)
-   - [Exporting Grades to CSV](#exporting-grades-to-csv)
-   - [Integrating with Canvas](#integrating-with-canvas)
-10. [Visual Analytics](#10-visual-analytics)
-    - [Viewing and Interpreting Charts](#viewing-and-interpreting-charts)
-11. [Advanced Features](#11-advanced-features)
-    - [Custom Marking Schemes](#custom-marking-schemes)
-    - [Visual Output of Graded Exams](#visual-output-of-graded-exams)
-12. [Troubleshooting and FAQs](#12-troubleshooting-and-faqs)
-13. [Contact Support](#13-contact-support)
+- [**GradeFalcon User Guide**](#gradefalcon-user-guide)
+  - [**Table of Contents**](#table-of-contents)
+  - [**1. Introduction**](#1-introduction)
+  - [**2. System Requirements**](#2-system-requirements)
+  - [**3. Getting Started**](#3-getting-started)
+    - [**Logging In**](#logging-in)
+  - [**4. Classes**](#4-classes)
+    - [**Creating a New Class**](#creating-a-new-class)
+  - [5. Exams](#5-exams)
+    - [**Creating a New Exam**](#creating-a-new-exam)
+    - [**Uploading the solution key**](#uploading-the-solution-key)
+    - [**Creating a custom exam sheet**](#creating-a-custom-exam-sheet)
+    - [**Grading Exams**](#grading-exams)
+    - [**Viewing Exam Statistics**](#viewing-exam-statistics)
 
 ---
 
@@ -142,4 +124,24 @@ This can then be uploaded and used in the upload exam key page.
 
 ### **Grading Exams**
 
-1. To grade the exams for a course, we
+1. To grade the exams for a course, we can click on the 3 dots for an exam on the Exam board
+![exam board grading](instructorView/exam_board_grading.png)
+
+2. Upload the stack of exams to be graded and click on the 'Import' button on the top right. The OMR will begin scanning and marking the exams.
+   
+3. After the OMR is finished, the results of the scan will popup. If there is a student ID that is not found in the database, the student name will show up as 'Unknown student'
+![review exams](instructorView/review_exams.png)
+
+4. We can click on any of the exams to see details about it.
+![view page](instructorView/view_page.png)
+We can also see the original images as well as their scanned copies.
+![scanned exams](instructorView/view_scanned.png)
+
+5. Back on the review exams page, click on 'Save Results' to save the results of the scan.
+
+### **Viewing Exam Statistics**
+
+To view statistics for an exam, navigate to the details of that exam and on the top right click on the button that says "View Box Plot"
+![box plot](instructorView/box_plot.png)
+You can also view a question-by-question distribution of answers by clicking the button right next to it saying 'View question distribution'
+![Question distribution](instructorView/question_distribution.png)
