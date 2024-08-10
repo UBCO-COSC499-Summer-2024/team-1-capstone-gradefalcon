@@ -46,7 +46,7 @@ GradeFalcon is an online platform designed to help students view their graded ex
 
 1. **Receiving an Invitation:**
    - If your instructor has enrolled you in a course, you will receive an email invitation.
-   - ![Student Dashboard](../studentView/VerifyAccount.png)
+   - ![Student Dashboard](../studentView/InviteEmail.png)
    - Follow the link in the email to verify your account.
    - ![Student Dashboard](../studentView/EmailVerified.png)
    - Once your account has been verified navigate back to the gradefalcon webpage.
