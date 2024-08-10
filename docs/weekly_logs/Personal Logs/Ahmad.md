@@ -1,6 +1,43 @@
 # Personal Log
 Ahmad Saleem Mirza
 
+## Friday (Aug 7 - Aug 9)
+
+### Timesheet
+Clockify report
+![alt text](../Clockify/Ahmad/Aug2-7.jpg)
+
+### Current Tasks (Provide sufficient detail)
+  * #1: Individual report
+
+### Progress Update
+<table>
+    <tr>
+        <td><strong>TASK/ISSUE #</strong>
+        </td>
+        <td><strong>STATUS</strong>
+        </td>
+    </tr> 
+    <tr>
+        <!-- Task/Issue # -->
+        <td>Maintain a changelog of grade changes
+        </td>
+        <!-- Status -->
+        <td>Completed
+        </td>
+    </tr>
+</table>
+
+### Cycle Goal Review (Reflection: what went well, what was done, what didn't; Retrospective: how is the process going and why?)
+
+Development is mostly complete, this cycle mostly involved preparation for the demo in front of the client and the presentation on Friday. I have been dedicated time to writing documentation and the individual for this project. I have not counted this time in my clockify logs.
+
+### Next Cycle Goals (What are you going to accomplish during the next cycle)
+  * I'm done :)
+
+
+
+
 ## Wednesday (Aug 2 - Aug 7)
 
 ### Timesheet
