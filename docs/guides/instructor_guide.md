@@ -104,3 +104,51 @@ Upon logging in, you’ll be directed to the dashboard. The dashboard provides a
 ![New exam](images/new_exam_1.png)
 3.  
 
+Here's a section of the instructor user guide covering the report feature, including placeholders for where to insert images:
+
+---
+
+## **Managing Student Reports**
+
+As an instructor, you can access and manage student reports through the Report Dashboard. This section will guide you through the steps for handling reports.
+
+### **Accessing the Report Dashboard**
+
+1. Navigate to the Report Dashboard from the sidebar.
+2. The Report Dashboard displays all submitted reports along with their submission dates.
+
+![Report Dashboard Overview](./images/ReportsDashboard.png)
+
+### **Handling a Report**
+
+1. **Viewing a Report:**
+   - Click on any report in the dashboard to view its details. You will see the student's comments, the exam grade, and any additional information provided.
+
+2. **Regrading an Exam:**
+   - If a regrade is required, you can adjust the grade directly from the report interface.
+   - After making the necessary changes, submit your updated grade.
+
+![Viewing and Regrading a Report](./images/ViewReport.png)
+
+3. **Replying to a Report:**
+   - You can reply to the student's report with any comments or explanations.
+   - Once you've addressed the report, mark it as closed. This will update the report's status to "Closed."
+
+### **Reopening and Editing a Closed Report**
+
+1. **Reopening a Report:**
+   - If necessary, you can reopen a closed report to make further edits or adjustments.
+   - Once reopened, you can modify the grade, update your reply, and re-close the report.
+
+2. **Editing a Report:**
+   - After reopening, you have the ability to make any additional changes needed, ensuring all concerns are addressed.
+
+![Reopening and Editing a Report](./images/ReopenReport.png)
+
+### **Report Status**
+
+- **Open:** The report is active and requires attention.
+- **Closed:** The report has been addressed, and no further action is required.
+- **Reopened:** The report was closed but has been reopened for further action.
+
+By effectively managing student reports, you can ensure that all grading concerns are handled promptly and fairly.
