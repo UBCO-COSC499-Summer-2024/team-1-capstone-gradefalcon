@@ -6,7 +6,7 @@ Here's an updated **Student User Guide** for GradeFalcon based on the new detail
 
 **Version:** 1.0  
 **Date:** August 2024  
-**Developed by:** [Your Team Name]
+**Developed by:** [GradeFalcon]
 
 ---
 
